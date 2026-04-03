@@ -7,12 +7,13 @@
 - 状态：可公开交付的训练项目
 - 仓库地址：[XiaoYu-yu/show_shop1](https://github.com/XiaoYu-yu/show_shop1)
 - 开源许可证：[`MIT`](D:/20278/code/show_shop1/LICENSE)
+- 后端构建方式：`Maven Wrapper`
 
 ## 技术栈
 
 - 前端：Vue 3、Vite、Vue Router、Pinia、Element Plus、ECharts、Axios、Vitest、ESLint
 - 后端：Spring Boot 3.2.4、MyBatis、MariaDB（本地开发）、MySQL/MariaDB（生产）、JWT、Maven、JUnit 5
-- 运行环境：Node.js 18+、JDK 17、Maven 3.9+
+- 运行环境：Node.js 18+、JDK 17
 
 ## 目录结构
 
@@ -69,9 +70,9 @@ show_shop1/
 
 ```bash
 cd backend
-..\apache-maven-3.9.14\bin\mvn.cmd test
-..\apache-maven-3.9.14\bin\mvn.cmd -DskipTests compile
-..\apache-maven-3.9.14\bin\mvn.cmd spring-boot:run -Dspring-boot.run.profiles=dev
+.\mvnw.cmd test
+.\mvnw.cmd -DskipTests compile
+.\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
 默认地址：`http://localhost:8080`
@@ -136,6 +137,7 @@ npm run dev
 - 新增数据库迁移目录、生产部署说明、备份与回滚说明、关键接口回归测试
 - 本地开发默认数据库从 H2 切换为 MariaDB，便于使用中文图形工具管理
 - 增加 `.gitignore`、前端 lint/test、后端最小回归测试
+- 公开仓库改用 `Maven Wrapper`，不再跟踪 Maven 发行包目录
 
 ## 验证结果
 

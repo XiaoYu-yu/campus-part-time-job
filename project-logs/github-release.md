@@ -14,6 +14,8 @@
 - 新增 GitHub Pull Request 模板
 - 更新根 `README.md`，加入公开仓库入口信息
 - 更新 `docs/README.md`，纳入开源仓库材料索引
+- 生成后端 `Maven Wrapper`
+- 将 `apache-maven-3.9.14` 调整为仅本机辅助目录，不再纳入 GitHub 公开仓库
 
 ## 关键文件
 
@@ -33,4 +35,14 @@
 
 ## 当前结论
 
-仓库材料已经具备标准公开项目的基础形态，可以直接初始化 Git 并推送到 GitHub 公开仓库。
+仓库材料已经具备标准公开项目的基础形态。
+
+## 发布状态
+
+- 本地 Git 仓库已初始化
+- 当前分支：`main`
+- 本地提交已完成：
+  - `8ce2858 feat: publish show_shop1 training project`
+- 远程仓库已绑定：
+  - `https://github.com/XiaoYu-yu/show_shop1.git`
+- 当前环境未完成 `push`，原因是到 `github.com:443` 的 TCP 连接失败，不是仓库内容问题

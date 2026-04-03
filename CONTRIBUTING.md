@@ -16,7 +16,7 @@ Avoid submitting purely visual reworks or unrelated framework migrations unless 
 ### Backend
 
 - JDK 17
-- Maven: use the bundled [apache-maven-3.9.14](D:/20278/code/show_shop1/apache-maven-3.9.14)
+- Maven: use [backend/mvnw.cmd](D:/20278/code/show_shop1/backend/mvnw.cmd)
 - MariaDB running on `127.0.0.1:3306`
 - Start with `--spring.profiles.active=dev`
 
@@ -39,8 +39,8 @@ Before opening a pull request, run:
 
 ```bash
 cd backend
-..\apache-maven-3.9.14\bin\mvn.cmd test
-..\apache-maven-3.9.14\bin\mvn.cmd -DskipTests compile
+.\mvnw.cmd test
+.\mvnw.cmd -DskipTests compile
 ```
 
 ```bash
