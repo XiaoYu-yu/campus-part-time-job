@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Upgraded password storage to BCrypt with legacy MD5 login migration
 - Hardened JWT secret validation, upload handling, and CORS configuration
 - Switched local development database to MariaDB
+- Refined the GitHub landing page README and docs index for public repository presentation
 
 ### Removed
 

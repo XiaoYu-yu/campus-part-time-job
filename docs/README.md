@@ -1,26 +1,42 @@
 # Docs
 
-这里存放项目的文档索引和修复记录入口。当前仓库里的文档已经以“代码真实状态”为准重新整理，不再假设缺失的截图或未落地模块已经完成。
+这个目录存放项目文档入口、部署说明和维护材料索引。文档内容以当前仓库真实代码状态为准。
 
-## 文档入口
+## Navigation
 
-- 项目交付说明：[项目交付说明.md](D:/20278/code/show_shop1/项目交付说明.md)
-- 开源许可证：[LICENSE](D:/20278/code/show_shop1/LICENSE)
-- 变更记录：[CHANGELOG.md](D:/20278/code/show_shop1/CHANGELOG.md)
-- 贡献说明：[CONTRIBUTING.md](D:/20278/code/show_shop1/CONTRIBUTING.md)
-- 安全说明：[SECURITY.md](D:/20278/code/show_shop1/SECURITY.md)
-- 审计说明：[项目检查说明.md](D:/20278/code/show_shop1/项目检查说明.md)
-- 修复总览：[project-logs/summary.md](D:/20278/code/show_shop1/project-logs/summary.md)
-- 生产准备：[project-logs/production-readiness.md](D:/20278/code/show_shop1/project-logs/production-readiness.md)
-- 交付整理日志：[project-logs/delivery-handover.md](D:/20278/code/show_shop1/project-logs/delivery-handover.md)
-- 环境搭建：[project-logs/runtime-setup.md](D:/20278/code/show_shop1/project-logs/runtime-setup.md)
-- 文件改动清单：[project-logs/file-change-list.md](D:/20278/code/show_shop1/project-logs/file-change-list.md)
-- 待处理事项：[project-logs/pending-items.md](D:/20278/code/show_shop1/project-logs/pending-items.md)
-- 部署说明：[docs/deployment/production-deploy.md](D:/20278/code/show_shop1/docs/deployment/production-deploy.md)
-- 备份回滚：[docs/deployment/backup-and-rollback.md](D:/20278/code/show_shop1/docs/deployment/backup-and-rollback.md)
+### 项目入口
 
-## 当前说明
+- [仓库首页说明](../README.md)
+- [项目交付说明](../项目交付说明.md)
+- [项目检查说明](../项目检查说明.md)
 
-- `docs/screenshots/` 目前仍不存在，因此 README 中不再引用失效截图
-- 本轮重点是修复契约、构建、鉴权和真实数据链路，不包含新的设计稿文档
-- 若后续补充接口说明、数据库 ER 图或部署文档，建议继续放在 `docs/` 下分目录维护
+### 工程与交付
+
+- [变更记录](../CHANGELOG.md)
+- [贡献说明](../CONTRIBUTING.md)
+- [安全说明](../SECURITY.md)
+- [前端说明](../frontend/README.md)
+
+### 部署与数据库
+
+- [数据库设计](db-design.md)
+- [接口设计](api-design.md)
+- [生产部署说明](deployment/production-deploy.md)
+- [备份与回滚](deployment/backup-and-rollback.md)
+
+### 修复与发布日志
+
+- [修复总览](../project-logs/summary.md)
+- [生产准备日志](../project-logs/production-readiness.md)
+- [交付整理日志](../project-logs/delivery-handover.md)
+- [GitHub 发布日志](../project-logs/github-release.md)
+- [环境搭建日志](../project-logs/runtime-setup.md)
+- [文件改动清单](../project-logs/file-change-list.md)
+- [待处理事项](../project-logs/pending-items.md)
+
+## Current Notes
+
+- 仓库首页 README 已按 GitHub 开源仓库入口方式重构
+- `docs/screenshots/` 目前仍不存在，因此不引用失效截图
+- 当前文档重点是启动、交付、部署、修复记录和发布说明
+- 若后续补 API 详细文档、ER 图或演示素材，建议继续按子目录扩展
