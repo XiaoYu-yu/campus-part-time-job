@@ -1,0 +1,145 @@
+-- Baseline schema for production-style deployment
+-- Execute inside an existing cangqiong_takeaway database
+
+CREATE TABLE IF NOT EXISTS employee (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    phone VARCHAR(20) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    position VARCHAR(50) NOT NULL,
+    department VARCHAR(50) NOT NULL,
+    entry_date DATE NOT NULL,
+    status TINYINT DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS category (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) UNIQUE NOT NULL,
+    sort INT DEFAULT 0,
+    status TINYINT DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS dish (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) UNIQUE NOT NULL,
+    category_id BIGINT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    description VARCHAR(255),
+    image VARCHAR(255),
+    status TINYINT DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES category(id)
+);
+
+CREATE TABLE IF NOT EXISTS setmeal (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) UNIQUE NOT NULL,
+    category_id BIGINT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    description VARCHAR(255),
+    image VARCHAR(255),
+    status TINYINT DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES category(id)
+);
+
+CREATE TABLE IF NOT EXISTS setmeal_dish (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    setmeal_id BIGINT NOT NULL,
+    dish_id BIGINT NOT NULL,
+    quantity INT DEFAULT 1,
+    FOREIGN KEY (setmeal_id) REFERENCES setmeal(id),
+    FOREIGN KEY (dish_id) REFERENCES dish(id)
+);
+
+CREATE TABLE IF NOT EXISTS user (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    phone VARCHAR(20) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    avatar VARCHAR(255),
+    status TINYINT DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS cart (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    dish_id BIGINT,
+    setmeal_id BIGINT,
+    quantity INT NOT NULL DEFAULT 1,
+    checked TINYINT DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (dish_id) REFERENCES dish(id),
+    FOREIGN KEY (setmeal_id) REFERENCES setmeal(id)
+);
+
+CREATE TABLE IF NOT EXISTS address (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    consignee VARCHAR(50) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    province VARCHAR(50) NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    district VARCHAR(50) NOT NULL,
+    detail VARCHAR(255) NOT NULL,
+    is_default TINYINT DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    id VARCHAR(32) PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    customer_name VARCHAR(50) NOT NULL,
+    customer_phone VARCHAR(20) NOT NULL,
+    customer_address VARCHAR(255) NOT NULL,
+    total_amount DECIMAL(10,2) NOT NULL,
+    status TINYINT DEFAULT 0,
+    payment_time DATETIME,
+    delivery_time DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
+
+CREATE TABLE IF NOT EXISTS order_item (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    order_id VARCHAR(32) NOT NULL,
+    dish_id BIGINT,
+    setmeal_id BIGINT,
+    name VARCHAR(100) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    quantity INT NOT NULL,
+    total DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (dish_id) REFERENCES dish(id),
+    FOREIGN KEY (setmeal_id) REFERENCES setmeal(id)
+);
+
+CREATE TABLE IF NOT EXISTS shop_config (
+    id BIGINT PRIMARY KEY,
+    is_open TINYINT DEFAULT 1,
+    rest_notice VARCHAR(255) DEFAULT '',
+    last_updated DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS shop_business_hour (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    day_key VARCHAR(20) NOT NULL UNIQUE,
+    day_name VARCHAR(20) NOT NULL,
+    is_open TINYINT DEFAULT 1,
+    open_time VARCHAR(5) NOT NULL,
+    close_time VARCHAR(5) NOT NULL,
+    sort INT DEFAULT 0
+);
