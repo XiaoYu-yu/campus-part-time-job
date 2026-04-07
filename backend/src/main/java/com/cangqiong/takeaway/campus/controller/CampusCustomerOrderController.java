@@ -1,6 +1,8 @@
 package com.cangqiong.takeaway.campus.controller;
 
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCreateDTO;
+import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderAfterSaleDTO;
+import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCancelDTO;
 import com.cangqiong.takeaway.campus.query.CampusCustomerOrderQuery;
 import com.cangqiong.takeaway.campus.service.CampusRelayOrderService;
 import com.cangqiong.takeaway.campus.vo.CampusCustomerOrderVO;
@@ -44,6 +46,22 @@ public class CampusCustomerOrderController {
         Long customerUserId = BaseContext.getCurrentUserId();
         log.info("校园用户确认送达: userId={}, orderId={}", customerUserId, id);
         campusRelayOrderService.confirmByCustomer(id, customerUserId);
+        return Result.success();
+    }
+
+    @PostMapping("/{id}/cancel")
+    public Result<Void> cancel(@PathVariable String id, @RequestBody CampusCustomerOrderCancelDTO dto) {
+        Long customerUserId = BaseContext.getCurrentUserId();
+        log.info("校园用户取消代送单: userId={}, orderId={}", customerUserId, id);
+        campusRelayOrderService.cancelByCustomer(id, dto, customerUserId);
+        return Result.success();
+    }
+
+    @PostMapping("/{id}/after-sale")
+    public Result<Void> openAfterSale(@PathVariable String id, @RequestBody CampusCustomerOrderAfterSaleDTO dto) {
+        Long customerUserId = BaseContext.getCurrentUserId();
+        log.info("校园用户发起售后: userId={}, orderId={}", customerUserId, id);
+        campusRelayOrderService.openAfterSaleByCustomer(id, dto, customerUserId);
         return Result.success();
     }
 

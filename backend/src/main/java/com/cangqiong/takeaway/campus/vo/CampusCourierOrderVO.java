@@ -31,9 +31,14 @@ public class CampusCourierOrderVO {
     private Long courierProfileId;
     private String priorityDormitoryBuilding;
     private String pickupProofImageUrl;
+    private String cancelReason;
     private String customerRemark;
     private String courierRemark;
+    private String afterSaleReason;
     private Boolean priorityWindowActive;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime paidAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime priorityWindowDeadline;
@@ -49,6 +54,12 @@ public class CampusCourierOrderVO {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime autoCompleteAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime cancelledAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime afterSaleAppliedAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;

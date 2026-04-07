@@ -149,6 +149,8 @@ public class JwtInterceptor implements HandlerInterceptor {
     }
 
     private boolean isCourierBridgePath(String uri) {
+        // Step 03E 仍保留 onboarding bridge：
+        // 未审核通过的用户还无法拿到 courier token，因此资料提交与审核状态查询继续允许 customer/courier 双通道。
         return CAMPUS_COURIER_PROFILE_PATH.equals(uri) || CAMPUS_COURIER_REVIEW_STATUS_PATH.equals(uri);
     }
 }

@@ -49,9 +49,11 @@ public interface CampusRelayOrderMapper {
             "  cro.tip_fee,",
             "  cro.total_amount,",
             "  cro.payment_status,",
+            "  cro.paid_at,",
             "  cro.order_status AS status,",
             "  cro.priority_dormitory_building,",
             "  cro.pickup_proof_image_url,",
+            "  cro.cancel_reason,",
             "  cro.customer_remark,",
             "  cro.courier_remark,",
             "  cro.after_sale_reason,",
@@ -61,6 +63,8 @@ public interface CampusRelayOrderMapper {
             "  cro.picked_up_at,",
             "  cro.delivered_at,",
             "  cro.auto_complete_at,",
+            "  cro.cancelled_at,",
+            "  cro.after_sale_applied_at,",
             "  cro.created_at,",
             "  cro.updated_at",
             "FROM campus_relay_order cro",
@@ -95,6 +99,7 @@ public interface CampusRelayOrderMapper {
             "  cro.tip_fee,",
             "  cro.total_amount,",
             "  cro.payment_status,",
+            "  cro.paid_at,",
             "  cro.order_status AS status,",
             "  cro.priority_dormitory_building,",
             "  cro.priority_window_deadline,",
@@ -102,6 +107,8 @@ public interface CampusRelayOrderMapper {
             "  cro.picked_up_at,",
             "  cro.delivered_at,",
             "  cro.auto_complete_at,",
+            "  cro.cancelled_at,",
+            "  cro.after_sale_applied_at,",
             "  cro.created_at,",
             "  cro.updated_at",
             "FROM campus_relay_order cro",
@@ -193,6 +200,7 @@ public interface CampusRelayOrderMapper {
             "  cro.tip_fee,",
             "  cro.total_amount,",
             "  cro.payment_status,",
+            "  cro.paid_at,",
             "  cro.order_status AS status,",
             "  cro.courier_profile_id,",
             "  cro.priority_dormitory_building,",
@@ -241,17 +249,22 @@ public interface CampusRelayOrderMapper {
             "  cro.tip_fee,",
             "  cro.total_amount,",
             "  cro.payment_status,",
+            "  cro.paid_at,",
             "  cro.order_status AS status,",
             "  cro.courier_profile_id,",
             "  cro.priority_dormitory_building,",
             "  cro.pickup_proof_image_url,",
+            "  cro.cancel_reason,",
             "  cro.customer_remark,",
             "  cro.courier_remark,",
+            "  cro.after_sale_reason,",
             "  cro.priority_window_deadline,",
             "  cro.accepted_at,",
             "  cro.picked_up_at,",
             "  cro.delivered_at,",
             "  cro.auto_complete_at,",
+            "  cro.cancelled_at,",
+            "  cro.after_sale_applied_at,",
             "  cro.created_at,",
             "  cro.updated_at",
             "FROM campus_relay_order cro",
@@ -282,17 +295,22 @@ public interface CampusRelayOrderMapper {
             "  cro.tip_fee,",
             "  cro.total_amount,",
             "  cro.payment_status,",
+            "  cro.paid_at,",
             "  cro.order_status AS status,",
             "  cro.courier_profile_id,",
             "  cp.real_name AS courier_name,",
             "  cro.priority_dormitory_building,",
             "  cro.pickup_proof_image_url,",
+            "  cro.cancel_reason,",
             "  cro.courier_remark,",
+            "  cro.after_sale_reason,",
             "  cro.priority_window_deadline,",
             "  cro.accepted_at,",
             "  cro.picked_up_at,",
             "  cro.delivered_at,",
             "  cro.auto_complete_at,",
+            "  cro.cancelled_at,",
+            "  cro.after_sale_applied_at,",
             "  cro.created_at,",
             "  cro.updated_at",
             "FROM campus_relay_order cro",
@@ -328,17 +346,22 @@ public interface CampusRelayOrderMapper {
             "  cro.tip_fee,",
             "  cro.total_amount,",
             "  cro.payment_status,",
+            "  cro.paid_at,",
             "  cro.order_status AS status,",
             "  cro.courier_profile_id,",
             "  cp.real_name AS courier_name,",
             "  cro.priority_dormitory_building,",
             "  cro.pickup_proof_image_url,",
+            "  cro.cancel_reason,",
             "  cro.courier_remark,",
+            "  cro.after_sale_reason,",
             "  cro.priority_window_deadline,",
             "  cro.accepted_at,",
             "  cro.picked_up_at,",
             "  cro.delivered_at,",
             "  cro.auto_complete_at,",
+            "  cro.cancelled_at,",
+            "  cro.after_sale_applied_at,",
             "  cro.created_at,",
             "  cro.updated_at",
             "FROM campus_relay_order cro",
@@ -390,20 +413,21 @@ public interface CampusRelayOrderMapper {
             "id, customer_user_id, courier_profile_id, pickup_point_id, delivery_target_type, delivery_building, delivery_detail, " +
             "delivery_contact_name, delivery_contact_phone, food_description, external_platform_name, external_order_ref, pickup_code, " +
             "base_fee, priority_fee, tip_fee, total_amount, payment_status, order_status, priority_dormitory_building, " +
-            "priority_window_deadline, accepted_at, cancel_locked_until, picked_up_at, delivered_at, auto_complete_at, " +
-            "pickup_proof_image_url, customer_remark, courier_remark, after_sale_reason, created_at, updated_at" +
+            "paid_at, priority_window_deadline, accepted_at, cancel_locked_until, picked_up_at, delivered_at, auto_complete_at, " +
+            "cancelled_at, after_sale_applied_at, pickup_proof_image_url, cancel_reason, customer_remark, courier_remark, after_sale_reason, created_at, updated_at" +
             ") VALUES (" +
             "#{id}, #{customerUserId}, #{courierProfileId}, #{pickupPointId}, #{deliveryTargetType}, #{deliveryBuilding}, #{deliveryDetail}, " +
             "#{deliveryContactName}, #{deliveryContactPhone}, #{foodDescription}, #{externalPlatformName}, #{externalOrderRef}, #{pickupCode}, " +
             "#{baseFee}, #{priorityFee}, #{tipFee}, #{totalAmount}, #{paymentStatus}, #{orderStatus}, #{priorityDormitoryBuilding}, " +
-            "#{priorityWindowDeadline}, #{acceptedAt}, #{cancelLockedUntil}, #{pickedUpAt}, #{deliveredAt}, #{autoCompleteAt}, " +
-            "#{pickupProofImageUrl}, #{customerRemark}, #{courierRemark}, #{afterSaleReason}, #{createdAt}, #{updatedAt}" +
+            "#{paidAt}, #{priorityWindowDeadline}, #{acceptedAt}, #{cancelLockedUntil}, #{pickedUpAt}, #{deliveredAt}, #{autoCompleteAt}, " +
+            "#{cancelledAt}, #{afterSaleAppliedAt}, #{pickupProofImageUrl}, #{cancelReason}, #{customerRemark}, #{courierRemark}, #{afterSaleReason}, #{createdAt}, #{updatedAt}" +
             ")")
     void insert(CampusRelayOrder order);
 
     @Update("UPDATE campus_relay_order SET " +
             "payment_status = #{paymentStatus}, " +
             "order_status = #{orderStatus}, " +
+            "paid_at = #{paidAt}, " +
             "priority_dormitory_building = #{priorityDormitoryBuilding}, " +
             "priority_window_deadline = #{priorityWindowDeadline}, " +
             "updated_at = #{updatedAt} " +
@@ -412,6 +436,7 @@ public interface CampusRelayOrderMapper {
             @Param("id") String id,
             @Param("paymentStatus") String paymentStatus,
             @Param("orderStatus") String orderStatus,
+            @Param("paidAt") LocalDateTime paidAt,
             @Param("priorityDormitoryBuilding") String priorityDormitoryBuilding,
             @Param("priorityWindowDeadline") LocalDateTime priorityWindowDeadline,
             @Param("updatedAt") LocalDateTime updatedAt
@@ -499,6 +524,41 @@ public interface CampusRelayOrderMapper {
             @Param("customerUserId") Long customerUserId,
             @Param("orderStatus") String orderStatus,
             @Param("autoCompleteAt") LocalDateTime autoCompleteAt,
+            @Param("updatedAt") LocalDateTime updatedAt
+    );
+
+    @Update("UPDATE campus_relay_order SET " +
+            "order_status = #{orderStatus}, " +
+            "cancel_reason = #{cancelReason}, " +
+            "cancelled_at = #{cancelledAt}, " +
+            "updated_at = #{updatedAt} " +
+            "WHERE id = #{id} " +
+            "AND customer_user_id = #{customerUserId} " +
+            "AND picked_up_at IS NULL " +
+            "AND order_status IN ('PENDING_PAYMENT', 'BUILDING_PRIORITY_PENDING', 'WAITING_ACCEPT', 'ACCEPTED')")
+    int cancelByCustomer(
+            @Param("id") String id,
+            @Param("customerUserId") Long customerUserId,
+            @Param("orderStatus") String orderStatus,
+            @Param("cancelReason") String cancelReason,
+            @Param("cancelledAt") LocalDateTime cancelledAt,
+            @Param("updatedAt") LocalDateTime updatedAt
+    );
+
+    @Update("UPDATE campus_relay_order SET " +
+            "order_status = #{orderStatus}, " +
+            "after_sale_reason = #{afterSaleReason}, " +
+            "after_sale_applied_at = #{afterSaleAppliedAt}, " +
+            "updated_at = #{updatedAt} " +
+            "WHERE id = #{id} " +
+            "AND customer_user_id = #{customerUserId} " +
+            "AND order_status IN ('AWAITING_CONFIRMATION', 'COMPLETED')")
+    int openAfterSaleByCustomer(
+            @Param("id") String id,
+            @Param("customerUserId") Long customerUserId,
+            @Param("orderStatus") String orderStatus,
+            @Param("afterSaleReason") String afterSaleReason,
+            @Param("afterSaleAppliedAt") LocalDateTime afterSaleAppliedAt,
             @Param("updatedAt") LocalDateTime updatedAt
     );
 }

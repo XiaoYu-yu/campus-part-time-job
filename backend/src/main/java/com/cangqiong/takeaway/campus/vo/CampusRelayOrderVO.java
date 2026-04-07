@@ -33,9 +33,13 @@ public class CampusRelayOrderVO {
     private String status;
     private String priorityDormitoryBuilding;
     private String pickupProofImageUrl;
+    private String cancelReason;
     private String customerRemark;
     private String courierRemark;
     private String afterSaleReason;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime paidAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime priorityWindowDeadline;
@@ -54,6 +58,12 @@ public class CampusRelayOrderVO {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime autoCompleteAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime cancelledAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime afterSaleAppliedAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;

@@ -2,20 +2,27 @@ package com.cangqiong.takeaway.campus.service.impl;
 
 import com.cangqiong.takeaway.campus.dto.CampusCourierDeliverDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCourierPickupDTO;
+import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderAfterSaleDTO;
+import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCancelDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCreateDTO;
 import com.cangqiong.takeaway.campus.entity.CampusCourierProfile;
 import com.cangqiong.takeaway.campus.entity.CampusCustomerProfile;
 import com.cangqiong.takeaway.campus.entity.CampusPickupPoint;
 import com.cangqiong.takeaway.campus.entity.CampusRelayOrder;
+import com.cangqiong.takeaway.campus.entity.CampusSettlementRecord;
 import com.cangqiong.takeaway.campus.enums.CampusDeliveryTargetType;
 import com.cangqiong.takeaway.campus.enums.CampusPaymentStatus;
 import com.cangqiong.takeaway.campus.enums.CampusRelayOrderStatus;
+import com.cangqiong.takeaway.campus.enums.CampusSettlementStatus;
 import com.cangqiong.takeaway.campus.mapper.CampusPickupPointMapper;
 import com.cangqiong.takeaway.campus.mapper.CampusRelayOrderMapper;
+import com.cangqiong.takeaway.campus.mapper.CampusSettlementRecordMapper;
 import com.cangqiong.takeaway.campus.query.CampusCourierAvailableOrderQuery;
 import com.cangqiong.takeaway.campus.query.CampusCustomerOrderQuery;
 import com.cangqiong.takeaway.campus.query.CampusRelayOrderQuery;
 import com.cangqiong.takeaway.campus.service.CampusCourierProfileService;
+import com.cangqiong.takeaway.campus.vo.CampusOrderTimelineItemVO;
+import com.cangqiong.takeaway.campus.vo.CampusOrderTimelineVO;
 import com.cangqiong.takeaway.campus.vo.CampusCourierOrderVO;
 import com.cangqiong.takeaway.campus.service.CampusCustomerProfileService;
 import com.cangqiong.takeaway.campus.service.CampusRelayOrderService;
@@ -34,6 +41,7 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -41,6 +49,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
 
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.00");
+    private static final String SETTLEMENT_REMARK = "订单完成待结算";
     private static final int ENABLED = 1;
     private static final DateTimeFormatter ORDER_ID_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
@@ -55,6 +64,9 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
 
     @Autowired
     private CampusCourierProfileService campusCourierProfileService;
+
+    @Autowired
+    private CampusSettlementRecordMapper campusSettlementRecordMapper;
 
     @Override
     public PageResult<CampusRelayOrderVO> pageQuery(CampusRelayOrderQuery query) {
@@ -180,10 +192,63 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
                 order.getId(),
                 CampusPaymentStatus.PAID.name(),
                 nextOrderStatus.name(),
+                now,
                 nextOrderStatus == CampusRelayOrderStatus.BUILDING_PRIORITY_PENDING ? order.getDeliveryBuilding() : null,
                 priorityWindowDeadline,
                 now
         );
+    }
+
+    @Override
+    @Transactional
+    public void cancelByCustomer(String id, CampusCustomerOrderCancelDTO dto, Long customerUserId) {
+        if (customerUserId == null) {
+            throw new BusinessException(401, "未授权，请先登录");
+        }
+
+        CampusRelayOrder order = getOwnedOrder(id, customerUserId);
+        String cancelReason = normalizeText(dto == null ? null : dto.getCancelReason());
+        requireText(cancelReason, "取消原因不能为空");
+        assertCustomerCancelAllowed(order);
+
+        LocalDateTime now = LocalDateTime.now();
+        int updated = campusRelayOrderMapper.cancelByCustomer(
+                id,
+                customerUserId,
+                CampusRelayOrderStatus.CANCELLED.name(),
+                cancelReason,
+                now,
+                now
+        );
+        if (updated == 0) {
+            throw new BusinessException("订单状态已变化，无法取消");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void openAfterSaleByCustomer(String id, CampusCustomerOrderAfterSaleDTO dto, Long customerUserId) {
+        if (customerUserId == null) {
+            throw new BusinessException(401, "未授权，请先登录");
+        }
+
+        CampusRelayOrder order = getOwnedOrder(id, customerUserId);
+        String afterSaleReason = normalizeText(dto == null ? null : dto.getAfterSaleReason());
+        requireText(afterSaleReason, "售后说明不能为空");
+        assertAfterSaleAllowed(order);
+
+        LocalDateTime now = LocalDateTime.now();
+        int updated = campusRelayOrderMapper.openAfterSaleByCustomer(
+                id,
+                customerUserId,
+                CampusRelayOrderStatus.AFTER_SALE_OPEN.name(),
+                afterSaleReason,
+                now,
+                now
+        );
+        if (updated == 0) {
+            throw new BusinessException("订单状态已变化，无法发起售后");
+        }
     }
 
     @Override
@@ -401,6 +466,45 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         if (updated == 0) {
             throw new BusinessException("订单状态已变化，无法确认送达");
         }
+        syncSettlementRecordForCompletedOrder(order, now);
+    }
+
+    @Override
+    public CampusOrderTimelineVO getTimelineByAdmin(String id) {
+        CampusRelayOrderVO order = getById(id);
+        CampusSettlementRecord settlementRecord = campusSettlementRecordMapper.selectByRelayOrderId(id);
+
+        List<CampusOrderTimelineItemVO> items = new ArrayList<>();
+        appendTimelineItem(items, "CREATED", "已下单", order.getCreatedAt(), buildCreatedRemark(order));
+        appendTimelineItem(items, "PAID", "已支付", order.getPaidAt(), buildPaidRemark(order));
+        appendTimelineItem(items, "ACCEPTED", "已接单", order.getAcceptedAt(), buildAcceptedRemark(order));
+        appendTimelineItem(items, "PICKED_UP", "已取餐", order.getPickedUpAt(), buildPickupRemark(order));
+        appendTimelineItem(items, "DELIVERED", "已送达", order.getDeliveredAt(), normalizeText(order.getCourierRemark()));
+        appendTimelineItem(items, "CONFIRMED", "已确认送达", order.getAutoCompleteAt(), "客户已确认送达");
+        appendTimelineItem(items, "CANCELLED", "已取消", order.getCancelledAt(), normalizeText(order.getCancelReason()));
+        appendTimelineItem(items, "AFTER_SALE_OPENED", "已发起售后", order.getAfterSaleAppliedAt(), normalizeText(order.getAfterSaleReason()));
+
+        if (settlementRecord != null) {
+            LocalDateTime eventTime = settlementRecord.getSettledAt() != null
+                    ? settlementRecord.getSettledAt()
+                    : settlementRecord.getCreatedAt();
+            appendTimelineItem(
+                    items,
+                    CampusSettlementStatus.SETTLED.name().equals(settlementRecord.getSettlementStatus()) ? "SETTLED" : "SETTLEMENT_PENDING",
+                    CampusSettlementStatus.SETTLED.name().equals(settlementRecord.getSettlementStatus()) ? "已结算" : "待结算",
+                    eventTime,
+                    normalizeText(settlementRecord.getRemark())
+            );
+        }
+
+        items.sort(Comparator.comparing(CampusOrderTimelineItemVO::getEventTime));
+        CampusOrderTimelineVO timelineVO = new CampusOrderTimelineVO();
+        timelineVO.setOrderId(order.getId());
+        timelineVO.setOrderStatus(order.getStatus());
+        timelineVO.setPaymentStatus(order.getPaymentStatus());
+        timelineVO.setSettlementStatus(settlementRecord == null ? null : settlementRecord.getSettlementStatus());
+        timelineVO.setItems(items);
+        return timelineVO;
     }
 
     private void validateCreateRequest(CampusCustomerOrderCreateDTO dto) {
@@ -500,8 +604,30 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         if (CampusRelayOrderStatus.PICKED_UP.name().equals(order.getOrderStatus())
                 || CampusRelayOrderStatus.DELIVERING.name().equals(order.getOrderStatus())
                 || CampusRelayOrderStatus.AWAITING_CONFIRMATION.name().equals(order.getOrderStatus())
-                || CampusRelayOrderStatus.COMPLETED.name().equals(order.getOrderStatus())) {
+                || CampusRelayOrderStatus.COMPLETED.name().equals(order.getOrderStatus())
+                || CampusRelayOrderStatus.CANCELLED.name().equals(order.getOrderStatus())
+                || CampusRelayOrderStatus.AFTER_SALE_OPEN.name().equals(order.getOrderStatus())) {
             throw new BusinessException("订单已取餐，当前阶段不可直接取消或修改");
+        }
+    }
+
+    private void assertCustomerCancelAllowed(CampusRelayOrder order) {
+        if (CampusRelayOrderStatus.CANCELLED.name().equals(order.getOrderStatus())) {
+            throw new BusinessException("订单已取消，无需重复操作");
+        }
+        if (CampusRelayOrderStatus.AFTER_SALE_OPEN.name().equals(order.getOrderStatus())) {
+            throw new BusinessException("订单已进入售后处理，当前不可取消");
+        }
+        assertCustomerSideMutableBeforePickup(order);
+    }
+
+    private void assertAfterSaleAllowed(CampusRelayOrder order) {
+        if (CampusRelayOrderStatus.AFTER_SALE_OPEN.name().equals(order.getOrderStatus())) {
+            throw new BusinessException("订单已发起售后，请勿重复提交");
+        }
+        if (!CampusRelayOrderStatus.AWAITING_CONFIRMATION.name().equals(order.getOrderStatus())
+                && !CampusRelayOrderStatus.COMPLETED.name().equals(order.getOrderStatus())) {
+            throw new BusinessException("当前订单状态不可发起售后");
         }
     }
 
@@ -555,6 +681,75 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         if (!CampusRelayOrderStatus.AWAITING_CONFIRMATION.name().equals(order.getOrderStatus())) {
             throw new BusinessException("当前订单状态不可确认送达");
         }
+    }
+
+    private void syncSettlementRecordForCompletedOrder(CampusRelayOrder order, LocalDateTime now) {
+        if (order.getCourierProfileId() == null) {
+            return;
+        }
+
+        CampusSettlementRecord existing = campusSettlementRecordMapper.selectByRelayOrderId(order.getId());
+        BigDecimal grossAmount = order.getTotalAmount() == null ? ZERO_AMOUNT : order.getTotalAmount().setScale(2, RoundingMode.HALF_UP);
+        BigDecimal platformCommission = ZERO_AMOUNT.setScale(2, RoundingMode.HALF_UP);
+        BigDecimal pendingAmount = grossAmount.subtract(platformCommission).setScale(2, RoundingMode.HALF_UP);
+
+        if (existing == null) {
+            CampusSettlementRecord record = new CampusSettlementRecord();
+            record.setRelayOrderId(order.getId());
+            record.setCourierProfileId(order.getCourierProfileId());
+            record.setGrossAmount(grossAmount);
+            record.setPlatformCommission(platformCommission);
+            record.setPendingAmount(pendingAmount);
+            record.setSettlementStatus(CampusSettlementStatus.PENDING.name());
+            record.setSettledAt(null);
+            record.setRemark(SETTLEMENT_REMARK);
+            record.setCreatedAt(now);
+            record.setUpdatedAt(now);
+            campusSettlementRecordMapper.insert(record);
+            return;
+        }
+
+        campusSettlementRecordMapper.updateSnapshotForCompleted(
+                order.getId(),
+                order.getCourierProfileId(),
+                grossAmount,
+                platformCommission,
+                pendingAmount,
+                CampusSettlementStatus.PENDING.name(),
+                SETTLEMENT_REMARK,
+                now
+        );
+    }
+
+    private void appendTimelineItem(List<CampusOrderTimelineItemVO> items, String nodeCode, String nodeLabel, LocalDateTime eventTime, String remark) {
+        if (eventTime == null) {
+            return;
+        }
+        CampusOrderTimelineItemVO item = new CampusOrderTimelineItemVO();
+        item.setNodeCode(nodeCode);
+        item.setNodeLabel(nodeLabel);
+        item.setEventTime(eventTime);
+        item.setRemark(remark);
+        items.add(item);
+    }
+
+    private String buildCreatedRemark(CampusRelayOrderVO order) {
+        return order.getPickupPointName() + " -> " + order.getDeliveryBuilding();
+    }
+
+    private String buildPaidRemark(CampusRelayOrderVO order) {
+        return CampusPaymentStatus.PAID.name().equals(order.getPaymentStatus()) ? "模拟支付成功" : null;
+    }
+
+    private String buildAcceptedRemark(CampusRelayOrderVO order) {
+        return StringUtils.hasText(order.getCourierName()) ? "接单配送员: " + order.getCourierName() : null;
+    }
+
+    private String buildPickupRemark(CampusRelayOrderVO order) {
+        if (StringUtils.hasText(order.getPickupProofImageUrl())) {
+            return order.getPickupProofImageUrl();
+        }
+        return normalizeText(order.getCourierRemark());
     }
 
     private void assertControlledFileReference(String value, String message) {

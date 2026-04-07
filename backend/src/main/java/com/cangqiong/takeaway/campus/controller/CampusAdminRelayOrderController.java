@@ -2,6 +2,7 @@ package com.cangqiong.takeaway.campus.controller;
 
 import com.cangqiong.takeaway.campus.query.CampusRelayOrderQuery;
 import com.cangqiong.takeaway.campus.service.CampusRelayOrderService;
+import com.cangqiong.takeaway.campus.vo.CampusOrderTimelineVO;
 import com.cangqiong.takeaway.campus.vo.CampusRelayOrderVO;
 import com.cangqiong.takeaway.utils.Result;
 import com.cangqiong.takeaway.vo.PageResult;
@@ -30,5 +31,11 @@ public class CampusAdminRelayOrderController {
     public Result<CampusRelayOrderVO> getById(@PathVariable String id) {
         log.info("校园代送订单详情查询: {}", id);
         return Result.success(campusRelayOrderService.getById(id));
+    }
+
+    @GetMapping("/{id}/timeline")
+    public Result<CampusOrderTimelineVO> getTimeline(@PathVariable String id) {
+        log.info("校园代送订单时间线查询: {}", id);
+        return Result.success(campusRelayOrderService.getTimelineByAdmin(id));
     }
 }

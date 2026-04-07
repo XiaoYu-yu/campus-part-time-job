@@ -2,12 +2,15 @@ package com.cangqiong.takeaway.campus.service;
 
 import com.cangqiong.takeaway.campus.dto.CampusCourierDeliverDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCourierPickupDTO;
+import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderAfterSaleDTO;
+import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCancelDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCreateDTO;
 import com.cangqiong.takeaway.campus.query.CampusCourierAvailableOrderQuery;
 import com.cangqiong.takeaway.campus.query.CampusCustomerOrderQuery;
 import com.cangqiong.takeaway.campus.query.CampusRelayOrderQuery;
 import com.cangqiong.takeaway.campus.vo.CampusCourierOrderVO;
 import com.cangqiong.takeaway.campus.vo.CampusCustomerOrderVO;
+import com.cangqiong.takeaway.campus.vo.CampusOrderTimelineVO;
 import com.cangqiong.takeaway.campus.vo.CampusRelayOrderVO;
 import com.cangqiong.takeaway.vo.PageResult;
 
@@ -20,6 +23,10 @@ public interface CampusRelayOrderService {
     String createByCustomer(CampusCustomerOrderCreateDTO dto, Long customerUserId);
 
     void mockPayByCustomer(String id, Long customerUserId);
+
+    void cancelByCustomer(String id, CampusCustomerOrderCancelDTO dto, Long customerUserId);
+
+    void openAfterSaleByCustomer(String id, CampusCustomerOrderAfterSaleDTO dto, Long customerUserId);
 
     CampusCustomerOrderVO getCustomerOrderById(String id, Long customerUserId);
 
@@ -36,4 +43,6 @@ public interface CampusRelayOrderService {
     void deliverByCourier(String id, CampusCourierDeliverDTO dto, Long courierUserId);
 
     void confirmByCustomer(String id, Long customerUserId);
+
+    CampusOrderTimelineVO getTimelineByAdmin(String id);
 }

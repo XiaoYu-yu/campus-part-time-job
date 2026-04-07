@@ -9,6 +9,7 @@
 - 当前已完成：`Step 03B - courier 资料链路与 admin 最小审核/详情`
 - 当前已完成：`Step 03C - courier token 与最小接单链路`
 - 当前已完成：`Step 03D - courier 取餐 / 配送推进 / customer 确认送达`
+- 当前已完成：`Step 03E - customer 取消 / 售后 / admin 时间线 / 结算联动`
 - 当前日期：`2026-04-07`
 - 当前范围：在不改 `frontend/`、不删旧外卖模块的前提下，已打通校园代送最小后端状态闭环
 
@@ -30,6 +31,8 @@
   - `/api/campus/customer/orders/{id}`
   - `/api/campus/customer/orders/{id}/mock-pay`
   - `/api/campus/customer/orders/{id}/confirm`
+  - `/api/campus/customer/orders/{id}/cancel`
+  - `/api/campus/customer/orders/{id}/after-sale`
   - `/api/campus/courier/auth/token`
   - `/api/campus/courier/profile`
   - `/api/campus/courier/review-status`
@@ -38,10 +41,13 @@
   - `/api/campus/courier/orders/{id}/accept`
   - `/api/campus/courier/orders/{id}/pickup`
   - `/api/campus/courier/orders/{id}/deliver`
+  - `/api/campus/admin/orders/{id}/timeline`
 - customer 侧已具备：
   - 复用旧 `user` 身份登录
   - 校园资料继续读取 `campus_customer_profile`
   - 创建代送单、模拟支付、订单详情、订单列表、确认送达
+  - 未取餐前取消
+  - 最小文本售后申诉
 - courier 侧已具备：
   - 基于旧 `user` 账号的 courier token 发行入口
   - 资料提交、资料详情查看、审核状态查看
@@ -51,6 +57,7 @@
   - 取餐凭证受控路径校验、取餐、配送中推进、送达待确认
 - admin 侧已具备：
   - campus 订单分页与详情
+  - campus 订单时间线查看
   - campus 配送员分页与审核
 - 当前最小订单状态闭环已打通：
   - `PENDING_PAYMENT`
@@ -60,6 +67,9 @@
   - `DELIVERING`
   - `AWAITING_CONFIRMATION`
   - `COMPLETED`
+  - `CANCELLED`
+  - `AFTER_SALE_OPEN`
+- 订单在进入 `COMPLETED` 时会自动生成或更新 `campus_settlement_record`
 
 ### Web 管理端
 
@@ -167,6 +177,22 @@
 12. 调整 `CampusSkeletonIntegrationTest` 的 admin 订单筛选断言，避免全量回归下的脆弱匹配
 13. 执行 `.\mvnw.cmd test`，累计 `31` 个测试通过
 
+## Step 03E 实际完成事项
+
+1. 新增 `POST /api/campus/customer/orders/{id}/cancel`
+2. 新增 `POST /api/campus/customer/orders/{id}/after-sale`
+3. 新增 `GET /api/campus/admin/orders/{id}/timeline`
+4. 扩展 `CampusRelayOrderServiceImpl`，将取消、售后、时间线、结算联动集中在 service 层
+5. 为 `campus_relay_order` 补齐最小时间线字段：
+   - `paid_at`
+   - `cancelled_at`
+   - `after_sale_applied_at`
+   - `cancel_reason`
+6. 在 customer confirm 进入 `COMPLETED` 时自动生成或更新 `campus_settlement_record`
+7. 保留 `courier/profile` 与 `courier/review-status` 的双 token bridge，并在 `JwtInterceptor` 中补充代码注释说明保留原因
+8. 新增 `CampusOrderExceptionIntegrationTest`
+9. 执行 `.\mvnw.cmd test`，累计 `34` 个测试通过
+
 ## 当前锁定的技术事实
 
 1. 仓库后端真实风格是注解式 MyBatis，不使用 XML Mapper
@@ -176,28 +202,28 @@
 5. customer 下单阶段继续只允许模拟支付，不接第三方支付
 6. courier 资料附件和取餐凭证继续保存受控文件路径，不引入新文件系统方案
 7. courier token 继续复用现有 `user` 账号密码校验，不新建第二套 courier 账号表
-8. `courier/profile` 与 `courier/review-status` 当前仍采用 `customer/courier` 双通道桥接
+8. `courier/profile` 与 `courier/review-status` 当前仍采用 `customer/courier` 双通道桥接，原因是未审核通过用户尚不能获取 courier token，但仍需要完成资料提交和查看审核状态
 9. 本轮没有引入新迁移工具，仍沿用 `init.sql + migrations + H2 schema/data`
 
 ## 当前风险与未完成项
 
-- `courier/profile` 和 `courier/review-status` 仍是 bridge 方案，后续是否收口需要明确
-- customer 仍没有取消、退款、售后接口
-- courier 仍没有异常上报、位置上报、结算联动
-- admin 仍没有订单异常处理、强制改派、售后处理能力
+- `courier/profile` 和 `courier/review-status` 仍是 bridge 方案，后续何时收口仍需结合前端与 onboarding 方案确定
+- customer 仍没有退款、售后处理结果查询接口
+- courier 仍没有位置上报、异常上报、送达凭证扩展能力
+- admin 仍没有售后处理、异常备注、强制改派能力
 - `CampusRuleCatalog` 仍是代码常量，后续若学校规则变更仍需配置化
 - `frontend/` 尚未隐藏旧菜单，也未接入 campus 新接口
 
 ## 下一轮建议
 
-- 进入 `Step 03E`
-- 重点补 customer 取消/售后边界、admin 异常处理与结算准备
+- 进入 `Step 03F`
+- 重点补 admin 最小售后处理、courier 位置/异常上报与 bridge 收口条件
 - 推荐顺序：
-  1. `POST /api/campus/customer/orders/{id}/cancel`
-  2. `POST /api/campus/customer/orders/{id}/after-sale`
-  3. `GET /api/campus/admin/orders/{id}/timeline` 或等价详情扩展
-  4. campus 订单完成后自动或半自动生成 `campus_settlement_record`
-  5. 评估是否收口 `courier/profile` 的双 token bridge
+  1. `POST /api/campus/admin/orders/{id}/after-sale-handle` 或等价的最小处理接口
+  2. `POST /api/campus/courier/orders/{id}/exception-report`
+  3. `POST /api/campus/courier/location-reports`
+  4. `GET /api/campus/admin/settlements`
+  5. 结合前端接入时机评估是否收口 `courier/profile` 的双 token bridge
 - 保持 `frontend/` 继续不动，先把后端异常链路和结算链路补稳
 
 ## 日志索引
@@ -211,5 +237,6 @@
 - [Step 03B 日志](step-03b-courier-profile-and-admin-review.md)
 - [Step 03C 日志](step-03c-courier-token-and-accept.md)
 - [Step 03D 日志](step-03d-pickup-deliver-confirm.md)
+- [Step 03E 日志](step-03e-cancel-after-sale-timeline-settlement.md)
 - [待处理事项](pending-items.md)
 - [文件改动清单](file-change-list.md)
