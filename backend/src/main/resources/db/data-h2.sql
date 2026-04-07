@@ -61,3 +61,42 @@ MERGE INTO order_item (id, order_id, dish_id, setmeal_id, name, price, quantity,
 (3, 'ORD2026001', 5, NULL, '可乐', 8.00, 1, 8.00),
 (4, 'ORD2026002', NULL, 1, '超值双人套餐', 88.00, 1, 88.00),
 (5, 'ORD2026003', NULL, 2, '经典单人套餐', 45.00, 1, 45.00);
+
+MERGE INTO campus_customer_profile (id, user_id, real_name, identity_type, identity_no, created_at, updated_at) KEY (id) VALUES
+(1, 1, '张三', 'STUDENT', '2023123401', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 2, '李四', 'STAFF', 'T20260001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+MERGE INTO campus_courier_profile (
+    id, user_id, real_name, student_no, college, major, class_name, dormitory_building, dormitory_room,
+    id_card_last4, emergency_contact_name, emergency_contact_phone, verification_photo_url,
+    schedule_attachment_url, review_status, review_comment, reviewed_by_employee_id, reviewed_at,
+    enabled, created_at, updated_at
+) KEY (id) VALUES
+(1, 1, '张三', '2023123401', '信息工程学院', '软件技术', '软工2301', '竹园', '2-403', '1234', '张父', '13900000001', '/api/files/courier-zhangsan-verify.jpg', '/api/files/courier-zhangsan-schedule.jpg', 'PENDING', '待人工审核', NULL, NULL, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 2, '李四', '2023123402', '信息工程学院', '计算机网络技术', '网工2302', '杏园', '1-206', '5678', '李母', '13900000002', '/api/files/courier-lisi-verify.jpg', '/api/files/courier-lisi-schedule.jpg', 'APPROVED', '首批示例账号', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+MERGE INTO campus_pickup_point (id, code, name, gate_area, description, enabled, sort, created_at, updated_at) KEY (id) VALUES
+(1, 'NORTH_GATE_TEMP', '主大门门卫室西侧临时取餐区', '北门', '适用于临时堆放和高峰期取餐', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'NORTH_GATE_LOCKER', '主大门外卖柜旁固定取餐区', '北门', '适用于固定外卖柜和外卖架旁取餐', 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+MERGE INTO campus_relay_order (
+    id, customer_user_id, courier_profile_id, pickup_point_id, delivery_target_type, delivery_building,
+    delivery_detail, delivery_contact_name, delivery_contact_phone, food_description, external_platform_name,
+    external_order_ref, pickup_code, base_fee, priority_fee, tip_fee, total_amount, payment_status,
+    order_status, priority_dormitory_building, priority_window_deadline, accepted_at, cancel_locked_until,
+    picked_up_at, delivered_at, auto_complete_at, pickup_proof_image_url, customer_remark, courier_remark,
+    after_sale_reason, created_at, updated_at
+) KEY (id) VALUES
+('CR202604070001', 1, NULL, 1, 'DORMITORY', '竹园', '竹园2栋门口', '张三', '13900139000', '美团订单：汉堡套餐 + 奶茶', '美团', 'MT-20260407-001', 'A18', 3.00, 3.00, 2.00, 8.00, 'PAID', 'BUILDING_PRIORITY_PENDING', '竹园', DATEADD('MINUTE', 5, CURRENT_TIMESTAMP), NULL, NULL, NULL, NULL, NULL, NULL, '放在门厅即可', NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('CR202604060001', 1, 2, 2, 'LIBRARY', '图书馆', '二楼门口', '张三', '13900139000', '饿了么订单：咖啡 + 面包', '饿了么', 'ELE-20260406-008', 'B09', 3.00, 0.00, 3.00, 6.00, 'PAID', 'COMPLETED', NULL, NULL, DATEADD('HOUR', -2, CURRENT_TIMESTAMP), DATEADD('MINUTE', -115, CURRENT_TIMESTAMP), DATEADD('MINUTE', -100, CURRENT_TIMESTAMP), DATEADD('MINUTE', -70, CURRENT_TIMESTAMP), DATEADD('MINUTE', -60, CURRENT_TIMESTAMP), '/api/files/campus-pickup-proof-001.jpg', '送到图书馆二楼门口', '已按要求送达', NULL, DATEADD('HOUR', -3, CURRENT_TIMESTAMP), DATEADD('MINUTE', -60, CURRENT_TIMESTAMP));
+
+MERGE INTO campus_location_report (
+    id, relay_order_id, courier_profile_id, latitude, longitude, source, note, reported_at, created_at
+) KEY (id) VALUES
+(1, 'CR202604060001', 2, 29.5630100, 106.5515500, 'MANUAL', '已到图书馆二楼门口', DATEADD('MINUTE', -65, CURRENT_TIMESTAMP), CURRENT_TIMESTAMP);
+
+MERGE INTO campus_settlement_record (
+    id, relay_order_id, courier_profile_id, gross_amount, platform_commission, pending_amount,
+    settlement_status, settled_at, remark, created_at, updated_at
+) KEY (id) VALUES
+(1, 'CR202604060001', 2, 6.00, 0.00, 6.00, 'PENDING', NULL, '第一版待结算示例', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

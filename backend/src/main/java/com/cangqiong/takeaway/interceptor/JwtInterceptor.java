@@ -16,6 +16,12 @@ import java.util.Set;
 @Component
 public class JwtInterceptor implements HandlerInterceptor {
 
+    private static final String CAMPUS_PUBLIC_PREFIX = "/api/campus/public/";
+    private static final String CAMPUS_ADMIN_PREFIX = "/api/campus/admin/";
+    private static final String CAMPUS_COURIER_TOKEN_PATH = "/api/campus/courier/auth/token";
+    private static final String CAMPUS_COURIER_PROFILE_PATH = "/api/campus/courier/profile";
+    private static final String CAMPUS_COURIER_REVIEW_STATUS_PATH = "/api/campus/courier/review-status";
+
     private static final Set<String> PUBLIC_GET_PATHS = Set.of(
             "/api/public/categories",
             "/api/public/dishes",
@@ -59,7 +65,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         String userType = jwtUtil.getUserTypeFromToken(token);
         String requiredUserType = resolveRequiredUserType(requestUri);
 
-        if (requiredUserType != null && !requiredUserType.equals(userType)) {
+        if (!isUserTypeAllowed(requestUri, requiredUserType, userType)) {
             log.warn("用户类型不匹配: uri={}, required={}, actual={}", requestUri, requiredUserType, userType);
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.setContentType("application/json;charset=UTF-8");
@@ -84,6 +90,14 @@ public class JwtInterceptor implements HandlerInterceptor {
             return true;
         }
 
+        if (uri.startsWith(CAMPUS_PUBLIC_PREFIX)) {
+            return true;
+        }
+
+        if (CAMPUS_COURIER_TOKEN_PATH.equals(uri)) {
+            return true;
+        }
+
         if ("/api/employees/login".equals(uri) || "/api/users/login".equals(uri)) {
             return true;
         }
@@ -100,6 +114,18 @@ public class JwtInterceptor implements HandlerInterceptor {
     }
 
     private String resolveRequiredUserType(String uri) {
+        if (uri.startsWith(CAMPUS_PUBLIC_PREFIX)) {
+            return null;
+        }
+        if (uri.startsWith(CAMPUS_ADMIN_PREFIX)) {
+            return "employee";
+        }
+        if (uri.startsWith("/api/campus/customer/")) {
+            return "customer";
+        }
+        if (uri.startsWith("/api/campus/courier/")) {
+            return "courier";
+        }
         if (uri.startsWith("/api/users/") || uri.startsWith("/api/user/")) {
             return "customer";
         }
@@ -107,5 +133,22 @@ public class JwtInterceptor implements HandlerInterceptor {
             return null;
         }
         return "employee";
+    }
+
+    private boolean isUserTypeAllowed(String uri, String requiredUserType, String actualUserType) {
+        if (requiredUserType == null) {
+            return true;
+        }
+        if (requiredUserType.equals(actualUserType)) {
+            return true;
+        }
+        if (isCourierBridgePath(uri)) {
+            return "customer".equals(actualUserType) || "courier".equals(actualUserType);
+        }
+        return false;
+    }
+
+    private boolean isCourierBridgePath(String uri) {
+        return CAMPUS_COURIER_PROFILE_PATH.equals(uri) || CAMPUS_COURIER_REVIEW_STATUS_PATH.equals(uri);
     }
 }

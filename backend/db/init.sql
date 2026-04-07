@@ -223,3 +223,161 @@ INSERT INTO shop_business_hour (day_key, day_name, is_open, open_time, close_tim
 ('friday', '周五', 1, '09:00', '23:00', 5),
 ('saturday', '周六', 1, '10:00', '23:00', 6),
 ('sunday', '周日', 1, '10:00', '22:00', 7);
+
+-- ============================================
+-- Campus relay tables
+-- ============================================
+
+CREATE TABLE IF NOT EXISTS campus_customer_profile (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '校园用户资料ID',
+    user_id BIGINT NOT NULL UNIQUE COMMENT '关联用户ID',
+    real_name VARCHAR(50) NOT NULL COMMENT '真实姓名',
+    identity_type VARCHAR(20) NOT NULL COMMENT '身份类型(STUDENT/STAFF)',
+    identity_no VARCHAR(50) NOT NULL COMMENT '学号或工号',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (user_id) REFERENCES user(id)
+) COMMENT='校园普通用户资料表';
+
+CREATE TABLE IF NOT EXISTS campus_courier_profile (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '兼职配送员资料ID',
+    user_id BIGINT NOT NULL UNIQUE COMMENT '关联用户ID',
+    real_name VARCHAR(50) NOT NULL COMMENT '真实姓名',
+    student_no VARCHAR(50) NOT NULL COMMENT '学号',
+    college VARCHAR(100) NOT NULL COMMENT '学院',
+    major VARCHAR(100) NOT NULL COMMENT '专业',
+    class_name VARCHAR(100) NOT NULL COMMENT '班级',
+    dormitory_building VARCHAR(50) NOT NULL COMMENT '宿舍楼栋',
+    dormitory_room VARCHAR(50) NOT NULL COMMENT '宿舍号',
+    id_card_last4 VARCHAR(4) NOT NULL COMMENT '身份证后四位',
+    emergency_contact_name VARCHAR(50) NOT NULL COMMENT '紧急联系人',
+    emergency_contact_phone VARCHAR(20) NOT NULL COMMENT '紧急联系人电话',
+    verification_photo_url VARCHAR(255) COMMENT '学信网认证照片',
+    schedule_attachment_url VARCHAR(255) COMMENT '课程表附件',
+    review_status VARCHAR(20) NOT NULL COMMENT '审核状态',
+    review_comment VARCHAR(255) COMMENT '审核备注',
+    reviewed_by_employee_id BIGINT COMMENT '审核管理员ID',
+    reviewed_at DATETIME COMMENT '审核时间',
+    enabled TINYINT DEFAULT 1 COMMENT '是否启用',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (reviewed_by_employee_id) REFERENCES employee(id)
+) COMMENT='兼职配送员资料表';
+
+CREATE TABLE IF NOT EXISTS campus_pickup_point (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '取餐点ID',
+    code VARCHAR(50) NOT NULL UNIQUE COMMENT '取餐点编码',
+    name VARCHAR(100) NOT NULL COMMENT '取餐点名称',
+    gate_area VARCHAR(100) NOT NULL COMMENT '所属区域',
+    description VARCHAR(255) NOT NULL COMMENT '说明',
+    enabled TINYINT DEFAULT 1 COMMENT '是否启用',
+    sort INT DEFAULT 0 COMMENT '排序',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) COMMENT='校园取餐点表';
+
+CREATE TABLE IF NOT EXISTS campus_relay_order (
+    id VARCHAR(32) PRIMARY KEY COMMENT '代送订单号',
+    customer_user_id BIGINT NOT NULL COMMENT '下单用户ID',
+    courier_profile_id BIGINT COMMENT '接单配送员资料ID',
+    pickup_point_id BIGINT NOT NULL COMMENT '取餐点ID',
+    delivery_target_type VARCHAR(30) NOT NULL COMMENT '配送目标类型',
+    delivery_building VARCHAR(100) NOT NULL COMMENT '配送楼栋',
+    delivery_detail VARCHAR(255) NOT NULL COMMENT '配送详细说明',
+    delivery_contact_name VARCHAR(50) NOT NULL COMMENT '联系人姓名',
+    delivery_contact_phone VARCHAR(20) NOT NULL COMMENT '联系人电话',
+    food_description VARCHAR(255) NOT NULL COMMENT '外卖描述',
+    external_platform_name VARCHAR(50) COMMENT '外部平台名称',
+    external_order_ref VARCHAR(100) COMMENT '外部订单号',
+    pickup_code VARCHAR(50) COMMENT '取餐码',
+    base_fee DECIMAL(10,2) NOT NULL COMMENT '基础代送费',
+    priority_fee DECIMAL(10,2) NOT NULL DEFAULT 0 COMMENT '加急费',
+    tip_fee DECIMAL(10,2) NOT NULL DEFAULT 0 COMMENT '打赏费',
+    total_amount DECIMAL(10,2) NOT NULL COMMENT '订单金额',
+    payment_status VARCHAR(20) NOT NULL COMMENT '支付状态',
+    order_status VARCHAR(30) NOT NULL COMMENT '订单状态',
+    priority_dormitory_building VARCHAR(50) COMMENT '优先楼栋',
+    priority_window_deadline DATETIME COMMENT '优先窗口截止时间',
+    accepted_at DATETIME COMMENT '接单时间',
+    cancel_locked_until DATETIME COMMENT '取消锁定截止时间',
+    picked_up_at DATETIME COMMENT '取餐时间',
+    delivered_at DATETIME COMMENT '送达时间',
+    auto_complete_at DATETIME COMMENT '自动完成时间',
+    pickup_proof_image_url VARCHAR(255) COMMENT '取餐凭证',
+    customer_remark VARCHAR(255) COMMENT '用户备注',
+    courier_remark VARCHAR(255) COMMENT '配送员备注',
+    after_sale_reason VARCHAR(255) COMMENT '售后原因',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (customer_user_id) REFERENCES user(id),
+    FOREIGN KEY (courier_profile_id) REFERENCES campus_courier_profile(id),
+    FOREIGN KEY (pickup_point_id) REFERENCES campus_pickup_point(id)
+) COMMENT='校园代送订单表';
+
+CREATE TABLE IF NOT EXISTS campus_location_report (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '位置上报ID',
+    relay_order_id VARCHAR(32) NOT NULL COMMENT '代送订单号',
+    courier_profile_id BIGINT NOT NULL COMMENT '配送员资料ID',
+    latitude DECIMAL(10,7) NOT NULL COMMENT '纬度',
+    longitude DECIMAL(10,7) NOT NULL COMMENT '经度',
+    source VARCHAR(30) NOT NULL COMMENT '来源',
+    note VARCHAR(255) COMMENT '备注',
+    reported_at DATETIME NOT NULL COMMENT '上报时间',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    FOREIGN KEY (relay_order_id) REFERENCES campus_relay_order(id),
+    FOREIGN KEY (courier_profile_id) REFERENCES campus_courier_profile(id)
+) COMMENT='配送位置上报表';
+
+CREATE TABLE IF NOT EXISTS campus_settlement_record (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '结算记录ID',
+    relay_order_id VARCHAR(32) NOT NULL UNIQUE COMMENT '代送订单号',
+    courier_profile_id BIGINT NOT NULL COMMENT '配送员资料ID',
+    gross_amount DECIMAL(10,2) NOT NULL COMMENT '应结金额',
+    platform_commission DECIMAL(10,2) NOT NULL DEFAULT 0 COMMENT '平台抽成',
+    pending_amount DECIMAL(10,2) NOT NULL COMMENT '待结算金额',
+    settlement_status VARCHAR(20) NOT NULL COMMENT '结算状态',
+    settled_at DATETIME COMMENT '结算时间',
+    remark VARCHAR(255) COMMENT '备注',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (relay_order_id) REFERENCES campus_relay_order(id),
+    FOREIGN KEY (courier_profile_id) REFERENCES campus_courier_profile(id)
+) COMMENT='待结算记录表';
+
+INSERT INTO campus_customer_profile (user_id, real_name, identity_type, identity_no) VALUES
+(1, '张三', 'STUDENT', '2023123401'),
+(2, '李四', 'STAFF', 'T20260001');
+
+INSERT INTO campus_courier_profile (
+    user_id, real_name, student_no, college, major, class_name, dormitory_building, dormitory_room,
+    id_card_last4, emergency_contact_name, emergency_contact_phone, verification_photo_url,
+    schedule_attachment_url, review_status, review_comment, reviewed_by_employee_id, reviewed_at, enabled
+) VALUES
+(1, '张三', '2023123401', '信息工程学院', '软件技术', '软工2301', '竹园', '2-403', '1234', '张父', '13900000001', '/api/files/courier-zhangsan-verify.jpg', '/api/files/courier-zhangsan-schedule.jpg', 'PENDING', '待人工审核', NULL, NULL, 0),
+(2, '李四', '2023123402', '信息工程学院', '计算机网络技术', '网工2302', '杏园', '1-206', '5678', '李母', '13900000002', '/api/files/courier-lisi-verify.jpg', '/api/files/courier-lisi-schedule.jpg', 'APPROVED', '首批示例账号', 1, NOW(), 1);
+
+INSERT INTO campus_pickup_point (code, name, gate_area, description, enabled, sort) VALUES
+('NORTH_GATE_TEMP', '主大门门卫室西侧临时取餐区', '北门', '适用于临时堆放和高峰期取餐', 1, 1),
+('NORTH_GATE_LOCKER', '主大门外卖柜旁固定取餐区', '北门', '适用于固定外卖柜和外卖架旁取餐', 1, 2);
+
+INSERT INTO campus_relay_order (
+    id, customer_user_id, courier_profile_id, pickup_point_id, delivery_target_type, delivery_building,
+    delivery_detail, delivery_contact_name, delivery_contact_phone, food_description, external_platform_name,
+    external_order_ref, pickup_code, base_fee, priority_fee, tip_fee, total_amount, payment_status,
+    order_status, priority_dormitory_building, priority_window_deadline, accepted_at, cancel_locked_until,
+    picked_up_at, delivered_at, auto_complete_at, pickup_proof_image_url, customer_remark, courier_remark,
+    after_sale_reason, created_at, updated_at
+) VALUES
+('CR202604070001', 1, NULL, 1, 'DORMITORY', '竹园', '竹园2栋门口', '张三', '13900139000', '美团订单：汉堡套餐 + 奶茶', '美团', 'MT-20260407-001', 'A18', 3.00, 3.00, 2.00, 8.00, 'PAID', 'BUILDING_PRIORITY_PENDING', '竹园', DATE_ADD(NOW(), INTERVAL 5 MINUTE), NULL, NULL, NULL, NULL, NULL, NULL, '放在门厅即可', NULL, NULL, NOW(), NOW()),
+('CR202604060001', 1, 2, 2, 'LIBRARY', '图书馆', '二楼门口', '张三', '13900139000', '饿了么订单：咖啡 + 面包', '饿了么', 'ELE-20260406-008', 'B09', 3.00, 0.00, 3.00, 6.00, 'PAID', 'COMPLETED', NULL, NULL, DATE_SUB(NOW(), INTERVAL 2 HOUR), DATE_SUB(NOW(), INTERVAL 115 MINUTE), DATE_SUB(NOW(), INTERVAL 100 MINUTE), DATE_SUB(NOW(), INTERVAL 70 MINUTE), DATE_SUB(NOW(), INTERVAL 60 MINUTE), '/api/files/campus-pickup-proof-001.jpg', '送到图书馆二楼门口', '已按要求送达', NULL, DATE_SUB(NOW(), INTERVAL 3 HOUR), DATE_SUB(NOW(), INTERVAL 60 MINUTE));
+
+INSERT INTO campus_location_report (
+    relay_order_id, courier_profile_id, latitude, longitude, source, note, reported_at
+) VALUES
+('CR202604060001', 2, 29.5630100, 106.5515500, 'MANUAL', '已到图书馆二楼门口', DATE_SUB(NOW(), INTERVAL 65 MINUTE));
+
+INSERT INTO campus_settlement_record (
+    relay_order_id, courier_profile_id, gross_amount, platform_commission, pending_amount, settlement_status, settled_at, remark
+) VALUES
+('CR202604060001', 2, 6.00, 0.00, 6.00, 'PENDING', NULL, '第一版待结算示例');
