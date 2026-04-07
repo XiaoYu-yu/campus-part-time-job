@@ -17,3 +17,4 @@ Thumbs.db
 
 uploads/
 project-logs/*.tmp
+.playwright-mcp/
