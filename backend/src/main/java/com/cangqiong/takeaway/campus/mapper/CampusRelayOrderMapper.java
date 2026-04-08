@@ -1,7 +1,9 @@
 package com.cangqiong.takeaway.campus.mapper;
 
 import com.cangqiong.takeaway.campus.entity.CampusRelayOrder;
+import com.cangqiong.takeaway.campus.vo.CampusAdminAfterSaleOrderVO;
 import com.cangqiong.takeaway.campus.vo.CampusCourierOrderVO;
+import com.cangqiong.takeaway.campus.vo.CampusCourierRecentExceptionVO;
 import com.cangqiong.takeaway.campus.vo.CampusCustomerOrderVO;
 import com.cangqiong.takeaway.campus.vo.CampusRelayOrderVO;
 import org.apache.ibatis.annotations.Insert;
@@ -60,6 +62,10 @@ public interface CampusRelayOrderMapper {
             "  cro.after_sale_handle_action,",
             "  cro.after_sale_handle_remark,",
             "  cro.after_sale_handled_by_employee_id,",
+            "  cro.after_sale_decision_type,",
+            "  cro.after_sale_decision_amount,",
+            "  cro.after_sale_decision_remark,",
+            "  cro.after_sale_decided_by_employee_id,",
             "  cro.exception_type,",
             "  cro.exception_remark,",
             "  cro.priority_window_deadline,",
@@ -71,6 +77,7 @@ public interface CampusRelayOrderMapper {
             "  cro.cancelled_at,",
             "  cro.after_sale_applied_at,",
             "  cro.after_sale_handled_at,",
+            "  cro.after_sale_decided_at,",
             "  cro.exception_reported_at,",
             "  cro.created_at,",
             "  cro.updated_at",
@@ -186,6 +193,71 @@ public interface CampusRelayOrderMapper {
             @Param("pickupPointId") Long pickupPointId,
             @Param("beginTime") LocalDateTime beginTime,
             @Param("endTime") LocalDateTime endTime
+    );
+
+    @Select({
+            "<script>",
+            "SELECT",
+            "  cro.id AS relay_order_id,",
+            "  cro.order_status,",
+            "  cro.customer_user_id,",
+            "  cro.courier_profile_id,",
+            "  cro.total_amount,",
+            "  cro.after_sale_reason,",
+            "  cro.after_sale_handle_action,",
+            "  cro.after_sale_handle_remark,",
+            "  cro.after_sale_handled_by_employee_id,",
+            "  cro.after_sale_decision_type,",
+            "  cro.after_sale_decision_amount,",
+            "  cro.after_sale_decision_remark,",
+            "  cro.after_sale_decided_by_employee_id,",
+            "  cro.after_sale_applied_at,",
+            "  cro.after_sale_handled_at,",
+            "  cro.after_sale_decided_at,",
+            "  cro.created_at",
+            "FROM campus_relay_order cro",
+            "<where>",
+            "  AND cro.order_status IN ('AFTER_SALE_OPEN', 'AFTER_SALE_RESOLVED', 'AFTER_SALE_REJECTED')",
+            "  <if test='orderStatus != null and orderStatus != \"\"'>AND cro.order_status = #{orderStatus}</if>",
+            "  <if test='afterSaleHandleAction != null and afterSaleHandleAction != \"\"'>AND cro.after_sale_handle_action = #{afterSaleHandleAction}</if>",
+            "  <if test='courierProfileId != null'>AND cro.courier_profile_id = #{courierProfileId}</if>",
+            "  <if test='customerUserId != null'>AND cro.customer_user_id = #{customerUserId}</if>",
+            "  <if test='relayOrderId != null and relayOrderId != \"\"'>AND cro.id = #{relayOrderId}</if>",
+            "</where>",
+            "ORDER BY cro.after_sale_applied_at DESC, cro.created_at DESC",
+            "LIMIT #{pageSize} OFFSET #{offset}",
+            "</script>"
+    })
+    List<CampusAdminAfterSaleOrderVO> selectAfterSaleByCondition(
+            @Param("orderStatus") String orderStatus,
+            @Param("afterSaleHandleAction") String afterSaleHandleAction,
+            @Param("courierProfileId") Long courierProfileId,
+            @Param("customerUserId") Long customerUserId,
+            @Param("relayOrderId") String relayOrderId,
+            @Param("offset") int offset,
+            @Param("pageSize") int pageSize
+    );
+
+    @Select({
+            "<script>",
+            "SELECT COUNT(*)",
+            "FROM campus_relay_order cro",
+            "<where>",
+            "  AND cro.order_status IN ('AFTER_SALE_OPEN', 'AFTER_SALE_RESOLVED', 'AFTER_SALE_REJECTED')",
+            "  <if test='orderStatus != null and orderStatus != \"\"'>AND cro.order_status = #{orderStatus}</if>",
+            "  <if test='afterSaleHandleAction != null and afterSaleHandleAction != \"\"'>AND cro.after_sale_handle_action = #{afterSaleHandleAction}</if>",
+            "  <if test='courierProfileId != null'>AND cro.courier_profile_id = #{courierProfileId}</if>",
+            "  <if test='customerUserId != null'>AND cro.customer_user_id = #{customerUserId}</if>",
+            "  <if test='relayOrderId != null and relayOrderId != \"\"'>AND cro.id = #{relayOrderId}</if>",
+            "</where>",
+            "</script>"
+    })
+    Long countAfterSaleByCondition(
+            @Param("orderStatus") String orderStatus,
+            @Param("afterSaleHandleAction") String afterSaleHandleAction,
+            @Param("courierProfileId") Long courierProfileId,
+            @Param("customerUserId") Long customerUserId,
+            @Param("relayOrderId") String relayOrderId
     );
 
     @Select({
@@ -609,6 +681,26 @@ public interface CampusRelayOrderMapper {
     );
 
     @Update("UPDATE campus_relay_order SET " +
+            "after_sale_decision_type = #{decisionType}, " +
+            "after_sale_decision_amount = #{decisionAmount}, " +
+            "after_sale_decision_remark = #{decisionRemark}, " +
+            "after_sale_decided_by_employee_id = #{decidedByEmployeeId}, " +
+            "after_sale_decided_at = #{decidedAt}, " +
+            "updated_at = #{updatedAt} " +
+            "WHERE id = #{id} " +
+            "AND order_status = 'AFTER_SALE_RESOLVED' " +
+            "AND after_sale_decision_type IS NULL")
+    int recordAfterSaleDecisionByAdmin(
+            @Param("id") String id,
+            @Param("decisionType") String decisionType,
+            @Param("decisionAmount") java.math.BigDecimal decisionAmount,
+            @Param("decisionRemark") String decisionRemark,
+            @Param("decidedByEmployeeId") Long decidedByEmployeeId,
+            @Param("decidedAt") LocalDateTime decidedAt,
+            @Param("updatedAt") LocalDateTime updatedAt
+    );
+
+    @Update("UPDATE campus_relay_order SET " +
             "exception_type = #{exceptionType}, " +
             "exception_remark = #{exceptionRemark}, " +
             "exception_reported_at = #{exceptionReportedAt}, " +
@@ -623,5 +715,26 @@ public interface CampusRelayOrderMapper {
             @Param("exceptionRemark") String exceptionRemark,
             @Param("exceptionReportedAt") LocalDateTime exceptionReportedAt,
             @Param("updatedAt") LocalDateTime updatedAt
+    );
+
+    @Select({
+            "<script>",
+            "SELECT",
+            "  id AS relay_order_id,",
+            "  order_status,",
+            "  customer_user_id,",
+            "  exception_type,",
+            "  exception_remark,",
+            "  exception_reported_at",
+            "FROM campus_relay_order",
+            "WHERE courier_profile_id = #{courierProfileId}",
+            "  AND exception_reported_at IS NOT NULL",
+            "ORDER BY exception_reported_at DESC",
+            "LIMIT #{limit}",
+            "</script>"
+    })
+    List<CampusCourierRecentExceptionVO> selectRecentExceptionsByCourier(
+            @Param("courierProfileId") Long courierProfileId,
+            @Param("limit") int limit
     );
 }

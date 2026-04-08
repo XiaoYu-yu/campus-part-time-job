@@ -1,5 +1,6 @@
 package com.cangqiong.takeaway.campus.service.impl;
 
+import com.cangqiong.takeaway.campus.dto.CampusAdminAfterSaleDecisionDTO;
 import com.cangqiong.takeaway.campus.dto.CampusAdminAfterSaleHandleDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCourierDeliverDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCourierExceptionReportDTO;
@@ -7,6 +8,7 @@ import com.cangqiong.takeaway.campus.dto.CampusCourierPickupDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderAfterSaleDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCancelDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCreateDTO;
+import com.cangqiong.takeaway.campus.enums.CampusAfterSaleDecisionType;
 import com.cangqiong.takeaway.campus.enums.CampusAfterSaleHandleAction;
 import com.cangqiong.takeaway.campus.entity.CampusCourierProfile;
 import com.cangqiong.takeaway.campus.entity.CampusCustomerProfile;
@@ -21,12 +23,15 @@ import com.cangqiong.takeaway.campus.mapper.CampusPickupPointMapper;
 import com.cangqiong.takeaway.campus.mapper.CampusRelayOrderMapper;
 import com.cangqiong.takeaway.campus.mapper.CampusSettlementRecordMapper;
 import com.cangqiong.takeaway.campus.query.CampusCourierAvailableOrderQuery;
+import com.cangqiong.takeaway.campus.query.CampusAdminAfterSaleOrderQuery;
 import com.cangqiong.takeaway.campus.query.CampusCustomerOrderQuery;
 import com.cangqiong.takeaway.campus.query.CampusRelayOrderQuery;
 import com.cangqiong.takeaway.campus.service.CampusCourierProfileService;
+import com.cangqiong.takeaway.campus.vo.CampusAdminAfterSaleOrderVO;
 import com.cangqiong.takeaway.campus.vo.CampusOrderTimelineItemVO;
 import com.cangqiong.takeaway.campus.vo.CampusOrderTimelineVO;
 import com.cangqiong.takeaway.campus.vo.CampusCourierOrderVO;
+import com.cangqiong.takeaway.campus.vo.CampusCourierRecentExceptionVO;
 import com.cangqiong.takeaway.campus.service.CampusCustomerProfileService;
 import com.cangqiong.takeaway.campus.service.CampusRelayOrderService;
 import com.cangqiong.takeaway.campus.support.CampusRuleCatalog;
@@ -52,6 +57,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
 
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.00");
+    private static final BigDecimal MAX_DECIMAL_10_2 = new BigDecimal("99999999.99");
     private static final String SETTLEMENT_REMARK = "订单完成待结算";
     private static final int ENABLED = 1;
     private static final DateTimeFormatter ORDER_ID_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -106,6 +112,33 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
                 query.getEndTime()
         );
 
+        return buildPageResult(records, total, page, pageSize);
+    }
+
+    @Override
+    public PageResult<CampusAdminAfterSaleOrderVO> pageAfterSaleByAdmin(CampusAdminAfterSaleOrderQuery query) {
+        int page = safePositive(query == null ? null : query.getPage(), 1);
+        int pageSize = safePageSize(query == null ? null : query.getPageSize(), query == null ? null : query.getSize());
+        int offset = (page - 1) * pageSize;
+        String orderStatus = normalizeAfterSaleOrderStatusFilter(query == null ? null : query.getOrderStatus());
+        String afterSaleHandleAction = normalizeAfterSaleHandleActionFilter(query == null ? null : query.getAfterSaleHandleAction());
+
+        List<CampusAdminAfterSaleOrderVO> records = campusRelayOrderMapper.selectAfterSaleByCondition(
+                orderStatus,
+                afterSaleHandleAction,
+                query == null ? null : query.getCourierProfileId(),
+                query == null ? null : query.getCustomerUserId(),
+                normalizeText(query == null ? null : query.getRelayOrderId()),
+                offset,
+                pageSize
+        );
+        Long total = campusRelayOrderMapper.countAfterSaleByCondition(
+                orderStatus,
+                afterSaleHandleAction,
+                query == null ? null : query.getCourierProfileId(),
+                query == null ? null : query.getCustomerUserId(),
+                normalizeText(query == null ? null : query.getRelayOrderId())
+        );
         return buildPageResult(records, total, page, pageSize);
     }
 
@@ -512,6 +545,44 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
 
     @Override
     @Transactional
+    public void recordAfterSaleDecisionByAdmin(String id, CampusAdminAfterSaleDecisionDTO dto, Long employeeId) {
+        if (employeeId == null) {
+            throw new BusinessException(401, "未授权，请先登录");
+        }
+        if (dto == null) {
+            throw new BusinessException("售后决策请求不能为空");
+        }
+
+        CampusRelayOrder order = requireRelayOrder(id);
+        if (!CampusRelayOrderStatus.AFTER_SALE_RESOLVED.name().equals(order.getOrderStatus())) {
+            throw new BusinessException("当前订单状态不可记录售后决策");
+        }
+        if (StringUtils.hasText(order.getAfterSaleDecisionType())) {
+            throw new BusinessException("当前订单已记录售后决策");
+        }
+
+        CampusAfterSaleDecisionType decisionType = resolveAfterSaleDecisionType(dto.getDecisionType());
+        String decisionRemark = normalizeText(dto.getDecisionRemark());
+        requireText(decisionRemark, "售后决策备注不能为空");
+        BigDecimal decisionAmount = normalizeDecisionAmount(dto.getDecisionAmount(), decisionType, order.getTotalAmount());
+
+        LocalDateTime now = LocalDateTime.now();
+        int updated = campusRelayOrderMapper.recordAfterSaleDecisionByAdmin(
+                id,
+                decisionType.name(),
+                decisionAmount,
+                decisionRemark,
+                employeeId,
+                now,
+                now
+        );
+        if (updated == 0) {
+            throw new BusinessException("订单状态已变化，无法记录售后决策");
+        }
+    }
+
+    @Override
+    @Transactional
     public void reportExceptionByCourier(String id, CampusCourierExceptionReportDTO dto, Long courierUserId) {
         CampusCourierProfile courierProfile = campusCourierProfileService.requireApprovedEnabledProfile(courierUserId);
         CampusRelayOrder order = requireRelayOrder(id);
@@ -538,6 +609,17 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
     }
 
     @Override
+    public List<CampusCourierRecentExceptionVO> listRecentExceptionsByCourier(Long courierProfileId, Integer limit) {
+        if (courierProfileId == null) {
+            throw new BusinessException("配送员资料不能为空");
+        }
+        int resolvedLimit = limit == null ? 10 : limit;
+        resolvedLimit = resolvedLimit < 1 ? 10 : resolvedLimit;
+        resolvedLimit = Math.min(resolvedLimit, 50);
+        return campusRelayOrderMapper.selectRecentExceptionsByCourier(courierProfileId, resolvedLimit);
+    }
+
+    @Override
     public CampusOrderTimelineVO getTimelineByAdmin(String id) {
         CampusRelayOrderVO order = getById(id);
         CampusSettlementRecord settlementRecord = campusSettlementRecordMapper.selectByRelayOrderId(id);
@@ -558,6 +640,9 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         appendTimelineItem(items, "AFTER_SALE_REJECTED", "售后已驳回",
                 CampusAfterSaleHandleAction.REJECTED.name().equals(order.getAfterSaleHandleAction()) ? order.getAfterSaleHandledAt() : null,
                 buildAfterSaleHandleRemark(order));
+        appendTimelineItem(items, "AFTER_SALE_DECISION_RECORDED", "售后决策已记录",
+                order.getAfterSaleDecidedAt(),
+                buildAfterSaleDecisionRemark(order));
 
         if (settlementRecord != null) {
             LocalDateTime eventTime = settlementRecord.getSettledAt() != null
@@ -853,6 +938,26 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         return normalizeText(order.getAfterSaleHandleRemark());
     }
 
+    private String buildAfterSaleDecisionRemark(CampusRelayOrderVO order) {
+        if (!StringUtils.hasText(order.getAfterSaleDecisionType())) {
+            return null;
+        }
+        String amountText = order.getAfterSaleDecisionAmount() == null
+                ? null
+                : order.getAfterSaleDecisionAmount().setScale(2, RoundingMode.HALF_UP).toPlainString();
+        String remark = normalizeText(order.getAfterSaleDecisionRemark());
+        if (amountText == null && remark == null) {
+            return order.getAfterSaleDecisionType();
+        }
+        if (amountText == null) {
+            return order.getAfterSaleDecisionType() + ": " + remark;
+        }
+        if (remark == null) {
+            return order.getAfterSaleDecisionType() + ": " + amountText;
+        }
+        return order.getAfterSaleDecisionType() + ": " + amountText + " | " + remark;
+    }
+
     private void assertControlledFileReference(String value, String message) {
         String normalized = normalizeText(value);
         if (!StringUtils.hasText(normalized) || !normalized.startsWith(CampusRuleCatalog.CONTROLLED_FILE_PREFIX)) {
@@ -900,11 +1005,76 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         return "CR" + now.format(ORDER_ID_TIME_FORMATTER) + String.format("%04d", ThreadLocalRandom.current().nextInt(10000));
     }
 
+    private String normalizeAfterSaleOrderStatusFilter(String value) {
+        String normalized = normalizeText(value);
+        if (!StringUtils.hasText(normalized)) {
+            return null;
+        }
+        String upper = normalized.toUpperCase();
+        if (!CampusRelayOrderStatus.AFTER_SALE_OPEN.name().equals(upper)
+                && !CampusRelayOrderStatus.AFTER_SALE_RESOLVED.name().equals(upper)
+                && !CampusRelayOrderStatus.AFTER_SALE_REJECTED.name().equals(upper)) {
+            throw new BusinessException("售后查询状态仅支持 AFTER_SALE_OPEN、AFTER_SALE_RESOLVED、AFTER_SALE_REJECTED");
+        }
+        return upper;
+    }
+
+    private String normalizeAfterSaleHandleActionFilter(String value) {
+        String normalized = normalizeText(value);
+        if (!StringUtils.hasText(normalized)) {
+            return null;
+        }
+        return resolveAfterSaleHandleAction(normalized).name();
+    }
+
     private CampusAfterSaleHandleAction resolveAfterSaleHandleAction(String action) {
         try {
             return CampusAfterSaleHandleAction.valueOf(normalizeText(action).toUpperCase());
         } catch (Exception ex) {
             throw new BusinessException("不支持的售后处理动作");
+        }
+    }
+
+    private CampusAfterSaleDecisionType resolveAfterSaleDecisionType(String decisionType) {
+        try {
+            return CampusAfterSaleDecisionType.valueOf(normalizeText(decisionType).toUpperCase());
+        } catch (Exception ex) {
+            throw new BusinessException("不支持的售后决策类型");
+        }
+    }
+
+    private BigDecimal normalizeDecisionAmount(BigDecimal decisionAmount, CampusAfterSaleDecisionType decisionType, BigDecimal totalAmount) {
+        if (decisionType == CampusAfterSaleDecisionType.NONE) {
+            if (decisionAmount != null) {
+                throw new BusinessException("NONE 决策类型不允许传入金额");
+            }
+            return null;
+        }
+        if (decisionAmount == null) {
+            throw new BusinessException("退款/补偿金额不能为空");
+        }
+        BigDecimal normalized = decisionAmount.setScale(2, RoundingMode.HALF_UP);
+        if (normalized.compareTo(ZERO_AMOUNT) < 0) {
+            throw new BusinessException("退款/补偿金额不能为负数");
+        }
+        assertWithinMoneyPrecision(normalized, "退款/补偿金额超出支持范围");
+        if (decisionType == CampusAfterSaleDecisionType.REFUND) {
+            BigDecimal normalizedTotalAmount = totalAmount == null
+                    ? ZERO_AMOUNT
+                    : totalAmount.setScale(2, RoundingMode.HALF_UP);
+            if (normalized.compareTo(normalizedTotalAmount) > 0) {
+                throw new BusinessException("退款金额不能超过订单总金额");
+            }
+        }
+        return normalized;
+    }
+
+    private void assertWithinMoneyPrecision(BigDecimal amount, String message) {
+        if (amount == null) {
+            return;
+        }
+        if (amount.compareTo(MAX_DECIMAL_10_2) > 0) {
+            throw new BusinessException(message);
         }
     }
 

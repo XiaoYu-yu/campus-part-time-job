@@ -229,6 +229,11 @@ CREATE TABLE IF NOT EXISTS campus_relay_order (
     after_sale_handle_action VARCHAR(20),
     after_sale_handle_remark VARCHAR(255),
     after_sale_handled_by_employee_id BIGINT,
+    after_sale_decision_type VARCHAR(20),
+    after_sale_decision_amount DECIMAL(10, 2),
+    after_sale_decision_remark VARCHAR(255),
+    after_sale_decided_by_employee_id BIGINT,
+    after_sale_decided_at TIMESTAMP,
     exception_type VARCHAR(50),
     exception_remark VARCHAR(255),
     exception_reported_at TIMESTAMP,
@@ -237,7 +242,8 @@ CREATE TABLE IF NOT EXISTS campus_relay_order (
     CONSTRAINT fk_campus_relay_order_user FOREIGN KEY (customer_user_id) REFERENCES user(id),
     CONSTRAINT fk_campus_relay_order_courier FOREIGN KEY (courier_profile_id) REFERENCES campus_courier_profile(id),
     CONSTRAINT fk_campus_relay_order_pickup_point FOREIGN KEY (pickup_point_id) REFERENCES campus_pickup_point(id),
-    CONSTRAINT fk_campus_relay_order_after_sale_employee FOREIGN KEY (after_sale_handled_by_employee_id) REFERENCES employee(id)
+    CONSTRAINT fk_campus_relay_order_after_sale_employee FOREIGN KEY (after_sale_handled_by_employee_id) REFERENCES employee(id),
+    CONSTRAINT fk_campus_relay_order_after_sale_decision_employee FOREIGN KEY (after_sale_decided_by_employee_id) REFERENCES employee(id)
 );
 
 CREATE TABLE IF NOT EXISTS campus_location_report (

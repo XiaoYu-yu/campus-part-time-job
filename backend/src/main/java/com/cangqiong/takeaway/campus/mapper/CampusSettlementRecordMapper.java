@@ -16,6 +16,9 @@ import java.util.List;
 @Mapper
 public interface CampusSettlementRecordMapper {
 
+    @Select("SELECT * FROM campus_settlement_record WHERE id = #{id}")
+    CampusSettlementRecord selectById(Long id);
+
     @Select("SELECT * FROM campus_settlement_record WHERE relay_order_id = #{relayOrderId}")
     CampusSettlementRecord selectByRelayOrderId(String relayOrderId);
 
@@ -46,6 +49,20 @@ public interface CampusSettlementRecordMapper {
             @Param("platformCommission") BigDecimal platformCommission,
             @Param("pendingAmount") BigDecimal pendingAmount,
             @Param("settlementStatus") String settlementStatus,
+            @Param("remark") String remark,
+            @Param("updatedAt") LocalDateTime updatedAt
+    );
+
+    @Update("UPDATE campus_settlement_record SET " +
+            "settlement_status = #{settlementStatus}, " +
+            "settled_at = #{settledAt}, " +
+            "remark = #{remark}, " +
+            "updated_at = #{updatedAt} " +
+            "WHERE id = #{id} AND settlement_status = 'PENDING'")
+    int confirmByAdmin(
+            @Param("id") Long id,
+            @Param("settlementStatus") String settlementStatus,
+            @Param("settledAt") LocalDateTime settledAt,
             @Param("remark") String remark,
             @Param("updatedAt") LocalDateTime updatedAt
     );

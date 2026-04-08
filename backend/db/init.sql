@@ -316,6 +316,11 @@ CREATE TABLE IF NOT EXISTS campus_relay_order (
     after_sale_handle_action VARCHAR(20) COMMENT '售后处理动作',
     after_sale_handle_remark VARCHAR(255) COMMENT '售后处理备注',
     after_sale_handled_by_employee_id BIGINT COMMENT '售后处理管理员ID',
+    after_sale_decision_type VARCHAR(20) COMMENT '售后决策类型',
+    after_sale_decision_amount DECIMAL(10,2) COMMENT '售后决策金额',
+    after_sale_decision_remark VARCHAR(255) COMMENT '售后决策备注',
+    after_sale_decided_by_employee_id BIGINT COMMENT '售后决策管理员ID',
+    after_sale_decided_at DATETIME COMMENT '售后决策时间',
     exception_type VARCHAR(50) COMMENT '最新异常类型',
     exception_remark VARCHAR(255) COMMENT '最新异常说明',
     exception_reported_at DATETIME COMMENT '最新异常上报时间',
@@ -324,7 +329,8 @@ CREATE TABLE IF NOT EXISTS campus_relay_order (
     FOREIGN KEY (customer_user_id) REFERENCES user(id),
     FOREIGN KEY (courier_profile_id) REFERENCES campus_courier_profile(id),
     FOREIGN KEY (pickup_point_id) REFERENCES campus_pickup_point(id),
-    FOREIGN KEY (after_sale_handled_by_employee_id) REFERENCES employee(id)
+    FOREIGN KEY (after_sale_handled_by_employee_id) REFERENCES employee(id),
+    FOREIGN KEY (after_sale_decided_by_employee_id) REFERENCES employee(id)
 ) COMMENT='校园代送订单表';
 
 CREATE TABLE IF NOT EXISTS campus_location_report (
@@ -380,10 +386,11 @@ INSERT INTO campus_relay_order (
     order_status, priority_dormitory_building, priority_window_deadline, accepted_at, cancel_locked_until,
     picked_up_at, delivered_at, auto_complete_at, after_sale_handled_at, pickup_proof_image_url, customer_remark, courier_remark,
     after_sale_reason, after_sale_handle_action, after_sale_handle_remark, after_sale_handled_by_employee_id,
+    after_sale_decision_type, after_sale_decision_amount, after_sale_decision_remark, after_sale_decided_by_employee_id, after_sale_decided_at,
     exception_type, exception_remark, exception_reported_at, created_at, updated_at
 ) VALUES
-('CR202604070001', 1, NULL, 1, 'DORMITORY', '竹园', '竹园2栋门口', '张三', '13900139000', '美团订单：汉堡套餐 + 奶茶', '美团', 'MT-20260407-001', 'A18', 3.00, 3.00, 2.00, 8.00, 'PAID', 'BUILDING_PRIORITY_PENDING', '竹园', DATE_ADD(NOW(), INTERVAL 5 MINUTE), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '放在门厅即可', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NOW(), NOW()),
-('CR202604060001', 1, 2, 2, 'LIBRARY', '图书馆', '二楼门口', '张三', '13900139000', '饿了么订单：咖啡 + 面包', '饿了么', 'ELE-20260406-008', 'B09', 3.00, 0.00, 3.00, 6.00, 'PAID', 'COMPLETED', NULL, NULL, DATE_SUB(NOW(), INTERVAL 2 HOUR), DATE_SUB(NOW(), INTERVAL 115 MINUTE), DATE_SUB(NOW(), INTERVAL 100 MINUTE), DATE_SUB(NOW(), INTERVAL 70 MINUTE), DATE_SUB(NOW(), INTERVAL 60 MINUTE), NULL, NULL, NULL, '/api/files/campus-pickup-proof-001.jpg', NULL, '送到图书馆二楼门口', '已按要求送达', NULL, NULL, NULL, NULL, NULL, NULL, NULL, DATE_SUB(NOW(), INTERVAL 3 HOUR), DATE_SUB(NOW(), INTERVAL 60 MINUTE));
+('CR202604070001', 1, NULL, 1, 'DORMITORY', '竹园', '竹园2栋门口', '张三', '13900139000', '美团订单：汉堡套餐 + 奶茶', '美团', 'MT-20260407-001', 'A18', 3.00, 3.00, 2.00, 8.00, 'PAID', 'BUILDING_PRIORITY_PENDING', '竹园', DATE_ADD(NOW(), INTERVAL 5 MINUTE), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '放在门厅即可', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NOW(), NOW()),
+('CR202604060001', 1, 2, 2, 'LIBRARY', '图书馆', '二楼门口', '张三', '13900139000', '饿了么订单：咖啡 + 面包', '饿了么', 'ELE-20260406-008', 'B09', 3.00, 0.00, 3.00, 6.00, 'PAID', 'COMPLETED', NULL, NULL, DATE_SUB(NOW(), INTERVAL 2 HOUR), DATE_SUB(NOW(), INTERVAL 115 MINUTE), DATE_SUB(NOW(), INTERVAL 100 MINUTE), DATE_SUB(NOW(), INTERVAL 70 MINUTE), DATE_SUB(NOW(), INTERVAL 60 MINUTE), NULL, NULL, NULL, '/api/files/campus-pickup-proof-001.jpg', NULL, '送到图书馆二楼门口', '已按要求送达', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, DATE_SUB(NOW(), INTERVAL 3 HOUR), DATE_SUB(NOW(), INTERVAL 60 MINUTE));
 
 INSERT INTO campus_location_report (
     relay_order_id, courier_profile_id, latitude, longitude, source, note, reported_at

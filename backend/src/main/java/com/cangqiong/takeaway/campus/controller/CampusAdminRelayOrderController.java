@@ -1,8 +1,11 @@
 package com.cangqiong.takeaway.campus.controller;
 
+import com.cangqiong.takeaway.campus.dto.CampusAdminAfterSaleDecisionDTO;
 import com.cangqiong.takeaway.campus.dto.CampusAdminAfterSaleHandleDTO;
+import com.cangqiong.takeaway.campus.query.CampusAdminAfterSaleOrderQuery;
 import com.cangqiong.takeaway.campus.query.CampusRelayOrderQuery;
 import com.cangqiong.takeaway.campus.service.CampusRelayOrderService;
+import com.cangqiong.takeaway.campus.vo.CampusAdminAfterSaleOrderVO;
 import com.cangqiong.takeaway.campus.vo.CampusOrderTimelineVO;
 import com.cangqiong.takeaway.campus.vo.CampusRelayOrderVO;
 import com.cangqiong.takeaway.interceptor.BaseContext;
@@ -32,6 +35,12 @@ public class CampusAdminRelayOrderController {
         return Result.success(campusRelayOrderService.pageQuery(query));
     }
 
+    @GetMapping("/after-sale")
+    public Result<PageResult<CampusAdminAfterSaleOrderVO>> pageAfterSale(CampusAdminAfterSaleOrderQuery query) {
+        log.info("校园代送订单售后分页查询: {}", query);
+        return Result.success(campusRelayOrderService.pageAfterSaleByAdmin(query));
+    }
+
     @GetMapping("/{id}")
     public Result<CampusRelayOrderVO> getById(@PathVariable String id) {
         log.info("校园代送订单详情查询: {}", id);
@@ -49,6 +58,14 @@ public class CampusAdminRelayOrderController {
         Long employeeId = BaseContext.getCurrentUserId();
         log.info("校园代送订单售后处理: employeeId={}, orderId={}", employeeId, id);
         campusRelayOrderService.handleAfterSaleByAdmin(id, dto, employeeId);
+        return Result.success();
+    }
+
+    @PostMapping("/{id}/after-sale-decision")
+    public Result<Void> recordAfterSaleDecision(@PathVariable String id, @Valid @RequestBody CampusAdminAfterSaleDecisionDTO dto) {
+        Long employeeId = BaseContext.getCurrentUserId();
+        log.info("校园代送订单售后决策记录: employeeId={}, orderId={}", employeeId, id);
+        campusRelayOrderService.recordAfterSaleDecisionByAdmin(id, dto, employeeId);
         return Result.success();
     }
 }

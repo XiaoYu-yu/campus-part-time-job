@@ -1,10 +1,10 @@
 # 校园代送待处理事项
 
-## Step 04 最高优先级
+## Step 05 最高优先级
 
-1. 为 admin 增加售后处理结果查询与最小退款/补偿决策能力
-2. 为 `campus_settlement_record` 增加确认结算、结算详情和最小打款备注能力
-3. 为 admin 增加可查看 courier 最近异常与低频位置记录的运营入口
+1. 为 admin 补充售后决策后的结果查询、后续处理动作和最小退款执行记录
+2. 为 settlement 增加打款结果、批量处理和最小对账能力
+3. 为 admin 增加按订单维度查看 courier 位置记录与异常摘要的只读入口
 4. 评估并决定 `courier/profile` 与 `courier/review-status` 的双 token bridge 何时收口
 5. 在不改旧外卖语义的前提下，规划 campus 接口接入管理端/用户端的最小路径
 
@@ -17,14 +17,15 @@
   - customer 创建单/模拟支付/详情/列表/确认送达/取消/售后
   - courier 可接单列表/详情/接单/取餐/配送推进
 - `CampusPublicController` 已开放 `pickup-points` 和 `delivery-rules`
-- `CampusAdminRelayOrderController` 已支持分页、详情、时间线与最小售后处理
+- `CampusAdminRelayOrderController` 已支持分页、详情、时间线、售后结果查询、最小售后处理和售后决策记录
 - `CampusAdminCourierController` 已支持分页与审核，但还没有详情页或批量审核能力
 - `CampusCourierProfileController` 已开放资料提交、资料查看、审核状态查看，并继续通过 bridge 方案接入现有 `user` token
 - `CampusCourierAuthController` 已开放正式 courier token 发行入口，但仅允许已审核通过且启用的 courier 获取 token
 - `CampusCourierOrderController` 已支持异常上报，但异常只保留最近一次文本记录且不改变订单状态
 - `CampusCourierLocationController` 已支持低频位置上报，位置记录继续只落 `campus_location_report`
-- `CampusAdminSettlementController` 已支持分页查询 `campus_settlement_record`
+- `CampusAdminSettlementController` 已支持分页查询、详情查询和确认结算
 - campus 订单在 customer confirm 进入 `COMPLETED` 时，已会自动生成或更新 `campus_settlement_record`
+- admin 已可查看 courier 最近异常与低频位置记录，但仍未提供地图或轨迹聚合视图
 
 ## 已锁定的默认处理策略
 
@@ -61,6 +62,8 @@
 - 继续只支持模拟支付
 - 金额字段继续使用 `BigDecimal` 并统一保留两位小数
 - 打赏金额继续限制在 `1` 到 `10` 元之间
+- 售后决策金额继续在 service 层统一按两位小数 `HALF_UP` 处理
+- `REFUND` 决策金额不得超过订单 `totalAmount`
 
 ### 6. 审核状态流转
 
@@ -83,10 +86,16 @@
 - admin 可将 `AFTER_SALE_OPEN` 推进到：
   - `AFTER_SALE_RESOLVED`
   - `AFTER_SALE_REJECTED`
+- admin 仅可对 `AFTER_SALE_RESOLVED` 订单记录售后决策：
+  - `REFUND`
+  - `COMPENSATE`
+  - `NONE`
 - 已取餐后 customer 仍不允许直接取消
 - 订单进入 `COMPLETED` 后自动插入或更新待结算记录
 - courier 异常上报只覆盖订单上的最近一次异常信息，不改 `order_status`
 - 位置上报只写 `campus_location_report`，不写入订单时间线
+- settlement confirm 仅允许 `PENDING -> SETTLED`
+- settlement confirm 继续只做后台记录，不做真实打款
 
 ## 当前阻塞点
 
@@ -95,15 +104,15 @@
 - 影响：`profile/review-status` 当前既能用 customer token 也能用 courier token
 - 默认处理：继续保留到前端与 onboarding 入口稳定，再统一收口
 
-### 2. 售后链路还没有退款/补偿结果
+### 2. 售后链路还没有真实退款/补偿执行结果
 
-- 影响：admin 现在能处理售后终态，但还没有退款、补偿、协商结果等后续动作
-- 默认处理：Step 04 优先补最小售后结果策略和查询能力
+- 影响：admin 当前已能记录退款/补偿/无补偿决策，但还没有真实支付执行结果和后续追踪
+- 默认处理：Step 05 优先补最小结果查询和执行记录
 
-### 3. courier 位置与异常只有最小记录，没有运营视图
+### 3. courier 位置与异常只有最小只读视图，没有地图和聚合视图
 
-- 影响：admin 已能从详情/时间线看到部分信息，但还没有专门的运营查看入口
-- 默认处理：Step 04 在不扩前端的前提下优先补查询能力
+- 影响：admin 已有异常/位置只读接口，但还没有按订单、时间范围或地图形式查看
+- 默认处理：Step 05 视需要补按订单维度和摘要接口
 
 ### 4. rules 仍是代码常量
 
@@ -115,10 +124,10 @@
 - 影响：当前 campus 新接口主要通过测试或后端联调演示
 - 默认处理：继续保持前端不动，避免范围膨胀
 
-### 6. 结算只有自动生成和分页查询，还没有处理动作
+### 6. 结算只有确认记录，没有真实打款和对账
 
-- 影响：`campus_settlement_record` 已能自动生成和分页查看，但仍无法确认结算或补记结算备注
-- 默认处理：Step 04 补最小结算处理接口
+- 影响：`campus_settlement_record` 已能自动生成、分页查看、详情查看和确认结算，但仍没有真实打款、批量处理和对账
+- 默认处理：Step 05 继续补最小财务运营能力
 
 ## 当前明确没做的事情
 
@@ -126,7 +135,7 @@
 - 没有删除旧外卖模块
 - 没有改旧 `orders/cart/address` 语义
 - 没有接第三方支付
-- 没有实现 customer 退款、完整售后处理结果
+- 没有实现 customer 自助退款、完整售后结果回执
 - 没有实现异常历史、多次异常记录和异常处理结果流转
 - 没有实现位置轨迹、地图展示和频控策略
 - 没有新增第二套返回体

@@ -7,9 +7,12 @@ import com.cangqiong.takeaway.campus.entity.CampusRelayOrder;
 import com.cangqiong.takeaway.campus.enums.CampusRelayOrderStatus;
 import com.cangqiong.takeaway.campus.mapper.CampusLocationReportMapper;
 import com.cangqiong.takeaway.campus.mapper.CampusRelayOrderMapper;
+import com.cangqiong.takeaway.campus.query.CampusAdminCourierLocationReportQuery;
 import com.cangqiong.takeaway.campus.service.CampusCourierProfileService;
 import com.cangqiong.takeaway.campus.service.CampusLocationReportService;
+import com.cangqiong.takeaway.campus.vo.CampusLocationReportVO;
 import com.cangqiong.takeaway.exception.BusinessException;
+import com.cangqiong.takeaway.vo.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +20,7 @@ import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class CampusLocationReportServiceImpl implements CampusLocationReportService {
@@ -69,6 +73,34 @@ public class CampusLocationReportServiceImpl implements CampusLocationReportServ
         campusLocationReportMapper.insert(report);
     }
 
+    @Override
+    public PageResult<CampusLocationReportVO> pageByCourierForAdmin(Long courierProfileId, CampusAdminCourierLocationReportQuery query) {
+        if (courierProfileId == null) {
+            throw new BusinessException("配送员资料不能为空");
+        }
+
+        int page = safePositive(query == null ? null : query.getPage(), 1);
+        int pageSize = safePageSize(query == null ? null : query.getPageSize(), query == null ? null : query.getSize());
+        int offset = (page - 1) * pageSize;
+        String relayOrderId = normalizeText(query == null ? null : query.getRelayOrderId());
+
+        List<CampusLocationReportVO> records = campusLocationReportMapper.selectByCourierProfileId(
+                courierProfileId,
+                relayOrderId,
+                offset,
+                pageSize
+        );
+        Long total = campusLocationReportMapper.countByCourierProfileId(courierProfileId, relayOrderId);
+
+        PageResult<CampusLocationReportVO> pageResult = new PageResult<>();
+        pageResult.setRecords(records);
+        pageResult.setTotal(total);
+        pageResult.setSize((long) pageSize);
+        pageResult.setCurrent((long) page);
+        pageResult.setPages((total + pageSize - 1) / pageSize);
+        return pageResult;
+    }
+
     private void assertLocationReportAllowed(CampusRelayOrder order) {
         if (!CampusRelayOrderStatus.ACCEPTED.name().equals(order.getOrderStatus())
                 && !CampusRelayOrderStatus.PICKED_UP.name().equals(order.getOrderStatus())
@@ -98,6 +130,16 @@ public class CampusLocationReportServiceImpl implements CampusLocationReportServ
 
     private String normalizeText(String value) {
         return StringUtils.hasText(value) ? value.trim() : null;
+    }
+
+    private int safePositive(Integer value, int defaultValue) {
+        return value == null || value < 1 ? defaultValue : value;
+    }
+
+    private int safePageSize(Integer pageSize, Integer size) {
+        int resolved = size != null ? size : (pageSize != null ? pageSize : 10);
+        resolved = resolved < 1 ? 10 : resolved;
+        return Math.min(resolved, 100);
     }
 
     private void requireText(String value, String message) {
