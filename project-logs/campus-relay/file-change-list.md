@@ -359,3 +359,15 @@
 - [project-logs/campus-relay/pending-items.md](pending-items.md)
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 - [project-logs/campus-relay/step-07-customer-onboarding-and-frontend-entry.md](step-07-customer-onboarding-and-frontend-entry.md)
+
+## Step 08 - admin settlement 批次演示页 / frontend 最小只读运营接入
+
+- [frontend/src/api/campus-admin.js](../../frontend/src/api/campus-admin.js)
+- [frontend/src/router/index.js](../../frontend/src/router/index.js)
+- [frontend/src/layout/MainLayout.vue](../../frontend/src/layout/MainLayout.vue)
+- [frontend/src/views/CampusSettlementBatchList.vue](../../frontend/src/views/CampusSettlementBatchList.vue)
+- [frontend/src/views/CampusSettlementBatchDetail.vue](../../frontend/src/views/CampusSettlementBatchDetail.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-08-admin-settlement-batch-demo-page.md](step-08-admin-settlement-batch-demo-page.md)

@@ -1,12 +1,12 @@
 # 校园代送待处理事项
 
-## Step 08 最高优先级
+## Step 09 最高优先级
 
 1. 继续观察 `customer/courier-onboarding/*` 新入口与旧 bridge 的并行表现，明确 bridge 的逐步收口条件
-2. 在不动旧系统的前提下，为 `frontend/` 增加一个真正可演示的 admin 最小只读运营页，优先售后执行分页或 settlement 批次列表
+2. 在不动旧系统的前提下，为 `frontend/` 增加第二个 admin 最小只读运营页，优先售后执行分页页
 3. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
 4. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
-5. 继续保持旧系统可运行，不在 Step 08 贸然切前端主链路
+5. 继续保持旧系统可运行，不在 Step 09 贸然切前端主链路
 
 ## 已完成但仍需继续扩展的部分
 
@@ -23,6 +23,7 @@
   - 结算分页、详情、确认结算、单笔打款记录、批量打款记录、对账摘要、批次列表、批次详情、二次核对
   - 按订单查看位置记录、按订单查看异常摘要
 - customer 已打通售后结果回执查询与 courier onboarding 前台入口
+- frontend 已打通 admin settlement 批次列表页与批次详情页最小演示入口
 - settlement 已在订单 `COMPLETED` 时自动生成或更新
 
 ## 已锁定的默认处理策略
@@ -81,10 +82,10 @@
 - 影响：`courier/profile` 与 `courier/review-status` 继续依赖双 token 兼容
 - 默认处理：继续保留，同时优先使用 `customer/courier-onboarding/*` 做未来前端 onboarding 入口，待替代链路稳定后再收口
 
-### 2. 前端只完成最小 customer 接入，admin 侧仍未落地
+### 2. 前端 admin 侧只完成一个最小演示页
 
-- 影响：customer 侧已可演示售后回执和 onboarding，但 admin 运营查询仍主要靠接口和测试演示
-- 默认处理：Step 08 继续走新增页面或新增轻量脚本，不替换旧主链路
+- 影响：admin 现在已有 settlement 批次演示页，但售后执行分页等其它运营视图仍未接入
+- 默认处理：Step 09 继续走新增页面或新增轻量脚本，不替换旧主链路
 
 ### 3. 售后与异常仍是最小审计模型
 
@@ -98,7 +99,7 @@
 
 ## 当前明确没做的事情
 
-- 没有重写 `frontend/` 主链路，只新增了最小 customer 页面与脚本
+- 没有重写 `frontend/` 主链路，只新增了最小 customer 页面、admin settlement 演示页与轻量脚本
 - 没有删除旧外卖模块
 - 没有改旧 `orders/cart/address` 语义
 - 没有接真实支付、真实退款、真实打款

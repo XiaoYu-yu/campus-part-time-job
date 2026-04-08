@@ -58,6 +58,18 @@ const router = createRouter({
       component: () => import('../views/Statistics.vue')
     },
     {
+      path: '/campus/settlement-batches',
+      name: 'CampusSettlementBatches',
+      meta: { requiresAdminAuth: true },
+      component: () => import('../views/CampusSettlementBatchList.vue')
+    },
+    {
+      path: '/campus/settlement-batches/:batchNo',
+      name: 'CampusSettlementBatchDetail',
+      meta: { requiresAdminAuth: true },
+      component: () => import('../views/CampusSettlementBatchDetail.vue')
+    },
+    {
       path: '/shop-status',
       name: 'ShopStatus',
       meta: { requiresAdminAuth: true },

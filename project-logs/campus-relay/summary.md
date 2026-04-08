@@ -15,8 +15,9 @@
 - 当前已完成：`Step 05 - 售后执行记录 / 结算打款运营 / 订单级运营查询`
 - 当前已完成：`Step 06 - customer 售后结果回执 / admin 执行纠正审计 / settlement 批次核对`
 - 当前已完成：`Step 07 - customer onboarding 替代链路 / frontend 最小接入`
+- 当前已完成：`Step 08 - admin settlement 批次演示页 / frontend 最小只读运营接入`
 - 当前日期：`2026-04-08`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路与 frontend 最小演示页，旧外卖模块仍保留可运行，旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路与 admin settlement 批次演示页，旧外卖模块仍保留可运行，旧前端主链路未被替换
 
 ## 当前状态
 
@@ -126,11 +127,17 @@
 - 已新增 customer 侧最小演示入口：
   - `/user/campus/after-sale-result`
   - `/user/campus/courier-onboarding`
+- 已新增 admin 侧最小演示入口：
+  - `/campus/settlement-batches`
+  - `/campus/settlement-batches/:batchNo`
 - 已新增 customer 侧 API 封装：
   - `frontend/src/api/campus-customer.js`
+- 已新增 admin 侧 API 封装：
+  - `frontend/src/api/campus-admin.js`
 - 已在 `frontend/src/utils/request.js` 放通 `/campus/customer/**` 的 customer token 附着
-- 已在 `frontend/src/views/user/Profile.vue` 追加轻量入口，不替换旧页面、不改旧登录主入口
-- 当前前端仍然只是最小联调与演示接入，不是完整校园代送前台
+- 已在 admin 现有平铺路由体系中新增“校园结算批次”只读入口，没有另起第二套路由体系
+- 已在 `frontend/src/views/user/Profile.vue` 追加 customer 轻量入口，不替换旧页面、不改旧登录主入口
+- 当前前端仍然只是最小联调与演示接入，不是完整校园代送前台，也不是完整校园代送后台
 
 ## Step 07 实际完成事项
 
@@ -172,6 +179,45 @@
    - `npm run build`
 15. 当前累计 `57` 个后端测试通过，前端生产构建通过
 
+## Step 08 实际完成事项
+
+1. 本轮优先选择了 admin settlement 批次列表页与批次详情页，而不是继续扩 customer 页面
+2. 选择 settlement 批次页的原因：
+   - 批次字段更聚合，演示信号更强
+   - 与 Step 06 的批次审计能力直接衔接
+   - 风险低于继续扩 customer 页面或直接上售后执行分页页
+   - 更适合作为首个 admin 只读运营演示页
+3. 因现有 admin 页面采用顶层平铺视图与顶层路由风格，本轮继续沿用该风格：
+   - `frontend/src/views/CampusSettlementBatchList.vue`
+   - `frontend/src/views/CampusSettlementBatchDetail.vue`
+   - 路由使用 `/campus/settlement-batches` 与 `/campus/settlement-batches/:batchNo`
+4. 新增 admin 侧 API 封装：
+   - `getCampusSettlementPayoutBatches`
+   - `getCampusSettlementPayoutBatchDetail`
+5. settlement 批次列表页能力：
+   - 调用 `GET /api/campus/admin/settlements/payout-batches`
+   - 支持 `payoutStatus` 与 `payoutVerified` 两个最小筛选
+   - 展示 `payoutBatchNo`、`totalCount`、`paidCount`、`failedCount`、`verifiedCount`、`unverifiedCount`、`totalPendingAmount`、`firstRecordedAt`、`lastRecordedAt`
+   - 支持点击批次进入详情页
+6. settlement 批次详情页能力：
+   - 调用 `GET /api/campus/admin/settlements/payout-batches/{batchNo}`
+   - 展示批次汇总卡片
+   - 展示 records 明细表
+   - 明细默认只读，不新增写操作
+7. 为 admin 现有侧边栏新增“校园结算批次”入口，并补齐 breadcrumb 与高亮逻辑
+8. 本轮没有改任何 campus 后端接口，也没有新增写接口，页面直接消费现有后端返回
+9. bridge 并行策略继续固化：
+   - `customer/courier-onboarding/*` 现在承担未拿到 courier token 前的稳定前台 onboarding 入口
+   - 旧 `/api/campus/courier/profile` 与 `/api/campus/courier/review-status` 继续承担历史兼容与旧桥接入口
+10. Step 08 的 bridge 观察指标明确为：
+   - onboarding 页面是否稳定联调
+   - 是否仍有历史调用依赖旧 bridge
+   - customer onboarding 页面是否已覆盖未拿 courier token 前的主要场景
+11. 执行：
+   - `.\mvnw.cmd -DskipTests compile`
+   - `npm run build`
+12. 本轮不扩 customer 业务页面，不扩 admin 写操作，不动旧前端主链路
+
 ## 当前锁定的技术事实
 
 1. 继续使用注解式 MyBatis，不改 XML
@@ -196,15 +242,15 @@
 - settlement 仍没有真实打款、撤回打款和复杂对账
 - 异常仍只保留最新一次，没有历史记录和处理结果流
 - 位置记录仍是低频明细，没有地图、轨迹聚合和频控
-- frontend 目前只接入了 customer 售后结果页与 courier onboarding 页，admin 运营页仍未接入
+- frontend 目前只接入了 customer 两个演示页与 admin settlement 批次演示页，admin 其他运营页仍未接入
 - `CampusRuleCatalog` 仍是代码常量
 
 ## 下一轮建议
 
-- 进入 `Step 08`
+- 进入 `Step 09`
 - 推荐顺序：
   1. 继续观察 onboarding 新入口与旧 bridge 的并行表现，再决定是否逐步收口旧 bridge
-  2. 为 admin 增加一个真正可演示的最小只读运营页，优先售后执行分页或 settlement 批次列表
+  2. 为 admin 补第二个最小只读运营页，优先售后执行分页页
   3. 视业务需要补售后执行历史、异常历史和更细粒度运营审计
   4. 视业务需要补 settlement 更完整的对账、撤回和财务复核能力
 
@@ -225,5 +271,6 @@
 - [Step 05 日志](step-05-after-sale-execution-payout-and-order-ops.md)
 - [Step 06 日志](step-06-customer-receipt-execution-audit-and-payout-verify.md)
 - [Step 07 日志](step-07-customer-onboarding-and-frontend-entry.md)
+- [Step 08 日志](step-08-admin-settlement-batch-demo-page.md)
 - [待处理事项](pending-items.md)
 - [文件改动清单](file-change-list.md)

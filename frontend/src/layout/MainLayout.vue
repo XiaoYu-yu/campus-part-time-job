@@ -58,6 +58,10 @@
           <el-icon><DataAnalysis /></el-icon>
           <template #title>数据统计</template>
         </el-menu-item>
+        <el-menu-item index="/campus/settlement-batches">
+          <el-icon><Tickets /></el-icon>
+          <template #title>校园结算批次</template>
+        </el-menu-item>
         <el-menu-item index="/shop-status">
           <el-icon><Position /></el-icon>
           <template #title>店铺营业状态</template>
@@ -143,7 +147,7 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/user'
 import { 
-  HomeFilled, User, Grid, Mug, Sugar, ShoppingCart, DataAnalysis, Position,
+  HomeFilled, User, Grid, Mug, Sugar, ShoppingCart, DataAnalysis, Position, Tickets,
   DArrowLeft, DArrowRight, House, FullScreen, Bell, ArrowDown, Setting, SwitchButton
 } from '@element-plus/icons-vue'
 
@@ -152,11 +156,18 @@ const userStore = useUserStore()
 const isCollapse = ref(false)
 
 const activeMenu = computed(() => {
-  return router.currentRoute.value.path
+  const path = router.currentRoute.value.path
+  if (path.startsWith('/campus/settlement-batches')) {
+    return '/campus/settlement-batches'
+  }
+  return path
 })
 
 const breadcrumb = computed(() => {
   const path = router.currentRoute.value.path
+  if (path.startsWith('/campus/settlement-batches/')) {
+    return '校园结算批次详情'
+  }
   const pathMap = {
     '/dashboard': '仪表盘',
     '/employee': '员工管理',
@@ -165,6 +176,7 @@ const breadcrumb = computed(() => {
     '/setmeal': '套餐管理',
     '/order': '订单管理',
     '/statistics': '数据统计',
+    '/campus/settlement-batches': '校园结算批次',
     '/shop-status': '店铺营业状态'
   }
   return pathMap[path] || ''
