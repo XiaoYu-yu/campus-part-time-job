@@ -48,6 +48,15 @@
         <div class="menu-item" @click="router.push('/user/cart')">我的购物车</div>
       </section>
 
+      <section class="card">
+        <div class="section-header">
+          <h3>校园代送</h3>
+          <span class="section-tip">新增演示入口</span>
+        </div>
+        <div class="menu-item" @click="router.push('/user/campus/after-sale-result')">售后结果回执</div>
+        <div class="menu-item" @click="router.push('/user/campus/courier-onboarding')">配送员入驻</div>
+      </section>
+
       <button class="logout-btn" @click="handleLogout">退出登录</button>
 
       <el-dialog v-model="addressDialogVisible" :title="editingAddressId ? '编辑地址' : '新增地址'">
@@ -218,6 +227,11 @@ onMounted(() => loadProfile())
 
 .default-tag {
   color: #ff7d00;
+}
+
+.section-tip {
+  color: #909399;
+  font-size: 12px;
 }
 
 .menu-item {

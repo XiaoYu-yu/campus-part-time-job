@@ -2,6 +2,7 @@ package com.cangqiong.takeaway.campus.service.impl;
 
 import com.cangqiong.takeaway.campus.dto.CampusCourierProfileSubmitDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCourierReviewDTO;
+import com.cangqiong.takeaway.campus.dto.CampusCustomerCourierOnboardingSubmitDTO;
 import com.cangqiong.takeaway.campus.entity.CampusCourierProfile;
 import com.cangqiong.takeaway.campus.enums.CampusCourierReviewStatus;
 import com.cangqiong.takeaway.campus.mapper.CampusCourierProfileMapper;
@@ -10,6 +11,9 @@ import com.cangqiong.takeaway.campus.service.CampusCourierProfileService;
 import com.cangqiong.takeaway.campus.support.CampusRuleCatalog;
 import com.cangqiong.takeaway.campus.vo.CampusCourierProfileVO;
 import com.cangqiong.takeaway.campus.vo.CampusCourierReviewStatusVO;
+import com.cangqiong.takeaway.campus.vo.CampusCourierTokenEligibilityVO;
+import com.cangqiong.takeaway.campus.vo.CampusCustomerCourierOnboardingProfileVO;
+import com.cangqiong.takeaway.campus.vo.CampusCustomerCourierOnboardingReviewStatusVO;
 import com.cangqiong.takeaway.entity.User;
 import com.cangqiong.takeaway.exception.BusinessException;
 import com.cangqiong.takeaway.mapper.UserMapper;
@@ -21,6 +25,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CampusCourierProfileServiceImpl implements CampusCourierProfileService {
@@ -29,6 +34,13 @@ public class CampusCourierProfileServiceImpl implements CampusCourierProfileServ
     private static final int DISABLED = 0;
     private static final String CONTROLLED_FILE_PREFIX = "/api/files/";
     private static final String PENDING_REVIEW_COMMENT = "待人工审核";
+    private static final String NOT_SUBMITTED_REMARK = "未提交资料";
+    private static final String ELIGIBLE_MESSAGE = "已通过，可申请 courier token";
+    private static final String PENDING_MESSAGE = "审核中";
+    private static final String REJECTED_MESSAGE = "已拒绝，请修改资料后重提";
+    private static final String DISABLED_MESSAGE = "已禁用，请联系管理员";
+    private static final String UNKNOWN_STATUS_MESSAGE = "当前状态暂不可申请 courier token";
+    private static final Set<String> ALLOWED_GENDERS = Set.of("MALE", "FEMALE", "OTHER");
 
     @Autowired
     private CampusCourierProfileMapper campusCourierProfileMapper;
@@ -79,24 +91,8 @@ public class CampusCourierProfileServiceImpl implements CampusCourierProfileServ
         User user = requireActiveUser(courierUserId);
         validateSubmitRequest(dto);
 
-        LocalDateTime now = LocalDateTime.now();
-        CampusCourierProfile existing = campusCourierProfileMapper.selectByUserId(courierUserId);
-        if (existing == null) {
-            CampusCourierProfile profile = buildSubmittedProfile(dto, courierUserId, now);
-            campusCourierProfileMapper.insert(profile);
-        } else {
-            applySubmittedFields(existing, dto, now);
-            campusCourierProfileMapper.updateSubmittedProfile(existing);
-        }
-
-        CampusCourierProfileVO profileVO = campusCourierProfileMapper.selectDetailByUserId(courierUserId);
-        if (profileVO == null) {
-            throw new BusinessException(404, "配送员资料不存在");
-        }
-        if (!StringUtils.hasText(profileVO.getPhone())) {
-            profileVO.setPhone(user.getPhone());
-        }
-        return profileVO;
+        saveSubmittedProfile(courierUserId, now -> profile -> applyFullSubmittedFields(profile, dto, now));
+        return requireDetailProfile(courierUserId, user);
     }
 
     @Override
@@ -117,6 +113,71 @@ public class CampusCourierProfileServiceImpl implements CampusCourierProfileServ
             throw new BusinessException(404, "配送员资料不存在");
         }
         return reviewStatusVO;
+    }
+
+    @Override
+    @Transactional
+    public CampusCustomerCourierOnboardingProfileVO submitOnboardingProfile(CampusCustomerCourierOnboardingSubmitDTO dto, Long customerUserId) {
+        User user = requireActiveUser(customerUserId);
+        validateOnboardingSubmitRequest(dto, user);
+
+        saveSubmittedProfile(customerUserId, now -> profile -> applyOnboardingSubmittedFields(profile, dto, now));
+        return getCurrentOnboardingProfile(customerUserId);
+    }
+
+    @Override
+    public CampusCustomerCourierOnboardingProfileVO getCurrentOnboardingProfile(Long customerUserId) {
+        User user = requireActiveUser(customerUserId);
+        CampusCourierProfileVO profileVO = campusCourierProfileMapper.selectDetailByUserId(customerUserId);
+        if (profileVO == null) {
+            return buildEmptyOnboardingProfile(user);
+        }
+        if (!StringUtils.hasText(profileVO.getPhone())) {
+            profileVO.setPhone(user.getPhone());
+        }
+        return buildOnboardingProfile(profileVO, user);
+    }
+
+    @Override
+    public CampusCustomerCourierOnboardingReviewStatusVO getCurrentOnboardingReviewStatus(Long customerUserId) {
+        requireActiveUser(customerUserId);
+        CampusCourierReviewStatusVO reviewStatusVO = campusCourierProfileMapper.selectReviewStatusByUserId(customerUserId);
+        if (reviewStatusVO == null) {
+            CampusCustomerCourierOnboardingReviewStatusVO emptyStatus = new CampusCustomerCourierOnboardingReviewStatusVO();
+            emptyStatus.setReviewRemark(NOT_SUBMITTED_REMARK);
+            emptyStatus.setEnabled(DISABLED);
+            emptyStatus.setCanApplyCourierToken(false);
+            return emptyStatus;
+        }
+
+        CampusCustomerCourierOnboardingReviewStatusVO response = new CampusCustomerCourierOnboardingReviewStatusVO();
+        response.setReviewStatus(reviewStatusVO.getReviewStatus());
+        response.setEnabled(reviewStatusVO.getEnabled());
+        response.setReviewRemark(reviewStatusVO.getReviewComment());
+        response.setReviewedAt(reviewStatusVO.getReviewedAt());
+        response.setCanApplyCourierToken(canApplyCourierToken(reviewStatusVO.getReviewStatus(), reviewStatusVO.getEnabled()));
+        return response;
+    }
+
+    @Override
+    public CampusCourierTokenEligibilityVO getTokenEligibility(Long customerUserId) {
+        requireActiveUser(customerUserId);
+        CampusCourierReviewStatusVO reviewStatusVO = campusCourierProfileMapper.selectReviewStatusByUserId(customerUserId);
+
+        CampusCourierTokenEligibilityVO response = new CampusCourierTokenEligibilityVO();
+        if (reviewStatusVO == null) {
+            response.setEligible(false);
+            response.setEnabled(DISABLED);
+            response.setMessage(NOT_SUBMITTED_REMARK);
+            return response;
+        }
+
+        boolean eligible = canApplyCourierToken(reviewStatusVO.getReviewStatus(), reviewStatusVO.getEnabled());
+        response.setEligible(eligible);
+        response.setReviewStatus(reviewStatusVO.getReviewStatus());
+        response.setEnabled(reviewStatusVO.getEnabled());
+        response.setMessage(resolveTokenEligibilityMessage(reviewStatusVO.getReviewStatus(), reviewStatusVO.getEnabled()));
+        return response;
     }
 
     @Override
@@ -184,15 +245,26 @@ public class CampusCourierProfileServiceImpl implements CampusCourierProfileServ
         throw new BusinessException(403, "配送员账号已停用，当前不可进入接单链路");
     }
 
-    private CampusCourierProfile buildSubmittedProfile(CampusCourierProfileSubmitDTO dto, Long courierUserId, LocalDateTime now) {
-        CampusCourierProfile profile = new CampusCourierProfile();
-        profile.setUserId(courierUserId);
-        applySubmittedFields(profile, dto, now);
-        profile.setCreatedAt(now);
-        return profile;
+    private void saveSubmittedProfile(Long userId, ProfileMutatorFactory mutatorFactory) {
+        LocalDateTime now = LocalDateTime.now();
+        CampusCourierProfile existing = campusCourierProfileMapper.selectByUserId(userId);
+        ProfileMutator mutator = mutatorFactory.create(now);
+        if (existing == null) {
+            CampusCourierProfile profile = new CampusCourierProfile();
+            profile.setUserId(userId);
+            profile.setCreatedAt(now);
+            mutator.apply(profile);
+            applyPendingReviewState(profile, now);
+            campusCourierProfileMapper.insert(profile);
+            return;
+        }
+
+        mutator.apply(existing);
+        applyPendingReviewState(existing, now);
+        campusCourierProfileMapper.updateSubmittedProfile(existing);
     }
 
-    private void applySubmittedFields(CampusCourierProfile profile, CampusCourierProfileSubmitDTO dto, LocalDateTime now) {
+    private void applyFullSubmittedFields(CampusCourierProfile profile, CampusCourierProfileSubmitDTO dto, LocalDateTime now) {
         profile.setRealName(normalizeText(dto.getRealName()));
         profile.setStudentNo(normalizeText(dto.getStudentNo()));
         profile.setCollege(normalizeText(dto.getCollege()));
@@ -205,12 +277,80 @@ public class CampusCourierProfileServiceImpl implements CampusCourierProfileServ
         profile.setEmergencyContactPhone(normalizeText(dto.getEmergencyContactPhone()));
         profile.setVerificationPhotoUrl(normalizeText(dto.getVerificationPhotoUrl()));
         profile.setScheduleAttachmentUrl(normalizeText(dto.getScheduleAttachmentUrl()));
+        if (!StringUtils.hasText(profile.getCampusZone()) && !CampusRuleCatalog.CAMPUS_ZONES.isEmpty()) {
+            profile.setCampusZone(CampusRuleCatalog.CAMPUS_ZONES.get(0));
+        }
+        if (profile.getEnabledWorkInOwnBuilding() == null) {
+            profile.setEnabledWorkInOwnBuilding(ENABLED);
+        }
+        profile.setUpdatedAt(now);
+    }
+
+    private void applyOnboardingSubmittedFields(CampusCourierProfile profile, CampusCustomerCourierOnboardingSubmitDTO dto, LocalDateTime now) {
+        profile.setRealName(normalizeText(dto.getRealName()));
+        profile.setGender(normalizeGender(dto.getGender()));
+        profile.setCampusZone(normalizeText(dto.getCampusZone()));
+        profile.setStudentNo(normalizeText(dto.getStudentNo()));
+        profile.setDormitoryBuilding(normalizeText(dto.getDormBuilding()));
+        profile.setEnabledWorkInOwnBuilding(dto.getEnabledWorkInOwnBuilding());
+        profile.setApplicantRemark(normalizeText(dto.getRemark()));
+        profile.setEmergencyContactName(normalizeText(dto.getEmergencyContactName()));
+        profile.setEmergencyContactPhone(normalizeText(dto.getEmergencyContactPhone()));
+        profile.setUpdatedAt(now);
+    }
+
+    private void applyPendingReviewState(CampusCourierProfile profile, LocalDateTime now) {
         profile.setReviewStatus(CampusCourierReviewStatus.PENDING.name());
         profile.setReviewComment(PENDING_REVIEW_COMMENT);
         profile.setReviewedByEmployeeId(null);
         profile.setReviewedAt(null);
         profile.setEnabled(DISABLED);
         profile.setUpdatedAt(now);
+    }
+
+    private CampusCustomerCourierOnboardingProfileVO buildOnboardingProfile(CampusCourierProfileVO profileVO, User user) {
+        CampusCustomerCourierOnboardingProfileVO response = new CampusCustomerCourierOnboardingProfileVO();
+        response.setProfileId(profileVO.getId());
+        response.setUserId(profileVO.getUserId());
+        response.setRealName(profileVO.getRealName());
+        response.setPhone(StringUtils.hasText(profileVO.getPhone()) ? profileVO.getPhone() : user.getPhone());
+        response.setGender(profileVO.getGender());
+        response.setStudentNo(profileVO.getStudentNo());
+        response.setCampusZone(profileVO.getCampusZone());
+        response.setDormBuilding(profileVO.getDormitoryBuilding());
+        response.setEnabledWorkInOwnBuilding(defaultOwnBuildingFlag(profileVO.getEnabledWorkInOwnBuilding()));
+        response.setRemark(profileVO.getApplicantRemark());
+        response.setEmergencyContactName(profileVO.getEmergencyContactName());
+        response.setEmergencyContactPhone(profileVO.getEmergencyContactPhone());
+        response.setReviewStatus(profileVO.getReviewStatus());
+        response.setReviewRemark(profileVO.getReviewComment());
+        response.setEnabled(profileVO.getEnabled());
+        response.setCreatedAt(profileVO.getCreatedAt());
+        response.setUpdatedAt(profileVO.getUpdatedAt());
+        return response;
+    }
+
+    private CampusCustomerCourierOnboardingProfileVO buildEmptyOnboardingProfile(User user) {
+        CampusCustomerCourierOnboardingProfileVO response = new CampusCustomerCourierOnboardingProfileVO();
+        response.setUserId(user.getId());
+        response.setRealName(user.getName());
+        response.setPhone(user.getPhone());
+        response.setCampusZone(CampusRuleCatalog.CAMPUS_ZONES.isEmpty() ? null : CampusRuleCatalog.CAMPUS_ZONES.get(0));
+        response.setEnabledWorkInOwnBuilding(ENABLED);
+        response.setEnabled(DISABLED);
+        response.setReviewRemark(NOT_SUBMITTED_REMARK);
+        return response;
+    }
+
+    private CampusCourierProfileVO requireDetailProfile(Long courierUserId, User user) {
+        CampusCourierProfileVO profileVO = campusCourierProfileMapper.selectDetailByUserId(courierUserId);
+        if (profileVO == null) {
+            throw new BusinessException(404, "配送员资料不存在");
+        }
+        if (!StringUtils.hasText(profileVO.getPhone())) {
+            profileVO.setPhone(user.getPhone());
+        }
+        return profileVO;
     }
 
     private void validateSubmitRequest(CampusCourierProfileSubmitDTO dto) {
@@ -248,6 +388,48 @@ public class CampusCourierProfileServiceImpl implements CampusCourierProfileServ
         assertControlledFileReference(dto.getScheduleAttachmentUrl(), "课程表附件路径必须为受控文件路径");
     }
 
+    private void validateOnboardingSubmitRequest(CampusCustomerCourierOnboardingSubmitDTO dto, User user) {
+        if (dto == null) {
+            throw new BusinessException("请求体不能为空");
+        }
+        requireText(dto.getRealName(), "真实姓名不能为空");
+        requireText(dto.getPhone(), "手机号不能为空");
+        requireText(dto.getGender(), "性别不能为空");
+        requireText(dto.getStudentNo(), "学号不能为空");
+        requireText(dto.getCampusZone(), "校区不能为空");
+        requireText(dto.getDormBuilding(), "宿舍楼栋不能为空");
+        requireText(dto.getEmergencyContactName(), "紧急联系人不能为空");
+        requireText(dto.getEmergencyContactPhone(), "紧急联系人电话不能为空");
+
+        String phone = normalizeText(dto.getPhone());
+        if (!phone.matches("1\\d{10}")) {
+            throw new BusinessException("手机号格式不正确");
+        }
+        if (!phone.equals(user.getPhone())) {
+            throw new BusinessException("手机号需与当前登录账号一致");
+        }
+
+        String gender = normalizeGender(dto.getGender());
+        if (!ALLOWED_GENDERS.contains(gender)) {
+            throw new BusinessException("性别仅支持 MALE、FEMALE、OTHER");
+        }
+        if (!CampusRuleCatalog.CAMPUS_ZONES.contains(normalizeText(dto.getCampusZone()))) {
+            throw new BusinessException("校区不在支持范围内");
+        }
+        if (!CampusRuleCatalog.DORMITORY_BUILDINGS.contains(normalizeText(dto.getDormBuilding()))) {
+            throw new BusinessException("宿舍楼栋不在支持范围内");
+        }
+        if (dto.getEnabledWorkInOwnBuilding() == null
+                || (dto.getEnabledWorkInOwnBuilding() != ENABLED && dto.getEnabledWorkInOwnBuilding() != DISABLED)) {
+            throw new BusinessException("是否优先接本楼栋订单字段不合法");
+        }
+
+        String emergencyContactPhone = normalizeText(dto.getEmergencyContactPhone());
+        if (!emergencyContactPhone.matches("1\\d{10}")) {
+            throw new BusinessException("紧急联系人电话格式不正确");
+        }
+    }
+
     private void assertControlledFileReference(String value, String message) {
         String normalized = normalizeText(value);
         if (!StringUtils.hasText(normalized) || !normalized.startsWith(CONTROLLED_FILE_PREFIX)) {
@@ -274,6 +456,34 @@ public class CampusCourierProfileServiceImpl implements CampusCourierProfileServ
         }
     }
 
+    private boolean canApplyCourierToken(String reviewStatus, Integer enabled) {
+        return CampusCourierReviewStatus.APPROVED.name().equals(reviewStatus) && ENABLED == (enabled == null ? DISABLED : enabled);
+    }
+
+    private String resolveTokenEligibilityMessage(String reviewStatus, Integer enabled) {
+        if (!StringUtils.hasText(reviewStatus)) {
+            return NOT_SUBMITTED_REMARK;
+        }
+        if (CampusCourierReviewStatus.APPROVED.name().equals(reviewStatus) && ENABLED == (enabled == null ? DISABLED : enabled)) {
+            return ELIGIBLE_MESSAGE;
+        }
+        if (CampusCourierReviewStatus.PENDING.name().equals(reviewStatus)) {
+            return PENDING_MESSAGE;
+        }
+        if (CampusCourierReviewStatus.REJECTED.name().equals(reviewStatus)) {
+            return REJECTED_MESSAGE;
+        }
+        if (CampusCourierReviewStatus.DISABLED.name().equals(reviewStatus)
+                || CampusCourierReviewStatus.APPROVED.name().equals(reviewStatus)) {
+            return DISABLED_MESSAGE;
+        }
+        return UNKNOWN_STATUS_MESSAGE;
+    }
+
+    private int defaultOwnBuildingFlag(Integer value) {
+        return value == null ? ENABLED : value;
+    }
+
     private int safePositive(Integer value, int defaultValue) {
         return value == null || value < 1 ? defaultValue : value;
     }
@@ -288,9 +498,24 @@ public class CampusCourierProfileServiceImpl implements CampusCourierProfileServ
         return StringUtils.hasText(value) ? value.trim() : null;
     }
 
+    private String normalizeGender(String value) {
+        String normalized = normalizeText(value);
+        return normalized == null ? null : normalized.toUpperCase();
+    }
+
     private void requireText(String value, String message) {
         if (!StringUtils.hasText(value)) {
             throw new BusinessException(message);
         }
+    }
+
+    @FunctionalInterface
+    private interface ProfileMutatorFactory {
+        ProfileMutator create(LocalDateTime now);
+    }
+
+    @FunctionalInterface
+    private interface ProfileMutator {
+        void apply(CampusCourierProfile profile);
     }
 }

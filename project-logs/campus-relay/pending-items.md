@@ -1,17 +1,18 @@
 # 校园代送待处理事项
 
-## Step 07 最高优先级
+## Step 08 最高优先级
 
-1. 继续评估 `courier/profile` 与 `courier/review-status` 的 bridge 收口条件，并先准备稳定的 onboarding 替代链路
-2. 在不动旧系统的前提下，规划 `frontend/` 接入 campus 最小后台页面和 customer 售后结果页的路径
+1. 继续观察 `customer/courier-onboarding/*` 新入口与旧 bridge 的并行表现，明确 bridge 的逐步收口条件
+2. 在不动旧系统的前提下，为 `frontend/` 增加一个真正可演示的 admin 最小只读运营页，优先售后执行分页或 settlement 批次列表
 3. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
 4. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
-5. 继续保持旧系统可运行，不在 Step 07 贸然切前端主链路
+5. 继续保持旧系统可运行，不在 Step 08 贸然切前端主链路
 
 ## 已完成但仍需继续扩展的部分
 
 - `campus_*` 核心表、实体、DTO、VO、Mapper、Service、Controller 已齐全
 - customer 已打通：创建单、模拟支付、列表、详情、确认送达、取消、售后
+- customer 已打通 onboarding 新入口：资料提交、资料读取、审核状态、token 资格判断
 - courier 已打通：资料提交、资料详情、审核状态、token 发行、可接单列表、接单、取餐、配送推进、异常上报、位置上报
 - admin 已打通：
   - 订单分页、详情、时间线
@@ -21,7 +22,7 @@
   - 配送员分页、审核、最近异常、低频位置记录
   - 结算分页、详情、确认结算、单笔打款记录、批量打款记录、对账摘要、批次列表、批次详情、二次核对
   - 按订单查看位置记录、按订单查看异常摘要
-- customer 已打通售后结果回执查询
+- customer 已打通售后结果回执查询与 courier onboarding 前台入口
 - settlement 已在订单 `COMPLETED` 时自动生成或更新
 
 ## 已锁定的默认处理策略
@@ -35,6 +36,7 @@
 - `/api/campus/customer/**` 继续只允许 `customer`
 - `/api/campus/courier/orders/**` 继续只允许 `courier`
 - `/api/campus/courier/profile` 与 `/api/campus/courier/review-status` 继续保留 `customer/courier` 双 token bridge
+- `/api/campus/customer/courier-onboarding/**` 作为新的 onboarding 稳定入口，只允许 `customer`
 
 ### 2. 支付、退款与打款
 
@@ -74,15 +76,15 @@
 
 ## 当前主要阻塞点
 
-### 1. bridge 仍是过渡态
+### 1. bridge 仍是过渡态，但已有替代入口
 
 - 影响：`courier/profile` 与 `courier/review-status` 继续依赖双 token 兼容
-- 默认处理：继续保留，等 onboarding 替代链路稳定后再收口
+- 默认处理：继续保留，同时优先使用 `customer/courier-onboarding/*` 做未来前端 onboarding 入口，待替代链路稳定后再收口
 
-### 2. 前端尚未接 campus 新接口
+### 2. 前端只完成最小 customer 接入，admin 侧仍未落地
 
-- 影响：现阶段主要靠测试和后端联调演示
-- 默认处理：继续保持 `frontend/` 不动，避免范围膨胀
+- 影响：customer 侧已可演示售后回执和 onboarding，但 admin 运营查询仍主要靠接口和测试演示
+- 默认处理：Step 08 继续走新增页面或新增轻量脚本，不替换旧主链路
 
 ### 3. 售后与异常仍是最小审计模型
 
@@ -96,7 +98,7 @@
 
 ## 当前明确没做的事情
 
-- 没有改 `frontend/`
+- 没有重写 `frontend/` 主链路，只新增了最小 customer 页面与脚本
 - 没有删除旧外卖模块
 - 没有改旧 `orders/cart/address` 语义
 - 没有接真实支付、真实退款、真实打款

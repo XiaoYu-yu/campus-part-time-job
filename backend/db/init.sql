@@ -243,13 +243,17 @@ CREATE TABLE IF NOT EXISTS campus_courier_profile (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '兼职配送员资料ID',
     user_id BIGINT NOT NULL UNIQUE COMMENT '关联用户ID',
     real_name VARCHAR(50) NOT NULL COMMENT '真实姓名',
+    gender VARCHAR(20) COMMENT '性别',
+    campus_zone VARCHAR(50) COMMENT '校区',
     student_no VARCHAR(50) NOT NULL COMMENT '学号',
-    college VARCHAR(100) NOT NULL COMMENT '学院',
-    major VARCHAR(100) NOT NULL COMMENT '专业',
-    class_name VARCHAR(100) NOT NULL COMMENT '班级',
+    college VARCHAR(100) COMMENT '学院',
+    major VARCHAR(100) COMMENT '专业',
+    class_name VARCHAR(100) COMMENT '班级',
     dormitory_building VARCHAR(50) NOT NULL COMMENT '宿舍楼栋',
-    dormitory_room VARCHAR(50) NOT NULL COMMENT '宿舍号',
-    id_card_last4 VARCHAR(4) NOT NULL COMMENT '身份证后四位',
+    dormitory_room VARCHAR(50) COMMENT '宿舍号',
+    enabled_work_in_own_building TINYINT DEFAULT 1 COMMENT '是否愿意优先接本楼栋订单',
+    applicant_remark VARCHAR(255) COMMENT '申请人备注',
+    id_card_last4 VARCHAR(4) COMMENT '身份证后四位',
     emergency_contact_name VARCHAR(50) NOT NULL COMMENT '紧急联系人',
     emergency_contact_phone VARCHAR(20) NOT NULL COMMENT '紧急联系人电话',
     verification_photo_url VARCHAR(255) COMMENT '学信网认证照片',
@@ -390,12 +394,12 @@ INSERT INTO campus_customer_profile (user_id, real_name, identity_type, identity
 (2, '李四', 'STAFF', 'T20260001');
 
 INSERT INTO campus_courier_profile (
-    user_id, real_name, student_no, college, major, class_name, dormitory_building, dormitory_room,
-    id_card_last4, emergency_contact_name, emergency_contact_phone, verification_photo_url,
+    user_id, real_name, gender, campus_zone, student_no, college, major, class_name, dormitory_building, dormitory_room,
+    enabled_work_in_own_building, applicant_remark, id_card_last4, emergency_contact_name, emergency_contact_phone, verification_photo_url,
     schedule_attachment_url, review_status, review_comment, reviewed_by_employee_id, reviewed_at, enabled
 ) VALUES
-(1, '张三', '2023123401', '信息工程学院', '软件技术', '软工2301', '竹园', '2-403', '1234', '张父', '13900000001', '/api/files/courier-zhangsan-verify.jpg', '/api/files/courier-zhangsan-schedule.jpg', 'PENDING', '待人工审核', NULL, NULL, 0),
-(2, '李四', '2023123402', '信息工程学院', '计算机网络技术', '网工2302', '杏园', '1-206', '5678', '李母', '13900000002', '/api/files/courier-lisi-verify.jpg', '/api/files/courier-lisi-schedule.jpg', 'APPROVED', '首批示例账号', 1, NOW(), 1);
+(1, '张三', 'MALE', '渝中校区', '2023123401', '信息工程学院', '软件技术', '软工2301', '竹园', '2-403', 1, '希望优先接本楼栋订单', '1234', '张父', '13900000001', '/api/files/courier-zhangsan-verify.jpg', '/api/files/courier-zhangsan-schedule.jpg', 'PENDING', '待人工审核', NULL, NULL, 0),
+(2, '李四', 'MALE', '渝中校区', '2023123402', '信息工程学院', '计算机网络技术', '网工2302', '杏园', '1-206', 1, '可参与图书馆与教学楼订单', '5678', '李母', '13900000002', '/api/files/courier-lisi-verify.jpg', '/api/files/courier-lisi-schedule.jpg', 'APPROVED', '首批示例账号', 1, NOW(), 1);
 
 INSERT INTO campus_pickup_point (code, name, gate_area, description, enabled, sort) VALUES
 ('NORTH_GATE_TEMP', '主大门门卫室西侧临时取餐区', '北门', '适用于临时堆放和高峰期取餐', 1, 1),

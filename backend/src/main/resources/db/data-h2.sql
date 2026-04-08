@@ -67,13 +67,13 @@ MERGE INTO campus_customer_profile (id, user_id, real_name, identity_type, ident
 (2, 2, '李四', 'STAFF', 'T20260001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 MERGE INTO campus_courier_profile (
-    id, user_id, real_name, student_no, college, major, class_name, dormitory_building, dormitory_room,
-    id_card_last4, emergency_contact_name, emergency_contact_phone, verification_photo_url,
+    id, user_id, real_name, gender, campus_zone, student_no, college, major, class_name, dormitory_building, dormitory_room,
+    enabled_work_in_own_building, applicant_remark, id_card_last4, emergency_contact_name, emergency_contact_phone, verification_photo_url,
     schedule_attachment_url, review_status, review_comment, reviewed_by_employee_id, reviewed_at,
     enabled, created_at, updated_at
 ) KEY (id) VALUES
-(1, 1, '张三', '2023123401', '信息工程学院', '软件技术', '软工2301', '竹园', '2-403', '1234', '张父', '13900000001', '/api/files/courier-zhangsan-verify.jpg', '/api/files/courier-zhangsan-schedule.jpg', 'PENDING', '待人工审核', NULL, NULL, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 2, '李四', '2023123402', '信息工程学院', '计算机网络技术', '网工2302', '杏园', '1-206', '5678', '李母', '13900000002', '/api/files/courier-lisi-verify.jpg', '/api/files/courier-lisi-schedule.jpg', 'APPROVED', '首批示例账号', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(1, 1, '张三', 'MALE', '渝中校区', '2023123401', '信息工程学院', '软件技术', '软工2301', '竹园', '2-403', 1, '希望优先接本楼栋订单', '1234', '张父', '13900000001', '/api/files/courier-zhangsan-verify.jpg', '/api/files/courier-zhangsan-schedule.jpg', 'PENDING', '待人工审核', NULL, NULL, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 2, '李四', 'MALE', '渝中校区', '2023123402', '信息工程学院', '计算机网络技术', '网工2302', '杏园', '1-206', 1, '可参与图书馆与教学楼订单', '5678', '李母', '13900000002', '/api/files/courier-lisi-verify.jpg', '/api/files/courier-lisi-schedule.jpg', 'APPROVED', '首批示例账号', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 MERGE INTO campus_pickup_point (id, code, name, gate_area, description, enabled, sort, created_at, updated_at) KEY (id) VALUES
 (1, 'NORTH_GATE_TEMP', '主大门门卫室西侧临时取餐区', '北门', '适用于临时堆放和高峰期取餐', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),

@@ -11,12 +11,16 @@ public class CampusCourierProfile {
     private Long id;
     private Long userId;
     private String realName;
+    private String gender;
+    private String campusZone;
     private String studentNo;
     private String college;
     private String major;
     private String className;
     private String dormitoryBuilding;
     private String dormitoryRoom;
+    private Integer enabledWorkInOwnBuilding;
+    private String applicantRemark;
     private String idCardLast4;
     private String emergencyContactName;
     private String emergencyContactPhone;

@@ -6,35 +6,23 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class CampusCourierProfileVO {
+public class CampusCustomerCourierOnboardingProfileVO {
 
-    private Long id;
+    private Long profileId;
     private Long userId;
     private String realName;
     private String phone;
     private String gender;
-    private String campusZone;
     private String studentNo;
-    private String college;
-    private String major;
-    private String className;
-    private String dormitoryBuilding;
-    private String dormitoryRoom;
+    private String campusZone;
+    private String dormBuilding;
     private Integer enabledWorkInOwnBuilding;
-    private String applicantRemark;
-    private String idCardLast4;
+    private String remark;
     private String emergencyContactName;
     private String emergencyContactPhone;
-    private String verificationPhotoUrl;
-    private String scheduleAttachmentUrl;
     private String reviewStatus;
-    private String reviewComment;
+    private String reviewRemark;
     private Integer enabled;
-    private Long reviewedByEmployeeId;
-    private String reviewedByName;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime reviewedAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;

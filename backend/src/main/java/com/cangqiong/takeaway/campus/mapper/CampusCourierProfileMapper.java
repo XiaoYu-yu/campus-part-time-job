@@ -31,12 +31,16 @@ public interface CampusCourierProfileMapper {
             "  cp.user_id,",
             "  cp.real_name,",
             "  u.phone,",
+            "  cp.gender,",
+            "  cp.campus_zone,",
             "  cp.student_no,",
             "  cp.college,",
             "  cp.major,",
             "  cp.class_name,",
             "  cp.dormitory_building,",
             "  cp.dormitory_room,",
+            "  cp.enabled_work_in_own_building,",
+            "  cp.applicant_remark,",
             "  cp.id_card_last4,",
             "  cp.emergency_contact_name,",
             "  cp.emergency_contact_phone,",
@@ -63,12 +67,16 @@ public interface CampusCourierProfileMapper {
             "  cp.user_id,",
             "  cp.real_name,",
             "  u.phone,",
+            "  cp.gender,",
+            "  cp.campus_zone,",
             "  cp.student_no,",
             "  cp.college,",
             "  cp.major,",
             "  cp.class_name,",
             "  cp.dormitory_building,",
             "  cp.dormitory_room,",
+            "  cp.enabled_work_in_own_building,",
+            "  cp.applicant_remark,",
             "  cp.id_card_last4,",
             "  cp.emergency_contact_name,",
             "  cp.emergency_contact_phone,",
@@ -112,12 +120,16 @@ public interface CampusCourierProfileMapper {
             "  cp.user_id,",
             "  cp.real_name,",
             "  u.phone,",
+            "  cp.gender,",
+            "  cp.campus_zone,",
             "  cp.student_no,",
             "  cp.college,",
             "  cp.major,",
             "  cp.class_name,",
             "  cp.dormitory_building,",
             "  cp.dormitory_room,",
+            "  cp.enabled_work_in_own_building,",
+            "  cp.applicant_remark,",
             "  cp.review_status,",
             "  cp.review_comment,",
             "  cp.enabled,",
@@ -181,12 +193,12 @@ public interface CampusCourierProfileMapper {
     );
 
     @Insert("INSERT INTO campus_courier_profile (" +
-            "user_id, real_name, student_no, college, major, class_name, dormitory_building, dormitory_room, " +
-            "id_card_last4, emergency_contact_name, emergency_contact_phone, verification_photo_url, schedule_attachment_url, " +
+            "user_id, real_name, gender, campus_zone, student_no, college, major, class_name, dormitory_building, dormitory_room, " +
+            "enabled_work_in_own_building, applicant_remark, id_card_last4, emergency_contact_name, emergency_contact_phone, verification_photo_url, schedule_attachment_url, " +
             "review_status, review_comment, reviewed_by_employee_id, reviewed_at, enabled, created_at, updated_at" +
             ") VALUES (" +
-            "#{userId}, #{realName}, #{studentNo}, #{college}, #{major}, #{className}, #{dormitoryBuilding}, #{dormitoryRoom}, " +
-            "#{idCardLast4}, #{emergencyContactName}, #{emergencyContactPhone}, #{verificationPhotoUrl}, #{scheduleAttachmentUrl}, " +
+            "#{userId}, #{realName}, #{gender}, #{campusZone}, #{studentNo}, #{college}, #{major}, #{className}, #{dormitoryBuilding}, #{dormitoryRoom}, " +
+            "#{enabledWorkInOwnBuilding}, #{applicantRemark}, #{idCardLast4}, #{emergencyContactName}, #{emergencyContactPhone}, #{verificationPhotoUrl}, #{scheduleAttachmentUrl}, " +
             "#{reviewStatus}, #{reviewComment}, #{reviewedByEmployeeId}, #{reviewedAt}, #{enabled}, #{createdAt}, #{updatedAt}" +
             ")")
     @Options(useGeneratedKeys = true, keyProperty = "id")
@@ -194,12 +206,16 @@ public interface CampusCourierProfileMapper {
 
     @Update("UPDATE campus_courier_profile SET " +
             "real_name = #{realName}, " +
+            "gender = #{gender}, " +
+            "campus_zone = #{campusZone}, " +
             "student_no = #{studentNo}, " +
             "college = #{college}, " +
             "major = #{major}, " +
             "class_name = #{className}, " +
             "dormitory_building = #{dormitoryBuilding}, " +
             "dormitory_room = #{dormitoryRoom}, " +
+            "enabled_work_in_own_building = #{enabledWorkInOwnBuilding}, " +
+            "applicant_remark = #{applicantRemark}, " +
             "id_card_last4 = #{idCardLast4}, " +
             "emergency_contact_name = #{emergencyContactName}, " +
             "emergency_contact_phone = #{emergencyContactPhone}, " +

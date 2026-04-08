@@ -117,6 +117,18 @@ const router = createRouter({
       name: 'UserProfile',
       meta: { requiresCustomerAuth: true },
       component: () => import('../views/user/Profile.vue')
+    },
+    {
+      path: '/user/campus/after-sale-result',
+      name: 'UserCampusAfterSaleResult',
+      meta: { requiresCustomerAuth: true },
+      component: () => import('../views/user/AfterSaleResult.vue')
+    },
+    {
+      path: '/user/campus/courier-onboarding',
+      name: 'UserCampusCourierOnboarding',
+      meta: { requiresCustomerAuth: true },
+      component: () => import('../views/user/CourierOnboarding.vue')
     }
   ]
 })

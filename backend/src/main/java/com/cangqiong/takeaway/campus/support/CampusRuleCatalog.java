@@ -21,6 +21,7 @@ public final class CampusRuleCatalog {
     public static final BigDecimal TIP_FEE_MIN = new BigDecimal("1.00");
     public static final BigDecimal TIP_FEE_MAX = new BigDecimal("10.00");
 
+    public static final List<String> CAMPUS_ZONES = List.of("渝中校区");
     public static final List<String> DORMITORY_BUILDINGS = List.of("竹园", "杏园", "李园", "桃园", "梅园", "馨园");
     public static final List<String> TEACHING_BUILDINGS = List.of("一教学楼", "二教学楼", "世纪楼", "例行楼");
     public static final List<String> LIBRARY_POINTS = List.of("图书馆一楼门口", "图书馆二楼门口");

@@ -14,8 +14,9 @@
 - 当前已完成：`Step 04 - 售后决策 / 结算确认 / admin 运营只读接口`
 - 当前已完成：`Step 05 - 售后执行记录 / 结算打款运营 / 订单级运营查询`
 - 当前已完成：`Step 06 - customer 售后结果回执 / admin 执行纠正审计 / settlement 批次核对`
+- 当前已完成：`Step 07 - customer onboarding 替代链路 / frontend 最小接入`
 - 当前日期：`2026-04-08`
-- 当前范围：后端最小闭环已扩展到 customer 售后回执与 settlement 批次审计层，`frontend/` 仍未改动，旧外卖模块仍保留可运行
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路与 frontend 最小演示页，旧外卖模块仍保留可运行，旧前端主链路未被替换
 
 ## 当前状态
 
@@ -46,6 +47,9 @@
   - `/api/campus/customer/orders/{id}/cancel`
   - `/api/campus/customer/orders/{id}/after-sale`
   - `/api/campus/customer/orders/{id}/after-sale-result`
+  - `/api/campus/customer/courier-onboarding/profile`
+  - `/api/campus/customer/courier-onboarding/review-status`
+  - `/api/campus/customer/courier-onboarding/token-eligibility`
 - courier：
   - `/api/campus/courier/auth/token`
   - `/api/campus/courier/profile`
@@ -117,65 +121,56 @@
 - courier 异常上报仍只保留订单上的最新一次异常，不改 `order_status`
 - courier 位置上报仍只写 `campus_location_report`，不进入 timeline
 
-## Step 06 实际完成事项
+### frontend 最小接入
 
-1. 为 customer 新增 `GET /api/campus/customer/orders/{id}/after-sale-result`
-2. customer 售后结果回执继续用 VO 计算字段表达：
-   - `customerReceiptStatus`
-   - `customerReceiptTitle`
-   - `customerReceiptMessage`
-   - `lastUpdatedAt`
-3. customer 售后结果规则集中在 service 层：
-   - 仅订单所属 customer 可查
-   - 订单未进入售后链路返回明确业务错误
-   - 不暴露内部 employee id、内部 reference no 等运营字段
-4. 为 `campus_relay_order` 新增售后执行纠正审计字段：
-   - `after_sale_execution_corrected`
-   - `after_sale_execution_corrected_at`
-   - `after_sale_execution_corrected_by_employee_id`
-5. 新增 `GET /api/campus/admin/orders/after-sale-executions`
-6. admin 售后执行查询规则：
-   - 支持 `afterSaleExecutionStatus`、`decisionType`、`correctedOnly`、`customerUserId`、`courierProfileId`、`relayOrderId`
-   - 默认排序 `after_sale_executed_at DESC, after_sale_applied_at DESC, created_at DESC`
-   - `correctedOnly = true` 时只返回人工纠正过的记录
-7. 扩展 `GET /api/campus/admin/orders/{id}/after-sale-result`
-   - 补充 `afterSaleExecutionCorrected`
-   - `afterSaleExecutionCorrectedAt`
-   - `afterSaleExecutionCorrectedByEmployeeId`
-8. 人工纠正规则继续集中在 service 层：
-   - 仅 `FAILED -> SUCCESS` 这一次人工纠正会把 `after_sale_execution_corrected = 1`
-   - 初次 `SUCCESS` 不算 corrected
-   - 不允许 `SUCCESS -> FAILED`
-   - 不允许无限来回切换
-9. 为 `campus_settlement_record` 新增批次与二次核对字段：
-   - `payout_batch_no`
-   - `payout_verified`
-   - `payout_verified_by_employee_id`
-   - `payout_verified_at`
-   - `payout_verify_remark`
-10. 扩展 `GET /api/campus/admin/settlements`
-   - 新增 `payoutVerified`
-   - 新增 `payoutBatchNo`
-   - 默认排序继续 `createdAt DESC`
-11. 新增 `GET /api/campus/admin/settlements/payout-batches`
-12. 新增 `GET /api/campus/admin/settlements/payout-batches/{batchNo}`
-13. 新增 `POST /api/campus/admin/settlements/{id}/verify-payout`
-14. settlement 运营规则：
-   - batch payout 未传 `batchNo` 时自动生成统一批次号
-   - 自动生成的批次号只写入本次成功处理的记录
-   - 失败或跳过的记录不会误写同一个 `batchNo`
-   - 只有 `payout_status = PAID` 的记录才允许 `verify-payout`
-   - `verify-payout` 只允许一次
-15. `GET /api/campus/admin/settlements/{id}` 与批次详情接口都已回显：
-   - `payoutVerified`
-   - `payoutVerifiedAt`
-   - `payoutVerifyRemark`
-16. 新增 `CampusStep06IntegrationTest`
-17. 执行：
+- 已新增 customer 侧最小演示入口：
+  - `/user/campus/after-sale-result`
+  - `/user/campus/courier-onboarding`
+- 已新增 customer 侧 API 封装：
+  - `frontend/src/api/campus-customer.js`
+- 已在 `frontend/src/utils/request.js` 放通 `/campus/customer/**` 的 customer token 附着
+- 已在 `frontend/src/views/user/Profile.vue` 追加轻量入口，不替换旧页面、不改旧登录主入口
+- 当前前端仍然只是最小联调与演示接入，不是完整校园代送前台
+
+## Step 07 实际完成事项
+
+1. 新增 customer onboarding 替代入口：
+   - `POST /api/campus/customer/courier-onboarding/profile`
+   - `GET /api/campus/customer/courier-onboarding/profile`
+   - `GET /api/campus/customer/courier-onboarding/review-status`
+   - `GET /api/campus/customer/courier-onboarding/token-eligibility`
+2. onboarding 新入口只允许 `customer` token，不替代现有 `/api/campus/courier/auth/token`
+3. onboarding 资料提交与旧 bridge 复用同一套 service 提交流程，没有复制两套资料提交流程
+4. onboarding 首次提交或重提后，仍统一走现有资料状态机：
+   - `reviewStatus = PENDING`
+   - `enabled = 0`
+   - 清空审核人和审核时间
+5. customer onboarding 资料读取支持“未提交资料”默认态，便于前端页面首屏回填与联调
+6. `canApplyCourierToken` 继续只作为 VO 计算字段：
+   - `APPROVED` 且 `enabled = 1` 时为 `true`
+   - 其他情况为 `false`
+7. `token-eligibility.message` 继续只作为 VO 计算字段，不新增数据库字段
+8. 为 `campus_courier_profile` 最小补齐 onboarding 所需字段：
+   - `gender`
+   - `campus_zone`
+   - `enabled_work_in_own_building`
+   - `applicant_remark`
+9. 同步放宽旧桥接链路依赖的部分资料字段必填约束，保证 onboarding 新入口可在不引入新表的前提下稳定落到 `campus_courier_profile`
+10. 新增 `CampusCourierOnboardingIntegrationTest`
+11. 旧 bridge 兼容性测试继续保留并通过，确保 `/api/campus/courier/profile` 与 `/api/campus/courier/review-status` 未被破坏
+12. frontend 最小接入已落地：
+   - 新增 customer 售后结果页 `frontend/src/views/user/AfterSaleResult.vue`
+   - 新增 courier onboarding 页 `frontend/src/views/user/CourierOnboarding.vue`
+   - 新增 customer campus API 封装 `frontend/src/api/campus-customer.js`
+   - 新增用户侧路由 `/user/campus/after-sale-result` 与 `/user/campus/courier-onboarding`
+   - 在 `frontend/src/views/user/Profile.vue` 追加“校园代送”入口区块
+13. 前端接入保持“新增页面 + 新增轻量脚本”方式，没有重写旧页面，没有切旧主链路
+14. 执行：
    - `.\mvnw.cmd -DskipTests compile`
-   - `.\mvnw.cmd "-Dtest=CampusStep06IntegrationTest" test`
+   - `.\mvnw.cmd "-Dtest=CampusCourierOnboardingIntegrationTest,CampusCourierProfileIntegrationTest" test`
    - `.\mvnw.cmd test`
-18. 当前累计 `53` 个测试通过
+   - `npm run build`
+15. 当前累计 `57` 个后端测试通过，前端生产构建通过
 
 ## 当前锁定的技术事实
 
@@ -185,11 +180,13 @@
 4. 退款/补偿/打款都仍然只是后台运营记录，不是真实支付执行
 5. 所有金额处理继续统一为 `BigDecimal`、两位小数、`HALF_UP`
 6. `courier/profile` 与 `courier/review-status` 的 bridge 继续保留
-7. 保留 bridge 的原因：
+7. `customer/courier-onboarding/*` 只是 onboarding 新入口，不替代 `/api/campus/courier/auth/token`
+8. 保留 bridge 的原因：
    - 未审核通过用户拿不到 `courier` token`
    - 但资料提交与审核状态查询必须发生在拿 token 之前
-8. 收口 bridge 的前提：
+9. 收口 bridge 的前提：
    - 先有稳定的 onboarding 替代链路
+   - 新入口完成一轮实际前端联调与演示验证
    - 或把资料提交与审核查询统一改为不依赖 `courier` token 的入口
 
 ## 当前未解决的问题
@@ -199,15 +196,15 @@
 - settlement 仍没有真实打款、撤回打款和复杂对账
 - 异常仍只保留最新一次，没有历史记录和处理结果流
 - 位置记录仍是低频明细，没有地图、轨迹聚合和频控
-- `frontend/` 仍未接入 campus 接口
+- frontend 目前只接入了 customer 售后结果页与 courier onboarding 页，admin 运营页仍未接入
 - `CampusRuleCatalog` 仍是代码常量
 
 ## 下一轮建议
 
-- 进入 `Step 07`
+- 进入 `Step 08`
 - 推荐顺序：
-  1. 继续评估 `courier/profile` 与 `courier/review-status` bridge 的收口条件，并先准备稳定的 onboarding 替代链路
-  2. 规划 campus 后端接口与 `frontend/` 最小接入顺序，优先 admin 运营页和 customer 售后结果页
+  1. 继续观察 onboarding 新入口与旧 bridge 的并行表现，再决定是否逐步收口旧 bridge
+  2. 为 admin 增加一个真正可演示的最小只读运营页，优先售后执行分页或 settlement 批次列表
   3. 视业务需要补售后执行历史、异常历史和更细粒度运营审计
   4. 视业务需要补 settlement 更完整的对账、撤回和财务复核能力
 
@@ -227,5 +224,6 @@
 - [Step 04 日志](step-04-after-sale-decision-settlement-admin-ops.md)
 - [Step 05 日志](step-05-after-sale-execution-payout-and-order-ops.md)
 - [Step 06 日志](step-06-customer-receipt-execution-audit-and-payout-verify.md)
+- [Step 07 日志](step-07-customer-onboarding-and-frontend-entry.md)
 - [待处理事项](pending-items.md)
 - [文件改动清单](file-change-list.md)

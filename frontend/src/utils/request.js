@@ -8,8 +8,8 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import router from '../router'
 
-const PUBLIC_PREFIXES = ['/public/', '/employees/login', '/users/login']
-const CUSTOMER_PREFIXES = ['/users/', '/user/']
+const PUBLIC_PREFIXES = ['/public/', '/campus/public/', '/campus/courier/auth/token', '/employees/login', '/users/login']
+const CUSTOMER_PREFIXES = ['/users/', '/user/', '/campus/customer/']
 
 const isPublicRequest = (url = '') => PUBLIC_PREFIXES.some(prefix => url.startsWith(prefix))
 const isCustomerRequest = (url = '') => CUSTOMER_PREFIXES.some(prefix => url.startsWith(prefix))
