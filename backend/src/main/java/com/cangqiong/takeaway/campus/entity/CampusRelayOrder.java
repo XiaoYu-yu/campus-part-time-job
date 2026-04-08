@@ -75,11 +75,18 @@ public class CampusRelayOrder {
     private BigDecimal afterSaleDecisionAmount;
     private String afterSaleDecisionRemark;
     private Long afterSaleDecidedByEmployeeId;
+    private String afterSaleExecutionStatus;
+    private String afterSaleExecutionRemark;
+    private String afterSaleExecutionReferenceNo;
+    private Long afterSaleExecutedByEmployeeId;
     private String exceptionType;
     private String exceptionRemark;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime afterSaleDecidedAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime afterSaleExecutedAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;

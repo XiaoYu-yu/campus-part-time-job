@@ -66,6 +66,10 @@ public interface CampusRelayOrderMapper {
             "  cro.after_sale_decision_amount,",
             "  cro.after_sale_decision_remark,",
             "  cro.after_sale_decided_by_employee_id,",
+            "  cro.after_sale_execution_status,",
+            "  cro.after_sale_execution_remark,",
+            "  cro.after_sale_execution_reference_no,",
+            "  cro.after_sale_executed_by_employee_id,",
             "  cro.exception_type,",
             "  cro.exception_remark,",
             "  cro.priority_window_deadline,",
@@ -78,6 +82,7 @@ public interface CampusRelayOrderMapper {
             "  cro.after_sale_applied_at,",
             "  cro.after_sale_handled_at,",
             "  cro.after_sale_decided_at,",
+            "  cro.after_sale_executed_at,",
             "  cro.exception_reported_at,",
             "  cro.created_at,",
             "  cro.updated_at",
@@ -211,15 +216,22 @@ public interface CampusRelayOrderMapper {
             "  cro.after_sale_decision_amount,",
             "  cro.after_sale_decision_remark,",
             "  cro.after_sale_decided_by_employee_id,",
+            "  cro.after_sale_execution_status,",
+            "  cro.after_sale_execution_remark,",
+            "  cro.after_sale_execution_reference_no,",
+            "  cro.after_sale_executed_by_employee_id,",
             "  cro.after_sale_applied_at,",
             "  cro.after_sale_handled_at,",
             "  cro.after_sale_decided_at,",
+            "  cro.after_sale_executed_at,",
             "  cro.created_at",
             "FROM campus_relay_order cro",
             "<where>",
             "  AND cro.order_status IN ('AFTER_SALE_OPEN', 'AFTER_SALE_RESOLVED', 'AFTER_SALE_REJECTED')",
             "  <if test='orderStatus != null and orderStatus != \"\"'>AND cro.order_status = #{orderStatus}</if>",
             "  <if test='afterSaleHandleAction != null and afterSaleHandleAction != \"\"'>AND cro.after_sale_handle_action = #{afterSaleHandleAction}</if>",
+            "  <if test='afterSaleDecisionType != null and afterSaleDecisionType != \"\"'>AND cro.after_sale_decision_type = #{afterSaleDecisionType}</if>",
+            "  <if test='afterSaleExecutionStatus != null and afterSaleExecutionStatus != \"\"'>AND cro.after_sale_execution_status = #{afterSaleExecutionStatus}</if>",
             "  <if test='courierProfileId != null'>AND cro.courier_profile_id = #{courierProfileId}</if>",
             "  <if test='customerUserId != null'>AND cro.customer_user_id = #{customerUserId}</if>",
             "  <if test='relayOrderId != null and relayOrderId != \"\"'>AND cro.id = #{relayOrderId}</if>",
@@ -231,6 +243,8 @@ public interface CampusRelayOrderMapper {
     List<CampusAdminAfterSaleOrderVO> selectAfterSaleByCondition(
             @Param("orderStatus") String orderStatus,
             @Param("afterSaleHandleAction") String afterSaleHandleAction,
+            @Param("afterSaleDecisionType") String afterSaleDecisionType,
+            @Param("afterSaleExecutionStatus") String afterSaleExecutionStatus,
             @Param("courierProfileId") Long courierProfileId,
             @Param("customerUserId") Long customerUserId,
             @Param("relayOrderId") String relayOrderId,
@@ -246,6 +260,8 @@ public interface CampusRelayOrderMapper {
             "  AND cro.order_status IN ('AFTER_SALE_OPEN', 'AFTER_SALE_RESOLVED', 'AFTER_SALE_REJECTED')",
             "  <if test='orderStatus != null and orderStatus != \"\"'>AND cro.order_status = #{orderStatus}</if>",
             "  <if test='afterSaleHandleAction != null and afterSaleHandleAction != \"\"'>AND cro.after_sale_handle_action = #{afterSaleHandleAction}</if>",
+            "  <if test='afterSaleDecisionType != null and afterSaleDecisionType != \"\"'>AND cro.after_sale_decision_type = #{afterSaleDecisionType}</if>",
+            "  <if test='afterSaleExecutionStatus != null and afterSaleExecutionStatus != \"\"'>AND cro.after_sale_execution_status = #{afterSaleExecutionStatus}</if>",
             "  <if test='courierProfileId != null'>AND cro.courier_profile_id = #{courierProfileId}</if>",
             "  <if test='customerUserId != null'>AND cro.customer_user_id = #{customerUserId}</if>",
             "  <if test='relayOrderId != null and relayOrderId != \"\"'>AND cro.id = #{relayOrderId}</if>",
@@ -255,6 +271,8 @@ public interface CampusRelayOrderMapper {
     Long countAfterSaleByCondition(
             @Param("orderStatus") String orderStatus,
             @Param("afterSaleHandleAction") String afterSaleHandleAction,
+            @Param("afterSaleDecisionType") String afterSaleDecisionType,
+            @Param("afterSaleExecutionStatus") String afterSaleExecutionStatus,
             @Param("courierProfileId") Long courierProfileId,
             @Param("customerUserId") Long customerUserId,
             @Param("relayOrderId") String relayOrderId
@@ -686,6 +704,11 @@ public interface CampusRelayOrderMapper {
             "after_sale_decision_remark = #{decisionRemark}, " +
             "after_sale_decided_by_employee_id = #{decidedByEmployeeId}, " +
             "after_sale_decided_at = #{decidedAt}, " +
+            "after_sale_execution_status = #{afterSaleExecutionStatus}, " +
+            "after_sale_execution_remark = NULL, " +
+            "after_sale_execution_reference_no = NULL, " +
+            "after_sale_executed_by_employee_id = NULL, " +
+            "after_sale_executed_at = NULL, " +
             "updated_at = #{updatedAt} " +
             "WHERE id = #{id} " +
             "AND order_status = 'AFTER_SALE_RESOLVED' " +
@@ -697,6 +720,29 @@ public interface CampusRelayOrderMapper {
             @Param("decisionRemark") String decisionRemark,
             @Param("decidedByEmployeeId") Long decidedByEmployeeId,
             @Param("decidedAt") LocalDateTime decidedAt,
+            @Param("afterSaleExecutionStatus") String afterSaleExecutionStatus,
+            @Param("updatedAt") LocalDateTime updatedAt
+    );
+
+    @Update("UPDATE campus_relay_order SET " +
+            "after_sale_execution_status = #{executionStatus}, " +
+            "after_sale_execution_remark = #{executionRemark}, " +
+            "after_sale_execution_reference_no = #{executionReferenceNo}, " +
+            "after_sale_executed_by_employee_id = #{executedByEmployeeId}, " +
+            "after_sale_executed_at = #{executedAt}, " +
+            "updated_at = #{updatedAt} " +
+            "WHERE id = #{id} " +
+            "AND order_status = 'AFTER_SALE_RESOLVED' " +
+            "AND after_sale_decision_type IS NOT NULL " +
+            "AND (after_sale_execution_status = #{currentExecutionStatus} OR (#{currentExecutionStatus} = 'PENDING' AND after_sale_execution_status IS NULL))")
+    int recordAfterSaleExecutionByAdmin(
+            @Param("id") String id,
+            @Param("currentExecutionStatus") String currentExecutionStatus,
+            @Param("executionStatus") String executionStatus,
+            @Param("executionRemark") String executionRemark,
+            @Param("executionReferenceNo") String executionReferenceNo,
+            @Param("executedByEmployeeId") Long executedByEmployeeId,
+            @Param("executedAt") LocalDateTime executedAt,
             @Param("updatedAt") LocalDateTime updatedAt
     );
 

@@ -1,6 +1,7 @@
 package com.cangqiong.takeaway.campus.service;
 
 import com.cangqiong.takeaway.campus.dto.CampusAdminAfterSaleDecisionDTO;
+import com.cangqiong.takeaway.campus.dto.CampusAdminAfterSaleExecutionDTO;
 import com.cangqiong.takeaway.campus.dto.CampusAdminAfterSaleHandleDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCourierDeliverDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCourierExceptionReportDTO;
@@ -13,9 +14,11 @@ import com.cangqiong.takeaway.campus.query.CampusCourierAvailableOrderQuery;
 import com.cangqiong.takeaway.campus.query.CampusCustomerOrderQuery;
 import com.cangqiong.takeaway.campus.query.CampusRelayOrderQuery;
 import com.cangqiong.takeaway.campus.vo.CampusAdminAfterSaleOrderVO;
+import com.cangqiong.takeaway.campus.vo.CampusAdminAfterSaleResultVO;
 import com.cangqiong.takeaway.campus.vo.CampusCourierOrderVO;
 import com.cangqiong.takeaway.campus.vo.CampusCourierRecentExceptionVO;
 import com.cangqiong.takeaway.campus.vo.CampusCustomerOrderVO;
+import com.cangqiong.takeaway.campus.vo.CampusOrderExceptionSummaryVO;
 import com.cangqiong.takeaway.campus.vo.CampusOrderTimelineVO;
 import com.cangqiong.takeaway.campus.vo.CampusRelayOrderVO;
 import com.cangqiong.takeaway.vo.PageResult;
@@ -60,7 +63,13 @@ public interface CampusRelayOrderService {
 
     void recordAfterSaleDecisionByAdmin(String id, CampusAdminAfterSaleDecisionDTO dto, Long employeeId);
 
+    CampusAdminAfterSaleResultVO getAfterSaleResultByAdmin(String id);
+
+    void recordAfterSaleExecutionByAdmin(String id, CampusAdminAfterSaleExecutionDTO dto, Long employeeId);
+
     void reportExceptionByCourier(String id, CampusCourierExceptionReportDTO dto, Long courierUserId);
 
     List<CampusCourierRecentExceptionVO> listRecentExceptionsByCourier(Long courierProfileId, Integer limit);
+
+    CampusOrderExceptionSummaryVO getExceptionSummaryByOrderIdForAdmin(String id);
 }

@@ -12,24 +12,60 @@
 - 当前已完成：`Step 03E - customer 取消 / 售后 / admin 时间线 / 结算联动`
 - 当前已完成：`Step 03F - admin 售后处理 / courier 异常上报 / courier 位置上报 / admin 结算分页`
 - 当前已完成：`Step 04 - 售后决策 / 结算确认 / admin 运营只读接口`
+- 当前已完成：`Step 05 - 售后执行记录 / 结算打款运营 / 订单级运营查询`
 - 当前日期：`2026-04-08`
-- 当前范围：在不改 `frontend/`、不删旧外卖模块的前提下，已打通校园代送最小后端状态闭环
+- 当前范围：后端最小闭环已扩展到运营记录层，`frontend/` 仍未改动，旧外卖模块仍保留可运行
 
 ## 当前状态
 
-### 后端
+### 数据与领域
 
-- 旧外卖后端仍保留 `category`、`dish`、`setmeal`、`cart`、`address`、`orders` 等链路
-- 已并行新增 `com.cangqiong.takeaway.campus` 包结构
-- 已并行新增 `campus_customer_profile`、`campus_courier_profile`、`campus_pickup_point`、`campus_relay_order`、`campus_location_report`、`campus_settlement_record`
-- 已开放 campus 最小接口：
+- 已并行新增表：
+  - `campus_customer_profile`
+  - `campus_courier_profile`
+  - `campus_pickup_point`
+  - `campus_relay_order`
+  - `campus_location_report`
+  - `campus_settlement_record`
+- 普通用户继续复用 `user`
+- 管理员继续复用 `employee`
+- 配送员继续通过 `campus_courier_profile.user_id` 关联 `user`
+- 旧外卖表与旧控制器未删除，旧 `orders/cart/address` 语义未改
+
+### 当前已开放的 campus 接口
+
+- public：
   - `/api/campus/public/pickup-points`
   - `/api/campus/public/delivery-rules`
+- customer：
+  - `/api/campus/customer/orders`
+  - `/api/campus/customer/orders/{id}`
+  - `/api/campus/customer/orders/{id}/mock-pay`
+  - `/api/campus/customer/orders/{id}/confirm`
+  - `/api/campus/customer/orders/{id}/cancel`
+  - `/api/campus/customer/orders/{id}/after-sale`
+- courier：
+  - `/api/campus/courier/auth/token`
+  - `/api/campus/courier/profile`
+  - `/api/campus/courier/review-status`
+  - `/api/campus/courier/orders/available`
+  - `/api/campus/courier/orders/{id}`
+  - `/api/campus/courier/orders/{id}/accept`
+  - `/api/campus/courier/orders/{id}/pickup`
+  - `/api/campus/courier/orders/{id}/deliver`
+  - `/api/campus/courier/orders/{id}/exception-report`
+  - `/api/campus/courier/location-reports`
+- admin：
   - `/api/campus/admin/orders`
   - `/api/campus/admin/orders/{id}`
+  - `/api/campus/admin/orders/{id}/timeline`
+  - `/api/campus/admin/orders/after-sale`
   - `/api/campus/admin/orders/{id}/after-sale-handle`
   - `/api/campus/admin/orders/{id}/after-sale-decision`
-  - `/api/campus/admin/orders/after-sale`
+  - `/api/campus/admin/orders/{id}/after-sale-result`
+  - `/api/campus/admin/orders/{id}/after-sale-execution`
+  - `/api/campus/admin/orders/{id}/location-reports`
+  - `/api/campus/admin/orders/{id}/exception-summary`
   - `/api/campus/admin/couriers`
   - `/api/campus/admin/couriers/{id}/review`
   - `/api/campus/admin/couriers/{courierProfileId}/exceptions/recent`
@@ -37,50 +73,16 @@
   - `/api/campus/admin/settlements`
   - `/api/campus/admin/settlements/{id}`
   - `/api/campus/admin/settlements/{id}/confirm`
-  - `/api/campus/customer/orders`
-  - `/api/campus/customer/orders/{id}`
-  - `/api/campus/customer/orders/{id}/mock-pay`
-  - `/api/campus/customer/orders/{id}/confirm`
-  - `/api/campus/customer/orders/{id}/cancel`
-  - `/api/campus/customer/orders/{id}/after-sale`
-  - `/api/campus/courier/auth/token`
-  - `/api/campus/courier/profile`
-  - `/api/campus/courier/review-status`
-  - `/api/campus/courier/orders/available`
-  - `/api/campus/courier/orders/{id}`
-  - `/api/campus/courier/orders/{id}/accept`
-  - `/api/campus/courier/orders/{id}/exception-report`
-  - `/api/campus/courier/orders/{id}/pickup`
-  - `/api/campus/courier/orders/{id}/deliver`
-  - `/api/campus/courier/location-reports`
-  - `/api/campus/admin/orders/{id}/timeline`
-- customer 侧已具备：
-  - 复用旧 `user` 身份登录
-  - 校园资料继续读取 `campus_customer_profile`
-  - 创建代送单、模拟支付、订单详情、订单列表、确认送达
-  - 未取餐前取消
-  - 最小文本售后申诉
-- courier 侧已具备：
-  - 基于旧 `user` 账号的 courier token 发行入口
-  - 资料提交、资料详情查看、审核状态查看
-  - onboarding 过渡桥接：资料接口允许 `customer` 或 `courier` token
-  - 已审核通过且启用的 courier 才能进入接单链路
-  - 可接订单列表、订单详情、最小接单
-  - 取餐凭证受控路径校验、取餐、配送中推进、送达待确认
-- admin 侧已具备：
-  - campus 订单分页与详情
-  - campus 订单时间线查看
-  - campus 订单售后处理
-  - campus 售后订单分页查询
-  - campus 售后退款/补偿/无补偿决策记录
-  - campus 配送员分页与审核
-  - campus 配送员最近异常查看
-  - campus 配送员低频位置记录查看
-  - campus 结算分页查询
-  - campus 结算详情与确认结算
-- 当前最小订单状态闭环已打通：
+  - `/api/campus/admin/settlements/{id}/payout-result`
+  - `/api/campus/admin/settlements/batch-payout-result`
+  - `/api/campus/admin/settlements/reconcile-summary`
+
+### 状态与运营能力
+
+- 订单主状态已覆盖：
   - `PENDING_PAYMENT`
-  - `BUILDING_PRIORITY_PENDING / WAITING_ACCEPT`
+  - `BUILDING_PRIORITY_PENDING`
+  - `WAITING_ACCEPT`
   - `ACCEPTED`
   - `PICKED_UP`
   - `DELIVERING`
@@ -90,240 +92,113 @@
   - `AFTER_SALE_OPEN`
   - `AFTER_SALE_RESOLVED`
   - `AFTER_SALE_REJECTED`
-- 订单在进入 `COMPLETED` 时会自动生成或更新 `campus_settlement_record`
-- courier 最小运营侧能力已补齐：
-  - 异常上报只保留订单上的最近一次异常信息
-  - 异常上报不改变 `orderStatus`
-  - 低频位置记录写入 `campus_location_report`
-  - 位置记录不进入 admin 时间线，避免噪音
+- `after_sale_execution_status` 独立于 `order_status`
+  - `PENDING`
+  - `SUCCESS`
+  - `FAILED`
+  - `NOT_REQUIRED`
+- `payout_status` 独立于 `settlement_status`
+  - `UNPAID`
+  - `PAID`
+  - `FAILED`
+- `decisionType = REFUND / COMPENSATE` 记录后会自动初始化 `after_sale_execution_status = PENDING`
+- `decisionType = NONE` 记录后会自动初始化 `after_sale_execution_status = NOT_REQUIRED`
+- settlement confirm 后会自动初始化 `payout_status = UNPAID`
+- courier 异常上报仍只保留订单上的最新一次异常，不改 `order_status`
+- courier 位置上报仍只写 `campus_location_report`，不进入 timeline
 
-### Web 管理端
+## Step 05 实际完成事项
 
-- `frontend/` 本轮没有改动
-- 现有后台菜单和页面仍是外卖语义
-- campus 后台接口可供后续挂接，但本轮仍未接入页面
-
-### Web 用户端
-
-- `frontend/src/views/user/*` 本轮没有改动
-- 用户 Web 仍是旧点餐、购物车、地址、结算链路
-- campus customer/courier 接口已可通过后端联调或测试演示，但尚未接入页面
-
-### 移动端
-
-- 当前仓库仍没有 `uni-app/`
-- 本轮仍未创建移动端工程
-
-## Step 01 实际完成事项
-
-1. 完成校园代送领域规划文档和旧模块映射文档落档
-2. 固定并行新增 `campus_*` 领域、不重建后端、不改前端的总体策略
-3. 为后续 Step 02/03 建立日志索引和待办基线
-
-## Step 02A 实际完成事项
-
-1. 新增 campus 迁移脚本 `backend/db/migrations/V2__campus_relay_schema.sql`
-2. 扩展 `backend/db/init.sql`
-3. 扩展 H2 `schema-h2.sql` 与 `data-h2.sql`
-4. 更新 dev/test/prod MyBatis type aliases 配置，纳入 campus 实体包
-5. 更新 `JwtInterceptor`，放行 `/api/campus/public/**`，并将 `/api/campus/admin/**` 固定为 employee 权限
-6. 新增 `com.cangqiong.takeaway.campus` 下的 entity、enums、support、query、vo、mapper、service、service/impl、controller 骨架
-7. 实现最小只读 public/admin Controller
-8. 新增 `CampusSkeletonIntegrationTest`
-9. 执行 `.\mvnw.cmd test`，全部通过
-
-## Step 02B 实际完成事项
-
-1. 扩展 `CampusDeliveryRuleVO` 与 `CampusRuleCatalog`，集中规则文案、楼栋清单、费用区间、优先窗口和位置刷新策略
-2. 扩展 `CampusRelayOrderQuery` 和 `CampusCourierQuery`
-3. 完善 `CampusRelayOrderMapper`、`CampusCourierProfileMapper` 查询 SQL
-4. 完善 `CampusRelayOrderServiceImpl`、`CampusCourierProfileServiceImpl` 的只读分页逻辑
-5. 完善 public/admin 只读 controller
-6. 扩展 `CampusSkeletonIntegrationTest`
-7. 执行 `.\mvnw.cmd test`，累计 `14` 个测试通过
-
-## Step 03A 实际完成事项
-
-1. 新增 `CampusCustomerOrderCreateDTO`、`CampusCustomerOrderQuery`、`CampusCustomerOrderVO`
-2. 新增 `CampusCustomerOrderController`
-3. 实现 customer 创建单、模拟支付、详情、列表能力
-4. 将金额统一按两位小数处理，继续复用 `BigDecimal`
-5. 将“已取餐后不可直接取消”规则提前落到 service 层
-6. 新增 `CampusCustomerOrderIntegrationTest`
-7. 执行 `.\mvnw.cmd test`，累计 `18` 个测试通过
-
-## Step 03B 实际完成事项
-
-1. 新增 `CampusCourierProfileSubmitDTO`、`CampusCourierReviewDTO`、`CampusCourierReviewStatusVO`
-2. 新增 `CampusCourierProfileController`
-3. 实现 courier 资料提交、资料详情、审核状态查询
-4. 实现 admin 订单详情与 courier 审核
-5. courier 提交/重提时统一回到 `PENDING`
-6. 文件字段继续只保存 `/api/files/*` 受控路径
-7. 新增 `CampusCourierProfileIntegrationTest`
-8. 执行 `.\mvnw.cmd test`，累计 `23` 个测试通过
-
-## Step 03C 实际完成事项
-
-1. 新增 `CampusCourierAuthController`
-2. 新增 `CampusCourierOrderController`
-3. 新增 `CampusCourierAvailableOrderQuery`、`CampusCourierOrderVO`
-4. 实现 courier token 发行、可接单列表、订单详情、最小接单
-5. 将宿舍优先窗口、资格判断和重复接单判断集中到 service 层
-6. 接单写入采用条件更新，避免同一订单被重复接单
-7. 新增 `CampusCourierAcceptIntegrationTest`
-8. 执行 `.\mvnw.cmd test`，累计 `28` 个测试通过
-
-## Step 03D 实际完成事项
-
-1. 新增 `CampusCourierPickupDTO`、`CampusCourierDeliverDTO`
-2. 扩展 `CampusRelayOrderService`、`CampusRelayOrderMapper`、`CampusRelayOrderServiceImpl`
-3. 扩展 `CampusCourierOrderController`：
-   - `POST /api/campus/courier/orders/{id}/pickup`
-   - `POST /api/campus/courier/orders/{id}/deliver`
-4. 扩展 `CampusCustomerOrderController`：
-   - `POST /api/campus/customer/orders/{id}/confirm`
-5. pickup 时新增受控文件路径校验：
-   - 只允许保存 `/api/files/*`
-   - 不允许写入本地磁盘绝对路径
-6. pickup 成功后：
-   - `orderStatus -> PICKED_UP`
-   - 写入 `pickedUpAt`
-   - 写入 `pickupProofImageUrl`
-7. deliver 接口采用单路径双阶段推进：
-   - `PICKED_UP -> DELIVERING`
-   - `DELIVERING -> AWAITING_CONFIRMATION`
-   - 第二次推进时写入 `deliveredAt`
-8. customer confirm 只允许订单所属用户调用：
-   - `AWAITING_CONFIRMATION -> COMPLETED`
-   - 写入 `autoCompleteAt`
-9. 继续把权限、状态流转、取餐凭证校验集中在 service 层
-10. 扩展 customer/courier 订单 VO 和 mapper 字段投影，补齐 `pickupProofImageUrl`、`courierRemark`、`autoCompleteAt`
-11. 新增 `CampusCourierDeliveryIntegrationTest`
-12. 调整 `CampusSkeletonIntegrationTest` 的 admin 订单筛选断言，避免全量回归下的脆弱匹配
-13. 执行 `.\mvnw.cmd test`，累计 `31` 个测试通过
-
-## Step 03E 实际完成事项
-
-1. 新增 `POST /api/campus/customer/orders/{id}/cancel`
-2. 新增 `POST /api/campus/customer/orders/{id}/after-sale`
-3. 新增 `GET /api/campus/admin/orders/{id}/timeline`
-4. 扩展 `CampusRelayOrderServiceImpl`，将取消、售后、时间线、结算联动集中在 service 层
-5. 为 `campus_relay_order` 补齐最小时间线字段：
-   - `paid_at`
-   - `cancelled_at`
-   - `after_sale_applied_at`
-   - `cancel_reason`
-6. 在 customer confirm 进入 `COMPLETED` 时自动生成或更新 `campus_settlement_record`
-7. 保留 `courier/profile` 与 `courier/review-status` 的双 token bridge，并在 `JwtInterceptor` 中补充代码注释说明保留原因
-8. 新增 `CampusOrderExceptionIntegrationTest`
-9. 执行 `.\mvnw.cmd test`，累计 `34` 个测试通过
-
-## Step 03F 实际完成事项
-
-1. 在 `CampusRelayOrderStatus` 中新增：
-   - `AFTER_SALE_RESOLVED`
-   - `AFTER_SALE_REJECTED`
-2. 为 `campus_relay_order` 最小增量补齐售后处理与异常字段：
-   - `after_sale_handle_action`
-   - `after_sale_handle_remark`
-   - `after_sale_handled_by_employee_id`
-   - `after_sale_handled_at`
-   - `exception_type`
-   - `exception_remark`
-   - `exception_reported_at`
-3. 新增 `POST /api/campus/admin/orders/{id}/after-sale-handle`
-4. 新增 `POST /api/campus/courier/orders/{id}/exception-report`
-5. 新增 `POST /api/campus/courier/location-reports`
-6. 新增 `GET /api/campus/admin/settlements`
-7. 新增参数校验与统一异常处理：
-   - `CampusAdminAfterSaleHandleDTO.handleRemark` 必填且不能为空白
-   - `CampusCourierExceptionReportDTO.exceptionType`、`exceptionRemark` 必填
-8. 时间线新增“异常上报”“售后已解决”“售后已驳回”节点，但继续排除每条位置上报记录
-9. settlement 分页兼容 `pageSize` 和 `size`，默认按 `createdAt DESC`
-10. 保留 `courier/profile` 与 `courier/review-status` 的双 token bridge，并明确记录保留原因与收口前提
-11. 新增 `CampusStep03FIntegrationTest`
-12. 执行 `.\mvnw.cmd test`，累计 `40` 个测试通过
-
-## Step 04 实际完成事项
-
-1. 新增 `GET /api/campus/admin/orders/after-sale`
-2. 新增 `POST /api/campus/admin/orders/{id}/after-sale-decision`
-3. 为 `campus_relay_order` 最小增量补齐售后决策字段：
-   - `after_sale_decision_type`
-   - `after_sale_decision_amount`
-   - `after_sale_decision_remark`
-   - `after_sale_decided_by_employee_id`
-   - `after_sale_decided_at`
-4. 售后查询支持：
-   - `orderStatus`
-   - `afterSaleHandleAction`
-   - `courierProfileId`
-   - `customerUserId`
-   - `relayOrderId`
-   - 兼容 `pageSize / size`
-   - 默认按 `after_sale_applied_at DESC, created_at DESC`
-5. 售后决策在 service 层统一完成：
-   - `decisionType` 先转大写再做枚举解析
-   - `REFUND` 金额不得超过订单 `totalAmount`
-   - `decisionAmount` 统一按 `BigDecimal` 两位小数、`HALF_UP`
-   - `NONE` 决策金额落库为 `NULL`
-6. admin 时间线新增“售后决策已记录”节点
-7. 新增 `GET /api/campus/admin/settlements/{id}`
-8. 新增 `POST /api/campus/admin/settlements/{id}/confirm`
-9. settlement confirm 规则最小闭环：
-   - 仅 `PENDING` 可确认
-   - confirm 后推进到 `SETTLED`
-   - 原 `remark` 为空时直接写 `settleRemark`
-   - 原 `remark` 非空时按 `原remark | settleRemark` 追加
-10. 新增 `GET /api/campus/admin/couriers/{courierProfileId}/exceptions/recent`
-11. 新增 `GET /api/campus/admin/couriers/{courierProfileId}/location-reports`
-12. admin 运营只读接口规则：
-   - courier 异常仍只读取订单上的最近一次异常
-   - `exceptions/recent` 的 `limit` 默认 `10`，最大 `50`
-   - `location-reports` 默认 `reportedAt DESC`
-   - `location-reports` 的 `pageSize` 最大 `100`
-13. 修复 campus 分页兼容回归，确保旧接口继续兼容 `size`
-14. 新增 `CampusStep04IntegrationTest`
-15. 执行 `.\mvnw.cmd test`，累计 `45` 个测试通过
+1. 为 `campus_relay_order` 新增售后执行字段：
+   - `after_sale_execution_status`
+   - `after_sale_execution_remark`
+   - `after_sale_execution_reference_no`
+   - `after_sale_executed_by_employee_id`
+   - `after_sale_executed_at`
+2. 扩展 `GET /api/campus/admin/orders/after-sale`
+   - 新增 `afterSaleDecisionType`
+   - 新增 `afterSaleExecutionStatus`
+   - 默认排序继续 `after_sale_applied_at DESC, created_at DESC`
+3. 新增 `GET /api/campus/admin/orders/{id}/after-sale-result`
+4. 新增 `POST /api/campus/admin/orders/{id}/after-sale-execution`
+5. 将售后执行结果规则集中在 service 层：
+   - 仅 `AFTER_SALE_RESOLVED` 且已记录决策的订单可写
+   - `REFUND + SUCCESS` 要求 `executionReferenceNo` 非空
+   - `executionReferenceNo` 统一 trim，纯空白不落库
+   - `decisionType = NONE` 不允许再通过执行接口写 `SUCCESS / FAILED`
+   - 允许 `FAILED -> SUCCESS` 一次人工纠正
+   - 拒绝 `SUCCESS -> FAILED` 和终态重复写入
+6. admin 时间线新增“售后执行结果已记录”节点
+7. 为 `campus_settlement_record` 新增打款字段：
+   - `payout_status`
+   - `payout_remark`
+   - `payout_reference_no`
+   - `payout_recorded_by_employee_id`
+   - `payout_recorded_at`
+8. 扩展 `GET /api/campus/admin/settlements`
+   - 新增 `payoutStatus`
+   - 继续兼容 `pageSize / size`
+   - 默认排序继续 `createdAt DESC`
+9. 新增 `POST /api/campus/admin/settlements/{id}/payout-result`
+10. 新增 `POST /api/campus/admin/settlements/batch-payout-result`
+11. 新增 `GET /api/campus/admin/settlements/reconcile-summary`
+12. 将打款规则集中在 service 层：
+   - 仅 `SETTLED` 记录可写
+   - `PAID` 时 `payoutReferenceNo` 必填
+   - `FAILED` 可无参考号
+   - 批量处理会先对 `settlementIds` 去重
+   - `totalRequested` 按去重后的请求数统计
+   - 允许 `FAILED -> PAID` 一次人工纠正
+13. 新增 `GET /api/campus/admin/orders/{id}/location-reports`
+14. 新增 `GET /api/campus/admin/orders/{id}/exception-summary`
+15. 订单级运营只读规则：
+   - `location-reports` 订单不存在返回 `404`
+   - 默认按 `reportedAt DESC`
+   - `pageSize` 最大值 `100`
+   - `exception-summary` 只返回当前订单最新一次异常摘要
+   - 无异常时返回空异常字段
+   - 无位置记录时 `locationReportCount = 0`
+16. 新增 `CampusStep05IntegrationTest`
+17. 执行：
+   - `.\mvnw.cmd -DskipTests compile`
+   - `.\mvnw.cmd "-Dtest=CampusStep05IntegrationTest" test`
+   - `.\mvnw.cmd test`
+18. 当前累计 `50` 个测试通过
 
 ## 当前锁定的技术事实
 
-1. 仓库后端真实风格是注解式 MyBatis，不使用 XML Mapper
-2. H2 测试环境真实依赖 `schema-h2.sql` 和 `data-h2.sql`
-3. `employee` 继续承担后台管理员登录和 `/api/campus/admin/**` 权限入口
-4. `user` 继续作为普通用户基础身份
-5. customer 下单阶段继续只允许模拟支付，不接第三方支付
-6. courier 资料附件和取餐凭证继续保存受控文件路径，不引入新文件系统方案
-7. courier token 继续复用现有 `user` 账号密码校验，不新建第二套 courier 账号表
-8. `courier/profile` 与 `courier/review-status` 当前仍采用 `customer/courier` 双通道桥接，原因是未审核通过用户尚不能获取 courier token，但仍需要完成资料提交和查看审核状态
-9. courier 异常上报当前只保留订单上的最新一次异常信息，不单独建异常历史表
-10. admin 时间线当前会展示异常上报、售后处理和售后决策节点，但不会写入每条位置上报记录
-11. admin 售后决策当前只做后台记录，不触发真实退款或补偿支付
-12. settlement confirm 当前只做后台确认记录，不触发真实打款
-13. 本轮没有引入新迁移工具，仍沿用 `init.sql + migrations + H2 schema/data`
+1. 继续使用注解式 MyBatis，不改 XML
+2. 继续沿用 `init.sql + migrations + schema-h2.sql + data-h2.sql`
+3. 第一版支付仍只允许模拟支付，不接第三方支付
+4. 退款/补偿/打款都仍然只是后台运营记录，不是真实支付执行
+5. 所有金额处理继续统一为 `BigDecimal`、两位小数、`HALF_UP`
+6. `courier/profile` 与 `courier/review-status` 的 bridge 继续保留
+7. 保留 bridge 的原因：
+   - 未审核通过用户拿不到 `courier` token`
+   - 但资料提交与审核状态查询必须发生在拿 token 之前
+8. 收口 bridge 的前提：
+   - 先有稳定的 onboarding 替代链路
+   - 或把资料提交与审核查询统一改为不依赖 `courier` token 的入口
 
-## 当前风险与未完成项
+## 当前未解决的问题
 
-- `courier/profile` 和 `courier/review-status` 仍是 bridge 方案，后续何时收口仍需结合前端与 onboarding 方案确定
-- customer 仍没有自助退款、售后处理结果查询接口
-- admin 仍没有售后二次流转、真实退款联动、强制改派能力
-- courier 位置上报仍是低频记录，没有频控、轨迹聚合和地图展示
-- settlement 目前已有详情与确认结算，但仍没有真实打款、批量结算和财务对账动作
-- `CampusRuleCatalog` 仍是代码常量，后续若学校规则变更仍需配置化
-- `frontend/` 尚未隐藏旧菜单，也未接入 campus 新接口
+- customer 仍没有售后结果查询和自助退款反馈接口
+- admin 仍没有售后执行审计列表和执行结果修正视图
+- settlement 仍没有真实打款、撤回打款、批次审计详情和复杂对账
+- 异常仍只保留最新一次，没有历史记录和处理结果流
+- 位置记录仍是低频明细，没有地图、轨迹聚合和频控
+- `frontend/` 仍未接入 campus 接口
+- `CampusRuleCatalog` 仍是代码常量
 
 ## 下一轮建议
 
-- 进入 `Step 05`
-- 重点从“后台记录闭环”转入“运营结果闭环与前端接入准备”
+- 进入 `Step 06`
 - 推荐顺序：
-  1. 为 admin 增加售后结果后续流转或退款执行结果查询
-  2. 为 settlement 增加打款结果记录、批量处理和对账视图
-  3. 为 admin 增加按订单维度查看位置记录与异常摘要的入口
-  4. 结合 onboarding 方案评估是否收口 `courier/profile` 的双 token bridge
-  5. 在后端接口稳定后再决定前端管理端和用户端的接入节奏
-- 保持 `frontend/` 继续不动，先把后端异常链路和结算链路补稳
+  1. 为 customer 增加售后结果查询与最小结果回执
+  2. 为 admin 增加售后执行结果列表、按配送员/按状态筛选和人工修正只读视图
+  3. 为 settlement 增加批次审计明细和更稳定的运营查询
+  4. 结合 onboarding 方案继续评估 `courier/profile` bridge 的收口时机
+  5. 在后端接口稳定后再决定 `frontend/` 的接入节奏
 
 ## 日志索引
 
@@ -339,5 +214,6 @@
 - [Step 03E 日志](step-03e-cancel-after-sale-timeline-settlement.md)
 - [Step 03F 日志](step-03f-admin-after-sale-exception-location-settlement.md)
 - [Step 04 日志](step-04-after-sale-decision-settlement-admin-ops.md)
+- [Step 05 日志](step-05-after-sale-execution-payout-and-order-ops.md)
 - [待处理事项](pending-items.md)
 - [文件改动清单](file-change-list.md)

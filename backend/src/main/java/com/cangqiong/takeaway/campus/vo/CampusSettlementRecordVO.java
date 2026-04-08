@@ -16,10 +16,17 @@ public class CampusSettlementRecordVO {
     private BigDecimal platformCommission;
     private BigDecimal pendingAmount;
     private String settlementStatus;
+    private String payoutStatus;
+    private String payoutRemark;
+    private String payoutReferenceNo;
+    private Long payoutRecordedByEmployeeId;
     private String remark;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime settledAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime payoutRecordedAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;

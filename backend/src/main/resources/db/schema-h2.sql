@@ -234,6 +234,11 @@ CREATE TABLE IF NOT EXISTS campus_relay_order (
     after_sale_decision_remark VARCHAR(255),
     after_sale_decided_by_employee_id BIGINT,
     after_sale_decided_at TIMESTAMP,
+    after_sale_execution_status VARCHAR(20),
+    after_sale_execution_remark VARCHAR(255),
+    after_sale_execution_reference_no VARCHAR(100),
+    after_sale_executed_by_employee_id BIGINT,
+    after_sale_executed_at TIMESTAMP,
     exception_type VARCHAR(50),
     exception_remark VARCHAR(255),
     exception_reported_at TIMESTAMP,
@@ -243,7 +248,8 @@ CREATE TABLE IF NOT EXISTS campus_relay_order (
     CONSTRAINT fk_campus_relay_order_courier FOREIGN KEY (courier_profile_id) REFERENCES campus_courier_profile(id),
     CONSTRAINT fk_campus_relay_order_pickup_point FOREIGN KEY (pickup_point_id) REFERENCES campus_pickup_point(id),
     CONSTRAINT fk_campus_relay_order_after_sale_employee FOREIGN KEY (after_sale_handled_by_employee_id) REFERENCES employee(id),
-    CONSTRAINT fk_campus_relay_order_after_sale_decision_employee FOREIGN KEY (after_sale_decided_by_employee_id) REFERENCES employee(id)
+    CONSTRAINT fk_campus_relay_order_after_sale_decision_employee FOREIGN KEY (after_sale_decided_by_employee_id) REFERENCES employee(id),
+    CONSTRAINT fk_campus_relay_order_after_sale_execution_employee FOREIGN KEY (after_sale_executed_by_employee_id) REFERENCES employee(id)
 );
 
 CREATE TABLE IF NOT EXISTS campus_location_report (
@@ -268,10 +274,16 @@ CREATE TABLE IF NOT EXISTS campus_settlement_record (
     platform_commission DECIMAL(10, 2) NOT NULL DEFAULT 0,
     pending_amount DECIMAL(10, 2) NOT NULL,
     settlement_status VARCHAR(20) NOT NULL,
+    payout_status VARCHAR(20),
+    payout_remark VARCHAR(255),
+    payout_reference_no VARCHAR(100),
+    payout_recorded_by_employee_id BIGINT,
+    payout_recorded_at TIMESTAMP,
     settled_at TIMESTAMP,
     remark VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_campus_settlement_record_order FOREIGN KEY (relay_order_id) REFERENCES campus_relay_order(id),
-    CONSTRAINT fk_campus_settlement_record_courier FOREIGN KEY (courier_profile_id) REFERENCES campus_courier_profile(id)
+    CONSTRAINT fk_campus_settlement_record_courier FOREIGN KEY (courier_profile_id) REFERENCES campus_courier_profile(id),
+    CONSTRAINT fk_campus_settlement_record_payout_employee FOREIGN KEY (payout_recorded_by_employee_id) REFERENCES employee(id)
 );

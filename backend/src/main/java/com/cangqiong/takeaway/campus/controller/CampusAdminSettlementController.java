@@ -1,9 +1,13 @@
 package com.cangqiong.takeaway.campus.controller;
 
 import com.cangqiong.takeaway.campus.dto.CampusAdminSettlementConfirmDTO;
+import com.cangqiong.takeaway.campus.dto.CampusAdminSettlementBatchPayoutDTO;
+import com.cangqiong.takeaway.campus.dto.CampusAdminSettlementPayoutResultDTO;
 import com.cangqiong.takeaway.campus.query.CampusSettlementQuery;
 import com.cangqiong.takeaway.campus.service.CampusSettlementRecordService;
+import com.cangqiong.takeaway.campus.vo.CampusSettlementBatchPayoutResultVO;
 import com.cangqiong.takeaway.campus.vo.CampusSettlementRecordVO;
+import com.cangqiong.takeaway.campus.vo.CampusSettlementReconcileSummaryVO;
 import com.cangqiong.takeaway.interceptor.BaseContext;
 import com.cangqiong.takeaway.utils.Result;
 import com.cangqiong.takeaway.vo.PageResult;
@@ -43,5 +47,26 @@ public class CampusAdminSettlementController {
         log.info("校园代送结算确认: employeeId={}, settlementId={}", employeeId, id);
         campusSettlementRecordService.confirmByAdmin(id, dto, employeeId);
         return Result.success();
+    }
+
+    @PostMapping("/{id}/payout-result")
+    public Result<Void> recordPayoutResult(@PathVariable Long id, @Valid @RequestBody CampusAdminSettlementPayoutResultDTO dto) {
+        Long employeeId = BaseContext.getCurrentUserId();
+        log.info("校园代送结算打款结果记录: employeeId={}, settlementId={}", employeeId, id);
+        campusSettlementRecordService.recordPayoutResultByAdmin(id, dto, employeeId);
+        return Result.success();
+    }
+
+    @PostMapping("/batch-payout-result")
+    public Result<CampusSettlementBatchPayoutResultVO> batchRecordPayoutResult(@Valid @RequestBody CampusAdminSettlementBatchPayoutDTO dto) {
+        Long employeeId = BaseContext.getCurrentUserId();
+        log.info("校园代送结算批量打款结果记录: employeeId={}, dto={}", employeeId, dto);
+        return Result.success(campusSettlementRecordService.batchRecordPayoutResultByAdmin(dto, employeeId));
+    }
+
+    @GetMapping("/reconcile-summary")
+    public Result<CampusSettlementReconcileSummaryVO> getReconcileSummary(CampusSettlementQuery query) {
+        log.info("校园代送结算对账摘要查询: {}", query);
+        return Result.success(campusSettlementRecordService.getReconcileSummary(query));
     }
 }

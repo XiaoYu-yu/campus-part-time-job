@@ -8,6 +8,7 @@ import com.cangqiong.takeaway.campus.enums.CampusRelayOrderStatus;
 import com.cangqiong.takeaway.campus.mapper.CampusLocationReportMapper;
 import com.cangqiong.takeaway.campus.mapper.CampusRelayOrderMapper;
 import com.cangqiong.takeaway.campus.query.CampusAdminCourierLocationReportQuery;
+import com.cangqiong.takeaway.campus.query.CampusAdminOrderLocationReportQuery;
 import com.cangqiong.takeaway.campus.service.CampusCourierProfileService;
 import com.cangqiong.takeaway.campus.service.CampusLocationReportService;
 import com.cangqiong.takeaway.campus.vo.CampusLocationReportVO;
@@ -91,6 +92,35 @@ public class CampusLocationReportServiceImpl implements CampusLocationReportServ
                 pageSize
         );
         Long total = campusLocationReportMapper.countByCourierProfileId(courierProfileId, relayOrderId);
+
+        PageResult<CampusLocationReportVO> pageResult = new PageResult<>();
+        pageResult.setRecords(records);
+        pageResult.setTotal(total);
+        pageResult.setSize((long) pageSize);
+        pageResult.setCurrent((long) page);
+        pageResult.setPages((total + pageSize - 1) / pageSize);
+        return pageResult;
+    }
+
+    @Override
+    public PageResult<CampusLocationReportVO> pageByOrderForAdmin(String relayOrderId, CampusAdminOrderLocationReportQuery query) {
+        String normalizedRelayOrderId = normalizeText(relayOrderId);
+        requireText(normalizedRelayOrderId, "订单号不能为空");
+        CampusRelayOrder order = campusRelayOrderMapper.selectEntityById(normalizedRelayOrderId);
+        if (order == null) {
+            throw new BusinessException(404, "订单不存在");
+        }
+
+        int page = safePositive(query == null ? null : query.getPage(), 1);
+        int pageSize = safePageSize(query == null ? null : query.getPageSize(), query == null ? null : query.getSize());
+        int offset = (page - 1) * pageSize;
+
+        List<CampusLocationReportVO> records = campusLocationReportMapper.selectByOrderId(
+                normalizedRelayOrderId,
+                offset,
+                pageSize
+        );
+        Long total = campusLocationReportMapper.countByOrderId(normalizedRelayOrderId);
 
         PageResult<CampusLocationReportVO> pageResult = new PageResult<>();
         pageResult.setRecords(records);

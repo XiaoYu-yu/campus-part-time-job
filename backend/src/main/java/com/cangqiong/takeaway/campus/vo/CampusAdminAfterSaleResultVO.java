@@ -7,12 +7,22 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
-public class CampusAdminAfterSaleOrderVO {
+public class CampusAdminAfterSaleResultVO {
 
     private String relayOrderId;
     private String orderStatus;
+    private String paymentStatus;
     private Long customerUserId;
     private Long courierProfileId;
+    private Long pickupPointId;
+    private String pickupPointCode;
+    private String pickupPointName;
+    private String deliveryTargetType;
+    private String deliveryBuilding;
+    private String deliveryDetail;
+    private String customerName;
+    private String customerPhone;
+    private String courierName;
     private BigDecimal totalAmount;
     private String afterSaleReason;
     private String afterSaleHandleAction;
@@ -41,4 +51,7 @@ public class CampusAdminAfterSaleOrderVO {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updatedAt;
 }

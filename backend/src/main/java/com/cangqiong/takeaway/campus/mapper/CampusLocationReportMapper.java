@@ -59,4 +59,25 @@ public interface CampusLocationReportMapper {
             @Param("courierProfileId") Long courierProfileId,
             @Param("relayOrderId") String relayOrderId
     );
+
+    @Select({
+            "<script>",
+            "SELECT id, relay_order_id, courier_profile_id, latitude, longitude, source, note, reported_at, created_at",
+            "FROM campus_location_report",
+            "WHERE relay_order_id = #{relayOrderId}",
+            "ORDER BY reported_at DESC",
+            "LIMIT #{pageSize} OFFSET #{offset}",
+            "</script>"
+    })
+    List<CampusLocationReportVO> selectByOrderId(
+            @Param("relayOrderId") String relayOrderId,
+            @Param("offset") int offset,
+            @Param("pageSize") int pageSize
+    );
+
+    @Select("SELECT COUNT(*) FROM campus_location_report WHERE relay_order_id = #{relayOrderId}")
+    Long countByOrderId(String relayOrderId);
+
+    @Select("SELECT MAX(reported_at) FROM campus_location_report WHERE relay_order_id = #{relayOrderId}")
+    java.time.LocalDateTime selectLatestReportedAtByOrderId(String relayOrderId);
 }

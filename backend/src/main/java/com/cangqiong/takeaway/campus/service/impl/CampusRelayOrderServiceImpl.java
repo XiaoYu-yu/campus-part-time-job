@@ -1,6 +1,7 @@
 package com.cangqiong.takeaway.campus.service.impl;
 
 import com.cangqiong.takeaway.campus.dto.CampusAdminAfterSaleDecisionDTO;
+import com.cangqiong.takeaway.campus.dto.CampusAdminAfterSaleExecutionDTO;
 import com.cangqiong.takeaway.campus.dto.CampusAdminAfterSaleHandleDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCourierDeliverDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCourierExceptionReportDTO;
@@ -9,6 +10,7 @@ import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderAfterSaleDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCancelDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCreateDTO;
 import com.cangqiong.takeaway.campus.enums.CampusAfterSaleDecisionType;
+import com.cangqiong.takeaway.campus.enums.CampusAfterSaleExecutionStatus;
 import com.cangqiong.takeaway.campus.enums.CampusAfterSaleHandleAction;
 import com.cangqiong.takeaway.campus.entity.CampusCourierProfile;
 import com.cangqiong.takeaway.campus.entity.CampusCustomerProfile;
@@ -20,6 +22,7 @@ import com.cangqiong.takeaway.campus.enums.CampusPaymentStatus;
 import com.cangqiong.takeaway.campus.enums.CampusRelayOrderStatus;
 import com.cangqiong.takeaway.campus.enums.CampusSettlementStatus;
 import com.cangqiong.takeaway.campus.mapper.CampusPickupPointMapper;
+import com.cangqiong.takeaway.campus.mapper.CampusLocationReportMapper;
 import com.cangqiong.takeaway.campus.mapper.CampusRelayOrderMapper;
 import com.cangqiong.takeaway.campus.mapper.CampusSettlementRecordMapper;
 import com.cangqiong.takeaway.campus.query.CampusCourierAvailableOrderQuery;
@@ -28,6 +31,7 @@ import com.cangqiong.takeaway.campus.query.CampusCustomerOrderQuery;
 import com.cangqiong.takeaway.campus.query.CampusRelayOrderQuery;
 import com.cangqiong.takeaway.campus.service.CampusCourierProfileService;
 import com.cangqiong.takeaway.campus.vo.CampusAdminAfterSaleOrderVO;
+import com.cangqiong.takeaway.campus.vo.CampusAdminAfterSaleResultVO;
 import com.cangqiong.takeaway.campus.vo.CampusOrderTimelineItemVO;
 import com.cangqiong.takeaway.campus.vo.CampusOrderTimelineVO;
 import com.cangqiong.takeaway.campus.vo.CampusCourierOrderVO;
@@ -36,9 +40,11 @@ import com.cangqiong.takeaway.campus.service.CampusCustomerProfileService;
 import com.cangqiong.takeaway.campus.service.CampusRelayOrderService;
 import com.cangqiong.takeaway.campus.support.CampusRuleCatalog;
 import com.cangqiong.takeaway.campus.vo.CampusCustomerOrderVO;
+import com.cangqiong.takeaway.campus.vo.CampusOrderExceptionSummaryVO;
 import com.cangqiong.takeaway.campus.vo.CampusRelayOrderVO;
 import com.cangqiong.takeaway.exception.BusinessException;
 import com.cangqiong.takeaway.vo.PageResult;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,6 +82,9 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
 
     @Autowired
     private CampusSettlementRecordMapper campusSettlementRecordMapper;
+
+    @Autowired
+    private CampusLocationReportMapper campusLocationReportMapper;
 
     @Override
     public PageResult<CampusRelayOrderVO> pageQuery(CampusRelayOrderQuery query) {
@@ -122,10 +131,14 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         int offset = (page - 1) * pageSize;
         String orderStatus = normalizeAfterSaleOrderStatusFilter(query == null ? null : query.getOrderStatus());
         String afterSaleHandleAction = normalizeAfterSaleHandleActionFilter(query == null ? null : query.getAfterSaleHandleAction());
+        String afterSaleDecisionType = normalizeAfterSaleDecisionTypeFilter(query == null ? null : query.getAfterSaleDecisionType());
+        String afterSaleExecutionStatus = normalizeAfterSaleExecutionStatusFilter(query == null ? null : query.getAfterSaleExecutionStatus());
 
         List<CampusAdminAfterSaleOrderVO> records = campusRelayOrderMapper.selectAfterSaleByCondition(
                 orderStatus,
                 afterSaleHandleAction,
+                afterSaleDecisionType,
+                afterSaleExecutionStatus,
                 query == null ? null : query.getCourierProfileId(),
                 query == null ? null : query.getCustomerUserId(),
                 normalizeText(query == null ? null : query.getRelayOrderId()),
@@ -135,6 +148,8 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         Long total = campusRelayOrderMapper.countAfterSaleByCondition(
                 orderStatus,
                 afterSaleHandleAction,
+                afterSaleDecisionType,
+                afterSaleExecutionStatus,
                 query == null ? null : query.getCourierProfileId(),
                 query == null ? null : query.getCustomerUserId(),
                 normalizeText(query == null ? null : query.getRelayOrderId())
@@ -565,6 +580,9 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         String decisionRemark = normalizeText(dto.getDecisionRemark());
         requireText(decisionRemark, "售后决策备注不能为空");
         BigDecimal decisionAmount = normalizeDecisionAmount(dto.getDecisionAmount(), decisionType, order.getTotalAmount());
+        CampusAfterSaleExecutionStatus initialExecutionStatus = decisionType == CampusAfterSaleDecisionType.NONE
+                ? CampusAfterSaleExecutionStatus.NOT_REQUIRED
+                : CampusAfterSaleExecutionStatus.PENDING;
 
         LocalDateTime now = LocalDateTime.now();
         int updated = campusRelayOrderMapper.recordAfterSaleDecisionByAdmin(
@@ -574,10 +592,81 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
                 decisionRemark,
                 employeeId,
                 now,
+                initialExecutionStatus.name(),
                 now
         );
         if (updated == 0) {
             throw new BusinessException("订单状态已变化，无法记录售后决策");
+        }
+    }
+
+    @Override
+    public CampusAdminAfterSaleResultVO getAfterSaleResultByAdmin(String id) {
+        CampusRelayOrderVO order = getById(id);
+        if (!isAfterSaleTracked(order)) {
+            throw new BusinessException("当前订单未进入售后流程");
+        }
+
+        CampusAdminAfterSaleResultVO resultVO = new CampusAdminAfterSaleResultVO();
+        BeanUtils.copyProperties(order, resultVO);
+        resultVO.setRelayOrderId(order.getId());
+        resultVO.setOrderStatus(order.getStatus());
+        return resultVO;
+    }
+
+    @Override
+    @Transactional
+    public void recordAfterSaleExecutionByAdmin(String id, CampusAdminAfterSaleExecutionDTO dto, Long employeeId) {
+        if (employeeId == null) {
+            throw new BusinessException(401, "未授权，请先登录");
+        }
+        if (dto == null) {
+            throw new BusinessException("售后执行结果请求不能为空");
+        }
+
+        CampusRelayOrder order = requireRelayOrder(id);
+        if (!CampusRelayOrderStatus.AFTER_SALE_RESOLVED.name().equals(order.getOrderStatus())) {
+            throw new BusinessException("当前订单状态不可记录售后执行结果");
+        }
+        if (!StringUtils.hasText(order.getAfterSaleDecisionType())) {
+            throw new BusinessException("当前订单尚未记录售后决策");
+        }
+
+        CampusAfterSaleDecisionType decisionType = resolveAfterSaleDecisionType(order.getAfterSaleDecisionType());
+        if (decisionType == CampusAfterSaleDecisionType.NONE) {
+            throw new BusinessException("NONE 决策类型的订单无需记录售后执行结果");
+        }
+
+        CampusAfterSaleExecutionStatus executionStatus = resolveAfterSaleExecutionStatus(dto.getExecutionStatus());
+        if (executionStatus != CampusAfterSaleExecutionStatus.SUCCESS && executionStatus != CampusAfterSaleExecutionStatus.FAILED) {
+            throw new BusinessException("售后执行结果仅支持 SUCCESS 或 FAILED");
+        }
+
+        String executionRemark = normalizeText(dto.getExecutionRemark());
+        requireText(executionRemark, "售后执行备注不能为空");
+        String executionReferenceNo = normalizeOptionalReferenceNo(dto.getExecutionReferenceNo());
+        if (executionStatus == CampusAfterSaleExecutionStatus.SUCCESS
+                && decisionType == CampusAfterSaleDecisionType.REFUND
+                && !StringUtils.hasText(executionReferenceNo)) {
+            throw new BusinessException("退款执行成功时参考号不能为空");
+        }
+
+        CampusAfterSaleExecutionStatus currentExecutionStatus = resolveCurrentAfterSaleExecutionStatus(order, decisionType);
+        assertAfterSaleExecutionTransitionAllowed(currentExecutionStatus, executionStatus);
+
+        LocalDateTime now = LocalDateTime.now();
+        int updated = campusRelayOrderMapper.recordAfterSaleExecutionByAdmin(
+                id,
+                currentExecutionStatus.name(),
+                executionStatus.name(),
+                executionRemark,
+                executionReferenceNo,
+                employeeId,
+                now,
+                now
+        );
+        if (updated == 0) {
+            throw new BusinessException("订单状态已变化，无法记录售后执行结果");
         }
     }
 
@@ -620,6 +709,22 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
     }
 
     @Override
+    public CampusOrderExceptionSummaryVO getExceptionSummaryByOrderIdForAdmin(String id) {
+        CampusRelayOrder order = requireRelayOrder(id);
+        CampusOrderExceptionSummaryVO summaryVO = new CampusOrderExceptionSummaryVO();
+        summaryVO.setRelayOrderId(order.getId());
+        summaryVO.setOrderStatus(order.getOrderStatus());
+        summaryVO.setCourierProfileId(order.getCourierProfileId());
+        summaryVO.setLatestExceptionType(normalizeText(order.getExceptionType()));
+        summaryVO.setLatestExceptionRemark(normalizeText(order.getExceptionRemark()));
+        summaryVO.setLatestExceptionReportedAt(order.getExceptionReportedAt());
+        summaryVO.setLatestLocationReportedAt(campusLocationReportMapper.selectLatestReportedAtByOrderId(id));
+        Long locationReportCount = campusLocationReportMapper.countByOrderId(id);
+        summaryVO.setLocationReportCount(locationReportCount == null ? 0L : locationReportCount);
+        return summaryVO;
+    }
+
+    @Override
     public CampusOrderTimelineVO getTimelineByAdmin(String id) {
         CampusRelayOrderVO order = getById(id);
         CampusSettlementRecord settlementRecord = campusSettlementRecordMapper.selectByRelayOrderId(id);
@@ -643,6 +748,9 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         appendTimelineItem(items, "AFTER_SALE_DECISION_RECORDED", "售后决策已记录",
                 order.getAfterSaleDecidedAt(),
                 buildAfterSaleDecisionRemark(order));
+        appendTimelineItem(items, "AFTER_SALE_EXECUTION_RECORDED", "售后执行结果已记录",
+                order.getAfterSaleExecutedAt(),
+                buildAfterSaleExecutionRemark(order));
 
         if (settlementRecord != null) {
             LocalDateTime eventTime = settlementRecord.getSettledAt() != null
@@ -958,6 +1066,24 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         return order.getAfterSaleDecisionType() + ": " + amountText + " | " + remark;
     }
 
+    private String buildAfterSaleExecutionRemark(CampusRelayOrderVO order) {
+        if (!StringUtils.hasText(order.getAfterSaleExecutionStatus())) {
+            return null;
+        }
+        String referenceNo = normalizeText(order.getAfterSaleExecutionReferenceNo());
+        String remark = normalizeText(order.getAfterSaleExecutionRemark());
+        if (!StringUtils.hasText(referenceNo) && !StringUtils.hasText(remark)) {
+            return order.getAfterSaleExecutionStatus();
+        }
+        if (!StringUtils.hasText(referenceNo)) {
+            return order.getAfterSaleExecutionStatus() + ": " + remark;
+        }
+        if (!StringUtils.hasText(remark)) {
+            return order.getAfterSaleExecutionStatus() + ": " + referenceNo;
+        }
+        return order.getAfterSaleExecutionStatus() + ": " + referenceNo + " | " + remark;
+    }
+
     private void assertControlledFileReference(String value, String message) {
         String normalized = normalizeText(value);
         if (!StringUtils.hasText(normalized) || !normalized.startsWith(CampusRuleCatalog.CONTROLLED_FILE_PREFIX)) {
@@ -1027,6 +1153,22 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         return resolveAfterSaleHandleAction(normalized).name();
     }
 
+    private String normalizeAfterSaleDecisionTypeFilter(String value) {
+        String normalized = normalizeText(value);
+        if (!StringUtils.hasText(normalized)) {
+            return null;
+        }
+        return resolveAfterSaleDecisionType(normalized).name();
+    }
+
+    private String normalizeAfterSaleExecutionStatusFilter(String value) {
+        String normalized = normalizeText(value);
+        if (!StringUtils.hasText(normalized)) {
+            return null;
+        }
+        return resolveAfterSaleExecutionStatus(normalized).name();
+    }
+
     private CampusAfterSaleHandleAction resolveAfterSaleHandleAction(String action) {
         try {
             return CampusAfterSaleHandleAction.valueOf(normalizeText(action).toUpperCase());
@@ -1040,6 +1182,14 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
             return CampusAfterSaleDecisionType.valueOf(normalizeText(decisionType).toUpperCase());
         } catch (Exception ex) {
             throw new BusinessException("不支持的售后决策类型");
+        }
+    }
+
+    private CampusAfterSaleExecutionStatus resolveAfterSaleExecutionStatus(String executionStatus) {
+        try {
+            return CampusAfterSaleExecutionStatus.valueOf(normalizeText(executionStatus).toUpperCase());
+        } catch (Exception ex) {
+            throw new BusinessException("不支持的售后执行状态");
         }
     }
 
@@ -1076,6 +1226,55 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         if (amount.compareTo(MAX_DECIMAL_10_2) > 0) {
             throw new BusinessException(message);
         }
+    }
+
+    private CampusAfterSaleExecutionStatus resolveCurrentAfterSaleExecutionStatus(
+            CampusRelayOrder order,
+            CampusAfterSaleDecisionType decisionType
+    ) {
+        if (StringUtils.hasText(order.getAfterSaleExecutionStatus())) {
+            return resolveAfterSaleExecutionStatus(order.getAfterSaleExecutionStatus());
+        }
+        return decisionType == CampusAfterSaleDecisionType.NONE
+                ? CampusAfterSaleExecutionStatus.NOT_REQUIRED
+                : CampusAfterSaleExecutionStatus.PENDING;
+    }
+
+    private void assertAfterSaleExecutionTransitionAllowed(
+            CampusAfterSaleExecutionStatus currentStatus,
+            CampusAfterSaleExecutionStatus targetStatus
+    ) {
+        if (currentStatus == CampusAfterSaleExecutionStatus.NOT_REQUIRED) {
+            throw new BusinessException("当前订单无需记录售后执行结果");
+        }
+        if (currentStatus == CampusAfterSaleExecutionStatus.SUCCESS) {
+            throw new BusinessException("当前订单已记录成功的售后执行结果");
+        }
+        if (currentStatus == CampusAfterSaleExecutionStatus.FAILED && targetStatus == CampusAfterSaleExecutionStatus.FAILED) {
+            throw new BusinessException("当前订单已记录失败的售后执行结果");
+        }
+        if (currentStatus == CampusAfterSaleExecutionStatus.FAILED && targetStatus != CampusAfterSaleExecutionStatus.SUCCESS) {
+            throw new BusinessException("失败的售后执行结果仅允许纠正为 SUCCESS");
+        }
+        if (currentStatus != CampusAfterSaleExecutionStatus.PENDING && currentStatus != CampusAfterSaleExecutionStatus.FAILED) {
+            throw new BusinessException("当前订单售后执行状态不可更新");
+        }
+    }
+
+    private String normalizeOptionalReferenceNo(String value) {
+        String normalized = normalizeText(value);
+        return StringUtils.hasText(normalized) ? normalized : null;
+    }
+
+    private boolean isAfterSaleTracked(CampusRelayOrderVO order) {
+        if (order == null) {
+            return false;
+        }
+        return CampusRelayOrderStatus.AFTER_SALE_OPEN.name().equals(order.getStatus())
+                || CampusRelayOrderStatus.AFTER_SALE_RESOLVED.name().equals(order.getStatus())
+                || CampusRelayOrderStatus.AFTER_SALE_REJECTED.name().equals(order.getStatus())
+                || order.getAfterSaleAppliedAt() != null
+                || StringUtils.hasText(order.getAfterSaleReason());
     }
 
     private <T> PageResult<T> buildPageResult(List<T> records, Long total, int page, int pageSize) {

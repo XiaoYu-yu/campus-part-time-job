@@ -9,6 +9,7 @@ public class CampusSettlementQuery {
     private Integer pageSize;
     private Integer size;
     private String settlementStatus;
+    private String payoutStatus;
     private Long courierProfileId;
     private String relayOrderId;
 }

@@ -88,10 +88,11 @@ MERGE INTO campus_relay_order (
     pickup_proof_image_url, cancel_reason, customer_remark, courier_remark, after_sale_reason,
     after_sale_handle_action, after_sale_handle_remark, after_sale_handled_by_employee_id,
     after_sale_decision_type, after_sale_decision_amount, after_sale_decision_remark, after_sale_decided_by_employee_id, after_sale_decided_at,
+    after_sale_execution_status, after_sale_execution_remark, after_sale_execution_reference_no, after_sale_executed_by_employee_id, after_sale_executed_at,
     exception_type, exception_remark, exception_reported_at, created_at, updated_at
 ) KEY (id) VALUES
-('CR202604070001', 1, NULL, 1, 'DORMITORY', '竹园', '竹园2栋门口', '张三', '13900139000', '美团订单：汉堡套餐 + 奶茶', '美团', 'MT-20260407-001', 'A18', 3.00, 3.00, 2.00, 8.00, 'PAID', 'BUILDING_PRIORITY_PENDING', '竹园', CURRENT_TIMESTAMP, DATEADD('MINUTE', 5, CURRENT_TIMESTAMP), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '放在门厅即可', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('CR202604060001', 1, 2, 2, 'LIBRARY', '图书馆', '二楼门口', '张三', '13900139000', '饿了么订单：咖啡 + 面包', '饿了么', 'ELE-20260406-008', 'B09', 3.00, 0.00, 3.00, 6.00, 'PAID', 'COMPLETED', NULL, DATEADD('MINUTE', -170, CURRENT_TIMESTAMP), NULL, DATEADD('HOUR', -2, CURRENT_TIMESTAMP), DATEADD('MINUTE', -115, CURRENT_TIMESTAMP), DATEADD('MINUTE', -100, CURRENT_TIMESTAMP), DATEADD('MINUTE', -70, CURRENT_TIMESTAMP), DATEADD('MINUTE', -60, CURRENT_TIMESTAMP), NULL, NULL, NULL, '/api/files/campus-pickup-proof-001.jpg', NULL, '送到图书馆二楼门口', '已按要求送达', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, DATEADD('HOUR', -3, CURRENT_TIMESTAMP), DATEADD('MINUTE', -60, CURRENT_TIMESTAMP));
+('CR202604070001', 1, NULL, 1, 'DORMITORY', '竹园', '竹园2栋门口', '张三', '13900139000', '美团订单：汉堡套餐 + 奶茶', '美团', 'MT-20260407-001', 'A18', 3.00, 3.00, 2.00, 8.00, 'PAID', 'BUILDING_PRIORITY_PENDING', '竹园', CURRENT_TIMESTAMP, DATEADD('MINUTE', 5, CURRENT_TIMESTAMP), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '放在门厅即可', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('CR202604060001', 1, 2, 2, 'LIBRARY', '图书馆', '二楼门口', '张三', '13900139000', '饿了么订单：咖啡 + 面包', '饿了么', 'ELE-20260406-008', 'B09', 3.00, 0.00, 3.00, 6.00, 'PAID', 'COMPLETED', NULL, DATEADD('MINUTE', -170, CURRENT_TIMESTAMP), NULL, DATEADD('HOUR', -2, CURRENT_TIMESTAMP), DATEADD('MINUTE', -115, CURRENT_TIMESTAMP), DATEADD('MINUTE', -100, CURRENT_TIMESTAMP), DATEADD('MINUTE', -70, CURRENT_TIMESTAMP), DATEADD('MINUTE', -60, CURRENT_TIMESTAMP), NULL, NULL, NULL, '/api/files/campus-pickup-proof-001.jpg', NULL, '送到图书馆二楼门口', '已按要求送达', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, DATEADD('HOUR', -3, CURRENT_TIMESTAMP), DATEADD('MINUTE', -60, CURRENT_TIMESTAMP));
 
 MERGE INTO campus_location_report (
     id, relay_order_id, courier_profile_id, latitude, longitude, source, note, reported_at, created_at
@@ -100,6 +101,7 @@ MERGE INTO campus_location_report (
 
 MERGE INTO campus_settlement_record (
     id, relay_order_id, courier_profile_id, gross_amount, platform_commission, pending_amount,
-    settlement_status, settled_at, remark, created_at, updated_at
+    settlement_status, payout_status, payout_remark, payout_reference_no, payout_recorded_by_employee_id, payout_recorded_at,
+    settled_at, remark, created_at, updated_at
 ) KEY (id) VALUES
-(1, 'CR202604060001', 2, 6.00, 0.00, 6.00, 'PENDING', NULL, '第一版待结算示例', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(1, 'CR202604060001', 2, 6.00, 0.00, 6.00, 'PENDING', NULL, NULL, NULL, NULL, NULL, NULL, '第一版待结算示例', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

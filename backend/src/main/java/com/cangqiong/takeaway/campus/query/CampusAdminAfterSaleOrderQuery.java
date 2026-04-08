@@ -10,6 +10,8 @@ public class CampusAdminAfterSaleOrderQuery {
     private Integer size;
     private String orderStatus;
     private String afterSaleHandleAction;
+    private String afterSaleDecisionType;
+    private String afterSaleExecutionStatus;
     private Long courierProfileId;
     private Long customerUserId;
     private String relayOrderId;
