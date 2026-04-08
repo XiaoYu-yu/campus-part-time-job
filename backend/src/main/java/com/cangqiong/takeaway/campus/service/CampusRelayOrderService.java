@@ -1,6 +1,8 @@
 package com.cangqiong.takeaway.campus.service;
 
+import com.cangqiong.takeaway.campus.dto.CampusAdminAfterSaleHandleDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCourierDeliverDTO;
+import com.cangqiong.takeaway.campus.dto.CampusCourierExceptionReportDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCourierPickupDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderAfterSaleDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCancelDTO;
@@ -45,4 +47,8 @@ public interface CampusRelayOrderService {
     void confirmByCustomer(String id, Long customerUserId);
 
     CampusOrderTimelineVO getTimelineByAdmin(String id);
+
+    void handleAfterSaleByAdmin(String id, CampusAdminAfterSaleHandleDTO dto, Long employeeId);
+
+    void reportExceptionByCourier(String id, CampusCourierExceptionReportDTO dto, Long courierUserId);
 }

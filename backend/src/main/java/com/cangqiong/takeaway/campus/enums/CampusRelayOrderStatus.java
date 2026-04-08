@@ -10,5 +10,7 @@ public enum CampusRelayOrderStatus {
     AWAITING_CONFIRMATION,
     COMPLETED,
     AFTER_SALE_OPEN,
+    AFTER_SALE_RESOLVED,
+    AFTER_SALE_REJECTED,
     CANCELLED
 }

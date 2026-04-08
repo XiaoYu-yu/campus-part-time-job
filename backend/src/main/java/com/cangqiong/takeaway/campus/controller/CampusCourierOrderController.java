@@ -1,6 +1,7 @@
 package com.cangqiong.takeaway.campus.controller;
 
 import com.cangqiong.takeaway.campus.dto.CampusCourierDeliverDTO;
+import com.cangqiong.takeaway.campus.dto.CampusCourierExceptionReportDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCourierPickupDTO;
 import com.cangqiong.takeaway.campus.query.CampusCourierAvailableOrderQuery;
 import com.cangqiong.takeaway.campus.service.CampusRelayOrderService;
@@ -8,6 +9,7 @@ import com.cangqiong.takeaway.campus.vo.CampusCourierOrderVO;
 import com.cangqiong.takeaway.interceptor.BaseContext;
 import com.cangqiong.takeaway.utils.Result;
 import com.cangqiong.takeaway.vo.PageResult;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,6 +62,14 @@ public class CampusCourierOrderController {
         Long courierUserId = BaseContext.getCurrentUserId();
         log.info("校园配送员推进配送状态: userId={}, orderId={}", courierUserId, id);
         campusRelayOrderService.deliverByCourier(id, dto, courierUserId);
+        return Result.success();
+    }
+
+    @PostMapping("/{id}/exception-report")
+    public Result<Void> reportException(@PathVariable String id, @Valid @RequestBody CampusCourierExceptionReportDTO dto) {
+        Long courierUserId = BaseContext.getCurrentUserId();
+        log.info("校园配送员订单异常上报: userId={}, orderId={}", courierUserId, id);
+        campusRelayOrderService.reportExceptionByCourier(id, dto, courierUserId);
         return Result.success();
     }
 }

@@ -220,16 +220,24 @@ CREATE TABLE IF NOT EXISTS campus_relay_order (
     auto_complete_at TIMESTAMP,
     cancelled_at TIMESTAMP,
     after_sale_applied_at TIMESTAMP,
+    after_sale_handled_at TIMESTAMP,
     pickup_proof_image_url VARCHAR(255),
     cancel_reason VARCHAR(255),
     customer_remark VARCHAR(255),
     courier_remark VARCHAR(255),
     after_sale_reason VARCHAR(255),
+    after_sale_handle_action VARCHAR(20),
+    after_sale_handle_remark VARCHAR(255),
+    after_sale_handled_by_employee_id BIGINT,
+    exception_type VARCHAR(50),
+    exception_remark VARCHAR(255),
+    exception_reported_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_campus_relay_order_user FOREIGN KEY (customer_user_id) REFERENCES user(id),
     CONSTRAINT fk_campus_relay_order_courier FOREIGN KEY (courier_profile_id) REFERENCES campus_courier_profile(id),
-    CONSTRAINT fk_campus_relay_order_pickup_point FOREIGN KEY (pickup_point_id) REFERENCES campus_pickup_point(id)
+    CONSTRAINT fk_campus_relay_order_pickup_point FOREIGN KEY (pickup_point_id) REFERENCES campus_pickup_point(id),
+    CONSTRAINT fk_campus_relay_order_after_sale_employee FOREIGN KEY (after_sale_handled_by_employee_id) REFERENCES employee(id)
 );
 
 CREATE TABLE IF NOT EXISTS campus_location_report (

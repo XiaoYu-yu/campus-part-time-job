@@ -36,6 +36,10 @@ public class CampusCustomerOrderVO {
     private String cancelReason;
     private String courierRemark;
     private String afterSaleReason;
+    private String afterSaleHandleAction;
+    private String afterSaleHandleRemark;
+    private String exceptionType;
+    private String exceptionRemark;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime paidAt;
@@ -60,6 +64,12 @@ public class CampusCustomerOrderVO {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime afterSaleAppliedAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime afterSaleHandledAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime exceptionReportedAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;

@@ -1,15 +1,20 @@
 package com.cangqiong.takeaway.campus.controller;
 
+import com.cangqiong.takeaway.campus.dto.CampusAdminAfterSaleHandleDTO;
 import com.cangqiong.takeaway.campus.query.CampusRelayOrderQuery;
 import com.cangqiong.takeaway.campus.service.CampusRelayOrderService;
 import com.cangqiong.takeaway.campus.vo.CampusOrderTimelineVO;
 import com.cangqiong.takeaway.campus.vo.CampusRelayOrderVO;
+import com.cangqiong.takeaway.interceptor.BaseContext;
 import com.cangqiong.takeaway.utils.Result;
 import com.cangqiong.takeaway.vo.PageResult;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,5 +42,13 @@ public class CampusAdminRelayOrderController {
     public Result<CampusOrderTimelineVO> getTimeline(@PathVariable String id) {
         log.info("校园代送订单时间线查询: {}", id);
         return Result.success(campusRelayOrderService.getTimelineByAdmin(id));
+    }
+
+    @PostMapping("/{id}/after-sale-handle")
+    public Result<Void> handleAfterSale(@PathVariable String id, @Valid @RequestBody CampusAdminAfterSaleHandleDTO dto) {
+        Long employeeId = BaseContext.getCurrentUserId();
+        log.info("校园代送订单售后处理: employeeId={}, orderId={}", employeeId, id);
+        campusRelayOrderService.handleAfterSaleByAdmin(id, dto, employeeId);
+        return Result.success();
     }
 }

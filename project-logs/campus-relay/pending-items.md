@@ -1,12 +1,12 @@
 # 校园代送待处理事项
 
-## Step 03F 最高优先级
+## Step 04 最高优先级
 
-1. 为 admin 新增最小售后处理能力，避免 `AFTER_SALE_OPEN` 长期停留
-2. 为 courier 新增最小异常上报入口
-3. 为 courier 新增低频位置上报接口，并复用现有 `campus_location_report`
-4. 为 admin 新增结算分页查询能力，便于查看 `campus_settlement_record`
-5. 评估并决定 `courier/profile` 与 `courier/review-status` 的双 token bridge 何时收口
+1. 为 admin 增加售后处理结果查询与最小退款/补偿决策能力
+2. 为 `campus_settlement_record` 增加确认结算、结算详情和最小打款备注能力
+3. 为 admin 增加可查看 courier 最近异常与低频位置记录的运营入口
+4. 评估并决定 `courier/profile` 与 `courier/review-status` 的双 token bridge 何时收口
+5. 在不改旧外卖语义的前提下，规划 campus 接口接入管理端/用户端的最小路径
 
 ## 已完成但仍需继续扩展的部分
 
@@ -17,10 +17,13 @@
   - customer 创建单/模拟支付/详情/列表/确认送达/取消/售后
   - courier 可接单列表/详情/接单/取餐/配送推进
 - `CampusPublicController` 已开放 `pickup-points` 和 `delivery-rules`
-- `CampusAdminRelayOrderController` 已支持分页、详情与时间线，但还没有异常备注和售后处理能力
+- `CampusAdminRelayOrderController` 已支持分页、详情、时间线与最小售后处理
 - `CampusAdminCourierController` 已支持分页与审核，但还没有详情页或批量审核能力
 - `CampusCourierProfileController` 已开放资料提交、资料查看、审核状态查看，并继续通过 bridge 方案接入现有 `user` token
 - `CampusCourierAuthController` 已开放正式 courier token 发行入口，但仅允许已审核通过且启用的 courier 获取 token
+- `CampusCourierOrderController` 已支持异常上报，但异常只保留最近一次文本记录且不改变订单状态
+- `CampusCourierLocationController` 已支持低频位置上报，位置记录继续只落 `campus_location_report`
+- `CampusAdminSettlementController` 已支持分页查询 `campus_settlement_record`
 - campus 订单在 customer confirm 进入 `COMPLETED` 时，已会自动生成或更新 `campus_settlement_record`
 
 ## 已锁定的默认处理策略
@@ -77,8 +80,13 @@
 - customer 确认送达后推进到 `COMPLETED`
 - customer 在未取餐前可推进到 `CANCELLED`
 - customer 在 `AWAITING_CONFIRMATION / COMPLETED` 可发起售后并推进到 `AFTER_SALE_OPEN`
+- admin 可将 `AFTER_SALE_OPEN` 推进到：
+  - `AFTER_SALE_RESOLVED`
+  - `AFTER_SALE_REJECTED`
 - 已取餐后 customer 仍不允许直接取消
 - 订单进入 `COMPLETED` 后自动插入或更新待结算记录
+- courier 异常上报只覆盖订单上的最近一次异常信息，不改 `order_status`
+- 位置上报只写 `campus_location_report`，不写入订单时间线
 
 ## 当前阻塞点
 
@@ -87,15 +95,15 @@
 - 影响：`profile/review-status` 当前既能用 customer token 也能用 courier token
 - 默认处理：继续保留到前端与 onboarding 入口稳定，再统一收口
 
-### 2. admin 还没有售后处理和异常备注
+### 2. 售后链路还没有退款/补偿结果
 
-- 影响：customer 发起售后后只能进入 `AFTER_SALE_OPEN`，后台仍缺少最小处理动作
-- 默认处理：Step 03F 优先补 admin 售后处理或异常备注
+- 影响：admin 现在能处理售后终态，但还没有退款、补偿、协商结果等后续动作
+- 默认处理：Step 04 优先补最小售后结果策略和查询能力
 
-### 3. courier 位置、异常反馈还没开
+### 3. courier 位置与异常只有最小记录，没有运营视图
 
-- 影响：最小履约闭环已完成，但异常态和运营态仍缺少基础支撑
-- 默认处理：Step 03F 优先补低频位置上报和异常上报
+- 影响：admin 已能从详情/时间线看到部分信息，但还没有专门的运营查看入口
+- 默认处理：Step 04 在不扩前端的前提下优先补查询能力
 
 ### 4. rules 仍是代码常量
 
@@ -107,10 +115,10 @@
 - 影响：当前 campus 新接口主要通过测试或后端联调演示
 - 默认处理：继续保持前端不动，避免范围膨胀
 
-### 6. 结算只有自动生成，还没有 admin 查询和处理
+### 6. 结算只有自动生成和分页查询，还没有处理动作
 
-- 影响：`campus_settlement_record` 已能自动生成，但后台仍无法分页查看或结算确认
-- 默认处理：Step 03F 或 Step 04 补 admin settlement 读接口
+- 影响：`campus_settlement_record` 已能自动生成和分页查看，但仍无法确认结算或补记结算备注
+- 默认处理：Step 04 补最小结算处理接口
 
 ## 当前明确没做的事情
 
@@ -119,6 +127,7 @@
 - 没有改旧 `orders/cart/address` 语义
 - 没有接第三方支付
 - 没有实现 customer 退款、完整售后处理结果
-- 没有实现 courier 位置上报和异常反馈
+- 没有实现异常历史、多次异常记录和异常处理结果流转
+- 没有实现位置轨迹、地图展示和频控策略
 - 没有新增第二套返回体
 - 没有引入 Flyway、Liquibase 等新迁移工具

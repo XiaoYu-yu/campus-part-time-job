@@ -1,10 +1,13 @@
 package com.cangqiong.takeaway.campus.service.impl;
 
+import com.cangqiong.takeaway.campus.dto.CampusAdminAfterSaleHandleDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCourierDeliverDTO;
+import com.cangqiong.takeaway.campus.dto.CampusCourierExceptionReportDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCourierPickupDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderAfterSaleDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCancelDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCreateDTO;
+import com.cangqiong.takeaway.campus.enums.CampusAfterSaleHandleAction;
 import com.cangqiong.takeaway.campus.entity.CampusCourierProfile;
 import com.cangqiong.takeaway.campus.entity.CampusCustomerProfile;
 import com.cangqiong.takeaway.campus.entity.CampusPickupPoint;
@@ -470,6 +473,71 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
     }
 
     @Override
+    @Transactional
+    public void handleAfterSaleByAdmin(String id, CampusAdminAfterSaleHandleDTO dto, Long employeeId) {
+        if (employeeId == null) {
+            throw new BusinessException(401, "未授权，请先登录");
+        }
+        if (dto == null) {
+            throw new BusinessException("处理请求不能为空");
+        }
+
+        CampusRelayOrder order = requireRelayOrder(id);
+        if (!CampusRelayOrderStatus.AFTER_SALE_OPEN.name().equals(order.getOrderStatus())) {
+            throw new BusinessException("当前订单状态不可处理售后");
+        }
+
+        CampusAfterSaleHandleAction action = resolveAfterSaleHandleAction(dto.getAction());
+        String handleRemark = normalizeText(dto.getHandleRemark());
+        requireText(handleRemark, "处理备注不能为空");
+
+        CampusRelayOrderStatus nextStatus = action == CampusAfterSaleHandleAction.RESOLVED
+                ? CampusRelayOrderStatus.AFTER_SALE_RESOLVED
+                : CampusRelayOrderStatus.AFTER_SALE_REJECTED;
+        LocalDateTime now = LocalDateTime.now();
+
+        int updated = campusRelayOrderMapper.handleAfterSaleByAdmin(
+                id,
+                nextStatus.name(),
+                action.name(),
+                handleRemark,
+                employeeId,
+                now,
+                now
+        );
+        if (updated == 0) {
+            throw new BusinessException("订单状态已变化，无法处理售后");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void reportExceptionByCourier(String id, CampusCourierExceptionReportDTO dto, Long courierUserId) {
+        CampusCourierProfile courierProfile = campusCourierProfileService.requireApprovedEnabledProfile(courierUserId);
+        CampusRelayOrder order = requireRelayOrder(id);
+        assertOrderOwnedByCourier(order, courierProfile);
+        assertExceptionReportAllowed(order);
+
+        String exceptionType = normalizeText(dto == null ? null : dto.getExceptionType());
+        String exceptionRemark = normalizeText(dto == null ? null : dto.getExceptionRemark());
+        requireText(exceptionType, "异常类型不能为空");
+        requireText(exceptionRemark, "异常说明不能为空");
+
+        LocalDateTime now = LocalDateTime.now();
+        int updated = campusRelayOrderMapper.reportExceptionByCourier(
+                id,
+                courierProfile.getId(),
+                exceptionType,
+                exceptionRemark,
+                now,
+                now
+        );
+        if (updated == 0) {
+            throw new BusinessException("订单状态已变化，无法上报异常");
+        }
+    }
+
+    @Override
     public CampusOrderTimelineVO getTimelineByAdmin(String id) {
         CampusRelayOrderVO order = getById(id);
         CampusSettlementRecord settlementRecord = campusSettlementRecordMapper.selectByRelayOrderId(id);
@@ -483,6 +551,13 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         appendTimelineItem(items, "CONFIRMED", "已确认送达", order.getAutoCompleteAt(), "客户已确认送达");
         appendTimelineItem(items, "CANCELLED", "已取消", order.getCancelledAt(), normalizeText(order.getCancelReason()));
         appendTimelineItem(items, "AFTER_SALE_OPENED", "已发起售后", order.getAfterSaleAppliedAt(), normalizeText(order.getAfterSaleReason()));
+        appendTimelineItem(items, "EXCEPTION_REPORTED", "异常上报", order.getExceptionReportedAt(), buildExceptionRemark(order));
+        appendTimelineItem(items, "AFTER_SALE_RESOLVED", "售后已解决",
+                CampusAfterSaleHandleAction.RESOLVED.name().equals(order.getAfterSaleHandleAction()) ? order.getAfterSaleHandledAt() : null,
+                buildAfterSaleHandleRemark(order));
+        appendTimelineItem(items, "AFTER_SALE_REJECTED", "售后已驳回",
+                CampusAfterSaleHandleAction.REJECTED.name().equals(order.getAfterSaleHandleAction()) ? order.getAfterSaleHandledAt() : null,
+                buildAfterSaleHandleRemark(order));
 
         if (settlementRecord != null) {
             LocalDateTime eventTime = settlementRecord.getSettledAt() != null
@@ -677,6 +752,15 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         }
     }
 
+    private void assertExceptionReportAllowed(CampusRelayOrder order) {
+        if (!CampusRelayOrderStatus.ACCEPTED.name().equals(order.getOrderStatus())
+                && !CampusRelayOrderStatus.PICKED_UP.name().equals(order.getOrderStatus())
+                && !CampusRelayOrderStatus.DELIVERING.name().equals(order.getOrderStatus())
+                && !CampusRelayOrderStatus.AWAITING_CONFIRMATION.name().equals(order.getOrderStatus())) {
+            throw new BusinessException("当前订单状态不可上报异常");
+        }
+    }
+
     private void assertCustomerConfirmAllowed(CampusRelayOrder order) {
         if (!CampusRelayOrderStatus.AWAITING_CONFIRMATION.name().equals(order.getOrderStatus())) {
             throw new BusinessException("当前订单状态不可确认送达");
@@ -752,6 +836,23 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         return normalizeText(order.getCourierRemark());
     }
 
+    private String buildExceptionRemark(CampusRelayOrderVO order) {
+        if (!StringUtils.hasText(order.getExceptionType()) && !StringUtils.hasText(order.getExceptionRemark())) {
+            return null;
+        }
+        if (!StringUtils.hasText(order.getExceptionType())) {
+            return normalizeText(order.getExceptionRemark());
+        }
+        if (!StringUtils.hasText(order.getExceptionRemark())) {
+            return normalizeText(order.getExceptionType());
+        }
+        return order.getExceptionType() + ": " + order.getExceptionRemark();
+    }
+
+    private String buildAfterSaleHandleRemark(CampusRelayOrderVO order) {
+        return normalizeText(order.getAfterSaleHandleRemark());
+    }
+
     private void assertControlledFileReference(String value, String message) {
         String normalized = normalizeText(value);
         if (!StringUtils.hasText(normalized) || !normalized.startsWith(CampusRuleCatalog.CONTROLLED_FILE_PREFIX)) {
@@ -797,6 +898,14 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
 
     private String generateOrderId(LocalDateTime now) {
         return "CR" + now.format(ORDER_ID_TIME_FORMATTER) + String.format("%04d", ThreadLocalRandom.current().nextInt(10000));
+    }
+
+    private CampusAfterSaleHandleAction resolveAfterSaleHandleAction(String action) {
+        try {
+            return CampusAfterSaleHandleAction.valueOf(normalizeText(action).toUpperCase());
+        } catch (Exception ex) {
+            throw new BusinessException("不支持的售后处理动作");
+        }
     }
 
     private <T> PageResult<T> buildPageResult(List<T> records, Long total, int page, int pageSize) {

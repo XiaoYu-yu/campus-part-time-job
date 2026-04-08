@@ -57,6 +57,11 @@ public interface CampusRelayOrderMapper {
             "  cro.customer_remark,",
             "  cro.courier_remark,",
             "  cro.after_sale_reason,",
+            "  cro.after_sale_handle_action,",
+            "  cro.after_sale_handle_remark,",
+            "  cro.after_sale_handled_by_employee_id,",
+            "  cro.exception_type,",
+            "  cro.exception_remark,",
             "  cro.priority_window_deadline,",
             "  cro.accepted_at,",
             "  cro.cancel_locked_until,",
@@ -65,6 +70,8 @@ public interface CampusRelayOrderMapper {
             "  cro.auto_complete_at,",
             "  cro.cancelled_at,",
             "  cro.after_sale_applied_at,",
+            "  cro.after_sale_handled_at,",
+            "  cro.exception_reported_at,",
             "  cro.created_at,",
             "  cro.updated_at",
             "FROM campus_relay_order cro",
@@ -109,6 +116,8 @@ public interface CampusRelayOrderMapper {
             "  cro.auto_complete_at,",
             "  cro.cancelled_at,",
             "  cro.after_sale_applied_at,",
+            "  cro.after_sale_handled_at,",
+            "  cro.exception_reported_at,",
             "  cro.created_at,",
             "  cro.updated_at",
             "FROM campus_relay_order cro",
@@ -258,6 +267,10 @@ public interface CampusRelayOrderMapper {
             "  cro.customer_remark,",
             "  cro.courier_remark,",
             "  cro.after_sale_reason,",
+            "  cro.after_sale_handle_action,",
+            "  cro.after_sale_handle_remark,",
+            "  cro.exception_type,",
+            "  cro.exception_remark,",
             "  cro.priority_window_deadline,",
             "  cro.accepted_at,",
             "  cro.picked_up_at,",
@@ -265,6 +278,8 @@ public interface CampusRelayOrderMapper {
             "  cro.auto_complete_at,",
             "  cro.cancelled_at,",
             "  cro.after_sale_applied_at,",
+            "  cro.after_sale_handled_at,",
+            "  cro.exception_reported_at,",
             "  cro.created_at,",
             "  cro.updated_at",
             "FROM campus_relay_order cro",
@@ -304,6 +319,10 @@ public interface CampusRelayOrderMapper {
             "  cro.cancel_reason,",
             "  cro.courier_remark,",
             "  cro.after_sale_reason,",
+            "  cro.after_sale_handle_action,",
+            "  cro.after_sale_handle_remark,",
+            "  cro.exception_type,",
+            "  cro.exception_remark,",
             "  cro.priority_window_deadline,",
             "  cro.accepted_at,",
             "  cro.picked_up_at,",
@@ -311,6 +330,8 @@ public interface CampusRelayOrderMapper {
             "  cro.auto_complete_at,",
             "  cro.cancelled_at,",
             "  cro.after_sale_applied_at,",
+            "  cro.after_sale_handled_at,",
+            "  cro.exception_reported_at,",
             "  cro.created_at,",
             "  cro.updated_at",
             "FROM campus_relay_order cro",
@@ -355,6 +376,10 @@ public interface CampusRelayOrderMapper {
             "  cro.cancel_reason,",
             "  cro.courier_remark,",
             "  cro.after_sale_reason,",
+            "  cro.after_sale_handle_action,",
+            "  cro.after_sale_handle_remark,",
+            "  cro.exception_type,",
+            "  cro.exception_remark,",
             "  cro.priority_window_deadline,",
             "  cro.accepted_at,",
             "  cro.picked_up_at,",
@@ -362,6 +387,8 @@ public interface CampusRelayOrderMapper {
             "  cro.auto_complete_at,",
             "  cro.cancelled_at,",
             "  cro.after_sale_applied_at,",
+            "  cro.after_sale_handled_at,",
+            "  cro.exception_reported_at,",
             "  cro.created_at,",
             "  cro.updated_at",
             "FROM campus_relay_order cro",
@@ -559,6 +586,42 @@ public interface CampusRelayOrderMapper {
             @Param("orderStatus") String orderStatus,
             @Param("afterSaleReason") String afterSaleReason,
             @Param("afterSaleAppliedAt") LocalDateTime afterSaleAppliedAt,
+            @Param("updatedAt") LocalDateTime updatedAt
+    );
+
+    @Update("UPDATE campus_relay_order SET " +
+            "order_status = #{orderStatus}, " +
+            "after_sale_handle_action = #{handleAction}, " +
+            "after_sale_handle_remark = #{handleRemark}, " +
+            "after_sale_handled_by_employee_id = #{handledByEmployeeId}, " +
+            "after_sale_handled_at = #{handledAt}, " +
+            "updated_at = #{updatedAt} " +
+            "WHERE id = #{id} " +
+            "AND order_status = 'AFTER_SALE_OPEN'")
+    int handleAfterSaleByAdmin(
+            @Param("id") String id,
+            @Param("orderStatus") String orderStatus,
+            @Param("handleAction") String handleAction,
+            @Param("handleRemark") String handleRemark,
+            @Param("handledByEmployeeId") Long handledByEmployeeId,
+            @Param("handledAt") LocalDateTime handledAt,
+            @Param("updatedAt") LocalDateTime updatedAt
+    );
+
+    @Update("UPDATE campus_relay_order SET " +
+            "exception_type = #{exceptionType}, " +
+            "exception_remark = #{exceptionRemark}, " +
+            "exception_reported_at = #{exceptionReportedAt}, " +
+            "updated_at = #{updatedAt} " +
+            "WHERE id = #{id} " +
+            "AND courier_profile_id = #{courierProfileId} " +
+            "AND order_status IN ('ACCEPTED', 'PICKED_UP', 'DELIVERING', 'AWAITING_CONFIRMATION')")
+    int reportExceptionByCourier(
+            @Param("id") String id,
+            @Param("courierProfileId") Long courierProfileId,
+            @Param("exceptionType") String exceptionType,
+            @Param("exceptionRemark") String exceptionRemark,
+            @Param("exceptionReportedAt") LocalDateTime exceptionReportedAt,
             @Param("updatedAt") LocalDateTime updatedAt
     );
 }

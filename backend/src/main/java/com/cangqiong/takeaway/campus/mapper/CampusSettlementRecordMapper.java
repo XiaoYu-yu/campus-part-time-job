@@ -1,6 +1,7 @@
 package com.cangqiong.takeaway.campus.mapper;
 
 import com.cangqiong.takeaway.campus.entity.CampusSettlementRecord;
+import com.cangqiong.takeaway.campus.vo.CampusSettlementRecordVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -10,6 +11,7 @@ import org.apache.ibatis.annotations.Update;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Mapper
 public interface CampusSettlementRecordMapper {
@@ -46,5 +48,43 @@ public interface CampusSettlementRecordMapper {
             @Param("settlementStatus") String settlementStatus,
             @Param("remark") String remark,
             @Param("updatedAt") LocalDateTime updatedAt
+    );
+
+    @Select({
+            "<script>",
+            "SELECT id, relay_order_id, courier_profile_id, gross_amount, platform_commission, pending_amount,",
+            "settlement_status, settled_at, remark, created_at, updated_at",
+            "FROM campus_settlement_record",
+            "<where>",
+            "  <if test='settlementStatus != null and settlementStatus != \"\"'>AND settlement_status = #{settlementStatus}</if>",
+            "  <if test='courierProfileId != null'>AND courier_profile_id = #{courierProfileId}</if>",
+            "  <if test='relayOrderId != null and relayOrderId != \"\"'>AND relay_order_id = #{relayOrderId}</if>",
+            "</where>",
+            "ORDER BY created_at DESC",
+            "LIMIT #{pageSize} OFFSET #{offset}",
+            "</script>"
+    })
+    List<CampusSettlementRecordVO> selectByCondition(
+            @Param("settlementStatus") String settlementStatus,
+            @Param("courierProfileId") Long courierProfileId,
+            @Param("relayOrderId") String relayOrderId,
+            @Param("offset") int offset,
+            @Param("pageSize") int pageSize
+    );
+
+    @Select({
+            "<script>",
+            "SELECT COUNT(*) FROM campus_settlement_record",
+            "<where>",
+            "  <if test='settlementStatus != null and settlementStatus != \"\"'>AND settlement_status = #{settlementStatus}</if>",
+            "  <if test='courierProfileId != null'>AND courier_profile_id = #{courierProfileId}</if>",
+            "  <if test='relayOrderId != null and relayOrderId != \"\"'>AND relay_order_id = #{relayOrderId}</if>",
+            "</where>",
+            "</script>"
+    })
+    Long countByCondition(
+            @Param("settlementStatus") String settlementStatus,
+            @Param("courierProfileId") Long courierProfileId,
+            @Param("relayOrderId") String relayOrderId
     );
 }

@@ -10,7 +10,8 @@
 - 当前已完成：`Step 03C - courier token 与最小接单链路`
 - 当前已完成：`Step 03D - courier 取餐 / 配送推进 / customer 确认送达`
 - 当前已完成：`Step 03E - customer 取消 / 售后 / admin 时间线 / 结算联动`
-- 当前日期：`2026-04-07`
+- 当前已完成：`Step 03F - admin 售后处理 / courier 异常上报 / courier 位置上报 / admin 结算分页`
+- 当前日期：`2026-04-08`
 - 当前范围：在不改 `frontend/`、不删旧外卖模块的前提下，已打通校园代送最小后端状态闭环
 
 ## 当前状态
@@ -25,8 +26,10 @@
   - `/api/campus/public/delivery-rules`
   - `/api/campus/admin/orders`
   - `/api/campus/admin/orders/{id}`
+  - `/api/campus/admin/orders/{id}/after-sale-handle`
   - `/api/campus/admin/couriers`
   - `/api/campus/admin/couriers/{id}/review`
+  - `/api/campus/admin/settlements`
   - `/api/campus/customer/orders`
   - `/api/campus/customer/orders/{id}`
   - `/api/campus/customer/orders/{id}/mock-pay`
@@ -39,8 +42,10 @@
   - `/api/campus/courier/orders/available`
   - `/api/campus/courier/orders/{id}`
   - `/api/campus/courier/orders/{id}/accept`
+  - `/api/campus/courier/orders/{id}/exception-report`
   - `/api/campus/courier/orders/{id}/pickup`
   - `/api/campus/courier/orders/{id}/deliver`
+  - `/api/campus/courier/location-reports`
   - `/api/campus/admin/orders/{id}/timeline`
 - customer 侧已具备：
   - 复用旧 `user` 身份登录
@@ -58,7 +63,9 @@
 - admin 侧已具备：
   - campus 订单分页与详情
   - campus 订单时间线查看
+  - campus 订单售后处理
   - campus 配送员分页与审核
+  - campus 结算分页查询
 - 当前最小订单状态闭环已打通：
   - `PENDING_PAYMENT`
   - `BUILDING_PRIORITY_PENDING / WAITING_ACCEPT`
@@ -69,7 +76,14 @@
   - `COMPLETED`
   - `CANCELLED`
   - `AFTER_SALE_OPEN`
+  - `AFTER_SALE_RESOLVED`
+  - `AFTER_SALE_REJECTED`
 - 订单在进入 `COMPLETED` 时会自动生成或更新 `campus_settlement_record`
+- courier 最小运营侧能力已补齐：
+  - 异常上报只保留订单上的最近一次异常信息
+  - 异常上报不改变 `orderStatus`
+  - 低频位置记录写入 `campus_location_report`
+  - 位置记录不进入 admin 时间线，避免噪音
 
 ### Web 管理端
 
@@ -193,6 +207,32 @@
 8. 新增 `CampusOrderExceptionIntegrationTest`
 9. 执行 `.\mvnw.cmd test`，累计 `34` 个测试通过
 
+## Step 03F 实际完成事项
+
+1. 在 `CampusRelayOrderStatus` 中新增：
+   - `AFTER_SALE_RESOLVED`
+   - `AFTER_SALE_REJECTED`
+2. 为 `campus_relay_order` 最小增量补齐售后处理与异常字段：
+   - `after_sale_handle_action`
+   - `after_sale_handle_remark`
+   - `after_sale_handled_by_employee_id`
+   - `after_sale_handled_at`
+   - `exception_type`
+   - `exception_remark`
+   - `exception_reported_at`
+3. 新增 `POST /api/campus/admin/orders/{id}/after-sale-handle`
+4. 新增 `POST /api/campus/courier/orders/{id}/exception-report`
+5. 新增 `POST /api/campus/courier/location-reports`
+6. 新增 `GET /api/campus/admin/settlements`
+7. 新增参数校验与统一异常处理：
+   - `CampusAdminAfterSaleHandleDTO.handleRemark` 必填且不能为空白
+   - `CampusCourierExceptionReportDTO.exceptionType`、`exceptionRemark` 必填
+8. 时间线新增“异常上报”“售后已解决”“售后已驳回”节点，但继续排除每条位置上报记录
+9. settlement 分页兼容 `pageSize` 和 `size`，默认按 `createdAt DESC`
+10. 保留 `courier/profile` 与 `courier/review-status` 的双 token bridge，并明确记录保留原因与收口前提
+11. 新增 `CampusStep03FIntegrationTest`
+12. 执行 `.\mvnw.cmd test`，累计 `40` 个测试通过
+
 ## 当前锁定的技术事实
 
 1. 仓库后端真实风格是注解式 MyBatis，不使用 XML Mapper
@@ -203,27 +243,30 @@
 6. courier 资料附件和取餐凭证继续保存受控文件路径，不引入新文件系统方案
 7. courier token 继续复用现有 `user` 账号密码校验，不新建第二套 courier 账号表
 8. `courier/profile` 与 `courier/review-status` 当前仍采用 `customer/courier` 双通道桥接，原因是未审核通过用户尚不能获取 courier token，但仍需要完成资料提交和查看审核状态
-9. 本轮没有引入新迁移工具，仍沿用 `init.sql + migrations + H2 schema/data`
+9. courier 异常上报当前只保留订单上的最新一次异常信息，不单独建异常历史表
+10. admin 时间线当前会展示异常上报和售后处理节点，但不会写入每条位置上报记录
+11. 本轮没有引入新迁移工具，仍沿用 `init.sql + migrations + H2 schema/data`
 
 ## 当前风险与未完成项
 
 - `courier/profile` 和 `courier/review-status` 仍是 bridge 方案，后续何时收口仍需结合前端与 onboarding 方案确定
 - customer 仍没有退款、售后处理结果查询接口
-- courier 仍没有位置上报、异常上报、送达凭证扩展能力
-- admin 仍没有售后处理、异常备注、强制改派能力
+- admin 仍没有售后二次流转、退款联动、强制改派能力
+- courier 位置上报仍是低频记录，没有频控、轨迹聚合和地图展示
+- settlement 目前只有分页查询，没有确认打款、批量结算和财务对账动作
 - `CampusRuleCatalog` 仍是代码常量，后续若学校规则变更仍需配置化
 - `frontend/` 尚未隐藏旧菜单，也未接入 campus 新接口
 
 ## 下一轮建议
 
-- 进入 `Step 03F`
-- 重点补 admin 最小售后处理、courier 位置/异常上报与 bridge 收口条件
+- 进入 `Step 04`
+- 重点从“闭环已通”转入“运营与后台处理能力增强”
 - 推荐顺序：
-  1. `POST /api/campus/admin/orders/{id}/after-sale-handle` 或等价的最小处理接口
-  2. `POST /api/campus/courier/orders/{id}/exception-report`
-  3. `POST /api/campus/courier/location-reports`
-  4. `GET /api/campus/admin/settlements`
-  5. 结合前端接入时机评估是否收口 `courier/profile` 的双 token bridge
+  1. 为 admin 增加售后处理结果查询与退款/补偿联动策略
+  2. 为 settlement 增加确认结算、结算详情与最小打款备注能力
+  3. 为 courier 增加异常后续处理和位置查看入口
+  4. 结合 onboarding 方案评估是否收口 `courier/profile` 的双 token bridge
+  5. 在后端接口稳定后再决定前端管理端和用户端的接入节奏
 - 保持 `frontend/` 继续不动，先把后端异常链路和结算链路补稳
 
 ## 日志索引
@@ -238,5 +281,6 @@
 - [Step 03C 日志](step-03c-courier-token-and-accept.md)
 - [Step 03D 日志](step-03d-pickup-deliver-confirm.md)
 - [Step 03E 日志](step-03e-cancel-after-sale-timeline-settlement.md)
+- [Step 03F 日志](step-03f-admin-after-sale-exception-location-settlement.md)
 - [待处理事项](pending-items.md)
 - [文件改动清单](file-change-list.md)

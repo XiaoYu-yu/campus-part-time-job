@@ -57,11 +57,22 @@ public class CampusRelayOrder {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime afterSaleAppliedAt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime afterSaleHandledAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime exceptionReportedAt;
+
     private String pickupProofImageUrl;
     private String cancelReason;
     private String customerRemark;
     private String courierRemark;
     private String afterSaleReason;
+    private String afterSaleHandleAction;
+    private String afterSaleHandleRemark;
+    private Long afterSaleHandledByEmployeeId;
+    private String exceptionType;
+    private String exceptionRemark;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
