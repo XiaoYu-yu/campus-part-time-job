@@ -70,6 +70,12 @@ const router = createRouter({
       component: () => import('../views/CampusSettlementBatchDetail.vue')
     },
     {
+      path: '/campus/after-sale-executions',
+      name: 'CampusAfterSaleExecutions',
+      meta: { requiresAdminAuth: true },
+      component: () => import('../views/CampusAfterSaleExecutionList.vue')
+    },
+    {
       path: '/shop-status',
       name: 'ShopStatus',
       meta: { requiresAdminAuth: true },
