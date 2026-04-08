@@ -48,6 +48,8 @@ public class CampusRelayOrderVO {
     private String afterSaleExecutionRemark;
     private String afterSaleExecutionReferenceNo;
     private Long afterSaleExecutedByEmployeeId;
+    private Integer afterSaleExecutionCorrected;
+    private Long afterSaleExecutionCorrectedByEmployeeId;
     private String exceptionType;
     private String exceptionRemark;
 
@@ -86,6 +88,9 @@ public class CampusRelayOrderVO {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime afterSaleExecutedAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime afterSaleExecutionCorrectedAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime exceptionReportedAt;

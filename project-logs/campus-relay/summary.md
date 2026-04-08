@@ -13,8 +13,9 @@
 - 当前已完成：`Step 03F - admin 售后处理 / courier 异常上报 / courier 位置上报 / admin 结算分页`
 - 当前已完成：`Step 04 - 售后决策 / 结算确认 / admin 运营只读接口`
 - 当前已完成：`Step 05 - 售后执行记录 / 结算打款运营 / 订单级运营查询`
+- 当前已完成：`Step 06 - customer 售后结果回执 / admin 执行纠正审计 / settlement 批次核对`
 - 当前日期：`2026-04-08`
-- 当前范围：后端最小闭环已扩展到运营记录层，`frontend/` 仍未改动，旧外卖模块仍保留可运行
+- 当前范围：后端最小闭环已扩展到 customer 售后回执与 settlement 批次审计层，`frontend/` 仍未改动，旧外卖模块仍保留可运行
 
 ## 当前状态
 
@@ -44,6 +45,7 @@
   - `/api/campus/customer/orders/{id}/confirm`
   - `/api/campus/customer/orders/{id}/cancel`
   - `/api/campus/customer/orders/{id}/after-sale`
+  - `/api/campus/customer/orders/{id}/after-sale-result`
 - courier：
   - `/api/campus/courier/auth/token`
   - `/api/campus/courier/profile`
@@ -64,6 +66,7 @@
   - `/api/campus/admin/orders/{id}/after-sale-decision`
   - `/api/campus/admin/orders/{id}/after-sale-result`
   - `/api/campus/admin/orders/{id}/after-sale-execution`
+  - `/api/campus/admin/orders/after-sale-executions`
   - `/api/campus/admin/orders/{id}/location-reports`
   - `/api/campus/admin/orders/{id}/exception-summary`
   - `/api/campus/admin/couriers`
@@ -76,6 +79,9 @@
   - `/api/campus/admin/settlements/{id}/payout-result`
   - `/api/campus/admin/settlements/batch-payout-result`
   - `/api/campus/admin/settlements/reconcile-summary`
+  - `/api/campus/admin/settlements/payout-batches`
+  - `/api/campus/admin/settlements/payout-batches/{batchNo}`
+  - `/api/campus/admin/settlements/{id}/verify-payout`
 
 ### 状态与运营能力
 
@@ -101,69 +107,75 @@
   - `UNPAID`
   - `PAID`
   - `FAILED`
+- `customerReceiptStatus` 继续只作为 customer 结果 VO 计算字段，不落数据库主状态
 - `decisionType = REFUND / COMPENSATE` 记录后会自动初始化 `after_sale_execution_status = PENDING`
 - `decisionType = NONE` 记录后会自动初始化 `after_sale_execution_status = NOT_REQUIRED`
 - settlement confirm 后会自动初始化 `payout_status = UNPAID`
+- `FAILED -> SUCCESS` 的售后执行人工纠正会写入 `after_sale_execution_corrected*` 审计字段，初次 `SUCCESS` 不算纠正
+- batch payout 未传 `batchNo` 时会在 service 层自动生成统一批次号，只写入本次成功处理的 settlement 记录
+- `payout_verified*` 字段独立表达二次核对结果，不复用 `settlement_status`
 - courier 异常上报仍只保留订单上的最新一次异常，不改 `order_status`
 - courier 位置上报仍只写 `campus_location_report`，不进入 timeline
 
-## Step 05 实际完成事项
+## Step 06 实际完成事项
 
-1. 为 `campus_relay_order` 新增售后执行字段：
-   - `after_sale_execution_status`
-   - `after_sale_execution_remark`
-   - `after_sale_execution_reference_no`
-   - `after_sale_executed_by_employee_id`
-   - `after_sale_executed_at`
-2. 扩展 `GET /api/campus/admin/orders/after-sale`
-   - 新增 `afterSaleDecisionType`
-   - 新增 `afterSaleExecutionStatus`
-   - 默认排序继续 `after_sale_applied_at DESC, created_at DESC`
-3. 新增 `GET /api/campus/admin/orders/{id}/after-sale-result`
-4. 新增 `POST /api/campus/admin/orders/{id}/after-sale-execution`
-5. 将售后执行结果规则集中在 service 层：
-   - 仅 `AFTER_SALE_RESOLVED` 且已记录决策的订单可写
-   - `REFUND + SUCCESS` 要求 `executionReferenceNo` 非空
-   - `executionReferenceNo` 统一 trim，纯空白不落库
-   - `decisionType = NONE` 不允许再通过执行接口写 `SUCCESS / FAILED`
-   - 允许 `FAILED -> SUCCESS` 一次人工纠正
-   - 拒绝 `SUCCESS -> FAILED` 和终态重复写入
-6. admin 时间线新增“售后执行结果已记录”节点
-7. 为 `campus_settlement_record` 新增打款字段：
-   - `payout_status`
-   - `payout_remark`
-   - `payout_reference_no`
-   - `payout_recorded_by_employee_id`
-   - `payout_recorded_at`
-8. 扩展 `GET /api/campus/admin/settlements`
-   - 新增 `payoutStatus`
-   - 继续兼容 `pageSize / size`
+1. 为 customer 新增 `GET /api/campus/customer/orders/{id}/after-sale-result`
+2. customer 售后结果回执继续用 VO 计算字段表达：
+   - `customerReceiptStatus`
+   - `customerReceiptTitle`
+   - `customerReceiptMessage`
+   - `lastUpdatedAt`
+3. customer 售后结果规则集中在 service 层：
+   - 仅订单所属 customer 可查
+   - 订单未进入售后链路返回明确业务错误
+   - 不暴露内部 employee id、内部 reference no 等运营字段
+4. 为 `campus_relay_order` 新增售后执行纠正审计字段：
+   - `after_sale_execution_corrected`
+   - `after_sale_execution_corrected_at`
+   - `after_sale_execution_corrected_by_employee_id`
+5. 新增 `GET /api/campus/admin/orders/after-sale-executions`
+6. admin 售后执行查询规则：
+   - 支持 `afterSaleExecutionStatus`、`decisionType`、`correctedOnly`、`customerUserId`、`courierProfileId`、`relayOrderId`
+   - 默认排序 `after_sale_executed_at DESC, after_sale_applied_at DESC, created_at DESC`
+   - `correctedOnly = true` 时只返回人工纠正过的记录
+7. 扩展 `GET /api/campus/admin/orders/{id}/after-sale-result`
+   - 补充 `afterSaleExecutionCorrected`
+   - `afterSaleExecutionCorrectedAt`
+   - `afterSaleExecutionCorrectedByEmployeeId`
+8. 人工纠正规则继续集中在 service 层：
+   - 仅 `FAILED -> SUCCESS` 这一次人工纠正会把 `after_sale_execution_corrected = 1`
+   - 初次 `SUCCESS` 不算 corrected
+   - 不允许 `SUCCESS -> FAILED`
+   - 不允许无限来回切换
+9. 为 `campus_settlement_record` 新增批次与二次核对字段：
+   - `payout_batch_no`
+   - `payout_verified`
+   - `payout_verified_by_employee_id`
+   - `payout_verified_at`
+   - `payout_verify_remark`
+10. 扩展 `GET /api/campus/admin/settlements`
+   - 新增 `payoutVerified`
+   - 新增 `payoutBatchNo`
    - 默认排序继续 `createdAt DESC`
-9. 新增 `POST /api/campus/admin/settlements/{id}/payout-result`
-10. 新增 `POST /api/campus/admin/settlements/batch-payout-result`
-11. 新增 `GET /api/campus/admin/settlements/reconcile-summary`
-12. 将打款规则集中在 service 层：
-   - 仅 `SETTLED` 记录可写
-   - `PAID` 时 `payoutReferenceNo` 必填
-   - `FAILED` 可无参考号
-   - 批量处理会先对 `settlementIds` 去重
-   - `totalRequested` 按去重后的请求数统计
-   - 允许 `FAILED -> PAID` 一次人工纠正
-13. 新增 `GET /api/campus/admin/orders/{id}/location-reports`
-14. 新增 `GET /api/campus/admin/orders/{id}/exception-summary`
-15. 订单级运营只读规则：
-   - `location-reports` 订单不存在返回 `404`
-   - 默认按 `reportedAt DESC`
-   - `pageSize` 最大值 `100`
-   - `exception-summary` 只返回当前订单最新一次异常摘要
-   - 无异常时返回空异常字段
-   - 无位置记录时 `locationReportCount = 0`
-16. 新增 `CampusStep05IntegrationTest`
+11. 新增 `GET /api/campus/admin/settlements/payout-batches`
+12. 新增 `GET /api/campus/admin/settlements/payout-batches/{batchNo}`
+13. 新增 `POST /api/campus/admin/settlements/{id}/verify-payout`
+14. settlement 运营规则：
+   - batch payout 未传 `batchNo` 时自动生成统一批次号
+   - 自动生成的批次号只写入本次成功处理的记录
+   - 失败或跳过的记录不会误写同一个 `batchNo`
+   - 只有 `payout_status = PAID` 的记录才允许 `verify-payout`
+   - `verify-payout` 只允许一次
+15. `GET /api/campus/admin/settlements/{id}` 与批次详情接口都已回显：
+   - `payoutVerified`
+   - `payoutVerifiedAt`
+   - `payoutVerifyRemark`
+16. 新增 `CampusStep06IntegrationTest`
 17. 执行：
    - `.\mvnw.cmd -DskipTests compile`
-   - `.\mvnw.cmd "-Dtest=CampusStep05IntegrationTest" test`
+   - `.\mvnw.cmd "-Dtest=CampusStep06IntegrationTest" test`
    - `.\mvnw.cmd test`
-18. 当前累计 `50` 个测试通过
+18. 当前累计 `53` 个测试通过
 
 ## 当前锁定的技术事实
 
@@ -182,9 +194,9 @@
 
 ## 当前未解决的问题
 
-- customer 仍没有售后结果查询和自助退款反馈接口
-- admin 仍没有售后执行审计列表和执行结果修正视图
-- settlement 仍没有真实打款、撤回打款、批次审计详情和复杂对账
+- customer 仍没有自助退款申请和结果确认交互，只能查看售后结果回执
+- admin 仍没有独立售后执行历史表，只保留订单上的当前执行结果和一次纠正审计
+- settlement 仍没有真实打款、撤回打款和复杂对账
 - 异常仍只保留最新一次，没有历史记录和处理结果流
 - 位置记录仍是低频明细，没有地图、轨迹聚合和频控
 - `frontend/` 仍未接入 campus 接口
@@ -192,13 +204,12 @@
 
 ## 下一轮建议
 
-- 进入 `Step 06`
+- 进入 `Step 07`
 - 推荐顺序：
-  1. 为 customer 增加售后结果查询与最小结果回执
-  2. 为 admin 增加售后执行结果列表、按配送员/按状态筛选和人工修正只读视图
-  3. 为 settlement 增加批次审计明细和更稳定的运营查询
-  4. 结合 onboarding 方案继续评估 `courier/profile` bridge 的收口时机
-  5. 在后端接口稳定后再决定 `frontend/` 的接入节奏
+  1. 继续评估 `courier/profile` 与 `courier/review-status` bridge 的收口条件，并先准备稳定的 onboarding 替代链路
+  2. 规划 campus 后端接口与 `frontend/` 最小接入顺序，优先 admin 运营页和 customer 售后结果页
+  3. 视业务需要补售后执行历史、异常历史和更细粒度运营审计
+  4. 视业务需要补 settlement 更完整的对账、撤回和财务复核能力
 
 ## 日志索引
 
@@ -215,5 +226,6 @@
 - [Step 03F 日志](step-03f-admin-after-sale-exception-location-settlement.md)
 - [Step 04 日志](step-04-after-sale-decision-settlement-admin-ops.md)
 - [Step 05 日志](step-05-after-sale-execution-payout-and-order-ops.md)
+- [Step 06 日志](step-06-customer-receipt-execution-audit-and-payout-verify.md)
 - [待处理事项](pending-items.md)
 - [文件改动清单](file-change-list.md)

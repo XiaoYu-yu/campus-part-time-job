@@ -36,6 +36,8 @@ public class CampusAdminAfterSaleResultVO {
     private String afterSaleExecutionRemark;
     private String afterSaleExecutionReferenceNo;
     private Long afterSaleExecutedByEmployeeId;
+    private Integer afterSaleExecutionCorrected;
+    private Long afterSaleExecutionCorrectedByEmployeeId;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime afterSaleAppliedAt;
@@ -48,6 +50,9 @@ public class CampusAdminAfterSaleResultVO {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime afterSaleExecutedAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime afterSaleExecutionCorrectedAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;

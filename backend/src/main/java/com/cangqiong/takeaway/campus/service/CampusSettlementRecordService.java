@@ -3,7 +3,10 @@ package com.cangqiong.takeaway.campus.service;
 import com.cangqiong.takeaway.campus.dto.CampusAdminSettlementConfirmDTO;
 import com.cangqiong.takeaway.campus.dto.CampusAdminSettlementBatchPayoutDTO;
 import com.cangqiong.takeaway.campus.dto.CampusAdminSettlementPayoutResultDTO;
+import com.cangqiong.takeaway.campus.dto.CampusAdminSettlementVerifyPayoutDTO;
 import com.cangqiong.takeaway.campus.query.CampusSettlementQuery;
+import com.cangqiong.takeaway.campus.vo.CampusSettlementPayoutBatchDetailVO;
+import com.cangqiong.takeaway.campus.vo.CampusSettlementPayoutBatchVO;
 import com.cangqiong.takeaway.campus.vo.CampusSettlementBatchPayoutResultVO;
 import com.cangqiong.takeaway.campus.vo.CampusSettlementRecordVO;
 import com.cangqiong.takeaway.campus.vo.CampusSettlementReconcileSummaryVO;
@@ -22,4 +25,10 @@ public interface CampusSettlementRecordService {
     CampusSettlementBatchPayoutResultVO batchRecordPayoutResultByAdmin(CampusAdminSettlementBatchPayoutDTO dto, Long employeeId);
 
     CampusSettlementReconcileSummaryVO getReconcileSummary(CampusSettlementQuery query);
+
+    PageResult<CampusSettlementPayoutBatchVO> pagePayoutBatches(CampusSettlementQuery query);
+
+    CampusSettlementPayoutBatchDetailVO getPayoutBatchDetail(String batchNo);
+
+    void verifyPayoutByAdmin(Long id, CampusAdminSettlementVerifyPayoutDTO dto, Long employeeId);
 }

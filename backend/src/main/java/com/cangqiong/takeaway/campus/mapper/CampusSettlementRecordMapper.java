@@ -1,6 +1,7 @@
 package com.cangqiong.takeaway.campus.mapper;
 
 import com.cangqiong.takeaway.campus.entity.CampusSettlementRecord;
+import com.cangqiong.takeaway.campus.vo.CampusSettlementPayoutBatchVO;
 import com.cangqiong.takeaway.campus.vo.CampusSettlementRecordVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -59,10 +60,15 @@ public interface CampusSettlementRecordMapper {
             "settlement_status = #{settlementStatus}, " +
             "settled_at = #{settledAt}, " +
             "payout_status = #{payoutStatus}, " +
+            "payout_batch_no = NULL, " +
             "payout_remark = NULL, " +
             "payout_reference_no = NULL, " +
             "payout_recorded_by_employee_id = NULL, " +
             "payout_recorded_at = NULL, " +
+            "payout_verified = 0, " +
+            "payout_verified_by_employee_id = NULL, " +
+            "payout_verified_at = NULL, " +
+            "payout_verify_remark = NULL, " +
             "remark = #{remark}, " +
             "updated_at = #{updatedAt} " +
             "WHERE id = #{id} AND settlement_status = 'PENDING'")
@@ -77,10 +83,15 @@ public interface CampusSettlementRecordMapper {
 
     @Update("UPDATE campus_settlement_record SET " +
             "payout_status = #{payoutStatus}, " +
+            "payout_batch_no = #{payoutBatchNo}, " +
             "payout_remark = #{payoutRemark}, " +
             "payout_reference_no = #{payoutReferenceNo}, " +
             "payout_recorded_by_employee_id = #{payoutRecordedByEmployeeId}, " +
             "payout_recorded_at = #{payoutRecordedAt}, " +
+            "payout_verified = 0, " +
+            "payout_verified_by_employee_id = NULL, " +
+            "payout_verified_at = NULL, " +
+            "payout_verify_remark = NULL, " +
             "updated_at = #{updatedAt} " +
             "WHERE id = #{id} " +
             "AND settlement_status = 'SETTLED' " +
@@ -89,6 +100,7 @@ public interface CampusSettlementRecordMapper {
             @Param("id") Long id,
             @Param("currentPayoutStatus") String currentPayoutStatus,
             @Param("payoutStatus") String payoutStatus,
+            @Param("payoutBatchNo") String payoutBatchNo,
             @Param("payoutRemark") String payoutRemark,
             @Param("payoutReferenceNo") String payoutReferenceNo,
             @Param("payoutRecordedByEmployeeId") Long payoutRecordedByEmployeeId,
@@ -96,15 +108,36 @@ public interface CampusSettlementRecordMapper {
             @Param("updatedAt") LocalDateTime updatedAt
     );
 
+    @Update("UPDATE campus_settlement_record SET " +
+            "payout_verified = 1, " +
+            "payout_verified_by_employee_id = #{payoutVerifiedByEmployeeId}, " +
+            "payout_verified_at = #{payoutVerifiedAt}, " +
+            "payout_verify_remark = #{payoutVerifyRemark}, " +
+            "updated_at = #{updatedAt} " +
+            "WHERE id = #{id} " +
+            "AND settlement_status = 'SETTLED' " +
+            "AND payout_status = 'PAID' " +
+            "AND (payout_verified = 0 OR payout_verified IS NULL)")
+    int verifyPayoutByAdmin(
+            @Param("id") Long id,
+            @Param("payoutVerifiedByEmployeeId") Long payoutVerifiedByEmployeeId,
+            @Param("payoutVerifiedAt") LocalDateTime payoutVerifiedAt,
+            @Param("payoutVerifyRemark") String payoutVerifyRemark,
+            @Param("updatedAt") LocalDateTime updatedAt
+    );
+
     @Select({
             "<script>",
             "SELECT id, relay_order_id, courier_profile_id, gross_amount, platform_commission, pending_amount,",
-            "settlement_status, payout_status, payout_remark, payout_reference_no, payout_recorded_by_employee_id, payout_recorded_at,",
+            "settlement_status, payout_status, payout_batch_no, payout_remark, payout_reference_no, payout_recorded_by_employee_id, payout_recorded_at,",
+            "payout_verified, payout_verified_by_employee_id, payout_verified_at, payout_verify_remark,",
             "settled_at, remark, created_at, updated_at",
             "FROM campus_settlement_record",
             "<where>",
             "  <if test='settlementStatus != null and settlementStatus != \"\"'>AND settlement_status = #{settlementStatus}</if>",
             "  <if test='payoutStatus != null and payoutStatus != \"\"'>AND payout_status = #{payoutStatus}</if>",
+            "  <if test='payoutVerified != null'>AND payout_verified = #{payoutVerified}</if>",
+            "  <if test='payoutBatchNo != null and payoutBatchNo != \"\"'>AND payout_batch_no = #{payoutBatchNo}</if>",
             "  <if test='courierProfileId != null'>AND courier_profile_id = #{courierProfileId}</if>",
             "  <if test='relayOrderId != null and relayOrderId != \"\"'>AND relay_order_id = #{relayOrderId}</if>",
             "</where>",
@@ -115,6 +148,8 @@ public interface CampusSettlementRecordMapper {
     List<CampusSettlementRecordVO> selectByCondition(
             @Param("settlementStatus") String settlementStatus,
             @Param("payoutStatus") String payoutStatus,
+            @Param("payoutVerified") Integer payoutVerified,
+            @Param("payoutBatchNo") String payoutBatchNo,
             @Param("courierProfileId") Long courierProfileId,
             @Param("relayOrderId") String relayOrderId,
             @Param("offset") int offset,
@@ -127,6 +162,8 @@ public interface CampusSettlementRecordMapper {
             "<where>",
             "  <if test='settlementStatus != null and settlementStatus != \"\"'>AND settlement_status = #{settlementStatus}</if>",
             "  <if test='payoutStatus != null and payoutStatus != \"\"'>AND payout_status = #{payoutStatus}</if>",
+            "  <if test='payoutVerified != null'>AND payout_verified = #{payoutVerified}</if>",
+            "  <if test='payoutBatchNo != null and payoutBatchNo != \"\"'>AND payout_batch_no = #{payoutBatchNo}</if>",
             "  <if test='courierProfileId != null'>AND courier_profile_id = #{courierProfileId}</if>",
             "  <if test='relayOrderId != null and relayOrderId != \"\"'>AND relay_order_id = #{relayOrderId}</if>",
             "</where>",
@@ -135,6 +172,8 @@ public interface CampusSettlementRecordMapper {
     Long countByCondition(
             @Param("settlementStatus") String settlementStatus,
             @Param("payoutStatus") String payoutStatus,
+            @Param("payoutVerified") Integer payoutVerified,
+            @Param("payoutBatchNo") String payoutBatchNo,
             @Param("courierProfileId") Long courierProfileId,
             @Param("relayOrderId") String relayOrderId
     );
@@ -162,4 +201,85 @@ public interface CampusSettlementRecordMapper {
             @Param("payoutStatus") String payoutStatus,
             @Param("courierProfileId") Long courierProfileId
     );
+
+    @Select({
+            "<script>",
+            "SELECT",
+            "  payout_batch_no,",
+            "  COUNT(*) AS total_count,",
+            "  SUM(CASE WHEN payout_status = 'PAID' THEN 1 ELSE 0 END) AS paid_count,",
+            "  SUM(CASE WHEN payout_status = 'FAILED' THEN 1 ELSE 0 END) AS failed_count,",
+            "  SUM(CASE WHEN payout_verified = 1 THEN 1 ELSE 0 END) AS verified_count,",
+            "  SUM(CASE WHEN payout_verified = 1 THEN 0 ELSE 1 END) AS unverified_count,",
+            "  COALESCE(SUM(pending_amount), 0) AS total_pending_amount,",
+            "  MIN(payout_recorded_at) AS first_recorded_at,",
+            "  MAX(payout_recorded_at) AS last_recorded_at",
+            "FROM campus_settlement_record",
+            "<where>",
+            "  AND payout_batch_no IS NOT NULL",
+            "  <if test='payoutStatus != null and payoutStatus != \"\"'>AND payout_status = #{payoutStatus}</if>",
+            "  <if test='payoutVerified != null'>AND payout_verified = #{payoutVerified}</if>",
+            "  <if test='courierProfileId != null'>AND courier_profile_id = #{courierProfileId}</if>",
+            "</where>",
+            "GROUP BY payout_batch_no",
+            "ORDER BY MAX(payout_recorded_at) DESC, payout_batch_no DESC",
+            "LIMIT #{pageSize} OFFSET #{offset}",
+            "</script>"
+    })
+    List<CampusSettlementPayoutBatchVO> selectPayoutBatchPage(
+            @Param("payoutStatus") String payoutStatus,
+            @Param("payoutVerified") Integer payoutVerified,
+            @Param("courierProfileId") Long courierProfileId,
+            @Param("offset") int offset,
+            @Param("pageSize") int pageSize
+    );
+
+    @Select({
+            "<script>",
+            "SELECT COUNT(*) FROM (",
+            "  SELECT payout_batch_no",
+            "  FROM campus_settlement_record",
+            "  <where>",
+            "    AND payout_batch_no IS NOT NULL",
+            "    <if test='payoutStatus != null and payoutStatus != \"\"'>AND payout_status = #{payoutStatus}</if>",
+            "    <if test='payoutVerified != null'>AND payout_verified = #{payoutVerified}</if>",
+            "    <if test='courierProfileId != null'>AND courier_profile_id = #{courierProfileId}</if>",
+            "  </where>",
+            "  GROUP BY payout_batch_no",
+            ") t",
+            "</script>"
+    })
+    Long countPayoutBatchPage(
+            @Param("payoutStatus") String payoutStatus,
+            @Param("payoutVerified") Integer payoutVerified,
+            @Param("courierProfileId") Long courierProfileId
+    );
+
+    @Select({
+            "SELECT",
+            "  payout_batch_no,",
+            "  COUNT(*) AS total_count,",
+            "  SUM(CASE WHEN payout_status = 'PAID' THEN 1 ELSE 0 END) AS paid_count,",
+            "  SUM(CASE WHEN payout_status = 'FAILED' THEN 1 ELSE 0 END) AS failed_count,",
+            "  SUM(CASE WHEN payout_verified = 1 THEN 1 ELSE 0 END) AS verified_count,",
+            "  SUM(CASE WHEN payout_verified = 1 THEN 0 ELSE 1 END) AS unverified_count,",
+            "  COALESCE(SUM(pending_amount), 0) AS total_pending_amount,",
+            "  MIN(payout_recorded_at) AS first_recorded_at,",
+            "  MAX(payout_recorded_at) AS last_recorded_at",
+            "FROM campus_settlement_record",
+            "WHERE payout_batch_no = #{payoutBatchNo}",
+            "GROUP BY payout_batch_no"
+    })
+    CampusSettlementPayoutBatchVO selectPayoutBatchSummaryByBatchNo(@Param("payoutBatchNo") String payoutBatchNo);
+
+    @Select({
+            "SELECT id, relay_order_id, courier_profile_id, gross_amount, platform_commission, pending_amount,",
+            "settlement_status, payout_status, payout_batch_no, payout_remark, payout_reference_no, payout_recorded_by_employee_id, payout_recorded_at,",
+            "payout_verified, payout_verified_by_employee_id, payout_verified_at, payout_verify_remark,",
+            "settled_at, remark, created_at, updated_at",
+            "FROM campus_settlement_record",
+            "WHERE payout_batch_no = #{payoutBatchNo}",
+            "ORDER BY payout_recorded_at DESC, id DESC"
+    })
+    List<CampusSettlementRecordVO> selectByPayoutBatchNo(@Param("payoutBatchNo") String payoutBatchNo);
 }

@@ -326,6 +326,9 @@ CREATE TABLE IF NOT EXISTS campus_relay_order (
     after_sale_execution_reference_no VARCHAR(100) COMMENT '售后执行参考号',
     after_sale_executed_by_employee_id BIGINT COMMENT '售后执行管理员ID',
     after_sale_executed_at DATETIME COMMENT '售后执行时间',
+    after_sale_execution_corrected TINYINT NOT NULL DEFAULT 0 COMMENT '售后执行是否人工纠正',
+    after_sale_execution_corrected_by_employee_id BIGINT COMMENT '售后执行纠正管理员ID',
+    after_sale_execution_corrected_at DATETIME COMMENT '售后执行纠正时间',
     exception_type VARCHAR(50) COMMENT '最新异常类型',
     exception_remark VARCHAR(255) COMMENT '最新异常说明',
     exception_reported_at DATETIME COMMENT '最新异常上报时间',
@@ -336,7 +339,8 @@ CREATE TABLE IF NOT EXISTS campus_relay_order (
     FOREIGN KEY (pickup_point_id) REFERENCES campus_pickup_point(id),
     FOREIGN KEY (after_sale_handled_by_employee_id) REFERENCES employee(id),
     FOREIGN KEY (after_sale_decided_by_employee_id) REFERENCES employee(id),
-    FOREIGN KEY (after_sale_executed_by_employee_id) REFERENCES employee(id)
+    FOREIGN KEY (after_sale_executed_by_employee_id) REFERENCES employee(id),
+    FOREIGN KEY (after_sale_execution_corrected_by_employee_id) REFERENCES employee(id)
 ) COMMENT='校园代送订单表';
 
 CREATE TABLE IF NOT EXISTS campus_location_report (
@@ -362,17 +366,23 @@ CREATE TABLE IF NOT EXISTS campus_settlement_record (
     pending_amount DECIMAL(10,2) NOT NULL COMMENT '待结算金额',
     settlement_status VARCHAR(20) NOT NULL COMMENT '结算状态',
     payout_status VARCHAR(20) COMMENT '打款结果状态',
+    payout_batch_no VARCHAR(100) COMMENT '打款批次号',
     payout_remark VARCHAR(255) COMMENT '打款备注',
     payout_reference_no VARCHAR(100) COMMENT '打款参考号',
     payout_recorded_by_employee_id BIGINT COMMENT '打款记录管理员ID',
     payout_recorded_at DATETIME COMMENT '打款记录时间',
+    payout_verified TINYINT NOT NULL DEFAULT 0 COMMENT '打款是否已二次核对',
+    payout_verified_by_employee_id BIGINT COMMENT '打款核对管理员ID',
+    payout_verified_at DATETIME COMMENT '打款核对时间',
+    payout_verify_remark VARCHAR(255) COMMENT '打款核对备注',
     settled_at DATETIME COMMENT '结算时间',
     remark VARCHAR(255) COMMENT '备注',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     FOREIGN KEY (relay_order_id) REFERENCES campus_relay_order(id),
     FOREIGN KEY (courier_profile_id) REFERENCES campus_courier_profile(id),
-    FOREIGN KEY (payout_recorded_by_employee_id) REFERENCES employee(id)
+    FOREIGN KEY (payout_recorded_by_employee_id) REFERENCES employee(id),
+    FOREIGN KEY (payout_verified_by_employee_id) REFERENCES employee(id)
 ) COMMENT='待结算记录表';
 
 INSERT INTO campus_customer_profile (user_id, real_name, identity_type, identity_no) VALUES

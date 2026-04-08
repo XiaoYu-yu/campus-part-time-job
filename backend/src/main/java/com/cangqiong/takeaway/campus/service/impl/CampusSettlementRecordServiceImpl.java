@@ -3,6 +3,7 @@ package com.cangqiong.takeaway.campus.service.impl;
 import com.cangqiong.takeaway.campus.dto.CampusAdminSettlementBatchPayoutDTO;
 import com.cangqiong.takeaway.campus.dto.CampusAdminSettlementConfirmDTO;
 import com.cangqiong.takeaway.campus.dto.CampusAdminSettlementPayoutResultDTO;
+import com.cangqiong.takeaway.campus.dto.CampusAdminSettlementVerifyPayoutDTO;
 import com.cangqiong.takeaway.campus.entity.CampusSettlementRecord;
 import com.cangqiong.takeaway.campus.enums.CampusPayoutStatus;
 import com.cangqiong.takeaway.campus.enums.CampusSettlementStatus;
@@ -10,6 +11,8 @@ import com.cangqiong.takeaway.campus.mapper.CampusSettlementRecordMapper;
 import com.cangqiong.takeaway.campus.query.CampusSettlementQuery;
 import com.cangqiong.takeaway.campus.service.CampusSettlementRecordService;
 import com.cangqiong.takeaway.campus.vo.CampusSettlementBatchPayoutResultVO;
+import com.cangqiong.takeaway.campus.vo.CampusSettlementPayoutBatchDetailVO;
+import com.cangqiong.takeaway.campus.vo.CampusSettlementPayoutBatchVO;
 import com.cangqiong.takeaway.campus.vo.CampusSettlementRecordVO;
 import com.cangqiong.takeaway.campus.vo.CampusSettlementReconcileSummaryVO;
 import com.cangqiong.takeaway.exception.BusinessException;
@@ -23,15 +26,18 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class CampusSettlementRecordServiceImpl implements CampusSettlementRecordService {
 
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.00");
+    private static final DateTimeFormatter PAYOUT_BATCH_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
     @Autowired
     private CampusSettlementRecordMapper campusSettlementRecordMapper;
@@ -43,11 +49,15 @@ public class CampusSettlementRecordServiceImpl implements CampusSettlementRecord
         int offset = (page - 1) * pageSize;
         String settlementStatus = resolveSettlementStatusFilter(query == null ? null : query.getSettlementStatus());
         String payoutStatus = normalizePayoutStatusFilter(query == null ? null : query.getPayoutStatus());
+        Integer payoutVerified = normalizePayoutVerifiedFilter(query == null ? null : query.getPayoutVerified());
+        String payoutBatchNo = normalizeText(query == null ? null : query.getPayoutBatchNo());
         String relayOrderId = normalizeText(query == null ? null : query.getRelayOrderId());
 
         List<CampusSettlementRecordVO> records = campusSettlementRecordMapper.selectByCondition(
                 settlementStatus,
                 payoutStatus,
+                payoutVerified,
+                payoutBatchNo,
                 query == null ? null : query.getCourierProfileId(),
                 relayOrderId,
                 offset,
@@ -56,6 +66,8 @@ public class CampusSettlementRecordServiceImpl implements CampusSettlementRecord
         Long total = campusSettlementRecordMapper.countByCondition(
                 settlementStatus,
                 payoutStatus,
+                payoutVerified,
+                payoutBatchNo,
                 query == null ? null : query.getCourierProfileId(),
                 relayOrderId
         );
@@ -137,6 +149,7 @@ public class CampusSettlementRecordServiceImpl implements CampusSettlementRecord
                 id,
                 payload.currentPayoutStatus,
                 payload.targetPayoutStatus,
+                payload.payoutBatchNo,
                 payload.payoutRemark,
                 payload.payoutReferenceNo,
                 employeeId,
@@ -176,6 +189,7 @@ public class CampusSettlementRecordServiceImpl implements CampusSettlementRecord
             throw new BusinessException("批量打款备注不能为空");
         }
         String batchNo = normalizeOptionalReferenceNo(dto.getBatchNo());
+        String resolvedBatchNo = StringUtils.hasText(batchNo) ? batchNo : generatePayoutBatchNo();
 
         List<Long> skippedIds = new ArrayList<>();
         List<Long> failedIds = new ArrayList<>();
@@ -190,21 +204,24 @@ public class CampusSettlementRecordServiceImpl implements CampusSettlementRecord
 
             PayoutWritePayload payload;
             try {
-                payload = buildPayoutWritePayload(record, payoutStatus, payoutRemark, batchNo, false);
+                payload = buildPayoutWritePayload(record, payoutStatus, payoutRemark, null, false);
+                payload.payoutBatchNo = resolvedBatchNo;
+                payload.payoutReferenceNo = resolvedBatchNo;
             } catch (BusinessException ex) {
                 skippedIds.add(settlementId);
                 continue;
             }
 
             int updated = campusSettlementRecordMapper.recordPayoutResultByAdmin(
-                    settlementId,
-                    payload.currentPayoutStatus,
-                    payload.targetPayoutStatus,
-                    payload.payoutRemark,
-                    payload.payoutReferenceNo,
-                    employeeId,
-                    payload.recordedAt,
-                    payload.recordedAt
+                settlementId,
+                payload.currentPayoutStatus,
+                payload.targetPayoutStatus,
+                payload.payoutBatchNo,
+                payload.payoutRemark,
+                payload.payoutReferenceNo,
+                employeeId,
+                payload.recordedAt,
+                payload.recordedAt
             );
             if (updated == 0) {
                 failedIds.add(settlementId);
@@ -245,6 +262,97 @@ public class CampusSettlementRecordServiceImpl implements CampusSettlementRecord
         return summaryVO;
     }
 
+    @Override
+    public PageResult<CampusSettlementPayoutBatchVO> pagePayoutBatches(CampusSettlementQuery query) {
+        int page = safePositive(query == null ? null : query.getPage(), 1);
+        int pageSize = safePageSize(query == null ? null : query.getPageSize(), query == null ? null : query.getSize());
+        int offset = (page - 1) * pageSize;
+        String payoutStatus = normalizePayoutStatusFilter(query == null ? null : query.getPayoutStatus());
+        Integer payoutVerified = normalizePayoutVerifiedFilter(query == null ? null : query.getPayoutVerified());
+
+        List<CampusSettlementPayoutBatchVO> records = campusSettlementRecordMapper.selectPayoutBatchPage(
+                payoutStatus,
+                payoutVerified,
+                query == null ? null : query.getCourierProfileId(),
+                offset,
+                pageSize
+        );
+        Long total = campusSettlementRecordMapper.countPayoutBatchPage(
+                payoutStatus,
+                payoutVerified,
+                query == null ? null : query.getCourierProfileId()
+        );
+
+        PageResult<CampusSettlementPayoutBatchVO> pageResult = new PageResult<>();
+        pageResult.setRecords(records);
+        pageResult.setTotal(total);
+        pageResult.setSize((long) pageSize);
+        pageResult.setCurrent((long) page);
+        pageResult.setPages((total + pageSize - 1) / pageSize);
+        return pageResult;
+    }
+
+    @Override
+    public CampusSettlementPayoutBatchDetailVO getPayoutBatchDetail(String batchNo) {
+        String normalizedBatchNo = normalizeText(batchNo);
+        if (!StringUtils.hasText(normalizedBatchNo)) {
+            throw new BusinessException("打款批次号不能为空");
+        }
+
+        CampusSettlementPayoutBatchVO summary = campusSettlementRecordMapper.selectPayoutBatchSummaryByBatchNo(normalizedBatchNo);
+        if (summary == null) {
+            throw new BusinessException(404, "打款批次不存在");
+        }
+        List<CampusSettlementRecordVO> records = campusSettlementRecordMapper.selectByPayoutBatchNo(normalizedBatchNo);
+
+        CampusSettlementPayoutBatchDetailVO detailVO = new CampusSettlementPayoutBatchDetailVO();
+        BeanUtils.copyProperties(summary, detailVO);
+        detailVO.setRecords(records);
+        return detailVO;
+    }
+
+    @Override
+    @Transactional
+    public void verifyPayoutByAdmin(Long id, CampusAdminSettlementVerifyPayoutDTO dto, Long employeeId) {
+        if (employeeId == null) {
+            throw new BusinessException(401, "未授权，请先登录");
+        }
+        if (dto == null) {
+            throw new BusinessException("打款核对请求不能为空");
+        }
+
+        CampusSettlementRecord record = campusSettlementRecordMapper.selectById(id);
+        if (record == null) {
+            throw new BusinessException(404, "结算记录不存在");
+        }
+        if (!CampusSettlementStatus.SETTLED.name().equals(record.getSettlementStatus())) {
+            throw new BusinessException("当前结算记录尚未完成结算确认");
+        }
+        if (resolveCurrentPayoutStatus(record) != CampusPayoutStatus.PAID) {
+            throw new BusinessException("仅打款成功的记录允许进行二次核对");
+        }
+        if (record.getPayoutVerified() != null && record.getPayoutVerified() == 1) {
+            throw new BusinessException("当前结算记录已完成打款核对");
+        }
+
+        String verifyRemark = normalizeText(dto.getVerifyRemark());
+        if (!StringUtils.hasText(verifyRemark)) {
+            throw new BusinessException("打款核对备注不能为空");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        int updated = campusSettlementRecordMapper.verifyPayoutByAdmin(
+                id,
+                employeeId,
+                now,
+                verifyRemark,
+                now
+        );
+        if (updated == 0) {
+            throw new BusinessException("结算记录状态已变化，无法完成打款核对");
+        }
+    }
+
     private PayoutWritePayload buildPayoutWritePayload(
             CampusSettlementRecord record,
             String payoutStatusText,
@@ -282,6 +390,7 @@ public class CampusSettlementRecordServiceImpl implements CampusSettlementRecord
         PayoutWritePayload payload = new PayoutWritePayload();
         payload.currentPayoutStatus = currentPayoutStatus.name();
         payload.targetPayoutStatus = targetPayoutStatus.name();
+        payload.payoutBatchNo = record.getPayoutBatchNo();
         payload.payoutRemark = payoutRemark;
         payload.payoutReferenceNo = payoutReferenceNo;
         payload.recordedAt = LocalDateTime.now();
@@ -332,6 +441,20 @@ public class CampusSettlementRecordServiceImpl implements CampusSettlementRecord
         return normalizeRequiredPayoutStatus(normalized).name();
     }
 
+    private Integer normalizePayoutVerifiedFilter(String value) {
+        String normalized = normalizeText(value);
+        if (!StringUtils.hasText(normalized)) {
+            return null;
+        }
+        if ("1".equals(normalized) || "true".equalsIgnoreCase(normalized)) {
+            return 1;
+        }
+        if ("0".equals(normalized) || "false".equalsIgnoreCase(normalized)) {
+            return 0;
+        }
+        throw new BusinessException("不支持的打款核对状态");
+    }
+
     private CampusPayoutStatus normalizeRequiredPayoutStatus(String value) {
         try {
             return CampusPayoutStatus.valueOf(normalizeText(value).toUpperCase());
@@ -363,6 +486,11 @@ public class CampusSettlementRecordServiceImpl implements CampusSettlementRecord
         return StringUtils.hasText(normalized) ? normalized : null;
     }
 
+    private String generatePayoutBatchNo() {
+        LocalDateTime now = LocalDateTime.now();
+        return "PB" + now.format(PAYOUT_BATCH_FORMATTER) + String.format("%04d", ThreadLocalRandom.current().nextInt(10000));
+    }
+
     private String appendRemark(String originalRemark, String settleRemark) {
         String normalizedOriginal = normalizeText(originalRemark);
         if (!StringUtils.hasText(normalizedOriginal)) {
@@ -374,6 +502,7 @@ public class CampusSettlementRecordServiceImpl implements CampusSettlementRecord
     private static class PayoutWritePayload {
         private String currentPayoutStatus;
         private String targetPayoutStatus;
+        private String payoutBatchNo;
         private String payoutRemark;
         private String payoutReferenceNo;
         private LocalDateTime recordedAt;

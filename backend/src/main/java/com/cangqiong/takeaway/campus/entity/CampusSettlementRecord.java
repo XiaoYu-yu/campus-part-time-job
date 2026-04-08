@@ -17,15 +17,22 @@ public class CampusSettlementRecord {
     private BigDecimal pendingAmount;
     private String settlementStatus;
     private String payoutStatus;
+    private String payoutBatchNo;
     private String payoutRemark;
     private String payoutReferenceNo;
     private Long payoutRecordedByEmployeeId;
+    private Integer payoutVerified;
+    private Long payoutVerifiedByEmployeeId;
+    private String payoutVerifyRemark;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime settledAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime payoutRecordedAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime payoutVerifiedAt;
 
     private String remark;
 

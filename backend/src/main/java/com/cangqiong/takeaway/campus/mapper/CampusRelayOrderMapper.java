@@ -1,6 +1,7 @@
 package com.cangqiong.takeaway.campus.mapper;
 
 import com.cangqiong.takeaway.campus.entity.CampusRelayOrder;
+import com.cangqiong.takeaway.campus.vo.CampusAdminAfterSaleExecutionVO;
 import com.cangqiong.takeaway.campus.vo.CampusAdminAfterSaleOrderVO;
 import com.cangqiong.takeaway.campus.vo.CampusCourierOrderVO;
 import com.cangqiong.takeaway.campus.vo.CampusCourierRecentExceptionVO;
@@ -70,6 +71,8 @@ public interface CampusRelayOrderMapper {
             "  cro.after_sale_execution_remark,",
             "  cro.after_sale_execution_reference_no,",
             "  cro.after_sale_executed_by_employee_id,",
+            "  cro.after_sale_execution_corrected,",
+            "  cro.after_sale_execution_corrected_by_employee_id,",
             "  cro.exception_type,",
             "  cro.exception_remark,",
             "  cro.priority_window_deadline,",
@@ -83,6 +86,7 @@ public interface CampusRelayOrderMapper {
             "  cro.after_sale_handled_at,",
             "  cro.after_sale_decided_at,",
             "  cro.after_sale_executed_at,",
+            "  cro.after_sale_execution_corrected_at,",
             "  cro.exception_reported_at,",
             "  cro.created_at,",
             "  cro.updated_at",
@@ -220,10 +224,13 @@ public interface CampusRelayOrderMapper {
             "  cro.after_sale_execution_remark,",
             "  cro.after_sale_execution_reference_no,",
             "  cro.after_sale_executed_by_employee_id,",
+            "  cro.after_sale_execution_corrected,",
+            "  cro.after_sale_execution_corrected_by_employee_id,",
             "  cro.after_sale_applied_at,",
             "  cro.after_sale_handled_at,",
             "  cro.after_sale_decided_at,",
             "  cro.after_sale_executed_at,",
+            "  cro.after_sale_execution_corrected_at,",
             "  cro.created_at",
             "FROM campus_relay_order cro",
             "<where>",
@@ -275,6 +282,73 @@ public interface CampusRelayOrderMapper {
             @Param("afterSaleExecutionStatus") String afterSaleExecutionStatus,
             @Param("courierProfileId") Long courierProfileId,
             @Param("customerUserId") Long customerUserId,
+            @Param("relayOrderId") String relayOrderId
+    );
+
+    @Select({
+            "<script>",
+            "SELECT",
+            "  cro.id AS relay_order_id,",
+            "  cro.order_status,",
+            "  cro.customer_user_id,",
+            "  cro.courier_profile_id,",
+            "  cro.after_sale_decision_type AS decision_type,",
+            "  cro.after_sale_decision_amount AS decision_amount,",
+            "  cro.after_sale_execution_status,",
+            "  cro.after_sale_execution_remark,",
+            "  cro.after_sale_execution_corrected,",
+            "  cro.after_sale_execution_corrected_by_employee_id,",
+            "  cro.after_sale_executed_at,",
+            "  cro.after_sale_execution_corrected_at,",
+            "  cro.after_sale_applied_at",
+            "FROM campus_relay_order cro",
+            "<where>",
+            "  AND cro.after_sale_decision_type IS NOT NULL",
+            "  AND cro.after_sale_execution_status IS NOT NULL",
+            "  <if test='afterSaleExecutionStatus != null and afterSaleExecutionStatus != \"\"'>AND cro.after_sale_execution_status = #{afterSaleExecutionStatus}</if>",
+            "  <if test='decisionType != null and decisionType != \"\"'>AND cro.after_sale_decision_type = #{decisionType}</if>",
+            "  <if test='correctedOnly != null and correctedOnly'>AND cro.after_sale_execution_corrected = 1</if>",
+            "  <if test='customerUserId != null'>AND cro.customer_user_id = #{customerUserId}</if>",
+            "  <if test='courierProfileId != null'>AND cro.courier_profile_id = #{courierProfileId}</if>",
+            "  <if test='relayOrderId != null and relayOrderId != \"\"'>AND cro.id = #{relayOrderId}</if>",
+            "</where>",
+            "ORDER BY cro.after_sale_executed_at DESC, cro.after_sale_applied_at DESC, cro.created_at DESC",
+            "LIMIT #{pageSize} OFFSET #{offset}",
+            "</script>"
+    })
+    List<CampusAdminAfterSaleExecutionVO> selectAfterSaleExecutionsByCondition(
+            @Param("afterSaleExecutionStatus") String afterSaleExecutionStatus,
+            @Param("decisionType") String decisionType,
+            @Param("correctedOnly") Boolean correctedOnly,
+            @Param("customerUserId") Long customerUserId,
+            @Param("courierProfileId") Long courierProfileId,
+            @Param("relayOrderId") String relayOrderId,
+            @Param("offset") int offset,
+            @Param("pageSize") int pageSize
+    );
+
+    @Select({
+            "<script>",
+            "SELECT COUNT(*)",
+            "FROM campus_relay_order cro",
+            "<where>",
+            "  AND cro.after_sale_decision_type IS NOT NULL",
+            "  AND cro.after_sale_execution_status IS NOT NULL",
+            "  <if test='afterSaleExecutionStatus != null and afterSaleExecutionStatus != \"\"'>AND cro.after_sale_execution_status = #{afterSaleExecutionStatus}</if>",
+            "  <if test='decisionType != null and decisionType != \"\"'>AND cro.after_sale_decision_type = #{decisionType}</if>",
+            "  <if test='correctedOnly != null and correctedOnly'>AND cro.after_sale_execution_corrected = 1</if>",
+            "  <if test='customerUserId != null'>AND cro.customer_user_id = #{customerUserId}</if>",
+            "  <if test='courierProfileId != null'>AND cro.courier_profile_id = #{courierProfileId}</if>",
+            "  <if test='relayOrderId != null and relayOrderId != \"\"'>AND cro.id = #{relayOrderId}</if>",
+            "</where>",
+            "</script>"
+    })
+    Long countAfterSaleExecutionsByCondition(
+            @Param("afterSaleExecutionStatus") String afterSaleExecutionStatus,
+            @Param("decisionType") String decisionType,
+            @Param("correctedOnly") Boolean correctedOnly,
+            @Param("customerUserId") Long customerUserId,
+            @Param("courierProfileId") Long courierProfileId,
             @Param("relayOrderId") String relayOrderId
     );
 
@@ -709,6 +783,9 @@ public interface CampusRelayOrderMapper {
             "after_sale_execution_reference_no = NULL, " +
             "after_sale_executed_by_employee_id = NULL, " +
             "after_sale_executed_at = NULL, " +
+            "after_sale_execution_corrected = 0, " +
+            "after_sale_execution_corrected_by_employee_id = NULL, " +
+            "after_sale_execution_corrected_at = NULL, " +
             "updated_at = #{updatedAt} " +
             "WHERE id = #{id} " +
             "AND order_status = 'AFTER_SALE_RESOLVED' " +
@@ -730,6 +807,9 @@ public interface CampusRelayOrderMapper {
             "after_sale_execution_reference_no = #{executionReferenceNo}, " +
             "after_sale_executed_by_employee_id = #{executedByEmployeeId}, " +
             "after_sale_executed_at = #{executedAt}, " +
+            "after_sale_execution_corrected = #{executionCorrected}, " +
+            "after_sale_execution_corrected_by_employee_id = #{executionCorrectedByEmployeeId}, " +
+            "after_sale_execution_corrected_at = #{executionCorrectedAt}, " +
             "updated_at = #{updatedAt} " +
             "WHERE id = #{id} " +
             "AND order_status = 'AFTER_SALE_RESOLVED' " +
@@ -743,6 +823,9 @@ public interface CampusRelayOrderMapper {
             @Param("executionReferenceNo") String executionReferenceNo,
             @Param("executedByEmployeeId") Long executedByEmployeeId,
             @Param("executedAt") LocalDateTime executedAt,
+            @Param("executionCorrected") Integer executionCorrected,
+            @Param("executionCorrectedByEmployeeId") Long executionCorrectedByEmployeeId,
+            @Param("executionCorrectedAt") LocalDateTime executionCorrectedAt,
             @Param("updatedAt") LocalDateTime updatedAt
     );
 

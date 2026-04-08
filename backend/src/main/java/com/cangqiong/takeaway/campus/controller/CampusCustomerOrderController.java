@@ -5,6 +5,7 @@ import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderAfterSaleDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCancelDTO;
 import com.cangqiong.takeaway.campus.query.CampusCustomerOrderQuery;
 import com.cangqiong.takeaway.campus.service.CampusRelayOrderService;
+import com.cangqiong.takeaway.campus.vo.CampusCustomerAfterSaleResultVO;
 import com.cangqiong.takeaway.campus.vo.CampusCustomerOrderVO;
 import com.cangqiong.takeaway.interceptor.BaseContext;
 import com.cangqiong.takeaway.utils.Result;
@@ -63,6 +64,13 @@ public class CampusCustomerOrderController {
         log.info("校园用户发起售后: userId={}, orderId={}", customerUserId, id);
         campusRelayOrderService.openAfterSaleByCustomer(id, dto, customerUserId);
         return Result.success();
+    }
+
+    @GetMapping("/{id}/after-sale-result")
+    public Result<CampusCustomerAfterSaleResultVO> getAfterSaleResult(@PathVariable String id) {
+        Long customerUserId = BaseContext.getCurrentUserId();
+        log.info("校园用户查看售后结果回执: userId={}, orderId={}", customerUserId, id);
+        return Result.success(campusRelayOrderService.getAfterSaleResultByCustomer(id, customerUserId));
     }
 
     @GetMapping("/{id}")

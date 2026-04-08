@@ -10,13 +10,16 @@ import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderAfterSaleDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCancelDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCreateDTO;
 import com.cangqiong.takeaway.campus.query.CampusAdminAfterSaleOrderQuery;
+import com.cangqiong.takeaway.campus.query.CampusAdminAfterSaleExecutionQuery;
 import com.cangqiong.takeaway.campus.query.CampusCourierAvailableOrderQuery;
 import com.cangqiong.takeaway.campus.query.CampusCustomerOrderQuery;
 import com.cangqiong.takeaway.campus.query.CampusRelayOrderQuery;
+import com.cangqiong.takeaway.campus.vo.CampusAdminAfterSaleExecutionVO;
 import com.cangqiong.takeaway.campus.vo.CampusAdminAfterSaleOrderVO;
 import com.cangqiong.takeaway.campus.vo.CampusAdminAfterSaleResultVO;
 import com.cangqiong.takeaway.campus.vo.CampusCourierOrderVO;
 import com.cangqiong.takeaway.campus.vo.CampusCourierRecentExceptionVO;
+import com.cangqiong.takeaway.campus.vo.CampusCustomerAfterSaleResultVO;
 import com.cangqiong.takeaway.campus.vo.CampusCustomerOrderVO;
 import com.cangqiong.takeaway.campus.vo.CampusOrderExceptionSummaryVO;
 import com.cangqiong.takeaway.campus.vo.CampusOrderTimelineVO;
@@ -43,6 +46,8 @@ public interface CampusRelayOrderService {
 
     CampusCustomerOrderVO getCustomerOrderById(String id, Long customerUserId);
 
+    CampusCustomerAfterSaleResultVO getAfterSaleResultByCustomer(String id, Long customerUserId);
+
     PageResult<CampusCustomerOrderVO> pageQueryByCustomer(CampusCustomerOrderQuery query, Long customerUserId);
 
     PageResult<CampusCourierOrderVO> pageAvailableForCourier(CampusCourierAvailableOrderQuery query, Long courierUserId);
@@ -64,6 +69,8 @@ public interface CampusRelayOrderService {
     void recordAfterSaleDecisionByAdmin(String id, CampusAdminAfterSaleDecisionDTO dto, Long employeeId);
 
     CampusAdminAfterSaleResultVO getAfterSaleResultByAdmin(String id);
+
+    PageResult<CampusAdminAfterSaleExecutionVO> pageAfterSaleExecutionsByAdmin(CampusAdminAfterSaleExecutionQuery query);
 
     void recordAfterSaleExecutionByAdmin(String id, CampusAdminAfterSaleExecutionDTO dto, Long employeeId);
 

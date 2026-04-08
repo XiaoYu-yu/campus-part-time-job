@@ -1,12 +1,12 @@
 # 校园代送待处理事项
 
-## Step 06 最高优先级
+## Step 07 最高优先级
 
-1. 为 customer 增加售后结果查询与最小退款/补偿处理回执
-2. 为 admin 增加售后执行结果列表、结果修正查询和按执行状态的运营筛选
-3. 为 settlement 增加批次审计明细、打款结果二次核对和更清晰的运营查询
-4. 继续评估 `courier/profile` 与 `courier/review-status` 的 bridge 收口条件
-5. 在不动旧系统的前提下，规划 `frontend/` 接入 campus 最小后台页面的路径
+1. 继续评估 `courier/profile` 与 `courier/review-status` 的 bridge 收口条件，并先准备稳定的 onboarding 替代链路
+2. 在不动旧系统的前提下，规划 `frontend/` 接入 campus 最小后台页面和 customer 售后结果页的路径
+3. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
+4. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
+5. 继续保持旧系统可运行，不在 Step 07 贸然切前端主链路
 
 ## 已完成但仍需继续扩展的部分
 
@@ -17,9 +17,11 @@
   - 订单分页、详情、时间线
   - 售后处理、售后决策、售后执行结果记录
   - 售后结果分页、售后结果汇总
+  - 售后执行分页、人工纠正审计
   - 配送员分页、审核、最近异常、低频位置记录
-  - 结算分页、详情、确认结算、单笔打款记录、批量打款记录、对账摘要
+  - 结算分页、详情、确认结算、单笔打款记录、批量打款记录、对账摘要、批次列表、批次详情、二次核对
   - 按订单查看位置记录、按订单查看异常摘要
+- customer 已打通售后结果回执查询
 - settlement 已在订单 `COMPLETED` 时自动生成或更新
 
 ## 已锁定的默认处理策略
@@ -48,7 +50,10 @@
 - `payout_status` 独立表达打款结果
 - `decisionType = NONE` 的订单自动初始化为 `after_sale_execution_status = NOT_REQUIRED`
 - `REFUND / COMPENSATE` 的订单自动初始化为 `after_sale_execution_status = PENDING`
+- `FAILED -> SUCCESS` 的售后执行人工纠正会写入 `after_sale_execution_corrected*` 审计字段
 - settlement confirm 后自动初始化 `payout_status = UNPAID`
+- batch payout 未传 `batchNo` 时会在 service 层自动生成统一批次号，只写入成功处理的记录
+- `payout_verified*` 字段独立表达二次核对结果，不复用 `settlement_status`
 
 ### 4. 异常与位置
 
@@ -69,25 +74,25 @@
 
 ## 当前主要阻塞点
 
-### 1. customer 仍然看不到售后最终结果
-
-- 影响：用户发起售后后只能依赖后台处理，缺少面向用户的结果回执
-- 默认处理：Step 06 优先补 customer 侧售后结果只读接口
-
-### 2. admin 运营结果仍缺少更强的审计查询
-
-- 影响：已有售后执行记录和打款记录，但还缺批次、执行状态和修正视角的只读查询
-- 默认处理：Step 06 补运营查询，不急于做复杂页面
-
-### 3. bridge 仍是过渡态
+### 1. bridge 仍是过渡态
 
 - 影响：`courier/profile` 与 `courier/review-status` 继续依赖双 token 兼容
 - 默认处理：继续保留，等 onboarding 替代链路稳定后再收口
 
-### 4. 前端尚未接 campus 新接口
+### 2. 前端尚未接 campus 新接口
 
 - 影响：现阶段主要靠测试和后端联调演示
 - 默认处理：继续保持 `frontend/` 不动，避免范围膨胀
+
+### 3. 售后与异常仍是最小审计模型
+
+- 影响：售后执行和异常上报目前只保留当前结果与一次纠正信息，缺少完整历史
+- 默认处理：在 Step 07 之后再评估是否需要单独历史表，当前先避免过度设计
+
+### 4. settlement 仍没有真实财务执行能力
+
+- 影响：目前只有后台记录、批次和核对，尚无真实打款、撤回、对账对接
+- 默认处理：继续保持最小运营记录，等业务边界稳定后再决定是否引入更深财务能力
 
 ## 当前明确没做的事情
 

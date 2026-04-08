@@ -5,9 +5,11 @@ import com.cangqiong.takeaway.campus.dto.CampusAdminAfterSaleExecutionDTO;
 import com.cangqiong.takeaway.campus.dto.CampusAdminAfterSaleHandleDTO;
 import com.cangqiong.takeaway.campus.query.CampusAdminOrderLocationReportQuery;
 import com.cangqiong.takeaway.campus.query.CampusAdminAfterSaleOrderQuery;
+import com.cangqiong.takeaway.campus.query.CampusAdminAfterSaleExecutionQuery;
 import com.cangqiong.takeaway.campus.query.CampusRelayOrderQuery;
 import com.cangqiong.takeaway.campus.service.CampusLocationReportService;
 import com.cangqiong.takeaway.campus.service.CampusRelayOrderService;
+import com.cangqiong.takeaway.campus.vo.CampusAdminAfterSaleExecutionVO;
 import com.cangqiong.takeaway.campus.vo.CampusAdminAfterSaleOrderVO;
 import com.cangqiong.takeaway.campus.vo.CampusAdminAfterSaleResultVO;
 import com.cangqiong.takeaway.campus.vo.CampusLocationReportVO;
@@ -48,6 +50,12 @@ public class CampusAdminRelayOrderController {
     public Result<PageResult<CampusAdminAfterSaleOrderVO>> pageAfterSale(CampusAdminAfterSaleOrderQuery query) {
         log.info("校园代送订单售后分页查询: {}", query);
         return Result.success(campusRelayOrderService.pageAfterSaleByAdmin(query));
+    }
+
+    @GetMapping("/after-sale-executions")
+    public Result<PageResult<CampusAdminAfterSaleExecutionVO>> pageAfterSaleExecutions(CampusAdminAfterSaleExecutionQuery query) {
+        log.info("校园代送订单售后执行结果分页查询: {}", query);
+        return Result.success(campusRelayOrderService.pageAfterSaleExecutionsByAdmin(query));
     }
 
     @GetMapping("/{id}/after-sale-result")
