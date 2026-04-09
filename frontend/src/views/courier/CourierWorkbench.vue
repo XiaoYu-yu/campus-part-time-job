@@ -264,7 +264,7 @@
               <div v-if="showPostDeliveryStatus" class="confirm-visual-section">
                 <div class="pickup-header">
                   <div>
-                    <h4>送达后状态可视化</h4>
+                    <h4>{{ postDeliverySectionTitle }}</h4>
                     <p>{{ postDeliveryMessage }}</p>
                   </div>
                   <el-tag :type="isAwaitingConfirmation ? 'warning' : 'success'">
@@ -288,6 +288,33 @@
                   <div class="summary-item">
                     <span>最近异常说明</span>
                     <strong>{{ displayText(orderDetail.exceptionRemark) }}</strong>
+                  </div>
+                </div>
+
+                <div class="summary-grid completion-summary-grid">
+                  <div class="summary-item">
+                    <span>取餐点</span>
+                    <strong>{{ displayText(orderDetail.pickupPointName) }}</strong>
+                  </div>
+                  <div class="summary-item">
+                    <span>配送楼栋</span>
+                    <strong>{{ displayText(orderDetail.deliveryBuilding) }}</strong>
+                  </div>
+                  <div class="summary-item">
+                    <span>配送详情</span>
+                    <strong>{{ displayText(orderDetail.deliveryDetail) }}</strong>
+                  </div>
+                  <div class="summary-item">
+                    <span>订单金额</span>
+                    <strong>{{ formatAmount(orderDetail.totalAmount) }}</strong>
+                  </div>
+                  <div class="summary-item">
+                    <span>customer 备注</span>
+                    <strong>{{ displayText(orderDetail.customerRemark) }}</strong>
+                  </div>
+                  <div class="summary-item">
+                    <span>完成时间</span>
+                    <strong>{{ displayText(orderDetail.autoCompleteAt) }}</strong>
                   </div>
                 </div>
 
@@ -458,12 +485,13 @@ const isAwaitingConfirmation = computed(() => orderDetail.status === 'AWAITING_C
 const isCompletedOrder = computed(() => orderDetail.status === 'COMPLETED')
 const showPostDeliveryStatus = computed(() => isAwaitingConfirmation.value || isCompletedOrder.value)
 const deliverActionLabel = computed(() => (orderDetail.status === 'PICKED_UP' ? '开始配送' : '确认送达'))
+const postDeliverySectionTitle = computed(() => (isCompletedOrder.value ? '完成后最小只读承接' : '送达后状态可视化'))
 const postDeliveryMessage = computed(() => {
   if (isAwaitingConfirmation.value) {
     return '订单已送达，当前等待 customer 侧确认。此阶段不再补新动作，只做最小状态提示和最近异常只读展示。'
   }
   if (isCompletedOrder.value) {
-    return '订单已完成，当前 drawer 只保留送达后状态与最近异常的最小只读展示。'
+    return '订单已完成，当前 drawer 继续保留送达后节点、异常摘要和订单关键字段的最小只读承接。'
   }
   return ''
 })
@@ -836,6 +864,10 @@ onMounted(() => {
 }
 
 .exception-grid {
+  margin-bottom: 12px;
+}
+
+.completion-summary-grid {
   margin-bottom: 12px;
 }
 
