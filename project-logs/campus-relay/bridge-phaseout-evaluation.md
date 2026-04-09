@@ -7,7 +7,7 @@
 1. `GET /api/campus/courier/profile`
 2. `GET /api/campus/courier/review-status`
 
-这两个接口没有在 Step 16 做删除或鉴权收紧。本次评估目标是判断：是否已经可以进入“逐步收口计划设计阶段”。
+这两个接口没有在 Step 17 做删除或鉴权收紧。本次评估目标是判断：是否已经可以从“逐步收口计划设计阶段”推进到“Phase A 执行准备阶段”。
 
 ## repo 内已确认调用
 
@@ -61,6 +61,38 @@
    - courier workbench 稳定
    - workbench 上 profile / review-status 的 courier_token 路径稳定
 
+## Step 17 执行准备评估
+
+### repo 内证据是否已经稳定
+
+1. 是。
+2. 当前 repo 内已确认调用方仍只有：
+   - `frontend/src/views/courier/CourierWorkbench.vue`
+3. customer onboarding 前置场景已经不再依赖旧 bridge。
+4. token 获取后的最小前台承接也已落到 workbench。
+
+### repo 外依赖是否仍只能列为待确认边界
+
+1. 是。
+2. 当前无法仅凭仓库代码证明：
+   - 是否仍有仓库外历史客户端直接调用旧 bridge
+   - 是否仍有手工联调脚本或临时调用习惯依赖双 token 兼容
+3. 因此 repo 外依赖目前仍只能列为“待确认边界”，不能被当作已排除。
+
+### 是否已经具备进入 Phase A 执行准备的条件
+
+1. 还不具备完整条件。
+2. 原因不是 repo 内证据不足，而是 repo 外依赖确认和一轮稳定回归证据还缺。
+3. 更准确的判断是：
+   - 已具备 Phase A 的 repo 内准备基础
+   - 但尚不具备发起 Phase A 执行准备的全量证据
+
+### 真正开始删除前还差什么
+
+1. repo 外依赖确认结论
+2. 一轮稳定联调与回归记录
+3. 证明 workbench 在纯 `courier_token` 路径下运行稳定
+
 ## 建议的分阶段动作
 
 ### Phase A
@@ -98,8 +130,8 @@
 ## 当前阶段结论
 
 1. 当前已经可以进入“逐步收口计划设计阶段”。
-2. 当前还不具备“实际删除旧 bridge”的条件。
-3. 更准确的判断是：
-   - repo 内证据已经足够
+2. 当前还不具备进入 `Phase A` 执行准备的完整条件。
+3. 当前更准确的判断是：
+   - repo 内证据已经稳定
    - repo 外依赖确认和回归证据仍然缺失
-   - 因此下一步应该先做收口计划设计，而不是直接删 bridge
+   - 因此下一步应先补执行前证据，而不是直接启动收口动作

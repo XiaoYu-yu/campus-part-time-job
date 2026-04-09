@@ -459,3 +459,13 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 - [project-logs/campus-relay/step-16-bridge-plan-and-workbench-pickup.md](step-16-bridge-plan-and-workbench-pickup.md)
 - [project-logs/campus-relay/bridge-phaseout-evaluation.md](bridge-phaseout-evaluation.md)
+
+## Step 17 - bridge 执行前评估 / courier workbench 最小 deliver 承接
+
+- [frontend/src/api/campus-courier.js](../../frontend/src/api/campus-courier.js)
+- [frontend/src/views/courier/CourierWorkbench.vue](../../frontend/src/views/courier/CourierWorkbench.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/bridge-phaseout-evaluation.md](bridge-phaseout-evaluation.md)
+- [project-logs/campus-relay/step-17-bridge-readiness-and-workbench-deliver.md](step-17-bridge-readiness-and-workbench-deliver.md)

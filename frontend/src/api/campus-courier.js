@@ -40,3 +40,9 @@ export const pickupCourierOrder = (orderId, data) => request({
   method: 'post',
   data
 })
+
+export const deliverCourierOrder = (orderId, data) => request({
+  url: `/campus/courier/orders/${orderId}/deliver`,
+  method: 'post',
+  data
+})

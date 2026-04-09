@@ -160,6 +160,14 @@
                   <strong>{{ displayText(orderDetail.acceptedAt) }}</strong>
                 </div>
                 <div class="summary-item">
+                  <span>取餐时间</span>
+                  <strong>{{ displayText(orderDetail.pickedUpAt) }}</strong>
+                </div>
+                <div class="summary-item">
+                  <span>送达时间</span>
+                  <strong>{{ displayText(orderDetail.deliveredAt) }}</strong>
+                </div>
+                <div class="summary-item">
                   <span>创建时间</span>
                   <strong>{{ displayText(orderDetail.createdAt) }}</strong>
                 </div>
@@ -214,6 +222,40 @@
                   </div>
                 </el-form>
               </div>
+
+              <div class="deliver-section">
+                <div class="pickup-header">
+                  <div>
+                    <h4>最小送达承接</h4>
+                    <p>当前后端 `deliver` 接口会按真实状态推进：`PICKED_UP -> DELIVERING`，`DELIVERING -> AWAITING_CONFIRMATION`。本轮只补一个最小 remark 输入区。</p>
+                  </div>
+                  <el-tag :type="canDeliverOrder ? 'success' : 'info'">
+                    {{ canDeliverOrder ? deliverActionLabel : '当前订单状态暂不支持推进送达流程' }}
+                  </el-tag>
+                </div>
+
+                <el-form label-position="top" class="pickup-form">
+                  <el-form-item label="配送备注">
+                    <el-input
+                      v-model="deliverForm.courierRemark"
+                      type="textarea"
+                      :rows="3"
+                      :disabled="!canDeliverOrder || deliverSubmitting"
+                      placeholder="可选，填写配送中的补充说明"
+                    />
+                  </el-form-item>
+                  <div class="pickup-actions">
+                    <el-button
+                      type="primary"
+                      :disabled="!canDeliverOrder"
+                      :loading="deliverSubmitting"
+                      @click="deliverOrder"
+                    >
+                      {{ deliverActionLabel }}
+                    </el-button>
+                  </div>
+                </el-form>
+              </div>
             </template>
             <el-empty v-else description="当前没有可展示的订单详情" />
           </div>
@@ -237,6 +279,7 @@ import { ElMessage } from 'element-plus'
 import UserLayout from '../../layout/UserLayout.vue'
 import {
   acceptCourierOrder,
+  deliverCourierOrder,
   getCourierAvailableOrders,
   getCourierOrderDetail,
   getCourierProfile,
@@ -250,6 +293,7 @@ const acceptingOrderId = ref('')
 const detailVisible = ref(false)
 const detailLoading = ref(false)
 const pickupSubmitting = ref(false)
+const deliverSubmitting = ref(false)
 const availableOrders = ref([])
 
 const profile = reactive({
@@ -276,6 +320,8 @@ const orderDetail = reactive({
   pickupCode: '',
   customerRemark: '',
   acceptedAt: '',
+  pickedUpAt: '',
+  deliveredAt: '',
   createdAt: '',
   updatedAt: '',
   courierProfileId: ''
@@ -286,8 +332,14 @@ const pickupForm = reactive({
   courierRemark: ''
 })
 
+const deliverForm = reactive({
+  courierRemark: ''
+})
+
 const hasCourierToken = computed(() => Boolean(localStorage.getItem('courier_token')))
 const canPickupOrder = computed(() => orderDetail.status === 'ACCEPTED')
+const canDeliverOrder = computed(() => ['PICKED_UP', 'DELIVERING'].includes(orderDetail.status))
+const deliverActionLabel = computed(() => (orderDetail.status === 'PICKED_UP' ? '开始配送' : '确认送达'))
 const tokenPreview = computed(() => {
   const token = localStorage.getItem('courier_token') || ''
   if (!token) {
@@ -312,11 +364,14 @@ const resetOrderDetail = () => {
   orderDetail.pickupCode = ''
   orderDetail.customerRemark = ''
   orderDetail.acceptedAt = ''
+  orderDetail.pickedUpAt = ''
+  orderDetail.deliveredAt = ''
   orderDetail.createdAt = ''
   orderDetail.updatedAt = ''
   orderDetail.courierProfileId = ''
   pickupForm.pickupProofImageUrl = ''
   pickupForm.courierRemark = ''
+  deliverForm.courierRemark = ''
 }
 
 const hydrateStoredProfile = () => {
@@ -387,6 +442,8 @@ const openOrderDetail = async (orderId) => {
     orderDetail.pickupCode = detail.pickupCode || ''
     orderDetail.customerRemark = detail.customerRemark || ''
     orderDetail.acceptedAt = detail.acceptedAt || ''
+    orderDetail.pickedUpAt = detail.pickedUpAt || ''
+    orderDetail.deliveredAt = detail.deliveredAt || ''
     orderDetail.createdAt = detail.createdAt || ''
     orderDetail.updatedAt = detail.updatedAt || ''
     orderDetail.courierProfileId = detail.courierProfileId || ''
@@ -440,6 +497,32 @@ const pickupOrder = async () => {
     // 请求层已经处理错误提示，这里吞掉异常避免未处理 Promise。
   } finally {
     pickupSubmitting.value = false
+  }
+}
+
+const deliverOrder = async () => {
+  if (!hasCourierToken.value) {
+    ElMessage.warning('当前没有 courier token，请先返回 onboarding 页面申请')
+    return
+  }
+
+  if (!orderDetail.id) {
+    ElMessage.warning('当前没有可推进送达流程的订单详情')
+    return
+  }
+
+  deliverSubmitting.value = true
+  try {
+    await deliverCourierOrder(orderDetail.id, {
+      courierRemark: deliverForm.courierRemark
+    })
+    ElMessage.success(`${deliverActionLabel.value}成功，已刷新订单详情`)
+    await openOrderDetail(orderDetail.id)
+    await loadWorkbench()
+  } catch (error) {
+    // 请求层已经处理错误提示，这里吞掉异常避免未处理 Promise。
+  } finally {
+    deliverSubmitting.value = false
   }
 }
 
@@ -555,6 +638,12 @@ onMounted(() => {
 }
 
 .pickup-section {
+  margin-top: 18px;
+  border-top: 1px solid #ebeef5;
+  padding-top: 16px;
+}
+
+.deliver-section {
   margin-top: 18px;
   border-top: 1px solid #ebeef5;
   padding-top: 16px;
