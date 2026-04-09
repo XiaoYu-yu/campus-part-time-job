@@ -393,3 +393,14 @@
 - [project-logs/campus-relay/pending-items.md](pending-items.md)
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 - [project-logs/campus-relay/step-10-admin-courier-ops-demo-page.md](step-10-admin-courier-ops-demo-page.md)
+
+## Step 11 - admin settlement 只读运营页 / frontend 第四个只读运营入口
+
+- [frontend/src/api/campus-admin.js](../../frontend/src/api/campus-admin.js)
+- [frontend/src/router/index.js](../../frontend/src/router/index.js)
+- [frontend/src/layout/MainLayout.vue](../../frontend/src/layout/MainLayout.vue)
+- [frontend/src/views/CampusSettlementOpsView.vue](../../frontend/src/views/CampusSettlementOpsView.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-11-admin-settlement-ops-demo-page.md](step-11-admin-settlement-ops-demo-page.md)

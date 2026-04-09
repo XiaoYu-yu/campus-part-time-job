@@ -48,3 +48,20 @@ export const getCampusCourierLocationReports = (courierProfileId, params) => req
   method: 'get',
   params: normalizePageParams(params)
 })
+
+export const getCampusSettlements = (params) => request({
+  url: '/campus/admin/settlements',
+  method: 'get',
+  params: normalizePageParams(params)
+})
+
+export const getCampusSettlementReconcileSummary = (params) => request({
+  url: '/campus/admin/settlements/reconcile-summary',
+  method: 'get',
+  params
+})
+
+export const getCampusSettlementDetail = (id) => request({
+  url: `/campus/admin/settlements/${id}`,
+  method: 'get'
+})

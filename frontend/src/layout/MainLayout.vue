@@ -70,6 +70,10 @@
           <el-icon><LocationInformation /></el-icon>
           <template #title>校园配送运营</template>
         </el-menu-item>
+        <el-menu-item index="/campus/settlements">
+          <el-icon><Coin /></el-icon>
+          <template #title>校园结算运营</template>
+        </el-menu-item>
         <el-menu-item index="/shop-status">
           <el-icon><Position /></el-icon>
           <template #title>店铺营业状态</template>
@@ -155,7 +159,7 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/user'
 import { 
-  HomeFilled, User, Grid, Mug, Sugar, ShoppingCart, DataAnalysis, Position, Tickets, Document, LocationInformation,
+  HomeFilled, User, Grid, Mug, Sugar, ShoppingCart, DataAnalysis, Position, Tickets, Document, LocationInformation, Coin,
   DArrowLeft, DArrowRight, House, FullScreen, Bell, ArrowDown, Setting, SwitchButton
 } from '@element-plus/icons-vue'
 
@@ -173,6 +177,9 @@ const activeMenu = computed(() => {
   }
   if (path.startsWith('/campus/courier-ops')) {
     return '/campus/courier-ops'
+  }
+  if (path.startsWith('/campus/settlements')) {
+    return '/campus/settlements'
   }
   return path
 })
@@ -193,6 +200,7 @@ const breadcrumb = computed(() => {
     '/campus/settlement-batches': '校园结算批次',
     '/campus/after-sale-executions': '校园售后执行',
     '/campus/courier-ops': '校园配送运营',
+    '/campus/settlements': '校园结算运营',
     '/shop-status': '店铺营业状态'
   }
   return pathMap[path] || ''
