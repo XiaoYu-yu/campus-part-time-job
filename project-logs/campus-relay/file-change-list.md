@@ -512,3 +512,15 @@
 - [project-logs/campus-relay/bridge-execution-readiness-checklist.md](bridge-execution-readiness-checklist.md)
 - [project-logs/campus-relay/bridge-regression-template.md](bridge-regression-template.md)
 - [project-logs/campus-relay/step-21-real-verification-and-workbench-completed-readback.md](step-21-real-verification-and-workbench-completed-readback.md)
+
+## Step 22 - H2 可接单数据补齐 / 本地完整链路真实联调
+
+- [backend/src/main/resources/db/data-h2.sql](../../backend/src/main/resources/db/data-h2.sql)
+- [frontend/src/layout/UserLayout.vue](../../frontend/src/layout/UserLayout.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/bridge-phaseout-evaluation.md](bridge-phaseout-evaluation.md)
+- [project-logs/campus-relay/bridge-execution-readiness-checklist.md](bridge-execution-readiness-checklist.md)
+- [project-logs/campus-relay/bridge-regression-template.md](bridge-regression-template.md)
+- [project-logs/campus-relay/step-22-real-local-chain-and-h2-seed.md](step-22-real-local-chain-and-h2-seed.md)

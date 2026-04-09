@@ -118,9 +118,9 @@
 - 是否影响进入 `Phase A`：
   - 是，阻塞项
 - 记录位置：
-  - `project-logs/campus-relay/step-21-real-verification-and-workbench-completed-readback.md`
+  - `project-logs/campus-relay/step-22-real-local-chain-and-h2-seed.md`
 - 核实结果：
-  - `2026-04-09` 已在本地启动 `backend(test profile, 8080)` 与 `frontend(vite, 5173)`，使用真实 `courier_token` 打开 `/courier/workbench`，并通过 Playwright 抓取 Network。`GET /api/campus/courier/profile` 与 `GET /api/campus/courier/review-status` 的 `Authorization` 头均为 `courier_token`，未回退到 `customer_token`。
+  - `2026-04-09` 已在本地启动 `backend(test profile, 8080)` 与 `frontend(vite, 5173)`，并完成两轮真实验证。第一轮暴露出 `/courier/workbench` 仍会被 `UserLayout` 的 customer 购物车请求拉回 `/user/login`；第二轮已在修正 `frontend/src/layout/UserLayout.vue` 后重新用 Playwright 验证，纯 `courier_token` 路径可稳定停留在 `/courier/workbench`，且 `GET /api/campus/courier/profile` 与 `GET /api/campus/courier/review-status` 均优先使用 `courier_token`。
 - 负责人：
   - Codex
 - 日期：
@@ -148,24 +148,24 @@
 - 是否影响进入 `Phase A`：
   - 是，阻塞项
 - 记录位置：
-  - `project-logs/campus-relay/step-21-real-verification-and-workbench-completed-readback.md`
+  - `project-logs/campus-relay/step-22-real-local-chain-and-h2-seed.md`
 - 核实结果：
-  - `2026-04-09` 本地已真实完成部分验证：`courier/auth/token` 可返回 `courier_token`，`/courier/workbench` 可在纯 `courier_token` 路径下加载，且可按订单号读取已完成订单 `CR202604060001` 并展示 completed 态。当前 H2 种子下 `GET /api/campus/courier/orders/available?page=1&pageSize=10` 返回 `records=[]`，因此本轮没有形成完整的“接单 -> 取餐 -> deliver -> 异常上报”真实联调记录，仍待人工执行。
+  - `2026-04-09` 已在本地 `backend test profile + H2 + 8080` 与 `frontend vite + 5173` 下形成一轮真实完整链路：`customer onboarding 提交资料 -> admin 审核通过 -> customer 申请 courier token -> /courier/workbench 加载 profile/review-status/available orders -> courier 接单 -> 取餐 -> deliver(配送中) -> deliver(已送达) -> 异常上报 -> customer 确认送达 -> courier completed 结果回读`。联调样本订单为 `CR202604070002`，customer 为 `13900139001`，courier 为 `13900139000`。
 - 负责人：
   - Codex
 - 日期：
   - `2026-04-09`
 - 是否通过：
-  - [ ] 通过
+  - [x] 通过
   - [ ] 不通过
-  - [x] 待人工核实
+  - [ ] 待人工核实
 
 ## 收口前判断
 
 - 是否可以进入 `Phase A` 执行准备：
   - [ ] 可以
-  - [ ] 还不可以
+  - [x] 还不可以
 - 若还不可以，阻塞项：
-  - 
+  - repo 外旧页面、历史客户端和手工联调脚本对旧 bridge 的依赖仍待人工核实
 - 下一步建议：
-  - 
+  - 按 checklist 关闭 repo 外依赖核实项，并基于 `bridge-regression-template.md` 补齐可共享的回归留痕

@@ -29,8 +29,9 @@
 - 当前已完成：`Step 19 - bridge 执行准备模板 / courier workbench confirm 前可视化`
 - 当前已完成：`Step 20 - bridge 模板可执行化 / courier workbench completed 后最小承接`
 - 当前已完成：`Step 21 - bridge 局部真实验证 / courier workbench completed 结果回读`
+- 当前已完成：`Step 22 - H2 可接单数据补齐 / 本地完整链路真实联调`
 - 当前日期：`2026-04-09`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读、admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页，旧外卖模块仍保留可运行，旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路；admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页继续可用，旧外卖模块仍保留可运行，旧前端主链路未被替换
 
 ## 当前状态
 
@@ -797,6 +798,52 @@
    - `.\mvnw.cmd -DskipTests compile`
    - `npm run build`
 
+## Step 22 实际完成事项
+
+1. 本轮先解决了本地 `available orders = 0` 的真实联调阻塞，而不是继续堆前端展示页。
+2. 在 `backend/src/main/resources/db/data-h2.sql` 新增了一笔 H2 联调样本：
+   - 订单号：`CR202604070002`
+   - customer：`13900139001`
+   - pickup point：`2 / NORTH_GATE_LOCKER`
+   - delivery building：`梅园`
+   - 状态：`WAITING_ACCEPT`
+   - paymentStatus：`PAID`
+3. 这笔数据使 `GET /api/campus/courier/orders/available?page=1&pageSize=10` 在本地 `test profile + H2` 下真实返回至少一条可接单记录。
+4. 本轮同时修正了一个 repo 内真实阻塞：
+   - `/courier/workbench` 在只有 `courier_token` 时会被 `UserLayout` 的 customer 购物车请求拉回 `/user/login`
+   - 现在 `frontend/src/layout/UserLayout.vue` 在无 `customer_token` 时不再请求 customer 购物车接口，且 `/courier/**` 不再渲染 customer 导航
+5. 本轮真实跑通了一轮完整本地链路：
+   - customer onboarding 提交资料
+   - admin 审核通过
+   - customer 查看 token eligibility
+   - customer 申请 courier token
+   - workbench 加载 profile / review-status / available orders
+   - courier 接单
+   - courier 取餐
+   - courier deliver 到 `DELIVERING`
+   - courier deliver 到 `AWAITING_CONFIRMATION`
+   - courier 异常上报
+   - customer 确认送达
+   - courier completed 结果回读
+6. 本轮真实联调样本账号：
+   - courier candidate / onboarding：`13900139000 / 123456`
+   - customer 订单所属人：`13900139001 / 123456`
+   - admin：`13800138000 / 123456`
+7. 本轮真实样本订单：
+   - `CR202604070002`
+   - 状态推进：`WAITING_ACCEPT -> ACCEPTED -> PICKED_UP -> DELIVERING -> AWAITING_CONFIRMATION -> COMPLETED`
+8. bridge checklist 已补入真实结果：
+   - workbench 的 `profile / review-status` 已在纯 `courier_token` 路径下真实验证通过
+   - `onboarding -> token -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 已在本地真实跑通
+9. bridge regression template 已不再只是模板空位，已经补入第一轮真实留痕。
+10. 当前 bridge 仍不删除，原因已收敛到 repo 外依赖人工核实，而不是 repo 内页面或 H2 数据阻塞。
+11. 本轮没有补 customer confirm 结果回看新页面，也没有补第五个 admin 页。
+12. 不补这些页面的原因：
+   - 当前最高优先级是先把本地完整链路真实跑通，并把 bridge 评估从“可执行模板”推进到“有真实本地留痕”
+13. 执行：
+   - `.\mvnw.cmd -DskipTests compile`
+   - `npm run build`
+
 ## 当前锁定的技术事实
 
 1. 继续使用注解式 MyBatis，不改 XML
@@ -816,8 +863,8 @@
 10. 当前 bridge 收口阶段结论：
    - repo 内证据已足够支持进入“逐步收口计划设计阶段”
    - 但还不具备进入 `Phase A` 执行准备的完整条件
-   - 当前缺口已收敛为 repo 外依赖人工核实和一轮稳定联调/回归证据
-   - Step 20 已把这些缺口进一步补成可真正执行、可真正填写的 checklist 和联调模板
+   - 当前缺口已收敛为 repo 外依赖人工核实和一轮可共享的稳定联调/回归证据
+   - Step 22 已在本地 `test profile + H2` 下真实跑通一轮完整链路，repo 内阻塞已基本清掉
    - 因此当前不能直接删除旧 bridge，也不能启动执行准备
 
 ## 当前未解决的问题
@@ -832,11 +879,11 @@
 
 ## 下一轮建议
 
-- 进入 `Step 22`
+- 进入 `Step 23`
 - 推荐顺序：
-  1. 继续按 checklist 和联调模板补齐 repo 外人工核实结果与完整链路联调记录，判断 bridge 是否可以从“计划设计”进入“执行准备”
-  2. 若继续扩 courier 前端，优先补 AWAITING_CONFIRMATION 到 COMPLETED 的更完整结果回读或 customer confirm 回看
-  3. 视业务需要再决定是否补第五个 admin 最小只读页，避免稀释 onboarding 收口重点
+  1. 按 checklist 补齐 repo 外旧页面、历史客户端和手工脚本依赖的人工核实结果，判断 bridge 是否可以进入 `Phase A` 执行准备
+  2. 若继续扩 courier/customer 前端，优先补 customer confirm 结果回看或 completed 后更明确结果承接
+  3. 视业务需要再决定是否补第五个 admin 最小只读页，避免稀释 bridge 收口与主链路联调重点
   4. 视业务需要补售后执行历史、异常历史和更细粒度运营审计
 
 ## 日志索引
@@ -870,6 +917,7 @@
 - [Step 19 日志](step-19-bridge-templates-and-workbench-confirm-visual.md)
 - [Step 20 日志](step-20-bridge-template-hardening-and-workbench-completed-visual.md)
 - [Step 21 日志](step-21-real-verification-and-workbench-completed-readback.md)
+- [Step 22 日志](step-22-real-local-chain-and-h2-seed.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

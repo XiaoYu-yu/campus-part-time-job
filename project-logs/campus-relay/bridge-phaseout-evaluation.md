@@ -178,6 +178,38 @@
 3. 证明 workbench 在纯 `courier_token` 路径下运行稳定
 4. 把 Step 18 执行准备清单中的人工核实项逐项关闭
 
+## Step 22 本地完整链路真实联调进展
+
+本轮没有伪造 repo 外依赖结果，也没有把待执行项写成“已通过”。
+
+本轮新增的真实推进是两部分：
+
+1. 先解决本地联调阻塞：
+   - 在 `backend/src/main/resources/db/data-h2.sql` 新增可接单样本 `CR202604070002`
+   - 目标是让 `GET /api/campus/courier/orders/available` 在 `test profile + H2` 下真实返回至少一条记录
+2. 再完成一轮真实本地完整链路：
+   - `customer onboarding 提交资料`
+   - `admin 审核通过`
+   - `customer 申请 courier token`
+   - `courier workbench 加载 profile / review-status / available orders`
+   - `courier 接单`
+   - `courier 取餐`
+   - `courier deliver(配送中)`
+   - `courier deliver(已送达)`
+   - `courier 异常上报`
+   - `customer 确认送达`
+   - `courier completed 结果回读`
+
+本轮同时关闭了一个 repo 内前端阻塞：
+
+1. `/courier/workbench` 在只有 `courier_token` 时会被 `UserLayout` 的 customer 购物车请求拉回 `/user/login`
+2. 修正 `frontend/src/layout/UserLayout.vue` 后，纯 `courier_token` 路径可稳定停留在 workbench，且 `profile / review-status / available orders` 全部能正常回读
+
+因此，本轮后的更准确状态是：
+
+1. repo 内证据不再只是局部验证，而是已经补齐到一轮真实本地完整链路
+2. 进入 `Phase A` 执行准备的主要剩余阻塞，不再是 repo 内页面或种子数据，而是 repo 外依赖人工核实
+
 ## 下一步人工核实建议
 
 1. 逐一确认是否还有仓库外旧页面直接调用旧 bridge 接口
@@ -224,9 +256,8 @@
 1. 当前已经可以继续留在“逐步收口计划设计阶段”。
 2. 当前仍然不具备进入 `Phase A` 执行准备的完整条件。
 3. 当前更准确的判断是：
-   - repo 内证据已经稳定
+   - repo 内证据已经稳定，并且本地完整链路已真实跑通
    - repo 外依赖确认仍然只能列为待人工核实边界
-   - 缺口已经从“概念性观察”收敛成“可人工关闭的 checklist + 可填写的联调模板”
-   - 模板已经可真正执行，且 repo 内局部真实验证已补齐
-   - 但 repo 外依赖和完整链路联调结果仍待补齐
-   - 因此下一步不是继续补抽象评估，而是按模板关闭人工核实项并留存联调记录
+   - 缺口已经从“概念性观察”收敛成“可人工关闭的 checklist + 可填写的联调模板 + 一轮本地真实留痕”
+   - 但 repo 外依赖和仓库外历史调用结果仍待补齐
+   - 因此下一步不是继续补 repo 内链路，而是按 checklist 关闭 repo 外人工核实项

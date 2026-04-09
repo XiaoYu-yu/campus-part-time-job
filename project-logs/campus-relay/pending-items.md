@@ -1,8 +1,8 @@
 # 校园代送待处理事项
 
-## Step 22 最高优先级
+## Step 23 最高优先级
 
-1. 按 `bridge-execution-readiness-checklist.md` 与 `bridge-regression-template.md` 继续补齐 repo 外人工核实与完整联调留痕，判断 bridge 是否可以进入 `Phase A` 执行准备
+1. 按 `bridge-execution-readiness-checklist.md` 与 `bridge-regression-template.md` 继续补齐 repo 外人工核实与联调留痕，判断 bridge 是否可以进入 `Phase A` 执行准备
 2. 评估 courier workbench 在“接单 + 详情 + 取餐 + deliver + 异常上报 + confirm 前可视化 + completed 后只读承接 + completed 订单按号回读”之后，是否优先补 customer confirm 结果回看或 completed 后更明确结果承接
 3. 若业务展示仍有需要，再评估是否补第五个 admin 最小只读页，但不再以“补页数”为目标
 4. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
@@ -97,9 +97,9 @@
   - onboarding 新入口已能承接未拿 courier token 前的主要前端场景
 - 仍缺：
   - 仓库外或历史调用依赖确认
-  - 一轮稳定联调和回归证据
+  - 一轮可共享的稳定联调和回归证据归档
   - `bridge-execution-readiness-checklist.md` 中人工核实项关闭结果
-  - `bridge-regression-template.md` 中完整链路联调记录
+  - `bridge-regression-template.md` 中可共享的完整链路联调记录
 - 默认处理：继续保留旧 bridge，不做删除动作；当前模板已可执行，但还不具备进入 `Phase A` 执行准备的完整条件
 - repo 内已新增一轮真实局部留痕：
   - 真实 token 申请成功
@@ -107,9 +107,10 @@
   - 真实确认 `profile / review-status` 优先走 `courier_token`
   - 真实确认无 `courier_token` 时不调用 courier 业务接口
   - 真实通过订单号 `CR202604060001` 回读 completed 订单详情
+  - 真实跑通 `CR202604070002` 的本地完整链路：onboarding -> 审核 -> token -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读
 - 仍缺：
   - repo 外依赖人工核实结果
-  - 完整 `onboarding -> token -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报` 联调记录
+  - 仓库外旧页面、历史客户端和手工脚本是否仍依赖旧 bridge 的人工证明
 
 ### 2. 前端 admin 侧已完成四个最小演示页
 

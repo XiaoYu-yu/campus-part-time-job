@@ -9,7 +9,7 @@
             <span v-if="shopStatus.restNotice"> · {{ shopStatus.restNotice }}</span>
           </p>
         </div>
-        <div class="header-actions">
+        <div v-if="showCustomerNav" class="header-actions">
           <button class="header-btn" @click="goToCart">
             <i class="el-icon-shopping-cart-2"></i>
             <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
@@ -25,7 +25,7 @@
       <slot></slot>
     </main>
 
-    <footer class="footer">
+    <footer v-if="showCustomerNav" class="footer">
       <nav class="footer-nav">
         <router-link to="/user" class="nav-item" active-class="active">
           <i class="el-icon-s-home"></i>
@@ -64,8 +64,14 @@ const shopStatus = ref({
   isOpen: true,
   restNotice: ''
 })
+const hasCustomerToken = computed(() => Boolean(localStorage.getItem('customer_token')))
+const showCustomerNav = computed(() => hasCustomerToken.value && !route.path.startsWith('/courier/'))
 
 const loadCartCount = async () => {
+  if (!hasCustomerToken.value) {
+    cartCount.value = 0
+    return
+  }
   try {
     cartCount.value = await getCartCount()
   } catch (error) {
