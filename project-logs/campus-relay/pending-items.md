@@ -1,9 +1,9 @@
 # 校园代送待处理事项
 
-## Step 23 最高优先级
+## Step 24 最高优先级
 
-1. 按 `bridge-execution-readiness-checklist.md` 与 `bridge-regression-template.md` 继续补齐 repo 外人工核实与联调留痕，判断 bridge 是否可以进入 `Phase A` 执行准备
-2. 评估 courier workbench 在“接单 + 详情 + 取餐 + deliver + 异常上报 + confirm 前可视化 + completed 后只读承接 + completed 订单按号回读”之后，是否优先补 customer confirm 结果回看或 completed 后更明确结果承接
+1. 按 `bridge-execution-readiness-checklist.md` 与 `bridge-regression-template.md` 继续补齐 repo 外人工核实与共享回归留痕，判断 bridge 是否可以进入 `Phase A` 执行准备
+2. 评估 customer completed 结果回看页在真实使用中是否还需要补 confirm 结果摘要或更明确状态衔接
 3. 若业务展示仍有需要，再评估是否补第五个 admin 最小只读页，但不再以“补页数”为目标
 4. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
 5. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
@@ -13,6 +13,7 @@
 - `campus_*` 核心表、实体、DTO、VO、Mapper、Service、Controller 已齐全
 - customer 已打通：创建单、模拟支付、列表、详情、确认送达、取消、售后
 - customer 已打通 onboarding 新入口：资料提交、资料读取、审核状态、token 资格判断
+- customer 已新增 `/user/campus/order-result`，可最小回看 `AWAITING_CONFIRMATION / COMPLETED` 下的代送结果
 - frontend 已新增 `/courier/workbench`，作为 token 获取后的最小 courier 前台承接页
 - courier workbench 已补最小接单动作，token 获取后不再停在纯只读承接页
 - courier workbench 已补订单详情 drawer，接单后可直接查看当前订单详情
@@ -107,7 +108,9 @@
   - 真实确认 `profile / review-status` 优先走 `courier_token`
   - 真实确认无 `courier_token` 时不调用 courier 业务接口
   - 真实通过订单号 `CR202604060001` 回读 completed 订单详情
-  - 真实跑通 `CR202604070002` 的本地完整链路：onboarding -> 审核 -> token -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读
+- 真实跑通 `CR202604070002` 的本地完整链路：onboarding -> 审核 -> token -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读
+- Step 23 已把该链路整理为可共享回归留痕：
+  - `project-logs/campus-relay/step-23-shared-regression-evidence.md`
 - 仍缺：
   - repo 外依赖人工核实结果
   - 仓库外旧页面、历史客户端和手工脚本是否仍依赖旧 bridge 的人工证明

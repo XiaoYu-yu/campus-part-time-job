@@ -53,6 +53,7 @@
           <h3>校园代送</h3>
           <span class="section-tip">新增演示入口</span>
         </div>
+        <div class="menu-item" @click="router.push('/user/campus/order-result')">代送结果回看</div>
         <div class="menu-item" @click="router.push('/user/campus/after-sale-result')">售后结果回执</div>
         <div class="menu-item" @click="router.push('/user/campus/courier-onboarding')">配送员入驻</div>
         <div class="menu-item" @click="router.push('/courier/workbench')">配送员工作台</div>

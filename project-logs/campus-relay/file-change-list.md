@@ -524,3 +524,18 @@
 - [project-logs/campus-relay/bridge-execution-readiness-checklist.md](bridge-execution-readiness-checklist.md)
 - [project-logs/campus-relay/bridge-regression-template.md](bridge-regression-template.md)
 - [project-logs/campus-relay/step-22-real-local-chain-and-h2-seed.md](step-22-real-local-chain-and-h2-seed.md)
+
+## Step 23 - 共享回归留痕 / customer completed 结果回看
+
+- [frontend/src/api/campus-customer.js](../../frontend/src/api/campus-customer.js)
+- [frontend/src/router/index.js](../../frontend/src/router/index.js)
+- [frontend/src/views/user/Profile.vue](../../frontend/src/views/user/Profile.vue)
+- [frontend/src/views/user/CampusOrderResult.vue](../../frontend/src/views/user/CampusOrderResult.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/bridge-phaseout-evaluation.md](bridge-phaseout-evaluation.md)
+- [project-logs/campus-relay/bridge-execution-readiness-checklist.md](bridge-execution-readiness-checklist.md)
+- [project-logs/campus-relay/bridge-regression-template.md](bridge-regression-template.md)
+- [project-logs/campus-relay/step-23-shared-regression-evidence.md](step-23-shared-regression-evidence.md)
+- [project-logs/campus-relay/step-23-shared-regression-and-customer-result-readback.md](step-23-shared-regression-and-customer-result-readback.md)

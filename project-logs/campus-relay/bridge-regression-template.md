@@ -19,7 +19,7 @@
 - 浏览器 / 设备：
   - Playwright / Chromium 146 / Windows
 - 关联分支 / commit：
-  - `main @ Step22 working tree (pre-commit local verification)`
+  - `main @ Step22/Step23 local verification`
 
 ## 链路步骤
 
@@ -268,10 +268,12 @@
   - 若订单已完成，可看到最小完成态
 - 实际结果：
   - `2026-04-09` 已真实执行并通过。`CR202604070002` 在 deliver 后详情真实进入 `AWAITING_CONFIRMATION`，随后 customer2 调用 `POST /api/campus/customer/orders/CR202604070002/confirm` 成功。customer 详情与 courier 详情回读均显示 `status = COMPLETED`、`autoCompleteAt` 已写入。Playwright 再次通过 workbench 的“按订单号查看详情”入口回读 `CR202604070002`，drawer 成功展示 completed 最终摘要态。
+  - `2026-04-09` Step 23 继续通过 customer 页面 `/user/campus/order-result?orderId=CR202604070002` 回读同一订单，页面成功展示 `COMPLETED` 状态、`deliveredAt`、`autoCompleteAt` 与完成后最小结果回看文案。
 - 失败记录建议：
   - 记录状态区未展示或字段缺失的位置，并附带详情接口返回体截图
 - 截图 / 日志占位：
   - `project-logs/campus-relay/step-22-real-local-chain-and-h2-seed.md`
+  - `project-logs/campus-relay/step-23-shared-regression-evidence.md`
 - 是否为阻塞项：
   - 否
 - 是否通过：

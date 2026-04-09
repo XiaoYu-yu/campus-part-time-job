@@ -210,6 +210,26 @@
 1. repo 内证据不再只是局部验证，而是已经补齐到一轮真实本地完整链路
 2. 进入 `Phase A` 执行准备的主要剩余阻塞，不再是 repo 内页面或种子数据，而是 repo 外依赖人工核实
 
+## Step 23 共享回归留痕与 customer 结果承接进展
+
+本轮没有新增 repo 外人工核实结果，也没有把待执行项写成“已完成”。
+
+本轮新增的真实推进是两部分：
+
+1. 将 Step 22 已真实跑通的本地链路整理为共享回归证据：
+   - `project-logs/campus-relay/step-23-shared-regression-evidence.md`
+2. 增加 customer 侧最小 completed 结果回看入口：
+   - `/user/campus/order-result`
+   - 复用 `GET /api/campus/customer/orders/{id}`
+   - 用真实字段只读展示 `AWAITING_CONFIRMATION / COMPLETED` 下的结果回看
+
+因此，本轮后的更准确状态是：
+
+1. repo 内完整链路不仅已经真实跑通，而且已有团队可共享的回归留痕
+2. customer confirm 结果已经有最小前端回看入口
+3. repo 外依赖仍然只能列为待人工核实边界
+4. 当前仍不具备进入 `Phase A` 执行准备的完整条件
+
 ## 下一步人工核实建议
 
 1. 逐一确认是否还有仓库外旧页面直接调用旧 bridge 接口
@@ -258,6 +278,6 @@
 3. 当前更准确的判断是：
    - repo 内证据已经稳定，并且本地完整链路已真实跑通
    - repo 外依赖确认仍然只能列为待人工核实边界
-   - 缺口已经从“概念性观察”收敛成“可人工关闭的 checklist + 可填写的联调模板 + 一轮本地真实留痕”
+   - 缺口已经从“概念性观察”收敛成“可人工关闭的 checklist + 可填写的联调模板 + 一轮本地真实留痕 + 一份共享回归证据”
    - 但 repo 外依赖和仓库外历史调用结果仍待补齐
    - 因此下一步不是继续补 repo 内链路，而是按 checklist 关闭 repo 外人工核实项

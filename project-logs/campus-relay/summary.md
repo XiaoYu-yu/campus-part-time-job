@@ -30,8 +30,9 @@
 - 当前已完成：`Step 20 - bridge 模板可执行化 / courier workbench completed 后最小承接`
 - 当前已完成：`Step 21 - bridge 局部真实验证 / courier workbench completed 结果回读`
 - 当前已完成：`Step 22 - H2 可接单数据补齐 / 本地完整链路真实联调`
+- 当前已完成：`Step 23 - 共享回归留痕整理 / customer completed 结果回看`
 - 当前日期：`2026-04-09`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路；admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页继续可用，旧外卖模块仍保留可运行，旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页继续可用，旧外卖模块仍保留可运行，旧前端主链路未被替换
 
 ## 当前状态
 
@@ -140,6 +141,7 @@
 
 - 已新增 customer 侧最小演示入口：
   - `/user/campus/after-sale-result`
+  - `/user/campus/order-result`
   - `/user/campus/courier-onboarding`
 - 已新增 courier 侧最小承接入口：
   - `/courier/workbench`
@@ -844,6 +846,56 @@
    - `.\mvnw.cmd -DskipTests compile`
    - `npm run build`
 
+## Step 23 实际完成事项
+
+1. 本轮没有伪造新的联调结果，而是把 Step 22 已真实跑通的本地链路整理成可共享、可复用、可答辩说明的证据文档：
+   - `project-logs/campus-relay/step-23-shared-regression-evidence.md`
+2. 共享回归证据文档已真实整理以下信息：
+   - customer 账号 `13900139001 / 123456`
+   - courier onboarding / token 申请账号 `13900139000 / 123456`
+   - admin 账号 `13800138000 / 123456`
+   - 样本订单 `CR202604070002`
+   - 状态流转 `WAITING_ACCEPT -> ACCEPTED -> PICKED_UP -> DELIVERING -> AWAITING_CONFIRMATION -> COMPLETED`
+   - 对应接口、页面入口、日志位置、现有证据和待补截图项
+3. 本轮新增 customer 侧最小 completed 结果回看页：
+   - 路由 `/user/campus/order-result`
+   - 页面文件 `frontend/src/views/user/CampusOrderResult.vue`
+4. completed 结果回看页复用现有读取接口：
+   - `GET /api/campus/customer/orders/{id}`
+   - 没有新增后端写接口，没有改状态机
+5. 页面按真实字段展示：
+   - `status`
+   - `deliveredAt`
+   - `autoCompleteAt`
+   - `pickupPointName`
+   - `deliveryBuilding`
+   - `deliveryDetail`
+   - `totalAmount`
+   - `remark`
+   - `exceptionType`
+   - `exceptionRemark`
+   - `updatedAt`
+6. 页面按真实状态做最小只读提示：
+   - `AWAITING_CONFIRMATION` 时显示等待确认文案
+   - `COMPLETED` 时显示已完成结果回看文案
+7. 在 `frontend/src/views/user/Profile.vue` 新增“代送结果回看”入口，不改旧 `orders/cart/address` 主链路。
+8. 在 `frontend/src/api/campus-customer.js` 补充：
+   - `getCampusCustomerOrderDetail`
+9. 本轮继续更新 bridge 相关文档，但没有把 repo 外人工核实项写成已完成：
+   - `bridge-phaseout-evaluation.md`
+   - `bridge-execution-readiness-checklist.md`
+   - `bridge-regression-template.md`
+10. `bridge-regression-template.md` 本轮明确补入：
+    - Step 22 已跑通完整链路的共享证据引用
+    - Step 23 customer completed 结果回看页的真实验证结果
+11. 本轮没有补第五个 admin 页。
+12. 不补第五页的原因：
+    - 当前更高优先级是把 Step 22 的真实链路沉淀成可共享留痕
+    - 以及补 customer confirm 后的最小结果回看
+13. 执行：
+    - `.\mvnw.cmd -DskipTests compile`
+    - `npm run build`
+
 ## 当前锁定的技术事实
 
 1. 继续使用注解式 MyBatis，不改 XML
@@ -865,6 +917,7 @@
    - 但还不具备进入 `Phase A` 执行准备的完整条件
    - 当前缺口已收敛为 repo 外依赖人工核实和一轮可共享的稳定联调/回归证据
    - Step 22 已在本地 `test profile + H2` 下真实跑通一轮完整链路，repo 内阻塞已基本清掉
+   - Step 23 已把这轮真实链路整理成共享回归留痕，并补了 customer completed 结果回看页
    - 因此当前不能直接删除旧 bridge，也不能启动执行准备
 
 ## 当前未解决的问题
@@ -874,16 +927,16 @@
 - settlement 仍没有真实打款、撤回打款和复杂对账
 - 异常仍只保留最新一次，没有历史记录和处理结果流
 - 位置记录仍是低频明细，没有地图、轨迹聚合和频控
-- frontend 目前已接入 customer 两个演示页与 admin 四个只读运营演示页，但仍不是完整校园代送后台
+- frontend 目前已接入 customer 三个演示页与 admin 四个只读运营演示页，但仍不是完整校园代送后台
 - `CampusRuleCatalog` 仍是代码常量
 
 ## 下一轮建议
 
-- 进入 `Step 23`
+- 进入 `Step 24`
 - 推荐顺序：
   1. 按 checklist 补齐 repo 外旧页面、历史客户端和手工脚本依赖的人工核实结果，判断 bridge 是否可以进入 `Phase A` 执行准备
-  2. 若继续扩 courier/customer 前端，优先补 customer confirm 结果回看或 completed 后更明确结果承接
-  3. 视业务需要再决定是否补第五个 admin 最小只读页，避免稀释 bridge 收口与主链路联调重点
+  2. 若继续扩 customer/courier 前端，优先评估 customer confirm 结果回看增强或 completed 后更清晰的结果承接
+  3. 视业务需要再决定是否补第五个 admin 最小只读页，避免稀释 bridge 收口与共享回归留痕重点
   4. 视业务需要补售后执行历史、异常历史和更细粒度运营审计
 
 ## 日志索引
@@ -918,6 +971,8 @@
 - [Step 20 日志](step-20-bridge-template-hardening-and-workbench-completed-visual.md)
 - [Step 21 日志](step-21-real-verification-and-workbench-completed-readback.md)
 - [Step 22 日志](step-22-real-local-chain-and-h2-seed.md)
+- [Step 23 日志](step-23-shared-regression-and-customer-result-readback.md)
+- [Step 23 共享回归留痕](step-23-shared-regression-evidence.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

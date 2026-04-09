@@ -5,6 +5,11 @@ export const getCampusCustomerAfterSaleResult = (orderId) => request({
   method: 'get'
 })
 
+export const getCampusCustomerOrderDetail = (orderId) => request({
+  url: `/campus/customer/orders/${orderId}`,
+  method: 'get'
+})
+
 export const submitCourierOnboardingProfile = (data) => request({
   url: '/campus/customer/courier-onboarding/profile',
   method: 'post',
