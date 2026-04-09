@@ -76,6 +76,12 @@ const router = createRouter({
       component: () => import('../views/CampusAfterSaleExecutionList.vue')
     },
     {
+      path: '/campus/courier-ops',
+      name: 'CampusCourierOps',
+      meta: { requiresAdminAuth: true },
+      component: () => import('../views/CampusCourierOpsView.vue')
+    },
+    {
       path: '/shop-status',
       name: 'ShopStatus',
       meta: { requiresAdminAuth: true },

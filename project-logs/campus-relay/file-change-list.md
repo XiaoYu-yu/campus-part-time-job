@@ -382,3 +382,14 @@
 - [project-logs/campus-relay/pending-items.md](pending-items.md)
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 - [project-logs/campus-relay/step-09-admin-after-sale-execution-demo-page.md](step-09-admin-after-sale-execution-demo-page.md)
+
+## Step 10 - admin courier 异常/位置联动演示页 / frontend 第三个只读运营入口
+
+- [frontend/src/api/campus-admin.js](../../frontend/src/api/campus-admin.js)
+- [frontend/src/router/index.js](../../frontend/src/router/index.js)
+- [frontend/src/layout/MainLayout.vue](../../frontend/src/layout/MainLayout.vue)
+- [frontend/src/views/CampusCourierOpsView.vue](../../frontend/src/views/CampusCourierOpsView.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-10-admin-courier-ops-demo-page.md](step-10-admin-courier-ops-demo-page.md)

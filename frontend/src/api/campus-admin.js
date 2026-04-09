@@ -30,3 +30,21 @@ export const getCampusAdminAfterSaleResult = (relayOrderId) => request({
   url: `/campus/admin/orders/${encodeURIComponent(relayOrderId)}/after-sale-result`,
   method: 'get'
 })
+
+export const getCampusCouriers = (params) => request({
+  url: '/campus/admin/couriers',
+  method: 'get',
+  params: normalizePageParams(params)
+})
+
+export const getCampusCourierRecentExceptions = (courierProfileId, params) => request({
+  url: `/campus/admin/couriers/${courierProfileId}/exceptions/recent`,
+  method: 'get',
+  params
+})
+
+export const getCampusCourierLocationReports = (courierProfileId, params) => request({
+  url: `/campus/admin/couriers/${courierProfileId}/location-reports`,
+  method: 'get',
+  params: normalizePageParams(params)
+})

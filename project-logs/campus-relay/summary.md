@@ -17,8 +17,9 @@
 - 当前已完成：`Step 07 - customer onboarding 替代链路 / frontend 最小接入`
 - 当前已完成：`Step 08 - admin settlement 批次演示页 / frontend 最小只读运营接入`
 - 当前已完成：`Step 09 - admin 售后执行演示页 / frontend 第二个只读运营入口`
+- 当前已完成：`Step 10 - admin courier 异常/位置联动演示页 / frontend 第三个只读运营入口`
 - 当前日期：`2026-04-08`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、admin settlement 批次演示页和 admin 售后执行演示页，旧外卖模块仍保留可运行，旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、admin settlement 批次演示页、admin 售后执行演示页和 admin courier 异常/位置联动演示页，旧外卖模块仍保留可运行，旧前端主链路未被替换
 
 ## 当前状态
 
@@ -132,6 +133,7 @@
   - `/campus/settlement-batches`
   - `/campus/settlement-batches/:batchNo`
   - `/campus/after-sale-executions`
+  - `/campus/courier-ops`
 - 已新增 customer 侧 API 封装：
   - `frontend/src/api/campus-customer.js`
 - 已新增 admin 侧 API 封装：
@@ -255,6 +257,52 @@
    - `npm run build`
 12. 本轮继续只做只读 admin 演示页，不扩 customer 主链路，不切旧前端主入口
 
+## Step 10 实际完成事项
+
+1. 本轮优先选择了 admin courier 异常/位置联动视图，而不是单独做 after-sale result 汇总页
+2. 选择 courier 异常/位置联动视图的原因：
+   - Step 09 已经在售后执行页通过 drawer 复用了 `after-sale-result` 接口，再单独做汇总页收益较低
+   - 当前更需要补齐第三个 admin 只读运营页，扩展示范面，而不是继续堆叠售后视图
+   - `/api/campus/admin/couriers`、`/api/campus/admin/couriers/{courierProfileId}/exceptions/recent`、`/api/campus/admin/couriers/{courierProfileId}/location-reports` 已存在，足够支撑前端最小联动页
+3. 延续现有 admin 顶层平铺视图与顶层路由风格，没有另起第二套路由体系：
+   - `frontend/src/views/CampusCourierOpsView.vue`
+   - 路由 `/campus/courier-ops`
+4. 新增 admin API 封装：
+   - `getCampusCouriers`
+   - `getCampusCourierRecentExceptions`
+   - `getCampusCourierLocationReports`
+5. 页面布局采用左侧 courier 列表、右侧异常列表与位置记录两块联动区：
+   - 左侧 courier 列表调用 `GET /api/campus/admin/couriers`
+   - 右上异常区调用 `GET /api/campus/admin/couriers/{courierProfileId}/exceptions/recent`
+   - 右下位置区调用 `GET /api/campus/admin/couriers/{courierProfileId}/location-reports`
+6. 页面行为：
+   - 默认自动选中当前 courier 列表页第一条记录
+   - courier 列表为空时，右侧统一展示空态
+   - 不接地图 SDK，不画轨迹，不做实时刷新
+   - 位置记录按后端现有字段只读展示，不在前端重建定位语义
+7. courier 列表页最小筛选使用后端现有真实参数：
+   - `realName`
+   - `reviewStatus`
+   - `enabled`
+8. 位置记录列表分页继续沿用后端现有 `page/pageSize` 风格
+9. 为 admin 现有侧边栏新增“校园配送运营”入口，并补齐 breadcrumb 与菜单高亮
+10. 本轮没有改任何后端接口、VO、数据库和状态机
+11. bridge 并行策略继续固化：
+   - `customer/courier-onboarding/*` 继续承担未拿 courier token 前的稳定 onboarding 新入口
+   - 旧 `/api/campus/courier/profile` 与 `/api/campus/courier/review-status` 继续承担历史兼容入口
+12. Step 10 观察指标明确为：
+   - onboarding 页面是否稳定联调
+   - 是否仍有历史调用依赖旧 bridge
+   - customer onboarding 页面是否已覆盖未拿 courier token 前的主要场景
+13. 达到以下条件后，才进入“逐步收口 bridge”评估：
+   - onboarding 新入口完成稳定联调与演示
+   - 历史调用方完成迁移盘点
+   - customer onboarding 页面已覆盖未拿 courier token 前的主要资料提交和状态查询场景
+14. 执行：
+   - `.\mvnw.cmd -DskipTests compile`
+   - `npm run build`
+15. 本轮继续只做只读 admin 演示页，不扩 customer 主链路，不切旧前端主入口
+
 ## 当前锁定的技术事实
 
 1. 继续使用注解式 MyBatis，不改 XML
@@ -280,15 +328,15 @@
 - 异常仍只保留最新一次，没有历史记录和处理结果流
 - 位置记录仍是低频明细，没有地图、轨迹聚合和频控
 - frontend 目前只接入了 customer 两个演示页与 admin settlement 批次演示页，admin 其他运营页仍未接入
-- frontend 目前只接入了 customer 两个演示页与 admin 两个只读运营演示页，更多 admin 运营页仍未接入
+- frontend 目前只接入了 customer 两个演示页与 admin 三个只读运营演示页，更多 admin 运营页仍未接入
 - `CampusRuleCatalog` 仍是代码常量
 
 ## 下一轮建议
 
-- 进入 `Step 10`
+- 进入 `Step 11`
 - 推荐顺序：
   1. 继续观察 onboarding 新入口与旧 bridge 的并行表现，再决定是否逐步收口旧 bridge
-  2. 视业务需要补第三个 admin 最小只读运营页，优先 after-sale result 或 courier 异常/位置联动视图
+  2. 视业务需要补第四个 admin 最小只读运营页，优先 after-sale result 汇总页或更细的 settlement 只读页
   3. 视业务需要补售后执行历史、异常历史和更细粒度运营审计
   4. 视业务需要补 settlement 更完整的对账、撤回和财务复核能力
 
@@ -311,5 +359,6 @@
 - [Step 07 日志](step-07-customer-onboarding-and-frontend-entry.md)
 - [Step 08 日志](step-08-admin-settlement-batch-demo-page.md)
 - [Step 09 日志](step-09-admin-after-sale-execution-demo-page.md)
+- [Step 10 日志](step-10-admin-courier-ops-demo-page.md)
 - [待处理事项](pending-items.md)
 - [文件改动清单](file-change-list.md)
