@@ -38,6 +38,7 @@
   - 资料提交成功，资料状态重置为 `PENDING`
 - 实际结果：
   - `2026-04-09` 已真实执行。使用用户 `13900139000 / 123456` 调用 `POST /api/campus/customer/courier-onboarding/profile`，资料提交成功，返回 `profileId = 1`，并将资料状态重置为 `PENDING`、`enabled = 0`。
+  - `2026-04-09` Step 24 又通过 Playwright 抓取浏览器实际请求体，确认 `enabledWorkInOwnBuilding` 当前发送的是整数 `1`，不再是 `true/false` boolean。
 - 失败记录建议：
   - 记录请求体、响应码、返回 message 和页面提示
 - 截图 / 日志占位：
@@ -269,6 +270,10 @@
 - 实际结果：
   - `2026-04-09` 已真实执行并通过。`CR202604070002` 在 deliver 后详情真实进入 `AWAITING_CONFIRMATION`，随后 customer2 调用 `POST /api/campus/customer/orders/CR202604070002/confirm` 成功。customer 详情与 courier 详情回读均显示 `status = COMPLETED`、`autoCompleteAt` 已写入。Playwright 再次通过 workbench 的“按订单号查看详情”入口回读 `CR202604070002`，drawer 成功展示 completed 最终摘要态。
   - `2026-04-09` Step 23 继续通过 customer 页面 `/user/campus/order-result?orderId=CR202604070002` 回读同一订单，页面成功展示 `COMPLETED` 状态、`deliveredAt`、`autoCompleteAt` 与完成后最小结果回看文案。
+  - `2026-04-09` Step 24 补充验证了 customer 页面结果回看的三种真实使用反馈：
+    - 无 `orderId` 时显示“等待输入订单号”初始提示
+    - 查询 `CR404` 时显示“订单不存在”错误态
+    - 查询 `CR202604070002` 时显示 `COMPLETED` 状态与完成后结果摘要
 - 失败记录建议：
   - 记录状态区未展示或字段缺失的位置，并附带详情接口返回体截图
 - 截图 / 日志占位：

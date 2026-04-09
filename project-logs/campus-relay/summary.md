@@ -31,8 +31,9 @@
 - 当前已完成：`Step 21 - bridge 局部真实验证 / courier workbench completed 结果回读`
 - 当前已完成：`Step 22 - H2 可接单数据补齐 / 本地完整链路真实联调`
 - 当前已完成：`Step 23 - 共享回归留痕整理 / customer completed 结果回看`
+- 当前已完成：`Step 24 - repo 外核实准备增强 / customer 结果页体验增强 / onboarding 请求体类型核查`
 - 当前日期：`2026-04-09`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页继续可用，旧外卖模块仍保留可运行，旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 24 又补了 repo 外人工核实动作的可执行说明、customer 结果页的无订单号/查无订单/已完成态真实验证，以及 onboarding 提交体 `enabledWorkInOwnBuilding` 的真实类型核查；admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页继续可用，旧外卖模块仍保留可运行，旧前端主链路未被替换
 
 ## 当前状态
 
@@ -896,6 +897,43 @@
     - `.\mvnw.cmd -DskipTests compile`
     - `npm run build`
 
+## Step 24 实际完成事项
+
+1. 本轮没有新增 repo 外人工核实结果，也没有把任何待人工核实项改写成“已通过”。
+2. 继续增强了 repo 外人工核实准备：
+   - `bridge-execution-readiness-checklist.md` 对未关闭项补齐了：
+     - 去哪里核
+     - 看什么证据
+     - 成功时如何留痕
+     - 失败时如何留痕
+     - 是否阻塞 `Phase A`
+3. 继续更新了：
+   - `bridge-phaseout-evaluation.md`
+   - `bridge-regression-template.md`
+   其中明确写清了：repo 内证据稳定，但 repo 外依赖仍待人工核实。
+4. customer 结果回看页 `frontend/src/views/user/CampusOrderResult.vue` 做了最小体验增强：
+   - 查询前显示“等待输入订单号”初始提示
+   - 查询时清空旧结果，避免上一笔结果残留
+   - 无订单号时清空 URL 中旧 `orderId`
+   - 查询不存在订单时显示明确错误态
+   - `AWAITING_CONFIRMATION / COMPLETED` 状态文案与摘要分组更清楚
+5. 本轮对 customer 结果页做了真实页面级验证：
+   - 无 `orderId` 时能看到初始提示
+   - 查询 `CR404` 时显示“订单不存在”
+   - 查询 `CR202604070002` 时显示 completed 结果摘要
+6. 本轮真实核查了 `enabledWorkInOwnBuilding` 提交类型：
+   - 检查文件：
+     - `frontend/src/views/user/CourierOnboarding.vue`
+     - `frontend/src/api/campus-customer.js`
+   - 通过 Playwright 抓取 `POST /api/campus/customer/courier-onboarding/profile` 的真实请求体，确认 `enabledWorkInOwnBuilding` 当前发送的是整数 `1/0`，不会再发送 boolean。
+7. 本轮没有补第五个 admin 页。
+8. 不补第五页的原因：
+   - 当前更高优先级是继续推进 bridge 收口评估和 customer 结果页真实使用体验
+   - 继续补 admin 页会稀释 repo 外人工核实准备的优先级
+9. 执行：
+   - `.\mvnw.cmd -DskipTests compile`
+   - `npm run build`
+
 ## 当前锁定的技术事实
 
 1. 继续使用注解式 MyBatis，不改 XML
@@ -932,11 +970,11 @@
 
 ## 下一轮建议
 
-- 进入 `Step 24`
+- 进入 `Step 25`
 - 推荐顺序：
-  1. 按 checklist 补齐 repo 外旧页面、历史客户端和手工脚本依赖的人工核实结果，判断 bridge 是否可以进入 `Phase A` 执行准备
-  2. 若继续扩 customer/courier 前端，优先评估 customer confirm 结果回看增强或 completed 后更清晰的结果承接
-  3. 视业务需要再决定是否补第五个 admin 最小只读页，避免稀释 bridge 收口与共享回归留痕重点
+  1. 按 checklist 继续补 repo 外旧页面、历史客户端和手工脚本依赖的人工核实结果，判断 bridge 是否可以进入 `Phase A` 执行准备
+  2. 若继续扩 customer/courier 前端，优先评估 customer completed 结果页的状态衔接是否还需补更明确摘要
+  3. 视 bridge 评估推进情况，再决定是否补第五个 admin 最小只读页，避免稀释当前优先级
   4. 视业务需要补售后执行历史、异常历史和更细粒度运营审计
 
 ## 日志索引
@@ -973,6 +1011,7 @@
 - [Step 22 日志](step-22-real-local-chain-and-h2-seed.md)
 - [Step 23 日志](step-23-shared-regression-and-customer-result-readback.md)
 - [Step 23 共享回归留痕](step-23-shared-regression-evidence.md)
+- [Step 24 日志](step-24-bridge-readiness-and-customer-result-polish.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

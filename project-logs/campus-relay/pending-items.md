@@ -1,12 +1,13 @@
 # 校园代送待处理事项
 
-## Step 24 最高优先级
+## Step 25 最高优先级
 
-1. 按 `bridge-execution-readiness-checklist.md` 与 `bridge-regression-template.md` 继续补齐 repo 外人工核实与共享回归留痕，判断 bridge 是否可以进入 `Phase A` 执行准备
-2. 评估 customer completed 结果回看页在真实使用中是否还需要补 confirm 结果摘要或更明确状态衔接
-3. 若业务展示仍有需要，再评估是否补第五个 admin 最小只读页，但不再以“补页数”为目标
-4. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
-5. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
+1. 按 `bridge-execution-readiness-checklist.md` 继续关闭 repo 外人工核实项，判断 bridge 是否可以进入 `Phase A` 执行准备
+2. 结合 `bridge-regression-template.md` 与 `step-23-shared-regression-evidence.md` 补可共享回归留痕，尤其是 repo 外人工核实留痕
+3. 视真实使用反馈再评估 customer completed 结果回看页是否还需要补更明确摘要
+4. 若 bridge 评估推进顺利，再决定是否评估第五个 admin 最小只读页，但不再以“补页数”为目标
+5. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
+6. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
 
 ## 已完成但仍需继续扩展的部分
 
@@ -14,6 +15,7 @@
 - customer 已打通：创建单、模拟支付、列表、详情、确认送达、取消、售后
 - customer 已打通 onboarding 新入口：资料提交、资料读取、审核状态、token 资格判断
 - customer 已新增 `/user/campus/order-result`，可最小回看 `AWAITING_CONFIRMATION / COMPLETED` 下的代送结果
+- `frontend/src/views/user/CampusOrderResult.vue` 已补清晰的初始提示、错误态和 completed 结果摘要，适合真实演示与回读
 - frontend 已新增 `/courier/workbench`，作为 token 获取后的最小 courier 前台承接页
 - courier workbench 已补最小接单动作，token 获取后不再停在纯只读承接页
 - courier workbench 已补订单详情 drawer，接单后可直接查看当前订单详情
@@ -114,6 +116,7 @@
 - 仍缺：
   - repo 外依赖人工核实结果
   - 仓库外旧页面、历史客户端和手工脚本是否仍依赖旧 bridge 的人工证明
+  - Step 24 已把 repo 外核实项补成更可执行的 checklist，但本轮未新增 repo 外人工核实结果
 
 ### 2. 前端 admin 侧已完成四个最小演示页
 

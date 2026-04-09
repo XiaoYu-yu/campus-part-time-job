@@ -230,6 +230,34 @@
 3. repo 外依赖仍然只能列为待人工核实边界
 4. 当前仍不具备进入 `Phase A` 执行准备的完整条件
 
+## Step 24 repo 外人工核实准备与 customer 结果页体验进展
+
+本轮没有新增 repo 外人工核实结果，也没有把任何待核实项改写成“已通过”。
+
+本轮新增的真实推进是三部分：
+
+1. 继续把 repo 外核实项补成可执行动作
+   - `bridge-execution-readiness-checklist.md` 现在对未关闭项补齐了：
+     - 去哪里核
+     - 看什么证据
+     - 成功时如何留痕
+     - 失败时如何留痕
+     - 是否阻塞 `Phase A`
+2. 用 Playwright 对 customer 结果回看页补了真实页面级验证
+   - `/user/campus/order-result` 在无 `orderId` 时显示初始提示
+   - 查询不存在订单时显示“订单不存在”错误态
+   - 查询 `CR202604070002` 时显示 `COMPLETED` 状态与完成后结果摘要
+3. 真实核查了 onboarding 请求体类型
+   - `POST /api/campus/customer/courier-onboarding/profile` 的 `enabledWorkInOwnBuilding` 当前发送为整数 `1/0`
+   - 本轮没有再观察到 `true/false` boolean 提交
+
+因此，本轮后的更准确状态是：
+
+1. repo 内证据仍然稳定
+2. repo 外依赖仍然只能列为待人工核实边界
+3. checklist 与回归模板已经更适合真实执行
+4. 但当前仍不具备进入 `Phase A` 执行准备的完整条件
+
 ## 下一步人工核实建议
 
 1. 逐一确认是否还有仓库外旧页面直接调用旧 bridge 接口
