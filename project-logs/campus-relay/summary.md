@@ -25,8 +25,9 @@
 - 当前已完成：`Step 15 - bridge 依赖评估细化 / courier workbench 订单详情承接`
 - 当前已完成：`Step 16 - bridge 收口计划评估 / courier workbench 最小取餐承接`
 - 当前已完成：`Step 17 - bridge 执行前评估 / courier workbench 最小 deliver 承接`
+- 当前已完成：`Step 18 - bridge 执行准备清单 / courier workbench 最小异常上报承接`
 - 当前日期：`2026-04-09`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接与最小 deliver 承接、admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页，旧外卖模块仍保留可运行，旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接与最小异常上报承接、admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页，旧外卖模块仍保留可运行，旧前端主链路未被替换
 
 ## 当前状态
 
@@ -609,6 +610,50 @@
    - `.\mvnw.cmd -DskipTests compile`
    - `npm run build`
 
+## Step 18 实际完成事项
+
+1. 本轮继续更新 bridge 收口评估文档：
+   - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
+2. 本轮把 bridge 评估重点从“能否进入执行前评估”推进为“能否进入执行准备”。
+3. 文档新增了 `Step 18 执行准备清单`，把以下事项明确列为“待人工核实项”：
+   - 是否还有仓库外旧页面直接调用 `/api/campus/courier/profile`
+   - 是否还有仓库外旧页面直接调用 `/api/campus/courier/review-status`
+   - 是否仍有手工联调脚本依赖 `customer_token` 访问旧 bridge
+   - 是否已有一轮 `customer onboarding -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报` 的稳定联调记录
+   - workbench 在纯 `courier_token` 路径下是否稳定
+4. 本轮 bridge 结论已进一步具体化：
+   - repo 内证据已经稳定
+   - repo 外依赖仍只能列为待人工核实边界
+   - 当前还不具备进入 `Phase A` 执行准备的完整条件
+   - 缺口已经收敛到执行准备清单，而不是泛化观察
+5. courier workbench 已补最小异常上报承接：
+   - 继续复用 `GET /api/campus/courier/orders/{id}`
+   - 直接接入 `POST /api/campus/courier/orders/{id}/exception-report`
+6. exception-report 没有新建页面，直接放在订单详情 drawer 中。
+7. 本轮按后端真实 DTO 接入，没有臆造 proofImageUrl 等字段：
+   - `exceptionType`
+   - `exceptionRemark`
+8. 异常上报区只在后端真实允许的状态下可用：
+   - `ACCEPTED`
+   - `PICKED_UP`
+   - `DELIVERING`
+   - `AWAITING_CONFIRMATION`
+9. 异常上报成功后：
+   - 显示成功提示
+   - 刷新当前订单详情
+   - 刷新 workbench 状态
+10. 异常上报失败时：
+   - 继续展示后端原错误信息
+   - 不新增前端自定义状态机
+11. 本轮没有改 backend 接口、数据库和状态机
+12. 本轮没有补第五个 admin 页
+13. 不补第五页的原因：
+   - 当前更高优先级是把 bridge 执行准备证据写实
+   - workbench 的最小异常上报承接比继续补展示页更直接支撑 courier 主链路
+14. 执行：
+   - `.\mvnw.cmd -DskipTests compile`
+   - `npm run build`
+
 ## 当前锁定的技术事实
 
 1. 继续使用注解式 MyBatis，不改 XML
@@ -628,8 +673,8 @@
 10. 当前 bridge 收口阶段结论：
    - repo 内证据已足够支持进入“逐步收口计划设计阶段”
    - 但还不具备进入 `Phase A` 执行准备的完整条件
-   - 仍缺 repo 外依赖确认和一轮稳定回归证据
-   - 因此当前不能直接删除旧 bridge
+   - 当前缺口已收敛为 repo 外依赖人工核实和一轮稳定联调/回归证据
+   - 因此当前不能直接删除旧 bridge，也不能启动执行准备
 
 ## 当前未解决的问题
 
@@ -643,10 +688,10 @@
 
 ## 下一轮建议
 
-- 进入 `Step 18`
+- 进入 `Step 19`
 - 推荐顺序：
-  1. 先补 repo 外依赖确认或一轮联调回归证据，判断 bridge 是否可以从“执行前评估”进入“执行准备”
-  2. 若继续扩 courier 前端，优先补异常上报承接，而不是继续机械新增展示页
+  1. 先补 repo 外依赖确认或一轮联调回归证据，判断 bridge 是否可以从“执行准备清单”进入“执行准备”
+  2. 若继续扩 courier 前端，优先补送达后的后续承接或 confirm 前可视化，而不是继续机械新增展示页
   3. 视业务需要再决定是否补第五个 admin 最小只读页，避免稀释 onboarding 收口重点
   4. 视业务需要补售后执行历史、异常历史和更细粒度运营审计
 
@@ -677,6 +722,7 @@
 - [Step 15 日志](step-15-bridge-evidence-and-workbench-detail.md)
 - [Step 16 日志](step-16-bridge-plan-and-workbench-pickup.md)
 - [Step 17 日志](step-17-bridge-readiness-and-workbench-deliver.md)
+- [Step 18 日志](step-18-bridge-readiness-checklist-and-workbench-exception.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [待处理事项](pending-items.md)
 - [文件改动清单](file-change-list.md)

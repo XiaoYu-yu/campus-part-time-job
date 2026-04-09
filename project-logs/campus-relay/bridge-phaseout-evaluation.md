@@ -7,7 +7,7 @@
 1. `GET /api/campus/courier/profile`
 2. `GET /api/campus/courier/review-status`
 
-这两个接口没有在 Step 17 做删除或鉴权收紧。本次评估目标是判断：是否已经可以从“逐步收口计划设计阶段”推进到“Phase A 执行准备阶段”。
+这两个接口没有在 Step 18 做删除或鉴权收紧。本次评估目标是判断：是否已经可以从“逐步收口计划设计阶段”推进到“Phase A 执行准备阶段”。
 
 ## repo 内已确认调用
 
@@ -61,7 +61,23 @@
    - courier workbench 稳定
    - workbench 上 profile / review-status 的 courier_token 路径稳定
 
-## Step 17 执行准备评估
+## Step 18 执行准备清单
+
+以下清单在当前仓库内无法全部自动证明，必须作为“待人工核实项”保留：
+
+1. 是否还有仓库外旧页面直接调用 `GET /api/campus/courier/profile`
+2. 是否还有仓库外旧页面直接调用 `GET /api/campus/courier/review-status`
+3. 是否仍有手工联调脚本依赖 `customer_token` 访问旧 bridge
+4. 是否已有一轮 `customer onboarding -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报` 的稳定联调记录
+5. workbench 在纯 `courier_token` 路径下是否稳定
+
+当前仓库内能明确给出的状态只有：
+
+- repo 内直接调用方已收敛到 `frontend/src/views/courier/CourierWorkbench.vue`
+- customer 前置 onboarding 场景已不再依赖旧 bridge
+- 其余条目都不能仅凭 repo 代码证明为“已完成”，只能标注为“待人工核实”
+
+## Step 18 执行准备评估
 
 ### repo 内证据是否已经稳定
 
@@ -82,9 +98,10 @@
 ### 是否已经具备进入 Phase A 执行准备的条件
 
 1. 还不具备完整条件。
-2. 原因不是 repo 内证据不足，而是 repo 外依赖确认和一轮稳定回归证据还缺。
+2. 当前不是 repo 内证据不足，而是执行准备清单中的人工核实项还没有被关闭。
 3. 更准确的判断是：
    - 已具备 Phase A 的 repo 内准备基础
+   - 已把缺口收敛到“repo 外依赖确认 + 一轮稳定联调记录”
    - 但尚不具备发起 Phase A 执行准备的全量证据
 
 ### 真正开始删除前还差什么
@@ -92,6 +109,14 @@
 1. repo 外依赖确认结论
 2. 一轮稳定联调与回归记录
 3. 证明 workbench 在纯 `courier_token` 路径下运行稳定
+4. 把 Step 18 执行准备清单中的人工核实项逐项关闭
+
+## 下一步人工核实建议
+
+1. 逐一确认是否还有仓库外旧页面直接调用旧 bridge 接口
+2. 逐一确认是否还有手工联调脚本使用 `customer_token` 调旧 bridge
+3. 留存一轮 `onboarding -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报` 的联调记录
+4. 在联调记录中单独确认 workbench 的 profile / review-status 请求是否全程只走 `courier_token`
 
 ## 建议的分阶段动作
 
@@ -129,9 +154,10 @@
 
 ## 当前阶段结论
 
-1. 当前已经可以进入“逐步收口计划设计阶段”。
+1. 当前已经可以继续留在“逐步收口计划设计阶段”。
 2. 当前还不具备进入 `Phase A` 执行准备的完整条件。
 3. 当前更准确的判断是：
    - repo 内证据已经稳定
-   - repo 外依赖确认和回归证据仍然缺失
-   - 因此下一步应先补执行前证据，而不是直接启动收口动作
+   - repo 外依赖确认仍然只能列为待人工核实边界
+   - 缺口已经收敛到执行准备清单，而不是继续停留在泛化观察阶段
+   - 因此下一步应先关闭人工核实项，再决定是否进入执行准备

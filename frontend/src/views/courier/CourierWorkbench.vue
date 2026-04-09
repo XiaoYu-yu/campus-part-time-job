@@ -4,7 +4,7 @@
       <section class="card hero-card">
         <div>
           <h2>配送员工作台</h2>
-          <p>这是 courier token 获取后的最小承接页。当前只做资料状态确认和可接单预览，不扩完整 courier 主工作流。</p>
+          <p>这是 courier token 获取后的最小承接页。当前已补到接单、详情、取餐、送达和异常上报的最小闭环，但仍不扩完整 courier 主工作流。</p>
         </div>
         <div class="token-pill" :class="hasCourierToken ? 'active' : 'inactive'">
           {{ hasCourierToken ? 'courier token 已就绪' : 'courier token 缺失' }}
@@ -104,7 +104,7 @@
           <div class="section-header">
             <div>
               <h3>快捷入口</h3>
-              <p>本轮只做最小承接，不新增复杂 courier 页面群。</p>
+              <p>本轮继续保持最小承接，只保留刷新、回退和资料入口，不新增复杂 courier 页面群。</p>
             </div>
           </div>
           <div class="action-group">
@@ -256,6 +256,63 @@
                   </div>
                 </el-form>
               </div>
+
+              <div class="exception-section">
+                <div class="pickup-header">
+                  <div>
+                    <h4>最小异常上报承接</h4>
+                    <p>当前后端 `exception-report` 仅要求 `exceptionType` 和 `exceptionRemark`。本轮不扩历史表，只支持在允许阶段上报最新一次异常信息。</p>
+                  </div>
+                  <el-tag :type="canReportException ? 'warning' : 'info'">
+                    {{ canReportException ? '当前订单可上报异常' : '当前订单状态暂不支持异常上报' }}
+                  </el-tag>
+                </div>
+
+                <div class="summary-grid exception-grid">
+                  <div class="summary-item">
+                    <span>最新异常类型</span>
+                    <strong>{{ displayText(orderDetail.exceptionType) }}</strong>
+                  </div>
+                  <div class="summary-item">
+                    <span>最新异常说明</span>
+                    <strong>{{ displayText(orderDetail.exceptionRemark) }}</strong>
+                  </div>
+                  <div class="summary-item">
+                    <span>最近上报时间</span>
+                    <strong>{{ displayText(orderDetail.exceptionReportedAt) }}</strong>
+                  </div>
+                </div>
+
+                <el-form label-position="top" class="pickup-form">
+                  <el-form-item label="异常类型">
+                    <el-input
+                      v-model="exceptionForm.exceptionType"
+                      :disabled="!canReportException || exceptionSubmitting"
+                      placeholder="请输入最小异常类型，例如 联系不上 / 商家缺货 / 地址异常"
+                      clearable
+                    />
+                  </el-form-item>
+                  <el-form-item label="异常说明">
+                    <el-input
+                      v-model="exceptionForm.exceptionRemark"
+                      type="textarea"
+                      :rows="3"
+                      :disabled="!canReportException || exceptionSubmitting"
+                      placeholder="请输入异常说明，失败时会直接展示后端原错误信息"
+                    />
+                  </el-form-item>
+                  <div class="pickup-actions">
+                    <el-button
+                      type="warning"
+                      :disabled="!canReportException"
+                      :loading="exceptionSubmitting"
+                      @click="reportException"
+                    >
+                      提交异常上报
+                    </el-button>
+                  </div>
+                </el-form>
+              </div>
             </template>
             <el-empty v-else description="当前没有可展示的订单详情" />
           </div>
@@ -284,7 +341,8 @@ import {
   getCourierOrderDetail,
   getCourierProfile,
   getCourierReviewStatus,
-  pickupCourierOrder
+  pickupCourierOrder,
+  reportCourierOrderException
 } from '../../api/campus-courier'
 
 const router = useRouter()
@@ -294,6 +352,7 @@ const detailVisible = ref(false)
 const detailLoading = ref(false)
 const pickupSubmitting = ref(false)
 const deliverSubmitting = ref(false)
+const exceptionSubmitting = ref(false)
 const availableOrders = ref([])
 
 const profile = reactive({
@@ -322,6 +381,9 @@ const orderDetail = reactive({
   acceptedAt: '',
   pickedUpAt: '',
   deliveredAt: '',
+  exceptionType: '',
+  exceptionRemark: '',
+  exceptionReportedAt: '',
   createdAt: '',
   updatedAt: '',
   courierProfileId: ''
@@ -336,9 +398,15 @@ const deliverForm = reactive({
   courierRemark: ''
 })
 
+const exceptionForm = reactive({
+  exceptionType: '',
+  exceptionRemark: ''
+})
+
 const hasCourierToken = computed(() => Boolean(localStorage.getItem('courier_token')))
 const canPickupOrder = computed(() => orderDetail.status === 'ACCEPTED')
 const canDeliverOrder = computed(() => ['PICKED_UP', 'DELIVERING'].includes(orderDetail.status))
+const canReportException = computed(() => ['ACCEPTED', 'PICKED_UP', 'DELIVERING', 'AWAITING_CONFIRMATION'].includes(orderDetail.status))
 const deliverActionLabel = computed(() => (orderDetail.status === 'PICKED_UP' ? '开始配送' : '确认送达'))
 const tokenPreview = computed(() => {
   const token = localStorage.getItem('courier_token') || ''
@@ -366,12 +434,17 @@ const resetOrderDetail = () => {
   orderDetail.acceptedAt = ''
   orderDetail.pickedUpAt = ''
   orderDetail.deliveredAt = ''
+  orderDetail.exceptionType = ''
+  orderDetail.exceptionRemark = ''
+  orderDetail.exceptionReportedAt = ''
   orderDetail.createdAt = ''
   orderDetail.updatedAt = ''
   orderDetail.courierProfileId = ''
   pickupForm.pickupProofImageUrl = ''
   pickupForm.courierRemark = ''
   deliverForm.courierRemark = ''
+  exceptionForm.exceptionType = ''
+  exceptionForm.exceptionRemark = ''
 }
 
 const hydrateStoredProfile = () => {
@@ -444,6 +517,9 @@ const openOrderDetail = async (orderId) => {
     orderDetail.acceptedAt = detail.acceptedAt || ''
     orderDetail.pickedUpAt = detail.pickedUpAt || ''
     orderDetail.deliveredAt = detail.deliveredAt || ''
+    orderDetail.exceptionType = detail.exceptionType || ''
+    orderDetail.exceptionRemark = detail.exceptionRemark || ''
+    orderDetail.exceptionReportedAt = detail.exceptionReportedAt || ''
     orderDetail.createdAt = detail.createdAt || ''
     orderDetail.updatedAt = detail.updatedAt || ''
     orderDetail.courierProfileId = detail.courierProfileId || ''
@@ -523,6 +599,33 @@ const deliverOrder = async () => {
     // 请求层已经处理错误提示，这里吞掉异常避免未处理 Promise。
   } finally {
     deliverSubmitting.value = false
+  }
+}
+
+const reportException = async () => {
+  if (!hasCourierToken.value) {
+    ElMessage.warning('当前没有 courier token，请先返回 onboarding 页面申请')
+    return
+  }
+
+  if (!orderDetail.id) {
+    ElMessage.warning('当前没有可上报异常的订单详情')
+    return
+  }
+
+  exceptionSubmitting.value = true
+  try {
+    await reportCourierOrderException(orderDetail.id, {
+      exceptionType: exceptionForm.exceptionType,
+      exceptionRemark: exceptionForm.exceptionRemark
+    })
+    ElMessage.success('异常上报成功，已刷新订单详情')
+    await openOrderDetail(orderDetail.id)
+    await loadWorkbench()
+  } catch (error) {
+    // 请求层已经处理错误提示，这里吞掉异常避免未处理 Promise。
+  } finally {
+    exceptionSubmitting.value = false
   }
 }
 
@@ -647,6 +750,16 @@ onMounted(() => {
   margin-top: 18px;
   border-top: 1px solid #ebeef5;
   padding-top: 16px;
+}
+
+.exception-section {
+  margin-top: 18px;
+  border-top: 1px solid #ebeef5;
+  padding-top: 16px;
+}
+
+.exception-grid {
+  margin-bottom: 12px;
 }
 
 .pickup-header {

@@ -469,3 +469,13 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 - [project-logs/campus-relay/bridge-phaseout-evaluation.md](bridge-phaseout-evaluation.md)
 - [project-logs/campus-relay/step-17-bridge-readiness-and-workbench-deliver.md](step-17-bridge-readiness-and-workbench-deliver.md)
+
+## Step 18 - bridge 执行准备清单 / courier workbench 最小异常上报承接
+
+- [frontend/src/api/campus-courier.js](../../frontend/src/api/campus-courier.js)
+- [frontend/src/views/courier/CourierWorkbench.vue](../../frontend/src/views/courier/CourierWorkbench.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/bridge-phaseout-evaluation.md](bridge-phaseout-evaluation.md)
+- [project-logs/campus-relay/step-18-bridge-readiness-checklist-and-workbench-exception.md](step-18-bridge-readiness-checklist-and-workbench-exception.md)

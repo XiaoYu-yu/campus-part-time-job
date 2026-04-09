@@ -46,3 +46,9 @@ export const deliverCourierOrder = (orderId, data) => request({
   method: 'post',
   data
 })
+
+export const reportCourierOrderException = (orderId, data) => request({
+  url: `/campus/courier/orders/${orderId}/exception-report`,
+  method: 'post',
+  data
+})
