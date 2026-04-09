@@ -24,3 +24,8 @@ export const getCourierAvailableOrders = (params) => request({
   method: 'get',
   params: normalizePageParams(params)
 })
+
+export const acceptCourierOrder = (orderId) => request({
+  url: `/campus/courier/orders/${orderId}/accept`,
+  method: 'post'
+})

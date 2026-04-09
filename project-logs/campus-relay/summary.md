@@ -21,8 +21,9 @@
 - 当前已完成：`Step 11 - admin settlement 只读运营页 / frontend 第四个只读运营入口`
 - 当前已完成：`Step 12 - onboarding token 申请衔接 / bridge 收口条件细化 / admin 演示页小修`
 - 当前已完成：`Step 13 - courier workbench 最小承接页 / bridge 收口证据链细化`
+- 当前已完成：`Step 14 - bridge 真实调用盘点 / courier workbench 最小接单承接`
 - 当前日期：`2026-04-09`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、courier workbench 最小承接页、admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页，旧外卖模块仍保留可运行，旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、courier workbench 最小承接页与最小接单动作、admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页，旧外卖模块仍保留可运行，旧前端主链路未被替换
 
 ## 当前状态
 
@@ -441,6 +442,42 @@
    - `npm run build`
 15. 本轮没有改 backend 接口、数据库和状态机，只做前端最小承接与 bridge 证据链细化。
 
+## Step 14 实际完成事项
+
+1. 本轮优先做的是两件事：
+   - 盘点旧 bridge 的真实调用方
+   - 给 courier workbench 补一个最小可接单动作
+2. 当前仓库内对旧 bridge 的前端直接调用已经盘点完成：
+   - `frontend/src/api/campus-courier.js`
+     - `GET /api/campus/courier/profile`
+     - `GET /api/campus/courier/review-status`
+   - 这两个 API 在当前 frontend 代码里只被 `frontend/src/views/courier/CourierWorkbench.vue` 调用
+3. 当前仓库内没有发现其他前端页面继续直接调用上述两个旧 bridge 接口。
+4. `request.js` 中这两类请求的 token 附着策略已再次确认：
+   - 优先 `courier_token`
+   - 若不存在 `courier_token`，才回退到 `customer_token`
+5. 因此，本轮已能明确区分：
+   - 当前仍在仓库内依赖旧 bridge endpoint 的调用：`CourierWorkbench.vue`
+   - 但该调用运行时应走 `courier_token`
+   - customer 侧 onboarding 前置场景已由 `customer/courier-onboarding/*` 覆盖，不再依赖旧 bridge 做 customer 读取
+6. bridge 证据链本轮已更具体：
+   - 当前仓库内前端没有发现“仍必须通过 customer_token 调用 `/api/campus/courier/profile` 或 `/api/campus/courier/review-status` 才能完成”的页面场景
+   - 但是否存在仓库外历史调用、手工调用或其他客户端依赖，当前仍未完成盘点
+7. courier workbench 已从“只读承接页”升级为“最小接单承接页”：
+   - 新增 `acceptCourierOrder`
+   - workbench 可直接调用 `POST /api/campus/courier/orders/{id}/accept`
+   - 接单成功后立即刷新可接单预览列表
+   - 接单失败时继续展示后端原错误信息
+   - 无 `courier_token` 时不调用 courier 业务接口
+8. 本轮没有改 backend 接口、数据库和状态机。
+9. 本轮没有补第五个 admin 页。
+10. 不补第五页的原因：
+   - 当前更高优先级是把 courier onboarding 替代链路的“token 获取后承接动作”补成最小闭环
+   - 继续机械补展示页的收益低于把 workbench 做到“看得到也能接第一单”
+11. 执行：
+   - `.\mvnw.cmd -DskipTests compile`
+   - `npm run build`
+
 ## 当前锁定的技术事实
 
 1. 继续使用注解式 MyBatis，不改 XML
@@ -470,11 +507,11 @@
 
 ## 下一轮建议
 
-- 进入 `Step 14`
+- 进入 `Step 15`
 - 推荐顺序：
-  1. 先盘点旧 bridge 的真实调用方，判断是否已经具备进入“逐步收口评估”的证据基础
-  2. 若继续扩前端，优先补 courier workbench 后的最小可接单承接动作，而不是继续机械新增展示页
-  3. 视业务需要再决定是否补第五个 admin 最小只读页，避免稀释当前 onboarding 收口重点
+  1. 继续盘点仓库外或历史调用对旧 bridge 的依赖，判断是否已经具备进入“逐步收口评估”的最后证据
+  2. 若继续扩前端，优先补 courier workbench 后的最小后续动作或订单详情承接，而不是继续机械新增展示页
+  3. 视业务需要再决定是否补第五个 admin 最小只读页，避免稀释 onboarding 收口重点
   4. 视业务需要补售后执行历史、异常历史和更细粒度运营审计
 
 ## 日志索引
@@ -500,5 +537,6 @@
 - [Step 11 日志](step-11-admin-settlement-ops-demo-page.md)
 - [Step 12 日志](step-12-onboarding-token-bridge-and-demo-polish.md)
 - [Step 13 日志](step-13-courier-workbench-and-bridge-evidence.md)
+- [Step 14 日志](step-14-bridge-audit-and-workbench-accept.md)
 - [待处理事项](pending-items.md)
 - [文件改动清单](file-change-list.md)

@@ -62,7 +62,7 @@
           <div class="section-header">
             <div>
               <h3>可接单预览</h3>
-              <p>调用 `GET /api/campus/courier/orders/available`，这里只展示前 5 条，只做只读预览。</p>
+              <p>调用 `GET /api/campus/courier/orders/available`，本轮补一个最小接单动作，成功后直接刷新当前预览列表。</p>
             </div>
             <el-button text type="primary" :loading="loading" @click="loadWorkbench">刷新列表</el-button>
           </div>
@@ -82,6 +82,18 @@
               </template>
             </el-table-column>
             <el-table-column prop="status" label="订单状态" width="150" />
+            <el-table-column label="操作" width="120" align="center">
+              <template #default="{ row }">
+                <el-button
+                  type="primary"
+                  link
+                  :loading="acceptingOrderId === row.id"
+                  @click="acceptOrder(row.id)"
+                >
+                  接单
+                </el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </section>
 
@@ -113,8 +125,10 @@
 <script setup>
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 import UserLayout from '../../layout/UserLayout.vue'
 import {
+  acceptCourierOrder,
   getCourierAvailableOrders,
   getCourierProfile,
   getCourierReviewStatus
@@ -122,6 +136,7 @@ import {
 
 const router = useRouter()
 const loading = ref(false)
+const acceptingOrderId = ref('')
 const availableOrders = ref([])
 
 const profile = reactive({
@@ -198,6 +213,24 @@ const loadWorkbench = async () => {
     availableOrders.value = ordersRes.records || []
   } finally {
     loading.value = false
+  }
+}
+
+const acceptOrder = async (orderId) => {
+  if (!hasCourierToken.value) {
+    ElMessage.warning('当前没有 courier token，请先返回 onboarding 页面申请')
+    return
+  }
+
+  acceptingOrderId.value = orderId
+  try {
+    await acceptCourierOrder(orderId)
+    ElMessage.success('接单成功，已刷新当前可接单列表')
+    await loadWorkbench()
+  } catch (error) {
+    // 请求层已经处理错误提示，这里只吞掉异常，避免控制台出现未处理 Promise
+  } finally {
+    acceptingOrderId.value = ''
   }
 }
 

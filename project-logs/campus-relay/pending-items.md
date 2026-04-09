@@ -1,9 +1,9 @@
 # 校园代送待处理事项
 
-## Step 14 最高优先级
+## Step 15 最高优先级
 
-1. 盘点旧 `/api/campus/courier/profile` 与 `/api/campus/courier/review-status` 的真实调用方，判断是否已经接近具备逐步收口评估条件
-2. 评估 courier workbench 之后是否需要补一个“最小可接单承接动作”，避免 token 获取后仍停在纯展示状态
+1. 继续盘点仓库外或历史调用对旧 `/api/campus/courier/profile` 与 `/api/campus/courier/review-status` 的依赖，判断是否已经具备逐步收口评估的最后证据
+2. 评估 courier workbench 在最小接单动作之后，是否还需要补一个“订单详情或后续动作承接点”
 3. 若业务展示仍有需要，再评估是否补第五个 admin 最小只读页，但不再以“补页数”为目标
 4. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
 5. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
@@ -14,6 +14,7 @@
 - customer 已打通：创建单、模拟支付、列表、详情、确认送达、取消、售后
 - customer 已打通 onboarding 新入口：资料提交、资料读取、审核状态、token 资格判断
 - frontend 已新增 `/courier/workbench`，作为 token 获取后的最小 courier 前台承接页
+- courier workbench 已补最小接单动作，token 获取后不再停在纯只读承接页
 - courier 已打通：资料提交、资料详情、审核状态、token 发行、可接单列表、接单、取餐、配送推进、异常上报、位置上报
 - admin 已打通：
   - 订单分页、详情、时间线
@@ -85,9 +86,10 @@
 - 当前证据：
   - `customer/courier-onboarding/*` 已覆盖资料提交、资料读取、审核状态、资格判断、token 申请
   - `/courier/workbench` 已覆盖 token 获取后的最小前台承接页
+  - 当前仓库内前端对旧 bridge 的直接调用已盘点到只剩 `CourierWorkbench.vue`
   - onboarding 新入口已能承接未拿 courier token 前的主要前端场景
 - 仍缺：
-  - 历史调用依赖清单
+  - 仓库外或历史调用依赖清单
   - 一轮稳定联调和回归证据
 - 默认处理：继续保留旧 bridge，不做删除动作，下一轮优先判断是否满足逐步收口条件
 
