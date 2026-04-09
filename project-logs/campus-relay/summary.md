@@ -23,8 +23,9 @@
 - 当前已完成：`Step 13 - courier workbench 最小承接页 / bridge 收口证据链细化`
 - 当前已完成：`Step 14 - bridge 真实调用盘点 / courier workbench 最小接单承接`
 - 当前已完成：`Step 15 - bridge 依赖评估细化 / courier workbench 订单详情承接`
+- 当前已完成：`Step 16 - bridge 收口计划评估 / courier workbench 最小取餐承接`
 - 当前日期：`2026-04-09`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、courier workbench 最小承接页、最小接单动作与订单详情承接、admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页，旧外卖模块仍保留可运行，旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、courier workbench 最小承接页、最小接单动作、订单详情承接与最小取餐承接、admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页，旧外卖模块仍保留可运行，旧前端主链路未被替换
 
 ## 当前状态
 
@@ -530,6 +531,48 @@
    - `.\mvnw.cmd -DskipTests compile`
    - `npm run build`
 
+## Step 16 实际完成事项
+
+1. 本轮新增 bridge 收口评估文档：
+   - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
+2. 文档中已经明确拆分：
+   - repo 内已确认调用
+   - repo 内可明确排除的依赖
+   - repo 外暂未确认依赖范围
+   - 进入逐步收口计划前仍缺的证据
+   - Phase A / B / C 分阶段建议
+   - 回滚与兼容保留策略
+3. 本轮 bridge 结论已推进为：
+   - 已可以进入“逐步收口计划设计阶段”
+   - 但仍不能进入实际删除阶段
+4. courier workbench 已补最小取餐承接：
+   - 继续复用 `GET /api/campus/courier/orders/{id}`
+   - 直接接入 `POST /api/campus/courier/orders/{id}/pickup`
+5. workbench 没有新建页面，直接在订单详情 drawer 中新增最小取餐区：
+   - `pickupProofImageUrl`
+   - `courierRemark`
+   - “确认取餐”
+6. 本轮按后端真实 DTO 接入，没有臆造取餐码或新接口。
+7. 接单成功后：
+   - 仍会刷新可接单列表
+   - 自动打开订单详情 drawer
+   - 用户可以继续在 drawer 中尝试取餐
+8. 取餐成功后：
+   - 页面显示成功提示
+   - 刷新当前订单详情
+   - 刷新 workbench 状态
+9. 取餐失败时：
+   - 继续展示后端原错误信息
+   - 不新增前端自定义状态机
+10. 本轮没有改 backend 接口、数据库和状态机
+11. 本轮没有补第五个 admin 页
+12. 不补第五页的原因：
+   - 当前更高优先级是把 bridge 收口评估补成“可进入计划设计阶段”
+   - workbench 的最小取餐承接比继续补展示页更直接支撑主链路闭环
+13. 执行：
+   - `.\mvnw.cmd -DskipTests compile`
+   - `npm run build`
+
 ## 当前锁定的技术事实
 
 1. 继续使用注解式 MyBatis，不改 XML
@@ -546,6 +589,10 @@
    - 先有稳定的 onboarding 替代链路
    - 新入口完成一轮实际前端联调与演示验证
    - 或把资料提交与审核查询统一改为不依赖 `courier` token 的入口
+10. 当前 bridge 收口阶段结论：
+   - repo 内证据已足够支持进入“逐步收口计划设计阶段”
+   - 仍缺 repo 外依赖确认和一轮稳定回归证据
+   - 因此当前不能直接删除旧 bridge
 
 ## 当前未解决的问题
 
@@ -559,10 +606,10 @@
 
 ## 下一轮建议
 
-- 进入 `Step 16`
+- 进入 `Step 17`
 - 推荐顺序：
-  1. 先补 repo 外或历史调用依赖的实际核实结论，判断是否可以进入 bridge 逐步收口计划
-  2. 若继续扩前端，优先补 courier workbench 的后续动作承接，而不是继续机械新增展示页
+  1. 先补 repo 外依赖确认或一轮联调回归证据，决定 bridge 是否可以从“计划设计”进入“计划执行”
+  2. 若继续扩 courier 前端，优先补 deliver 或异常上报承接，而不是继续机械新增展示页
   3. 视业务需要再决定是否补第五个 admin 最小只读页，避免稀释 onboarding 收口重点
   4. 视业务需要补售后执行历史、异常历史和更细粒度运营审计
 
@@ -591,5 +638,7 @@
 - [Step 13 日志](step-13-courier-workbench-and-bridge-evidence.md)
 - [Step 14 日志](step-14-bridge-audit-and-workbench-accept.md)
 - [Step 15 日志](step-15-bridge-evidence-and-workbench-detail.md)
+- [Step 16 日志](step-16-bridge-plan-and-workbench-pickup.md)
+- [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [待处理事项](pending-items.md)
 - [文件改动清单](file-change-list.md)

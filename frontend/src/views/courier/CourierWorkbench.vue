@@ -172,6 +172,48 @@
                   <strong>{{ displayText(orderDetail.courierProfileId) }}</strong>
                 </div>
               </div>
+
+              <div class="pickup-section">
+                <div class="pickup-header">
+                  <div>
+                    <h4>最小取餐承接</h4>
+                    <p>当前后端要求上传受控文件路径作为取餐凭证，例如 `/api/files/...`。本轮只补一个最小输入区，不新开页面。</p>
+                  </div>
+                  <el-tag :type="canPickupOrder ? 'success' : 'info'">
+                    {{ canPickupOrder ? '当前订单可尝试取餐' : '当前订单状态暂不支持取餐' }}
+                  </el-tag>
+                </div>
+
+                <el-form label-position="top" class="pickup-form">
+                  <el-form-item label="取餐凭证路径">
+                    <el-input
+                      v-model="pickupForm.pickupProofImageUrl"
+                      :disabled="!canPickupOrder || pickupSubmitting"
+                      placeholder="请输入受控文件路径，例如 /api/files/campus/pickup-proof/xxx.jpg"
+                      clearable
+                    />
+                  </el-form-item>
+                  <el-form-item label="courier 备注">
+                    <el-input
+                      v-model="pickupForm.courierRemark"
+                      type="textarea"
+                      :rows="3"
+                      :disabled="!canPickupOrder || pickupSubmitting"
+                      placeholder="可选，填写取餐说明或补充信息"
+                    />
+                  </el-form-item>
+                  <div class="pickup-actions">
+                    <el-button
+                      type="primary"
+                      :disabled="!canPickupOrder"
+                      :loading="pickupSubmitting"
+                      @click="pickupOrder"
+                    >
+                      确认取餐
+                    </el-button>
+                  </div>
+                </el-form>
+              </div>
             </template>
             <el-empty v-else description="当前没有可展示的订单详情" />
           </div>
@@ -198,7 +240,8 @@ import {
   getCourierAvailableOrders,
   getCourierOrderDetail,
   getCourierProfile,
-  getCourierReviewStatus
+  getCourierReviewStatus,
+  pickupCourierOrder
 } from '../../api/campus-courier'
 
 const router = useRouter()
@@ -206,6 +249,7 @@ const loading = ref(false)
 const acceptingOrderId = ref('')
 const detailVisible = ref(false)
 const detailLoading = ref(false)
+const pickupSubmitting = ref(false)
 const availableOrders = ref([])
 
 const profile = reactive({
@@ -237,7 +281,13 @@ const orderDetail = reactive({
   courierProfileId: ''
 })
 
+const pickupForm = reactive({
+  pickupProofImageUrl: '',
+  courierRemark: ''
+})
+
 const hasCourierToken = computed(() => Boolean(localStorage.getItem('courier_token')))
+const canPickupOrder = computed(() => orderDetail.status === 'ACCEPTED')
 const tokenPreview = computed(() => {
   const token = localStorage.getItem('courier_token') || ''
   if (!token) {
@@ -265,6 +315,8 @@ const resetOrderDetail = () => {
   orderDetail.createdAt = ''
   orderDetail.updatedAt = ''
   orderDetail.courierProfileId = ''
+  pickupForm.pickupProofImageUrl = ''
+  pickupForm.courierRemark = ''
 }
 
 const hydrateStoredProfile = () => {
@@ -361,6 +413,33 @@ const acceptOrder = async (orderId) => {
     // 请求层已经处理错误提示，这里只吞掉异常，避免控制台出现未处理 Promise
   } finally {
     acceptingOrderId.value = ''
+  }
+}
+
+const pickupOrder = async () => {
+  if (!hasCourierToken.value) {
+    ElMessage.warning('当前没有 courier token，请先返回 onboarding 页面申请')
+    return
+  }
+
+  if (!orderDetail.id) {
+    ElMessage.warning('当前没有可取餐的订单详情')
+    return
+  }
+
+  pickupSubmitting.value = true
+  try {
+    await pickupCourierOrder(orderDetail.id, {
+      pickupProofImageUrl: pickupForm.pickupProofImageUrl,
+      courierRemark: pickupForm.courierRemark
+    })
+    ElMessage.success('取餐成功，已刷新订单详情')
+    await openOrderDetail(orderDetail.id)
+    await loadWorkbench()
+  } catch (error) {
+    // 请求层已经处理错误提示，这里吞掉异常避免未处理 Promise。
+  } finally {
+    pickupSubmitting.value = false
   }
 }
 
@@ -475,9 +554,44 @@ onMounted(() => {
   min-height: 160px;
 }
 
+.pickup-section {
+  margin-top: 18px;
+  border-top: 1px solid #ebeef5;
+  padding-top: 16px;
+}
+
+.pickup-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.pickup-header h4 {
+  margin: 0 0 6px;
+}
+
+.pickup-header p {
+  margin: 0;
+  color: #909399;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.pickup-form {
+  margin-top: 8px;
+}
+
+.pickup-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
 @media (max-width: 640px) {
   .hero-card,
-  .section-header {
+  .section-header,
+  .pickup-header {
     flex-direction: column;
     align-items: flex-start;
   }

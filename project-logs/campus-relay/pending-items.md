@@ -1,9 +1,9 @@
 # 校园代送待处理事项
 
-## Step 16 最高优先级
+## Step 17 最高优先级
 
-1. 继续核实 repo 外或历史调用对旧 `/api/campus/courier/profile` 与 `/api/campus/courier/review-status` 的依赖，判断是否可以进入 bridge 逐步收口计划
-2. 评估 courier workbench 在“接单 + 详情承接”之后，是否还需要补一个最小后续动作承接点
+1. 继续核实 repo 外或历史调用对旧 `/api/campus/courier/profile` 与 `/api/campus/courier/review-status` 的依赖，判断 bridge 是否可以从“计划设计”进入“计划执行”
+2. 评估 courier workbench 在“接单 + 详情承接 + 取餐承接”之后，是否优先补最小 deliver 或异常上报动作
 3. 若业务展示仍有需要，再评估是否补第五个 admin 最小只读页，但不再以“补页数”为目标
 4. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
 5. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
@@ -16,6 +16,7 @@
 - frontend 已新增 `/courier/workbench`，作为 token 获取后的最小 courier 前台承接页
 - courier workbench 已补最小接单动作，token 获取后不再停在纯只读承接页
 - courier workbench 已补订单详情 drawer，接单后可直接查看当前订单详情
+- courier workbench 已补最小取餐承接，可在详情 drawer 中直接调用现有 pickup 接口
 - courier 已打通：资料提交、资料详情、审核状态、token 发行、可接单列表、接单、取餐、配送推进、异常上报、位置上报
 - admin 已打通：
   - 订单分页、详情、时间线
@@ -81,18 +82,19 @@
 
 ## 当前主要阻塞点
 
-### 1. bridge 仍是过渡态，但已更接近可评估状态
+### 1. bridge 仍是过渡态，但已进入可计划评估状态
 
 - 影响：`courier/profile` 与 `courier/review-status` 继续依赖双 token 兼容
 - 当前证据：
   - `customer/courier-onboarding/*` 已覆盖资料提交、资料读取、审核状态、资格判断、token 申请
   - `/courier/workbench` 已覆盖 token 获取后的最小前台承接页
+  - `/courier/workbench` 已具备接单、详情承接和最小取餐承接
   - 当前仓库内前端对旧 bridge 的直接调用已盘点到只剩 `CourierWorkbench.vue`
   - onboarding 新入口已能承接未拿 courier token 前的主要前端场景
 - 仍缺：
   - 仓库外或历史调用依赖确认
   - 一轮稳定联调和回归证据
-- 默认处理：继续保留旧 bridge，不做删除动作；当前已具备进入“逐步收口评估”的基础，但还不具备直接删除条件
+- 默认处理：继续保留旧 bridge，不做删除动作；当前已具备进入“逐步收口计划设计阶段”的基础，但还不具备直接删除条件
 
 ### 2. 前端 admin 侧已完成四个最小演示页
 

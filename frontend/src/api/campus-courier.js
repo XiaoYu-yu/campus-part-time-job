@@ -34,3 +34,9 @@ export const getCourierOrderDetail = (orderId) => request({
   url: `/campus/courier/orders/${orderId}`,
   method: 'get'
 })
+
+export const pickupCourierOrder = (orderId, data) => request({
+  url: `/campus/courier/orders/${orderId}/pickup`,
+  method: 'post',
+  data
+})
