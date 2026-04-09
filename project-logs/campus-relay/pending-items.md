@@ -1,12 +1,12 @@
 # 校园代送待处理事项
 
-## Step 12 最高优先级
+## Step 13 最高优先级
 
-1. 继续观察 `customer/courier-onboarding/*` 新入口与旧 bridge 的并行表现，明确 bridge 的逐步收口条件
-2. 在不动旧系统的前提下，评估第五个 admin 最小只读运营页或现有 admin 演示页的细化需求
-3. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
-4. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
-5. 继续保持旧系统可运行，不在 Step 12 贸然切前端主链路
+1. 继续观察 `customer/courier-onboarding/*` 新入口与旧 bridge 的并行表现，确认是否已经具备进入逐步收口评估的证据链
+2. 评估 token 申请成功后的最小 courier 前台承接动作，避免 onboarding 停在“拿到 token 即结束”
+3. 若业务展示仍有需要，再评估是否补第五个 admin 最小只读页，但不再以“补页数”为目标
+4. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
+5. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
 
 ## 已完成但仍需继续扩展的部分
 
@@ -23,6 +23,7 @@
   - 结算分页、详情、确认结算、单笔打款记录、批量打款记录、对账摘要、批次列表、批次详情、二次核对
   - 按订单查看位置记录、按订单查看异常摘要
 - customer 已打通售后结果回执查询与 courier onboarding 前台入口
+- customer onboarding 页面已补齐 courier token 申请动作衔接
 - frontend 已打通 admin settlement 批次列表页、批次详情页、售后执行分页页、courier 异常/位置联动页和 settlement 只读运营页最小演示入口
 - settlement 已在订单 `COMPLETED` 时自动生成或更新
 
@@ -77,15 +78,21 @@
 
 ## 当前主要阻塞点
 
-### 1. bridge 仍是过渡态，但已有替代入口
+### 1. bridge 仍是过渡态，但已更接近可评估状态
 
 - 影响：`courier/profile` 与 `courier/review-status` 继续依赖双 token 兼容
-- 默认处理：继续保留，同时优先使用 `customer/courier-onboarding/*` 做未来前端 onboarding 入口，待替代链路稳定后再收口
+- 当前证据：
+  - `customer/courier-onboarding/*` 已覆盖资料提交、资料读取、审核状态、资格判断、token 申请
+  - onboarding 新入口已能承接未拿 courier token 前的主要前端场景
+- 仍缺：
+  - 历史调用依赖清单
+  - 一轮稳定联调和回归证据
+- 默认处理：继续保留旧 bridge，不做删除动作，下一轮优先判断是否满足逐步收口条件
 
-### 2. 前端 admin 侧只完成四个最小演示页
+### 2. 前端 admin 侧已完成四个最小演示页
 
 - 影响：admin 现在已有 settlement 批次演示页、售后执行演示页、courier 异常/位置联动演示页和 settlement 只读运营页，但更多运营视图仍未接入
-- 默认处理：Step 12 继续走新增页面或新增轻量脚本，不替换旧主链路
+- 默认处理：继续保持现有四页稳定，不为补页数机械新增第五页
 
 ### 3. 售后与异常仍是最小审计模型
 

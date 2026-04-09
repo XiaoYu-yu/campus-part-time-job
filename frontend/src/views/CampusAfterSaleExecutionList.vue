@@ -8,6 +8,14 @@
         </div>
       </div>
 
+      <el-alert
+        title="该页聚焦售后执行结果和人工纠正审计，详情 drawer 继续复用现有 after-sale-result 接口。"
+        type="info"
+        :closable="false"
+        show-icon
+        class="page-alert"
+      />
+
       <section class="filter-card">
         <el-form :inline="true" class="filter-form">
           <el-form-item label="执行状态">
@@ -36,7 +44,7 @@
       </section>
 
       <section class="table-card">
-        <el-table v-loading="loading" :data="records" border>
+        <el-table v-loading="loading" :data="records" border empty-text="当前筛选条件下暂无售后执行记录">
           <el-table-column prop="relayOrderId" label="订单号" min-width="200" />
           <el-table-column prop="orderStatus" label="订单状态" width="150" />
           <el-table-column prop="customerUserId" label="用户ID" width="100" align="center" />
@@ -58,7 +66,11 @@
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="afterSaleExecutionRemark" label="执行备注" min-width="220" show-overflow-tooltip />
+          <el-table-column label="执行备注" min-width="220" show-overflow-tooltip>
+            <template #default="{ row }">
+              {{ displayText(row.afterSaleExecutionRemark) }}
+            </template>
+          </el-table-column>
           <el-table-column label="人工纠正" width="110" align="center">
             <template #default="{ row }">
               <el-tag :type="Number(row.afterSaleExecutionCorrected) === 1 ? 'warning' : 'info'">
@@ -103,13 +115,13 @@
               <el-descriptions-item label="订单号">{{ detail.relayOrderId }}</el-descriptions-item>
               <el-descriptions-item label="订单状态">{{ detail.orderStatus }}</el-descriptions-item>
               <el-descriptions-item label="支付状态">{{ detail.paymentStatus || '暂无' }}</el-descriptions-item>
-              <el-descriptions-item label="用户ID">{{ detail.customerUserId ?? '暂无' }}</el-descriptions-item>
-              <el-descriptions-item label="配送员ID">{{ detail.courierProfileId ?? '暂无' }}</el-descriptions-item>
-              <el-descriptions-item label="配送员姓名">{{ detail.courierName || '暂无' }}</el-descriptions-item>
-              <el-descriptions-item label="用户姓名">{{ detail.customerName || '暂无' }}</el-descriptions-item>
-              <el-descriptions-item label="用户手机号">{{ detail.customerPhone || '暂无' }}</el-descriptions-item>
-              <el-descriptions-item label="取餐点">{{ detail.pickupPointName || '暂无' }}</el-descriptions-item>
-              <el-descriptions-item label="配送目标">{{ detail.deliveryBuilding || '暂无' }}</el-descriptions-item>
+              <el-descriptions-item label="用户ID">{{ displayText(detail.customerUserId) }}</el-descriptions-item>
+              <el-descriptions-item label="配送员ID">{{ displayText(detail.courierProfileId) }}</el-descriptions-item>
+              <el-descriptions-item label="配送员姓名">{{ displayText(detail.courierName) }}</el-descriptions-item>
+              <el-descriptions-item label="用户姓名">{{ displayText(detail.customerName) }}</el-descriptions-item>
+              <el-descriptions-item label="用户手机号">{{ displayText(detail.customerPhone) }}</el-descriptions-item>
+              <el-descriptions-item label="取餐点">{{ displayText(detail.pickupPointName) }}</el-descriptions-item>
+              <el-descriptions-item label="配送目标">{{ displayText(detail.deliveryBuilding) }}</el-descriptions-item>
               <el-descriptions-item label="总金额">{{ formatAmount(detail.totalAmount) }}</el-descriptions-item>
               <el-descriptions-item label="最近更新时间">{{ formatDateTime(detail.updatedAt) }}</el-descriptions-item>
             </el-descriptions>
@@ -118,30 +130,30 @@
               <h3>售后申请</h3>
               <el-descriptions :column="2" border>
                 <el-descriptions-item label="申请时间">{{ formatDateTime(detail.afterSaleAppliedAt) }}</el-descriptions-item>
-                <el-descriptions-item label="申请原因">{{ detail.afterSaleReason || '暂无' }}</el-descriptions-item>
+                <el-descriptions-item label="申请原因">{{ displayText(detail.afterSaleReason) }}</el-descriptions-item>
               </el-descriptions>
             </div>
 
             <div class="detail-section">
               <h3>售后处理与决策</h3>
               <el-descriptions :column="2" border>
-                <el-descriptions-item label="处理动作">{{ detail.afterSaleHandleAction || '暂无' }}</el-descriptions-item>
+                <el-descriptions-item label="处理动作">{{ displayText(detail.afterSaleHandleAction) }}</el-descriptions-item>
                 <el-descriptions-item label="处理时间">{{ formatDateTime(detail.afterSaleHandledAt) }}</el-descriptions-item>
-                <el-descriptions-item label="处理备注">{{ detail.afterSaleHandleRemark || '暂无' }}</el-descriptions-item>
-                <el-descriptions-item label="决策类型">{{ detail.afterSaleDecisionType || '暂无' }}</el-descriptions-item>
+                <el-descriptions-item label="处理备注">{{ displayText(detail.afterSaleHandleRemark) }}</el-descriptions-item>
+                <el-descriptions-item label="决策类型">{{ displayText(detail.afterSaleDecisionType) }}</el-descriptions-item>
                 <el-descriptions-item label="决策金额">{{ formatAmount(detail.afterSaleDecisionAmount) }}</el-descriptions-item>
                 <el-descriptions-item label="决策时间">{{ formatDateTime(detail.afterSaleDecidedAt) }}</el-descriptions-item>
-                <el-descriptions-item label="决策备注" :span="2">{{ detail.afterSaleDecisionRemark || '暂无' }}</el-descriptions-item>
+                <el-descriptions-item label="决策备注" :span="2">{{ displayText(detail.afterSaleDecisionRemark) }}</el-descriptions-item>
               </el-descriptions>
             </div>
 
             <div class="detail-section">
               <h3>售后执行</h3>
               <el-descriptions :column="2" border>
-                <el-descriptions-item label="执行状态">{{ detail.afterSaleExecutionStatus || '暂无' }}</el-descriptions-item>
+                <el-descriptions-item label="执行状态">{{ displayText(detail.afterSaleExecutionStatus) }}</el-descriptions-item>
                 <el-descriptions-item label="执行时间">{{ formatDateTime(detail.afterSaleExecutedAt) }}</el-descriptions-item>
-                <el-descriptions-item label="执行备注">{{ detail.afterSaleExecutionRemark || '暂无' }}</el-descriptions-item>
-                <el-descriptions-item label="执行参考号">{{ detail.afterSaleExecutionReferenceNo || '暂无' }}</el-descriptions-item>
+                <el-descriptions-item label="执行备注">{{ displayText(detail.afterSaleExecutionRemark) }}</el-descriptions-item>
+                <el-descriptions-item label="执行参考号">{{ displayText(detail.afterSaleExecutionReferenceNo) }}</el-descriptions-item>
                 <el-descriptions-item label="人工纠正">
                   {{ Number(detail.afterSaleExecutionCorrected) === 1 ? '是' : '否' }}
                 </el-descriptions-item>
@@ -182,12 +194,13 @@ const pagination = reactive({
 
 const formatAmount = (value) => {
   if (value === null || value === undefined || value === '') {
-    return '暂无'
+    return '无金额型处理'
   }
   return `¥${Number(value).toFixed(2)}`
 }
 
 const formatDateTime = (value) => value || '暂无'
+const displayText = (value) => (value === null || value === undefined || value === '' ? '暂无' : value)
 
 const executionTagType = (status) => ({
   PENDING: 'warning',

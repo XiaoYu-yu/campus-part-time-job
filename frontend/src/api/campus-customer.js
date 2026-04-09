@@ -25,3 +25,9 @@ export const getCourierTokenEligibility = () => request({
   url: '/campus/customer/courier-onboarding/token-eligibility',
   method: 'get'
 })
+
+export const applyCourierToken = (data) => request({
+  url: '/campus/courier/auth/token',
+  method: 'post',
+  data
+})

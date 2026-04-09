@@ -31,6 +31,8 @@ export const useCustomerStore = defineStore('customer', {
       this.token = ''
       localStorage.removeItem('customer_token')
       localStorage.removeItem('customer_user_info')
+      localStorage.removeItem('courier_token')
+      localStorage.removeItem('courier_profile')
     }
   }
 })

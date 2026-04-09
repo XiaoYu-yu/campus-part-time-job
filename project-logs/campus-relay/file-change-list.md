@@ -404,3 +404,17 @@
 - [project-logs/campus-relay/pending-items.md](pending-items.md)
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 - [project-logs/campus-relay/step-11-admin-settlement-ops-demo-page.md](step-11-admin-settlement-ops-demo-page.md)
+
+## Step 12 - onboarding token 申请衔接 / bridge 收口条件细化 / admin 演示页小修
+
+- [frontend/src/api/campus-customer.js](../../frontend/src/api/campus-customer.js)
+- [frontend/src/utils/request.js](../../frontend/src/utils/request.js)
+- [frontend/src/stores/customer.js](../../frontend/src/stores/customer.js)
+- [frontend/src/views/user/CourierOnboarding.vue](../../frontend/src/views/user/CourierOnboarding.vue)
+- [frontend/src/views/CampusSettlementOpsView.vue](../../frontend/src/views/CampusSettlementOpsView.vue)
+- [frontend/src/views/CampusAfterSaleExecutionList.vue](../../frontend/src/views/CampusAfterSaleExecutionList.vue)
+- [frontend/src/views/CampusCourierOpsView.vue](../../frontend/src/views/CampusCourierOpsView.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-12-onboarding-token-bridge-and-demo-polish.md](step-12-onboarding-token-bridge-and-demo-polish.md)

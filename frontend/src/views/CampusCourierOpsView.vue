@@ -8,6 +8,14 @@
         </div>
       </div>
 
+      <el-alert
+        title="该页聚焦配送员维度的异常与低频位置联动查看，只读展示后端当前最小运营模型。"
+        type="info"
+        :closable="false"
+        show-icon
+        class="page-alert"
+      />
+
       <div class="ops-layout">
         <section class="panel-card courier-panel">
           <div class="panel-header">
@@ -49,6 +57,7 @@
             :data="couriers"
             border
             highlight-current-row
+            empty-text="当前筛选条件下暂无配送员数据"
             @current-change="handleCourierSelect"
           >
             <el-table-column prop="id" label="ID" width="88" align="center" />
@@ -97,11 +106,11 @@
                 </div>
                 <div class="summary-item">
                   <span>姓名</span>
-                  <strong>{{ selectedCourier.realName || '暂无' }}</strong>
+                  <strong>{{ displayText(selectedCourier.realName) }}</strong>
                 </div>
                 <div class="summary-item">
                   <span>手机号</span>
-                  <strong>{{ selectedCourier.phone || '暂无' }}</strong>
+                  <strong>{{ displayText(selectedCourier.phone) }}</strong>
                 </div>
                 <div class="summary-item">
                   <span>审核状态</span>
@@ -125,11 +134,23 @@
             </div>
 
             <template v-if="selectedCourier">
-              <el-table v-loading="exceptionLoading" :data="exceptions" border>
+              <el-table v-loading="exceptionLoading" :data="exceptions" border empty-text="当前配送员暂无异常记录">
                 <el-table-column prop="relayOrderId" label="订单号" min-width="180" />
-                <el-table-column prop="exceptionType" label="异常类型" width="140" />
-                <el-table-column prop="exceptionRemark" label="异常备注" min-width="220" show-overflow-tooltip />
-                <el-table-column prop="orderStatus" label="订单状态" width="140" />
+                <el-table-column label="异常类型" width="140">
+                  <template #default="{ row }">
+                    {{ displayText(row.exceptionType) }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="异常备注" min-width="220" show-overflow-tooltip>
+                  <template #default="{ row }">
+                    {{ displayText(row.exceptionRemark) }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="订单状态" width="140">
+                  <template #default="{ row }">
+                    {{ displayText(row.orderStatus) }}
+                  </template>
+                </el-table-column>
                 <el-table-column label="上报时间" min-width="170">
                   <template #default="{ row }">
                     {{ formatDateTime(row.exceptionReportedAt) }}
@@ -150,7 +171,7 @@
             </div>
 
             <template v-if="selectedCourier">
-              <el-table v-loading="locationLoading" :data="locationReports" border>
+              <el-table v-loading="locationLoading" :data="locationReports" border empty-text="当前配送员暂无位置记录">
                 <el-table-column prop="relayOrderId" label="订单号" min-width="180" />
                 <el-table-column label="上报时间" min-width="170">
                   <template #default="{ row }">
@@ -159,8 +180,16 @@
                 </el-table-column>
                 <el-table-column prop="latitude" label="纬度" width="120" />
                 <el-table-column prop="longitude" label="经度" width="120" />
-                <el-table-column prop="source" label="来源" width="120" />
-                <el-table-column prop="note" label="备注" min-width="180" show-overflow-tooltip />
+                <el-table-column label="来源" width="120">
+                  <template #default="{ row }">
+                    {{ displayText(row.source) }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="备注" min-width="180" show-overflow-tooltip>
+                  <template #default="{ row }">
+                    {{ displayText(row.note) }}
+                  </template>
+                </el-table-column>
               </el-table>
               <el-empty v-if="!locationLoading && locationReports.length === 0" description="当前配送员暂无位置记录" />
               <div class="pagination-wrapper">
@@ -220,6 +249,7 @@ const locationPagination = reactive({
 })
 
 const formatDateTime = (value) => value || '暂无'
+const displayText = (value) => (value === null || value === undefined || value === '' ? '暂无' : value)
 
 const reviewTagType = (status) => ({
   PENDING: 'warning',

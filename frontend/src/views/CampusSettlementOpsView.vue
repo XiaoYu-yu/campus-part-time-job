@@ -8,6 +8,14 @@
         </div>
       </div>
 
+      <el-alert
+        title="当前页面适合演示结算摘要、单笔记录和详情联动，不包含确认结算、打款或核对写操作。"
+        type="info"
+        :closable="false"
+        show-icon
+        class="page-alert"
+      />
+
       <section class="summary-card" v-loading="summaryLoading">
         <div class="panel-header">
           <div>
@@ -83,7 +91,7 @@
           </div>
         </div>
 
-        <el-table v-loading="listLoading" :data="records" border>
+        <el-table v-loading="listLoading" :data="records" border empty-text="当前筛选条件下暂无结算记录">
           <el-table-column prop="id" label="结算ID" width="96" align="center" />
           <el-table-column prop="relayOrderId" label="订单号" min-width="200" />
           <el-table-column prop="courierProfileId" label="配送员ID" width="110" align="center" />
@@ -153,20 +161,20 @@
             <el-descriptions :column="2" border>
               <el-descriptions-item label="结算ID">{{ detail.id }}</el-descriptions-item>
               <el-descriptions-item label="订单号">{{ detail.relayOrderId }}</el-descriptions-item>
-              <el-descriptions-item label="配送员ID">{{ detail.courierProfileId ?? '暂无' }}</el-descriptions-item>
+              <el-descriptions-item label="配送员ID">{{ displayText(detail.courierProfileId) }}</el-descriptions-item>
               <el-descriptions-item label="结算状态">{{ detail.settlementStatus || 'PENDING' }}</el-descriptions-item>
               <el-descriptions-item label="总金额">{{ formatAmount(detail.grossAmount) }}</el-descriptions-item>
               <el-descriptions-item label="平台佣金">{{ formatAmount(detail.platformCommission) }}</el-descriptions-item>
               <el-descriptions-item label="待结算金额">{{ formatAmount(detail.pendingAmount) }}</el-descriptions-item>
               <el-descriptions-item label="打款状态">{{ detail.payoutStatus || 'UNPAID' }}</el-descriptions-item>
-              <el-descriptions-item label="结算备注" :span="2">{{ detail.remark || '暂无' }}</el-descriptions-item>
-              <el-descriptions-item label="打款备注" :span="2">{{ detail.payoutRemark || '暂无' }}</el-descriptions-item>
-              <el-descriptions-item label="打款参考号">{{ detail.payoutReferenceNo || '暂无' }}</el-descriptions-item>
+              <el-descriptions-item label="结算备注" :span="2">{{ displayText(detail.remark) }}</el-descriptions-item>
+              <el-descriptions-item label="打款备注" :span="2">{{ displayText(detail.payoutRemark) }}</el-descriptions-item>
+              <el-descriptions-item label="打款参考号">{{ displayText(detail.payoutReferenceNo) }}</el-descriptions-item>
               <el-descriptions-item label="是否已核对">
                 {{ Number(detail.payoutVerified) === 1 ? '是' : '否' }}
               </el-descriptions-item>
               <el-descriptions-item label="核对时间">{{ formatDateTime(detail.payoutVerifiedAt) }}</el-descriptions-item>
-              <el-descriptions-item label="核对备注" :span="2">{{ detail.payoutVerifyRemark || '暂无' }}</el-descriptions-item>
+              <el-descriptions-item label="核对备注" :span="2">{{ displayText(detail.payoutVerifyRemark) }}</el-descriptions-item>
               <el-descriptions-item label="结算时间">{{ formatDateTime(detail.settledAt) }}</el-descriptions-item>
               <el-descriptions-item label="打款记录时间">{{ formatDateTime(detail.payoutRecordedAt) }}</el-descriptions-item>
               <el-descriptions-item label="创建时间">{{ formatDateTime(detail.createdAt) }}</el-descriptions-item>
@@ -211,6 +219,7 @@ const pagination = reactive({
 
 const formatAmount = (value) => `¥${Number(value || 0).toFixed(2)}`
 const formatDateTime = (value) => value || '暂无'
+const displayText = (value) => (value === null || value === undefined || value === '' ? '暂无' : value)
 
 const settlementTagType = (status) => ({
   PENDING: 'warning',

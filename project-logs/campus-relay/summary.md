@@ -19,8 +19,9 @@
 - 当前已完成：`Step 09 - admin 售后执行演示页 / frontend 第二个只读运营入口`
 - 当前已完成：`Step 10 - admin courier 异常/位置联动演示页 / frontend 第三个只读运营入口`
 - 当前已完成：`Step 11 - admin settlement 只读运营页 / frontend 第四个只读运营入口`
-- 当前日期：`2026-04-08`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页，旧外卖模块仍保留可运行，旧前端主链路未被替换
+- 当前已完成：`Step 12 - onboarding token 申请衔接 / bridge 收口条件细化 / admin 演示页小修`
+- 当前日期：`2026-04-09`
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页，旧外卖模块仍保留可运行，旧前端主链路未被替换
 
 ## 当前状态
 
@@ -352,6 +353,46 @@
    - `npm run build`
 14. 本轮继续只做只读 admin 演示页，不扩 customer 主链路，不切旧前端主入口
 
+## Step 12 实际完成事项
+
+1. 本轮优先做“收口型增强”，没有机械新增第五个 admin 页。
+2. customer onboarding 页面已从“只能看审核状态与 token 资格”升级为“可直接申请 courier token”：
+   - 继续复用 `GET /api/campus/customer/courier-onboarding/token-eligibility`
+   - 直接接入现有 `POST /api/campus/courier/auth/token`
+3. onboarding 页面行为已补齐：
+   - `eligible = true` 时展示“申请 courier token”按钮
+   - 用户输入当前登录账号密码后即可申请
+   - 成功后显示申请成功提示、返回 token、返回的 `courierProfile` 摘要
+   - 失败时继续直接展示后端返回错误信息
+4. 本轮没有新建后端认证接口，也没有改状态机；前端沿用现有 `phone + password` 调用方式。
+5. 为避免 token 只展示不生效，本轮最小补齐了 courier token 的前端会话能力：
+   - 申请成功后写入 `localStorage.courier_token`
+   - 同时写入 `localStorage.courier_profile`
+   - `request.js` 已开始为 `/api/campus/courier/orders/**` 与 `/api/campus/courier/location-reports` 附加 `courier_token`
+   - customer logout 或 courier 相关 401 时会清理本地 courier token
+6. 本轮没有改 `/api/campus/courier/profile`、`/api/campus/courier/review-status`、`/api/campus/courier/auth/token`，bridge 仍完整保留。
+7. 本轮对现有 admin 演示页做了最小细化，而不是新加第五页：
+   - `CampusSettlementOpsView.vue`
+   - `CampusAfterSaleExecutionList.vue`
+   - `CampusCourierOpsView.vue`
+8. 细化点固定为：
+   - 顶部说明 alert 更明确
+   - 空态文案更清晰
+   - “暂无”字段展示统一
+   - 非金额型处理显示为“无金额型处理”
+9. 本轮不补第五个 admin 页的原因：
+   - 当前更高优先级是把 onboarding 新入口真正闭环到 token 申请
+   - 现有四个 admin 演示页已经足够支撑本阶段演示
+   - 继续机械加页的收益低于先把 onboarding 与 bridge 观察项做实
+10. Step 12 后 bridge 观察项比之前更具体：
+   - 新 onboarding 页面已覆盖资料提交、资料读取、审核状态查询、资格判断、token 申请五个前置场景
+   - 旧 bridge 继续覆盖历史调用方和双 token 兼容读取
+   - 进入“逐步收口 bridge”前，仍需补足历史调用盘点与一轮稳定联调证据
+11. 执行：
+   - `.\mvnw.cmd -DskipTests compile`
+   - `npm run build`
+12. 本轮没有改 backend 接口、数据库和测试集，只做前端接入与演示细化。
+
 ## 当前锁定的技术事实
 
 1. 继续使用注解式 MyBatis，不改 XML
@@ -376,18 +417,17 @@
 - settlement 仍没有真实打款、撤回打款和复杂对账
 - 异常仍只保留最新一次，没有历史记录和处理结果流
 - 位置记录仍是低频明细，没有地图、轨迹聚合和频控
-- frontend 目前只接入了 customer 两个演示页与 admin settlement 批次演示页，admin 其他运营页仍未接入
-- frontend 目前只接入了 customer 两个演示页与 admin 四个只读运营演示页，更多 admin 运营页仍未接入
+- frontend 目前已接入 customer 两个演示页与 admin 四个只读运营演示页，但仍不是完整校园代送后台
 - `CampusRuleCatalog` 仍是代码常量
 
 ## 下一轮建议
 
-- 进入 `Step 12`
+- 进入 `Step 13`
 - 推荐顺序：
-  1. 继续观察 onboarding 新入口与旧 bridge 的并行表现，再决定是否逐步收口旧 bridge
-  2. 视业务需要补第五个 admin 最小只读运营页，优先 after-sale result 汇总页或更细的 batch / payout 只读页
-  3. 视业务需要补售后执行历史、异常历史和更细粒度运营审计
-  4. 视业务需要补 settlement 更完整的对账、撤回和财务复核能力
+  1. 继续观察 onboarding 新入口 + token 申请动作与旧 bridge 的并行表现，再决定是否进入逐步收口评估
+  2. 视业务需要再决定是否补第五个 admin 最小只读页，避免为了数量继续摊薄重点
+  3. 若要继续扩前端，优先补 courier token 获取后的最小后续承接页，而不是继续堆更多静态展示页
+  4. 视业务需要补售后执行历史、异常历史和更细粒度运营审计
 
 ## 日志索引
 
@@ -410,5 +450,6 @@
 - [Step 09 日志](step-09-admin-after-sale-execution-demo-page.md)
 - [Step 10 日志](step-10-admin-courier-ops-demo-page.md)
 - [Step 11 日志](step-11-admin-settlement-ops-demo-page.md)
+- [Step 12 日志](step-12-onboarding-token-bridge-and-demo-polish.md)
 - [待处理事项](pending-items.md)
 - [文件改动清单](file-change-list.md)
