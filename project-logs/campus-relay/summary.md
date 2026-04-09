@@ -26,8 +26,9 @@
 - 当前已完成：`Step 16 - bridge 收口计划评估 / courier workbench 最小取餐承接`
 - 当前已完成：`Step 17 - bridge 执行前评估 / courier workbench 最小 deliver 承接`
 - 当前已完成：`Step 18 - bridge 执行准备清单 / courier workbench 最小异常上报承接`
+- 当前已完成：`Step 19 - bridge 执行准备模板 / courier workbench confirm 前可视化`
 - 当前日期：`2026-04-09`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接与最小异常上报承接、admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页，旧外卖模块仍保留可运行，旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接与 confirm 前可视化、admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页，旧外卖模块仍保留可运行，旧前端主链路未被替换
 
 ## 当前状态
 
@@ -654,6 +655,60 @@
    - `.\mvnw.cmd -DskipTests compile`
    - `npm run build`
 
+## Step 19 实际完成事项
+
+1. 本轮继续更新 bridge 收口评估文档：
+   - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
+2. 本轮没有伪造 repo 外依赖结果，而是把执行准备缺口继续改造成可人工关闭的模板文档。
+3. 新增 bridge 人工核实 checklist：
+   - `project-logs/campus-relay/bridge-execution-readiness-checklist.md`
+4. checklist 中为每个待人工核实项提供了统一结构：
+   - 核实方法
+   - 记录位置
+   - 核实结果
+   - 负责人
+   - 日期
+   - 是否通过
+5. 新增 bridge 联调/回归模板：
+   - `project-logs/campus-relay/bridge-regression-template.md`
+6. 回归模板已按完整链路拆分：
+   - customer onboarding 提交资料
+   - customer 查看审核状态
+   - customer 申请 courier token
+   - courier workbench 加载 profile/review-status
+   - courier 接单
+   - courier 取餐
+   - courier deliver
+   - courier 异常上报
+   - customer 侧确认前状态可视化或结果查看
+7. courier workbench 本轮没有新增页面，继续复用订单详情 drawer。
+8. 本轮新增了“送达后 / confirm 前”状态区：
+   - 当订单状态为 `AWAITING_CONFIRMATION` 时，显示“已送达，等待用户确认”
+   - 当订单状态为 `COMPLETED` 时，显示“订单已完成”的最小只读状态
+9. confirm 前状态区继续只读复用现有详情字段：
+   - `status`
+   - `deliveredAt`
+   - `exceptionType`
+   - `exceptionRemark`
+   - `acceptedAt`
+   - `pickedUpAt`
+   - `deliveredAt`
+   - `autoCompleteAt`
+   - `updatedAt`
+10. deliver 成功后刷新详情时，如果订单进入 `AWAITING_CONFIRMATION`，可直接在同一 drawer 中看到等待确认区，不需要新页面。
+11. 本轮再次确认 `request.js` 的 courier token 附着范围已足够覆盖：
+   - `/api/campus/courier/orders/**`
+   - `/api/campus/courier/location-reports`
+   - `/api/campus/courier/profile`
+   - `/api/campus/courier/review-status`
+12. 本轮没有补第五个 admin 页。
+13. 不补第五页的原因：
+   - 当前更高优先级是把 bridge 执行准备缺口变成可落地模板
+   - confirm 前可视化比继续补一个展示页更直接支撑 courier 主链路闭环
+14. 执行：
+   - `.\mvnw.cmd -DskipTests compile`
+   - `npm run build`
+
 ## 当前锁定的技术事实
 
 1. 继续使用注解式 MyBatis，不改 XML
@@ -674,6 +729,7 @@
    - repo 内证据已足够支持进入“逐步收口计划设计阶段”
    - 但还不具备进入 `Phase A` 执行准备的完整条件
    - 当前缺口已收敛为 repo 外依赖人工核实和一轮稳定联调/回归证据
+   - Step 19 已把这些缺口改写成可执行 checklist 和联调模板
    - 因此当前不能直接删除旧 bridge，也不能启动执行准备
 
 ## 当前未解决的问题
@@ -688,10 +744,10 @@
 
 ## 下一轮建议
 
-- 进入 `Step 19`
+- 进入 `Step 20`
 - 推荐顺序：
-  1. 先补 repo 外依赖确认或一轮联调回归证据，判断 bridge 是否可以从“执行准备清单”进入“执行准备”
-  2. 若继续扩 courier 前端，优先补送达后的后续承接或 confirm 前可视化，而不是继续机械新增展示页
+  1. 先按 checklist 和联调模板补 repo 外依赖确认与一轮真实回归记录，判断 bridge 是否可以从“执行准备清单”进入“执行准备”
+  2. 若继续扩 courier 前端，优先补 confirm 后或 completed 后的最小承接，而不是继续机械新增展示页
   3. 视业务需要再决定是否补第五个 admin 最小只读页，避免稀释 onboarding 收口重点
   4. 视业务需要补售后执行历史、异常历史和更细粒度运营审计
 
@@ -723,6 +779,9 @@
 - [Step 16 日志](step-16-bridge-plan-and-workbench-pickup.md)
 - [Step 17 日志](step-17-bridge-readiness-and-workbench-deliver.md)
 - [Step 18 日志](step-18-bridge-readiness-checklist-and-workbench-exception.md)
+- [Step 19 日志](step-19-bridge-templates-and-workbench-confirm-visual.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
+- [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
+- [bridge 联调/回归模板](bridge-regression-template.md)
 - [待处理事项](pending-items.md)
 - [文件改动清单](file-change-list.md)

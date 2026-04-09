@@ -168,6 +168,10 @@
                   <strong>{{ displayText(orderDetail.deliveredAt) }}</strong>
                 </div>
                 <div class="summary-item">
+                  <span>完成时间</span>
+                  <strong>{{ displayText(orderDetail.autoCompleteAt) }}</strong>
+                </div>
+                <div class="summary-item">
                   <span>创建时间</span>
                   <strong>{{ displayText(orderDetail.createdAt) }}</strong>
                 </div>
@@ -255,6 +259,48 @@
                     </el-button>
                   </div>
                 </el-form>
+              </div>
+
+              <div v-if="showPostDeliveryStatus" class="confirm-visual-section">
+                <div class="pickup-header">
+                  <div>
+                    <h4>送达后状态可视化</h4>
+                    <p>{{ postDeliveryMessage }}</p>
+                  </div>
+                  <el-tag :type="isAwaitingConfirmation ? 'warning' : 'success'">
+                    {{ isAwaitingConfirmation ? '等待用户确认' : '订单已完成' }}
+                  </el-tag>
+                </div>
+
+                <div class="summary-grid exception-grid">
+                  <div class="summary-item">
+                    <span>当前订单状态</span>
+                    <strong>{{ displayText(orderDetail.status) }}</strong>
+                  </div>
+                  <div class="summary-item">
+                    <span>已送达时间</span>
+                    <strong>{{ displayText(orderDetail.deliveredAt) }}</strong>
+                  </div>
+                  <div class="summary-item">
+                    <span>最近异常类型</span>
+                    <strong>{{ displayText(orderDetail.exceptionType) }}</strong>
+                  </div>
+                  <div class="summary-item">
+                    <span>最近异常说明</span>
+                    <strong>{{ displayText(orderDetail.exceptionRemark) }}</strong>
+                  </div>
+                </div>
+
+                <div class="node-list">
+                  <div
+                    v-for="node in postDeliveryNodes"
+                    :key="node.label"
+                    class="node-item"
+                  >
+                    <span class="node-label">{{ node.label }}</span>
+                    <strong class="node-value">{{ displayText(node.value) }}</strong>
+                  </div>
+                </div>
               </div>
 
               <div class="exception-section">
@@ -381,6 +427,7 @@ const orderDetail = reactive({
   acceptedAt: '',
   pickedUpAt: '',
   deliveredAt: '',
+  autoCompleteAt: '',
   exceptionType: '',
   exceptionRemark: '',
   exceptionReportedAt: '',
@@ -407,7 +454,29 @@ const hasCourierToken = computed(() => Boolean(localStorage.getItem('courier_tok
 const canPickupOrder = computed(() => orderDetail.status === 'ACCEPTED')
 const canDeliverOrder = computed(() => ['PICKED_UP', 'DELIVERING'].includes(orderDetail.status))
 const canReportException = computed(() => ['ACCEPTED', 'PICKED_UP', 'DELIVERING', 'AWAITING_CONFIRMATION'].includes(orderDetail.status))
+const isAwaitingConfirmation = computed(() => orderDetail.status === 'AWAITING_CONFIRMATION')
+const isCompletedOrder = computed(() => orderDetail.status === 'COMPLETED')
+const showPostDeliveryStatus = computed(() => isAwaitingConfirmation.value || isCompletedOrder.value)
 const deliverActionLabel = computed(() => (orderDetail.status === 'PICKED_UP' ? '开始配送' : '确认送达'))
+const postDeliveryMessage = computed(() => {
+  if (isAwaitingConfirmation.value) {
+    return '订单已送达，当前等待 customer 侧确认。此阶段不再补新动作，只做最小状态提示和最近异常只读展示。'
+  }
+  if (isCompletedOrder.value) {
+    return '订单已完成，当前 drawer 只保留送达后状态与最近异常的最小只读展示。'
+  }
+  return ''
+})
+const postDeliveryNodes = computed(() => {
+  const nodes = [
+    { label: '接单时间', value: orderDetail.acceptedAt },
+    { label: '取餐时间', value: orderDetail.pickedUpAt },
+    { label: '送达时间', value: orderDetail.deliveredAt },
+    { label: '完成时间', value: orderDetail.autoCompleteAt },
+    { label: '最近更新时间', value: orderDetail.updatedAt }
+  ]
+  return nodes.filter(node => node.value)
+})
 const tokenPreview = computed(() => {
   const token = localStorage.getItem('courier_token') || ''
   if (!token) {
@@ -434,6 +503,7 @@ const resetOrderDetail = () => {
   orderDetail.acceptedAt = ''
   orderDetail.pickedUpAt = ''
   orderDetail.deliveredAt = ''
+  orderDetail.autoCompleteAt = ''
   orderDetail.exceptionType = ''
   orderDetail.exceptionRemark = ''
   orderDetail.exceptionReportedAt = ''
@@ -517,6 +587,7 @@ const openOrderDetail = async (orderId) => {
     orderDetail.acceptedAt = detail.acceptedAt || ''
     orderDetail.pickedUpAt = detail.pickedUpAt || ''
     orderDetail.deliveredAt = detail.deliveredAt || ''
+    orderDetail.autoCompleteAt = detail.autoCompleteAt || ''
     orderDetail.exceptionType = detail.exceptionType || ''
     orderDetail.exceptionRemark = detail.exceptionRemark || ''
     orderDetail.exceptionReportedAt = detail.exceptionReportedAt || ''
@@ -758,8 +829,38 @@ onMounted(() => {
   padding-top: 16px;
 }
 
+.confirm-visual-section {
+  margin-top: 18px;
+  border-top: 1px solid #ebeef5;
+  padding-top: 16px;
+}
+
 .exception-grid {
   margin-bottom: 12px;
+}
+
+.node-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.node-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.node-label {
+  color: #909399;
+  font-size: 13px;
+}
+
+.node-value {
+  text-align: right;
 }
 
 .pickup-header {

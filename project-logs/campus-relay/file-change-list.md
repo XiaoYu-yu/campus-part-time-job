@@ -479,3 +479,14 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 - [project-logs/campus-relay/bridge-phaseout-evaluation.md](bridge-phaseout-evaluation.md)
 - [project-logs/campus-relay/step-18-bridge-readiness-checklist-and-workbench-exception.md](step-18-bridge-readiness-checklist-and-workbench-exception.md)
+
+## Step 19 - bridge 模板文档 / courier workbench confirm 前可视化
+
+- [frontend/src/views/courier/CourierWorkbench.vue](../../frontend/src/views/courier/CourierWorkbench.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/bridge-phaseout-evaluation.md](bridge-phaseout-evaluation.md)
+- [project-logs/campus-relay/bridge-execution-readiness-checklist.md](bridge-execution-readiness-checklist.md)
+- [project-logs/campus-relay/bridge-regression-template.md](bridge-regression-template.md)
+- [project-logs/campus-relay/step-19-bridge-templates-and-workbench-confirm-visual.md](step-19-bridge-templates-and-workbench-confirm-visual.md)

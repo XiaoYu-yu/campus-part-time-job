@@ -1,9 +1,9 @@
 # 校园代送待处理事项
 
-## Step 19 最高优先级
+## Step 20 最高优先级
 
-1. 继续核实 repo 外或历史调用对旧 `/api/campus/courier/profile` 与 `/api/campus/courier/review-status` 的依赖，判断 bridge 是否可以从“执行准备清单”进入“执行准备”
-2. 评估 courier workbench 在“接单 + 详情承接 + 取餐承接 + deliver 承接 + 异常上报承接”之后，是否优先补送达后的后续承接点
+1. 按 `bridge-execution-readiness-checklist.md` 与 `bridge-regression-template.md` 逐项补齐人工核实和联调记录，判断 bridge 是否可以从“执行准备清单”进入“执行准备”
+2. 评估 courier workbench 在“接单 + 详情承接 + 取餐承接 + deliver 承接 + 异常上报承接 + confirm 前可视化”之后，是否优先补 confirm 后或 completed 后的最小承接点
 3. 若业务展示仍有需要，再评估是否补第五个 admin 最小只读页，但不再以“补页数”为目标
 4. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
 5. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
@@ -19,6 +19,7 @@
 - courier workbench 已补最小取餐承接，可在详情 drawer 中直接调用现有 pickup 接口
 - courier workbench 已补最小 deliver 承接，可在详情 drawer 中按真实状态机继续推进配送流程
 - courier workbench 已补最小异常上报承接，可在详情 drawer 中按真实后端 DTO 上报最新一次异常
+- courier workbench 已补最小 confirm 前可视化，可在 `AWAITING_CONFIRMATION / COMPLETED` 状态下只读展示送达后状态
 - courier 已打通：资料提交、资料详情、审核状态、token 发行、可接单列表、接单、取餐、配送推进、异常上报、位置上报
 - admin 已打通：
   - 订单分页、详情、时间线
@@ -84,7 +85,7 @@
 
 ## 当前主要阻塞点
 
-### 1. bridge 仍是过渡态，但已进入执行准备清单阶段
+### 1. bridge 仍是过渡态，但已进入执行准备清单与联调模板阶段
 
 - 影响：`courier/profile` 与 `courier/review-status` 继续依赖双 token 兼容
 - 当前证据：
@@ -96,7 +97,8 @@
 - 仍缺：
   - 仓库外或历史调用依赖确认
   - 一轮稳定联调和回归证据
-  - Step 18 执行准备清单中的人工核实项关闭结果
+  - `bridge-execution-readiness-checklist.md` 中人工核实项关闭结果
+  - `bridge-regression-template.md` 中完整链路联调记录
 - 默认处理：继续保留旧 bridge，不做删除动作；当前已具备进入“逐步收口计划设计阶段”的基础，但还不具备进入 `Phase A` 执行准备的完整条件
 
 ### 2. 前端 admin 侧已完成四个最小演示页
