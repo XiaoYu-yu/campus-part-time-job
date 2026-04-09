@@ -159,6 +159,12 @@ const router = createRouter({
       name: 'UserCampusCourierOnboarding',
       meta: { requiresCustomerAuth: true },
       component: () => import('../views/user/CourierOnboarding.vue')
+    },
+    {
+      path: '/courier/workbench',
+      name: 'CourierWorkbench',
+      meta: { public: true },
+      component: () => import('../views/courier/CourierWorkbench.vue')
     }
   ]
 })

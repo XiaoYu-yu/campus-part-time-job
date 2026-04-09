@@ -418,3 +418,16 @@
 - [project-logs/campus-relay/pending-items.md](pending-items.md)
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 - [project-logs/campus-relay/step-12-onboarding-token-bridge-and-demo-polish.md](step-12-onboarding-token-bridge-and-demo-polish.md)
+
+## Step 13 - courier workbench 最小承接页 / bridge 收口证据链细化
+
+- [frontend/src/api/campus-courier.js](../../frontend/src/api/campus-courier.js)
+- [frontend/src/router/index.js](../../frontend/src/router/index.js)
+- [frontend/src/utils/request.js](../../frontend/src/utils/request.js)
+- [frontend/src/views/user/Profile.vue](../../frontend/src/views/user/Profile.vue)
+- [frontend/src/views/user/CourierOnboarding.vue](../../frontend/src/views/user/CourierOnboarding.vue)
+- [frontend/src/views/courier/CourierWorkbench.vue](../../frontend/src/views/courier/CourierWorkbench.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-13-courier-workbench-and-bridge-evidence.md](step-13-courier-workbench-and-bridge-evidence.md)

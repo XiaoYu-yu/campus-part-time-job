@@ -55,6 +55,7 @@
         </div>
         <div class="menu-item" @click="router.push('/user/campus/after-sale-result')">售后结果回执</div>
         <div class="menu-item" @click="router.push('/user/campus/courier-onboarding')">配送员入驻</div>
+        <div class="menu-item" @click="router.push('/courier/workbench')">配送员工作台</div>
       </section>
 
       <button class="logout-btn" @click="handleLogout">退出登录</button>

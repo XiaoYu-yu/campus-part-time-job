@@ -104,6 +104,9 @@
               <el-input :model-value="tokenResult.token" type="textarea" :rows="3" readonly />
             </el-form-item>
           </el-form>
+          <div class="form-actions">
+            <el-button type="primary" @click="goToCourierWorkbench">前往 courier 工作台</el-button>
+          </div>
         </div>
       </section>
 
@@ -165,6 +168,7 @@
 
 <script setup>
 import { computed, onMounted, reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import UserLayout from '../../layout/UserLayout.vue'
 import {
@@ -178,6 +182,7 @@ import { useCustomerStore } from '../../stores/customer'
 
 const campusZones = ['渝中校区']
 const dormBuildings = ['竹园', '杏园', '李园', '桃园', '梅园', '馨园']
+const router = useRouter()
 const customerStore = useCustomerStore()
 
 const reviewStatus = ref({
@@ -241,6 +246,10 @@ const loadAll = async () => {
   fillForm(profileRes)
   reviewStatus.value = reviewRes
   eligibility.value = eligibilityRes
+}
+
+const goToCourierWorkbench = () => {
+  router.push('/courier/workbench')
 }
 
 const applyToken = async () => {

@@ -20,8 +20,9 @@
 - 当前已完成：`Step 10 - admin courier 异常/位置联动演示页 / frontend 第三个只读运营入口`
 - 当前已完成：`Step 11 - admin settlement 只读运营页 / frontend 第四个只读运营入口`
 - 当前已完成：`Step 12 - onboarding token 申请衔接 / bridge 收口条件细化 / admin 演示页小修`
+- 当前已完成：`Step 13 - courier workbench 最小承接页 / bridge 收口证据链细化`
 - 当前日期：`2026-04-09`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页，旧外卖模块仍保留可运行，旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、courier workbench 最小承接页、admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页，旧外卖模块仍保留可运行，旧前端主链路未被替换
 
 ## 当前状态
 
@@ -131,6 +132,8 @@
 - 已新增 customer 侧最小演示入口：
   - `/user/campus/after-sale-result`
   - `/user/campus/courier-onboarding`
+- 已新增 courier 侧最小承接入口：
+  - `/courier/workbench`
 - 已新增 admin 侧最小演示入口：
   - `/campus/settlement-batches`
   - `/campus/settlement-batches/:batchNo`
@@ -139,6 +142,8 @@
   - `/campus/settlements`
 - 已新增 customer 侧 API 封装：
   - `frontend/src/api/campus-customer.js`
+- 已新增 courier 侧 API 封装：
+  - `frontend/src/api/campus-courier.js`
 - 已新增 admin 侧 API 封装：
   - `frontend/src/api/campus-admin.js`
 - 已在 `frontend/src/utils/request.js` 放通 `/campus/customer/**` 的 customer token 附着
@@ -393,6 +398,49 @@
    - `npm run build`
 12. 本轮没有改 backend 接口、数据库和测试集，只做前端接入与演示细化。
 
+## Step 13 实际完成事项
+
+1. 本轮优先补的是 courier token 申请成功后的最小前台承接页，而不是继续机械新增第五个 admin 页。
+2. 新增 courier workbench 页面：
+   - `frontend/src/views/courier/CourierWorkbench.vue`
+   - 路由 `/courier/workbench`
+3. courier workbench 的定位固定为“token 获取后的最小承接页”，不扩成完整 courier 端，不补地图、不补大屏、不补完整接单页群。
+4. 页面结构保持最小三段：
+   - 身份状态卡：展示 `courierProfileId`、`realName`、`reviewStatus`、`enabled`、token 状态
+   - 可接单预览：调用 `GET /api/campus/courier/orders/available`，只展示前 5 条
+   - 快捷入口区：刷新工作台、返回 onboarding 页面、返回个人中心
+5. 页面行为固定为：
+   - 本地存在 `courier_token` 时，自动读取 `GET /api/campus/courier/profile`、`GET /api/campus/courier/review-status`、`GET /api/campus/courier/orders/available`
+   - 本地不存在 `courier_token` 时，不调用 courier 业务接口，只展示明确空态和回退入口
+   - available orders 为空时，只读展示空态，不做异常处理分叉
+6. 为支撑 workbench，本轮新增 courier 前端 API 封装：
+   - `getCourierProfile`
+   - `getCourierReviewStatus`
+   - `getCourierAvailableOrders`
+7. `request.js` 已最小修正 courier token 附着范围：
+   - `/api/campus/courier/orders/**`
+   - `/api/campus/courier/location-reports`
+   - `/api/campus/courier/profile`
+   - `/api/campus/courier/review-status`
+8. 对 `/api/campus/courier/profile` 与 `/api/campus/courier/review-status` 继续保留 bridge 兼容策略：
+   - 优先使用 `courier_token`
+   - 若没有 `courier_token`，回退使用 `customer_token`
+9. onboarding 页面已继续打通到 workbench：
+   - 申请 courier token 成功后，页面展示“前往 courier 工作台”按钮
+10. customer 个人中心已新增“配送员工作台”轻量入口，但没有改旧主链路，没有替换旧页面。
+11. Step 13 后 bridge 收口证据链更具体了：
+   - 新入口已覆盖资料提交、资料读取、审核状态、资格判断、token 申请、token 后最小承接六个前端场景
+   - 旧 bridge 仍承担历史兼容读取与双 token 过渡场景
+   - 仍缺历史调用盘点与一轮稳定联调回归证据，因此本轮结论仍是“继续保留，但已接近具备收口评估条件”
+12. 本轮没有补第五个 admin 页。
+13. 不补第五页的原因：
+   - 当前更高优先级是让 onboarding 页面不再停在“拿到 token 即结束”
+   - workbench 比新增展示页更直接决定 onboarding 替代链路是否成立
+14. 执行：
+   - `.\mvnw.cmd -DskipTests compile`
+   - `npm run build`
+15. 本轮没有改 backend 接口、数据库和状态机，只做前端最小承接与 bridge 证据链细化。
+
 ## 当前锁定的技术事实
 
 1. 继续使用注解式 MyBatis，不改 XML
@@ -422,11 +470,11 @@
 
 ## 下一轮建议
 
-- 进入 `Step 13`
+- 进入 `Step 14`
 - 推荐顺序：
-  1. 继续观察 onboarding 新入口 + token 申请动作与旧 bridge 的并行表现，再决定是否进入逐步收口评估
-  2. 视业务需要再决定是否补第五个 admin 最小只读页，避免为了数量继续摊薄重点
-  3. 若要继续扩前端，优先补 courier token 获取后的最小后续承接页，而不是继续堆更多静态展示页
+  1. 先盘点旧 bridge 的真实调用方，判断是否已经具备进入“逐步收口评估”的证据基础
+  2. 若继续扩前端，优先补 courier workbench 后的最小可接单承接动作，而不是继续机械新增展示页
+  3. 视业务需要再决定是否补第五个 admin 最小只读页，避免稀释当前 onboarding 收口重点
   4. 视业务需要补售后执行历史、异常历史和更细粒度运营审计
 
 ## 日志索引
@@ -451,5 +499,6 @@
 - [Step 10 日志](step-10-admin-courier-ops-demo-page.md)
 - [Step 11 日志](step-11-admin-settlement-ops-demo-page.md)
 - [Step 12 日志](step-12-onboarding-token-bridge-and-demo-polish.md)
+- [Step 13 日志](step-13-courier-workbench-and-bridge-evidence.md)
 - [待处理事项](pending-items.md)
 - [文件改动清单](file-change-list.md)

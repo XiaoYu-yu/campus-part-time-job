@@ -11,10 +11,12 @@ import router from '../router'
 const PUBLIC_PREFIXES = ['/public/', '/campus/public/', '/campus/courier/auth/token', '/employees/login', '/users/login']
 const CUSTOMER_PREFIXES = ['/users/', '/user/', '/campus/customer/']
 const COURIER_PREFIXES = ['/campus/courier/orders/', '/campus/courier/location-reports']
+const COURIER_BRIDGE_PREFIXES = ['/campus/courier/profile', '/campus/courier/review-status']
 
 const isPublicRequest = (url = '') => PUBLIC_PREFIXES.some(prefix => url.startsWith(prefix))
 const isCustomerRequest = (url = '') => CUSTOMER_PREFIXES.some(prefix => url.startsWith(prefix))
 const isCourierRequest = (url = '') => COURIER_PREFIXES.some(prefix => url.startsWith(prefix))
+const isCourierBridgeRequest = (url = '') => COURIER_BRIDGE_PREFIXES.some(prefix => url.startsWith(prefix))
 
 /**
  * 创建axios实例
@@ -43,6 +45,8 @@ request.interceptors.request.use(
     if (!isPublicRequest(requestUrl)) {
       if (isCustomerRequest(requestUrl)) {
         token = localStorage.getItem('customer_token')
+      } else if (isCourierBridgeRequest(requestUrl)) {
+        token = localStorage.getItem('courier_token') || localStorage.getItem('customer_token')
       } else if (isCourierRequest(requestUrl)) {
         token = localStorage.getItem('courier_token')
       } else {
@@ -89,6 +93,7 @@ request.interceptors.response.use(
       const requestUrl = error.config?.url || ''
       const customerRequest = isCustomerRequest(requestUrl)
       const courierRequest = isCourierRequest(requestUrl)
+      const courierBridgeRequest = isCourierBridgeRequest(requestUrl)
       switch (response.status) {
         case 401:
           ElMessage.error('登录已过期，请重新登录')
@@ -96,6 +101,16 @@ request.interceptors.response.use(
             localStorage.removeItem('customer_token')
             localStorage.removeItem('customer_user_info')
             router.push('/user/login')
+          } else if (courierBridgeRequest) {
+            if (localStorage.getItem('courier_token')) {
+              localStorage.removeItem('courier_token')
+              localStorage.removeItem('courier_profile')
+              router.push('/user/campus/courier-onboarding')
+            } else {
+              localStorage.removeItem('customer_token')
+              localStorage.removeItem('customer_user_info')
+              router.push('/user/login')
+            }
           } else if (courierRequest) {
             localStorage.removeItem('courier_token')
             localStorage.removeItem('courier_profile')
