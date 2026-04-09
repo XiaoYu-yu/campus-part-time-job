@@ -29,3 +29,8 @@ export const acceptCourierOrder = (orderId) => request({
   url: `/campus/courier/orders/${orderId}/accept`,
   method: 'post'
 })
+
+export const getCourierOrderDetail = (orderId) => request({
+  url: `/campus/courier/orders/${orderId}`,
+  method: 'get'
+})

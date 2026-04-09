@@ -84,6 +84,9 @@
             <el-table-column prop="status" label="订单状态" width="150" />
             <el-table-column label="操作" width="120" align="center">
               <template #default="{ row }">
+                <el-button type="primary" link @click="openOrderDetail(row.id)">
+                  详情
+                </el-button>
                 <el-button
                   type="primary"
                   link
@@ -110,6 +113,69 @@
             <el-button @click="goToProfile">回到个人中心</el-button>
           </div>
         </section>
+
+        <el-drawer
+          v-model="detailVisible"
+          title="订单详情"
+          size="420px"
+          destroy-on-close
+        >
+          <div v-loading="detailLoading" class="detail-content">
+            <template v-if="orderDetail.id">
+              <div class="summary-grid">
+                <div class="summary-item">
+                  <span>订单号</span>
+                  <strong>{{ displayText(orderDetail.id) }}</strong>
+                </div>
+                <div class="summary-item">
+                  <span>订单状态</span>
+                  <strong>{{ displayText(orderDetail.status) }}</strong>
+                </div>
+                <div class="summary-item">
+                  <span>取餐点</span>
+                  <strong>{{ displayText(orderDetail.pickupPointName) }}</strong>
+                </div>
+                <div class="summary-item">
+                  <span>配送楼栋</span>
+                  <strong>{{ displayText(orderDetail.deliveryBuilding) }}</strong>
+                </div>
+                <div class="summary-item">
+                  <span>配送详情</span>
+                  <strong>{{ displayText(orderDetail.deliveryDetail) }}</strong>
+                </div>
+                <div class="summary-item">
+                  <span>订单金额</span>
+                  <strong>{{ formatAmount(orderDetail.totalAmount) }}</strong>
+                </div>
+                <div class="summary-item">
+                  <span>取餐码</span>
+                  <strong>{{ displayText(orderDetail.pickupCode) }}</strong>
+                </div>
+                <div class="summary-item">
+                  <span>customer 备注</span>
+                  <strong>{{ displayText(orderDetail.customerRemark) }}</strong>
+                </div>
+                <div class="summary-item">
+                  <span>接单时间</span>
+                  <strong>{{ displayText(orderDetail.acceptedAt) }}</strong>
+                </div>
+                <div class="summary-item">
+                  <span>创建时间</span>
+                  <strong>{{ displayText(orderDetail.createdAt) }}</strong>
+                </div>
+                <div class="summary-item">
+                  <span>更新时间</span>
+                  <strong>{{ displayText(orderDetail.updatedAt) }}</strong>
+                </div>
+                <div class="summary-item">
+                  <span>当前 courierProfileId</span>
+                  <strong>{{ displayText(orderDetail.courierProfileId) }}</strong>
+                </div>
+              </div>
+            </template>
+            <el-empty v-else description="当前没有可展示的订单详情" />
+          </div>
+        </el-drawer>
       </template>
 
       <section v-else class="card">
@@ -130,6 +196,7 @@ import UserLayout from '../../layout/UserLayout.vue'
 import {
   acceptCourierOrder,
   getCourierAvailableOrders,
+  getCourierOrderDetail,
   getCourierProfile,
   getCourierReviewStatus
 } from '../../api/campus-courier'
@@ -137,6 +204,8 @@ import {
 const router = useRouter()
 const loading = ref(false)
 const acceptingOrderId = ref('')
+const detailVisible = ref(false)
+const detailLoading = ref(false)
 const availableOrders = ref([])
 
 const profile = reactive({
@@ -153,6 +222,21 @@ const reviewStatus = reactive({
   enabled: 0
 })
 
+const orderDetail = reactive({
+  id: '',
+  status: '',
+  pickupPointName: '',
+  deliveryBuilding: '',
+  deliveryDetail: '',
+  totalAmount: 0,
+  pickupCode: '',
+  customerRemark: '',
+  acceptedAt: '',
+  createdAt: '',
+  updatedAt: '',
+  courierProfileId: ''
+})
+
 const hasCourierToken = computed(() => Boolean(localStorage.getItem('courier_token')))
 const tokenPreview = computed(() => {
   const token = localStorage.getItem('courier_token') || ''
@@ -167,6 +251,21 @@ const tokenPreview = computed(() => {
 
 const displayText = (value) => (value === null || value === undefined || value === '' ? '暂无' : value)
 const formatAmount = (value) => `¥${Number(value || 0).toFixed(2)}`
+
+const resetOrderDetail = () => {
+  orderDetail.id = ''
+  orderDetail.status = ''
+  orderDetail.pickupPointName = ''
+  orderDetail.deliveryBuilding = ''
+  orderDetail.deliveryDetail = ''
+  orderDetail.totalAmount = 0
+  orderDetail.pickupCode = ''
+  orderDetail.customerRemark = ''
+  orderDetail.acceptedAt = ''
+  orderDetail.createdAt = ''
+  orderDetail.updatedAt = ''
+  orderDetail.courierProfileId = ''
+}
 
 const hydrateStoredProfile = () => {
   try {
@@ -216,6 +315,36 @@ const loadWorkbench = async () => {
   }
 }
 
+const openOrderDetail = async (orderId) => {
+  if (!hasCourierToken.value) {
+    ElMessage.warning('当前没有 courier token，请先返回 onboarding 页面申请')
+    return
+  }
+
+  detailVisible.value = true
+  detailLoading.value = true
+  resetOrderDetail()
+  try {
+    const detail = await getCourierOrderDetail(orderId)
+    orderDetail.id = detail.id || ''
+    orderDetail.status = detail.status || ''
+    orderDetail.pickupPointName = detail.pickupPointName || ''
+    orderDetail.deliveryBuilding = detail.deliveryBuilding || ''
+    orderDetail.deliveryDetail = detail.deliveryDetail || ''
+    orderDetail.totalAmount = detail.totalAmount || 0
+    orderDetail.pickupCode = detail.pickupCode || ''
+    orderDetail.customerRemark = detail.customerRemark || ''
+    orderDetail.acceptedAt = detail.acceptedAt || ''
+    orderDetail.createdAt = detail.createdAt || ''
+    orderDetail.updatedAt = detail.updatedAt || ''
+    orderDetail.courierProfileId = detail.courierProfileId || ''
+  } catch (error) {
+    detailVisible.value = false
+  } finally {
+    detailLoading.value = false
+  }
+}
+
 const acceptOrder = async (orderId) => {
   if (!hasCourierToken.value) {
     ElMessage.warning('当前没有 courier token，请先返回 onboarding 页面申请')
@@ -227,6 +356,7 @@ const acceptOrder = async (orderId) => {
     await acceptCourierOrder(orderId)
     ElMessage.success('接单成功，已刷新当前可接单列表')
     await loadWorkbench()
+    await openOrderDetail(orderId)
   } catch (error) {
     // 请求层已经处理错误提示，这里只吞掉异常，避免控制台出现未处理 Promise
   } finally {
@@ -339,6 +469,10 @@ onMounted(() => {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+}
+
+.detail-content {
+  min-height: 160px;
 }
 
 @media (max-width: 640px) {
