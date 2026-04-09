@@ -104,8 +104,22 @@
           <div class="section-header">
             <div>
               <h3>快捷入口</h3>
-              <p>本轮继续保持最小承接，只保留刷新、回退和资料入口，不新增复杂 courier 页面群。</p>
+              <p>本轮继续保持最小承接，除了刷新和回退，还补一个“按订单号查看详情”的只读回读入口，便于验证 completed 态。</p>
             </div>
+          </div>
+          <div class="lookup-panel">
+            <el-input
+              v-model="detailLookupId"
+              placeholder="输入订单号后直接查看详情，例如 CR202604060001"
+              clearable
+            />
+            <el-button
+              type="primary"
+              :disabled="!hasCourierToken || !detailLookupId.trim()"
+              @click="openOrderDetail(detailLookupId.trim())"
+            >
+              查看订单详情
+            </el-button>
           </div>
           <div class="action-group">
             <el-button type="primary" @click="loadWorkbench">刷新工作台</el-button>
@@ -427,6 +441,7 @@ const pickupSubmitting = ref(false)
 const deliverSubmitting = ref(false)
 const exceptionSubmitting = ref(false)
 const availableOrders = ref([])
+const detailLookupId = ref('')
 
 const profile = reactive({
   id: null,
@@ -835,6 +850,12 @@ onMounted(() => {
   gap: 12px;
 }
 
+.lookup-panel {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
 .detail-content {
   min-height: 160px;
 }
@@ -929,6 +950,10 @@ onMounted(() => {
   .pickup-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .lookup-panel {
+    flex-direction: column;
   }
 }
 </style>

@@ -1,9 +1,9 @@
 # 校园代送待处理事项
 
-## Step 21 最高优先级
+## Step 22 最高优先级
 
-1. 按 `bridge-execution-readiness-checklist.md` 与 `bridge-regression-template.md` 落第一轮真实人工核实与联调记录，判断 bridge 是否可以进入 `Phase A` 执行准备
-2. 评估 courier workbench 在“接单 + 详情 + 取餐 + deliver + 异常上报 + confirm 前可视化 + completed 后只读承接”之后，是否优先补 completed 后回读或 customer confirm 结果承接
+1. 按 `bridge-execution-readiness-checklist.md` 与 `bridge-regression-template.md` 继续补齐 repo 外人工核实与完整联调留痕，判断 bridge 是否可以进入 `Phase A` 执行准备
+2. 评估 courier workbench 在“接单 + 详情 + 取餐 + deliver + 异常上报 + confirm 前可视化 + completed 后只读承接 + completed 订单按号回读”之后，是否优先补 customer confirm 结果回看或 completed 后更明确结果承接
 3. 若业务展示仍有需要，再评估是否补第五个 admin 最小只读页，但不再以“补页数”为目标
 4. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
 5. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
@@ -20,6 +20,7 @@
 - courier workbench 已补最小 deliver 承接，可在详情 drawer 中按真实状态机继续推进配送流程
 - courier workbench 已补最小异常上报承接，可在详情 drawer 中按真实后端 DTO 上报最新一次异常
 - courier workbench 已补最小 confirm 前可视化与 completed 后只读承接，可在 `AWAITING_CONFIRMATION / COMPLETED` 状态下只读展示送达后状态
+- courier workbench 已补按订单号查看详情的最小入口，可在可接单列表为空时回读已完成订单结果
 - courier 已打通：资料提交、资料详情、审核状态、token 发行、可接单列表、接单、取餐、配送推进、异常上报、位置上报
 - admin 已打通：
   - 订单分页、详情、时间线
@@ -100,6 +101,15 @@
   - `bridge-execution-readiness-checklist.md` 中人工核实项关闭结果
   - `bridge-regression-template.md` 中完整链路联调记录
 - 默认处理：继续保留旧 bridge，不做删除动作；当前模板已可执行，但还不具备进入 `Phase A` 执行准备的完整条件
+- repo 内已新增一轮真实局部留痕：
+  - 真实 token 申请成功
+  - 真实 workbench 加载成功
+  - 真实确认 `profile / review-status` 优先走 `courier_token`
+  - 真实确认无 `courier_token` 时不调用 courier 业务接口
+  - 真实通过订单号 `CR202604060001` 回读 completed 订单详情
+- 仍缺：
+  - repo 外依赖人工核实结果
+  - 完整 `onboarding -> token -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报` 联调记录
 
 ### 2. 前端 admin 侧已完成四个最小演示页
 

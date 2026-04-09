@@ -109,6 +109,39 @@
 1. 执行准备缺口已经被整理成可真正填写、可真正执行的模板
 2. 但模板中的真实结果仍然待人工执行和留痕
 
+## Step 21 repo 内真实验证进展
+
+本轮没有伪造 repo 外依赖结果，也没有把待执行项写成已通过。
+
+本轮新增的真实验证只有 repo 内可执行部分：
+
+1. 已真实执行 `POST /api/campus/courier/auth/token`
+   - 使用测试种子用户 `13900139001 / 123456`
+   - 成功拿到 `courier_token`
+2. 已真实执行 `/courier/workbench` 页面加载
+   - Playwright 打开 workbench
+   - `GET /api/campus/courier/profile`
+   - `GET /api/campus/courier/review-status`
+   - `GET /api/campus/courier/orders/available`
+   均成功返回
+3. 已真实确认 workbench 的 bridge 读取优先走 `courier_token`
+   - `profile` / `review-status` 的 `Authorization` 头均为 `courier_token`
+4. 已真实确认无 `courier_token` 时页面停在空态
+   - 页面不继续请求 courier 业务接口
+5. 已真实确认 completed 订单回读可用
+   - 通过 workbench 的“按订单号查看详情”入口读取 `CR202604060001`
+   - drawer 成功展示 `COMPLETED` 状态和完成后最小只读承接区
+
+本轮没有真实跑通的部分也必须保留：
+
+1. 当前 H2 种子下 `GET /api/campus/courier/orders/available?page=1&pageSize=10` 返回空列表
+2. 因此本轮没有形成真实的：
+   - 接单
+   - 取餐
+   - deliver
+   - 异常上报
+   的完整链路联调记录
+
 ## Step 19 执行准备评估
 
 ### repo 内证据是否已经稳定
@@ -135,6 +168,7 @@
    - 已具备 Phase A 的 repo 内准备基础
    - 已把缺口收敛到“repo 外依赖确认 + 一轮稳定联调记录”
    - 已经拥有可执行的人工核实 checklist 和联调模板
+   - 已补齐一部分 repo 内真实验证结果
    - 但尚不具备发起 Phase A 执行准备的全量证据
 
 ### 真正开始删除前还差什么
@@ -193,5 +227,6 @@
    - repo 内证据已经稳定
    - repo 外依赖确认仍然只能列为待人工核实边界
    - 缺口已经从“概念性观察”收敛成“可人工关闭的 checklist + 可填写的联调模板”
-   - 模板已经可真正执行，但真实人工核实结果仍待补齐
+   - 模板已经可真正执行，且 repo 内局部真实验证已补齐
+   - 但 repo 外依赖和完整链路联调结果仍待补齐
    - 因此下一步不是继续补抽象评估，而是按模板关闭人工核实项并留存联调记录
