@@ -34,8 +34,9 @@
 - 当前已完成：`Step 24 - repo 外核实准备增强 / customer 结果页体验增强 / onboarding 请求体类型核查`
 - 当前已完成：`Step 25 - repo 外 bridge 依赖核实与证据回填`
 - 当前已完成：`Step 26 - repo 外真实资产追补与阻塞项重新评估`
+- 当前已完成：`Step 27 - 关键外部资产追补与阻塞项继续关闭`
 - 当前日期：`2026-04-10`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 24 又补了 repo 外人工核实动作的可执行说明、customer 结果页的无订单号/查无订单/已完成态真实验证，以及 onboarding 提交体 `enabledWorkInOwnBuilding` 的真实类型核查；Step 25 明确了本机可访问范围内的 repo 外阴性证据，Step 26 又进一步拿到了可登录的公网服务器与 repo 外共享文档资产，并据此确认“当前已知外部入口未发现 bridge 命中，但关键部署产物、访问日志和共享集合仍缺”；admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页继续可用，旧外卖模块仍保留可运行，旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 24 又补了 repo 外人工核实动作的可执行说明、customer 结果页的无订单号/查无订单/已完成态真实验证，以及 onboarding 提交体 `enabledWorkInOwnBuilding` 的真实类型核查；Step 25 明确了本机可访问范围内的 repo 外阴性证据，Step 26 拿到了可登录的公网服务器与 repo 外共享文档资产，Step 27 又进一步拿到了 repo 外源码树、Windows Recent 外部文档入口以及更贴近业务部署面的服务器路径/调试资产现状，并据此确认“当前新增外部资产范围内仍未发现旧 bridge 命中，但真实部署物、可归因日志和团队共享集合仍缺”；admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页继续可用，旧外卖模块仍保留可运行，旧前端主链路未被替换
 
 ## 当前状态
 
@@ -1038,8 +1039,50 @@
    - Step 23 已把这轮真实链路整理成共享回归留痕，并补了 customer completed 结果回看页
    - Step 25 已把 repo 外核查范围、阴性证据和待人工核实边界写实
    - Step 26 已进一步拿到公网服务器与 repo 外共享文档等真实外部资产，并确认当前已知外部入口未发现旧 bridge 命中
-   - 但 Step 26 仍未拿到真实部署产物、可归因访问日志和团队共享集合，因此 bridge 仍不能进入 `Phase A` 执行准备
+   - Step 27 又补拿了 repo 外源码树、Windows Recent 外部文档入口以及更贴近业务部署面的服务器路径和调试资产现状，进一步证明“当前新增资产范围内未发现命中”但仍缺关键业务侧证据
+   - 但 Step 27 仍未拿到真实部署产物、可归因访问日志和团队共享集合，因此 bridge 仍不能进入 `Phase A` 执行准备
    - 因此当前不能直接删除旧 bridge，也不能启动执行准备
+
+## Step 27 实际完成事项
+
+1. 本轮没有扩 repo 内功能，也没有补第五个 admin 页。
+2. 本轮继续沿 Step 26 主线，只追三类更接近真实业务运行面的 repo 外关键资产：
+   - repo 外前端源码 / 历史项目目录：`D:\software\GOT\html`
+   - Windows Recent 指向的 repo 外文档入口
+   - 两台公网服务器上的真实部署候选路径、nginx/openresty 配置与日志位置
+3. 本轮在 `D:\software\GOT\html` 排除 `node_modules/dist/build/.venv` 后，对以下关键字做了定点搜索：
+   - `/api/campus/courier/profile`
+   - `/api/campus/courier/review-status`
+   - `getCourierProfile`
+   - `getCourierReviewStatus`
+   - `customer_token`
+   结果未发现 repo 外代码或脚本命中。
+4. 本轮从 `C:\Users\20278\AppData\Roaming\Microsoft\Windows\Recent` 解析到新的 repo 外文档入口：
+   - `C:\Users\20278\Desktop\工信渝中校园代送平台_Codex提示词补充版_IDEA与HBuilderX工作流.md`
+   - 当前目标文件已缺失，因此只能作为“存在过额外文档入口”的证据，不能作为运行时依赖证明。
+5. 本轮在两台公网服务器上进一步核查了更贴近业务部署面的路径：
+   - `/www`
+   - `/www/wwwroot`
+   - `/www/server/nginx/logs`
+   - `/var/log/nginx`
+   - `/var/log/openresty`
+   - `/usr/share/nginx/html`
+   - `/var/www`
+   - `/srv`
+   - `/etc/nginx`
+   - `/etc/openresty`
+   结果仍未发现业务部署物、`nginx.conf`、`access.log` 或 bridge endpoint 命中。
+6. 本轮还真实确认当前机器不存在常见 `Postman / Apifox` 资产目录：
+   - `C:\Users\20278\AppData\Roaming\Postman`
+   - `C:\Users\20278\AppData\Roaming\Apifox`
+   - `C:\Users\20278\AppData\Local\Apifox`
+   - `C:\Users\20278\Documents\Postman`
+   - `C:\Users\20278\Documents\Apifox`
+7. 因为这轮虽然拿到了更多 repo 外关键资产，但仍没有拿到：
+   - 实际业务静态资源目录或历史发布包
+   - 可归因的 Nginx / gateway 访问日志
+   - 团队共享 Postman / Apifox / 联调脚本资产
+   所以 bridge 结论没有变化，仍不能进入 `Phase A` 执行准备。
 
 ## 当前未解决的问题
 
@@ -1053,11 +1096,11 @@
 
 ## 下一轮建议
 
-- 进入 `Step 27`
+- 进入 `Step 28`
 - 推荐顺序：
   1. 继续拿真实业务部署产物、可归因访问日志和团队共享调试资产，关闭 checklist 第 1~3 项
-  2. 在三类 repo 外阻塞项真正关闭前，不要启动 `Phase A` 执行准备，也不要继续扩无关页面
-  3. 若 bridge 外部证据补齐，再评估是否需要 customer completed 结果页的小幅增强
+  2. 如果仍拿不到关键资产，就把“缺什么、理论上在哪、应找谁拿”继续写实，不要回到泛目录搜索
+  3. 在三类 repo 外阻塞项真正关闭前，不要启动 `Phase A` 执行准备，也不要继续扩无关页面
   4. 第五个 admin 页继续后置，避免稀释当前优先级
 
 ## 日志索引
@@ -1097,6 +1140,7 @@
 - [Step 24 日志](step-24-bridge-readiness-and-customer-result-polish.md)
 - [Step 25 日志](step-25-repo-external-bridge-verification.md)
 - [Step 26 日志](step-26-repo-external-evidence-closure.md)
+- [Step 27 日志](step-27-key-external-asset-verification.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

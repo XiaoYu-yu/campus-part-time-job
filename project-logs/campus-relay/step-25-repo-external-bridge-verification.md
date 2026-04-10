@@ -190,3 +190,21 @@
    - 没有团队共享 Postman / Apifox / 联调脚本资产
 4. 因此 Step 25 的最终阶段结论不变：
    - bridge 仍不能进入 `Phase A` 执行准备
+
+## Step 27 补充证据
+
+1. 本轮没有重复 Step 25 的泛目录搜索，而是继续追三类更接近真实运行面的 repo 外资产：
+   - repo 外前端源码 / 历史项目目录：`D:\software\GOT\html`
+   - Windows Recent 外部文档入口：`C:\Users\20278\AppData\Roaming\Microsoft\Windows\Recent`
+   - 两台公网服务器上的常见业务部署和日志路径：`/www`、`/www/wwwroot`、`/var/log/nginx`、`/etc/nginx` 等
+2. 本轮新增真实核查结果：
+   - 在 `D:\software\GOT\html` 排除 `node_modules/dist/build/.venv` 后，对旧 bridge 关键字无命中
+   - Windows Recent 解析到额外的 repo 外文档入口 `C:\Users\20278\Desktop\工信渝中校园代送平台_Codex提示词补充版_IDEA与HBuilderX工作流.md`，但目标文件当前已缺失
+   - 当前机器不存在常见 `Postman / Apifox` 资产目录
+   - 两台公网服务器在更贴近业务部署面的路径下仍未发现业务部署物、`nginx.conf` 或 `access.log`
+3. 这轮新增证据比 Step 26 更接近真实业务运行面，但仍不足以关闭第 1~3 项阻塞，因为：
+   - 还没有拿到实际业务静态资源目录或历史发布包
+   - 还没有拿到可归因的 Nginx / gateway 访问日志
+   - 还没有拿到团队共享 Postman / Apifox / 联调脚本资产
+4. 因此 Step 25 的最终阶段结论继续保持：
+   - bridge 仍不能进入 `Phase A` 执行准备

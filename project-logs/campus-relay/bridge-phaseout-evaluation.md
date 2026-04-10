@@ -406,3 +406,64 @@
    - 缺口已经从“概念性观察”收敛成“可人工关闭的 checklist + 可填写的联调模板 + 一轮本地真实留痕 + 一份共享回归证据”
    - 但 repo 外依赖关闭证据、真实部署产物和仓库外历史调用结果仍待补齐
    - 因此下一步不是继续补 repo 内链路，而是按 checklist 关闭 repo 外人工核实项
+
+## Step 27 关键外部资产追补结果
+
+本轮没有新增 repo 内功能，也没有删除 bridge。本轮只继续追三类真正可能关项的 repo 外关键资产。
+
+### 本轮新增拿到的关键外部资产
+
+1. repo 外源码 / 历史项目目录
+   - `D:\software\GOT\html`
+2. Windows Recent 指向的 repo 外文档入口
+   - `C:\Users\20278\AppData\Roaming\Microsoft\Windows\Recent\工信渝中校园代送平台_Codex提示词补充版_IDEA与HBuilderX工作流.md.lnk`
+   - 解析目标：`C:\Users\20278\Desktop\工信渝中校园代送平台_Codex提示词补充版_IDEA与HBuilderX工作流.md`
+   - 当前状态：目标文件缺失
+3. 更贴近业务部署面的服务器路径核查结果
+   - `xiaoyu_TenXun_Ubuntu`
+   - `xiaoyu_root_ALi_Ubuntu`
+   - 实际检查目录：
+     - `/www`
+     - `/www/wwwroot`
+     - `/www/server/nginx/logs`
+     - `/var/log/nginx`
+     - `/var/log/openresty`
+     - `/usr/share/nginx/html`
+     - `/var/www`
+     - `/srv`
+     - `/etc/nginx`
+     - `/etc/openresty`
+4. 本机团队联调资产入口现状
+   - `C:\Users\20278\AppData\Roaming\Postman`
+   - `C:\Users\20278\AppData\Roaming\Apifox`
+   - `C:\Users\20278\AppData\Local\Apifox`
+   - `C:\Users\20278\Documents\Postman`
+   - `C:\Users\20278\Documents\Apifox`
+   - 当前均不存在
+
+### 基于新资产的重新判断
+
+1. 第 1、2 项阻塞
+   - 在 `D:\software\GOT\html` 排除 `node_modules/dist/build/.venv` 后，对 `/api/campus/courier/profile`、`/api/campus/courier/review-status`、`getCourierProfile`、`getCourierReviewStatus` 没有命中
+   - 两台公网服务器的常见部署目录和 nginx/openresty 配置、日志路径也没有命中
+   - 这说明当前新增资产范围内仍未发现 repo 外旧页面直接调用证据
+   - 但仍缺“实际业务静态资源目录或历史发布包”，所以不能关闭单项阻塞
+2. 第 3 项阻塞
+   - 当前机器没有常见 `Postman / Apifox` 资产目录
+   - 在 `Downloads / Desktop / Documents / D:\software` 的文本与脚本类资产中，也没有搜到 `customer_token` 调旧 bridge 的脚本命中
+   - 但仍缺“团队共享 Postman / Apifox / 联调脚本资产”，所以不能关闭第 3 项
+3. 额外边界收敛
+   - Windows Recent 证明当前机器近期打开过额外的 repo 外工作流文档，但目标文件已经不存在，无法继续把它当作有效证据读取
+   - 因此当前能确定的是“存在过额外文档入口”，不能据此推导“存在运行时依赖”
+
+### 当前是否可进入 Phase A 执行准备
+
+1. 仍然不可以。
+2. 更具体的原因已经不再是“泛泛缺证据”，而是以下三类资产仍未拿到：
+   - 实际业务静态资源目录或历史发布包
+   - 可归因的 Nginx / gateway 访问日志
+   - 团队共享 Postman / Apifox / 联调脚本资产
+3. 当前环境无法证明这些资产的具体持有人，只能按资产类型判断：
+   - 静态资源 / 发布包：应向当前部署维护人或发布机持有人索取
+   - 访问日志：应向当前运维或网关维护人索取
+   - 调试集合 / 脚本：应向当前接口联调维护人或共享资产维护人索取

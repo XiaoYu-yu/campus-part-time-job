@@ -1,8 +1,8 @@
 # 校园代送待处理事项
 
-## Step 27 最高优先级
+## Step 28 最高优先级
 
-1. 基于 Step 26 新拿到的公网服务器与 repo 外共享文档资产，继续补真正能关项的外部证据，重点仍是：
+1. 基于 Step 27 已拿到的 repo 外源码树、Windows Recent 文档入口和公网服务器部署候选路径，继续追真正能关项的关键业务资产，重点仍是：
    - 实际业务静态资源目录或历史发布包
    - 可归因的 Nginx / gateway 访问日志
    - 团队共享 Postman / Apifox / 联调脚本资产
@@ -11,11 +11,17 @@
    - `bridge-phaseout-evaluation.md`
    - `step-25-repo-external-bridge-verification.md`
    - `step-26-repo-external-evidence-closure.md`
-3. 只有在第 1~3 项 repo 外阻塞都拿到真实关闭证据后，才重新评估 bridge 是否可以进入 `Phase A` 执行准备
-4. customer completed 结果回看页继续冻结，除非 repo 外核实过程暴露出演示阻塞
-5. 第五个 admin 页继续后置，不再以“补页数”为目标
-6. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
-7. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
+   - `step-27-key-external-asset-verification.md`
+3. 如果仍然拿不到关键资产，不要重复泛目录搜索，直接写清：
+   - 还缺哪类资产
+   - 理论上在哪里
+   - 当前为什么拿不到
+   - 下一步应该找谁拿
+4. 只有在第 1~3 项 repo 外阻塞都拿到真实关闭证据后，才重新评估 bridge 是否可以进入 `Phase A` 执行准备
+5. customer completed 结果回看页继续冻结，除非 repo 外核实过程暴露出演示阻塞
+6. 第五个 admin 页继续后置，不再以“补页数”为目标
+7. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
+8. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
 
 ## 已完成但仍需继续扩展的部分
 

@@ -141,3 +141,18 @@
    - Apifox 项目导出
    - 团队共享脚本目录
 4. 在 3 个阻塞项都真正关闭前，不要提前宣布 bridge 可进入 `Phase A`，也不要转去补第五个 admin 页。
+
+## Step 27 补充证据
+
+1. 本轮拿到的新增关键外部资产：
+   - repo 外前端源码树：`D:\software\GOT\html`
+   - Windows Recent 外部文档入口：`C:\Users\20278\AppData\Roaming\Microsoft\Windows\Recent`
+   - 两台公网服务器上更贴近业务部署面的目录与日志路径核查结果
+2. 本轮新增真实核查结果：
+   - `D:\software\GOT\html` 中未发现旧 bridge endpoint、辅助函数名或 `customer_token` 命中
+   - Windows Recent 证明当前机器近期打开过额外的校园代送工作流文档，但目标文件已缺失
+   - `xiaoyu_TenXun_Ubuntu` 与 `xiaoyu_root_ALi_Ubuntu` 的 `/www`、`/var/log/nginx`、`/etc/nginx` 等路径仍未发现业务部署物或访问日志
+   - 当前机器不存在常见 `Postman / Apifox` 资产目录
+3. 这些证据让 repo 外边界继续收窄，但依然不足以关闭 3 个阻塞项。
+4. Step 26 的最终结论保持不变：
+   - bridge 仍不能进入 `Phase A` 执行准备

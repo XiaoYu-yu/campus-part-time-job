@@ -53,7 +53,15 @@
     - 未发现 `nginx` / `openresty` / `caddy` 业务进程
     - 未发现 `access.log` 或 endpoint 命中
   - 外部文档里只出现 bridge 策略说明，没有出现旧页面产物路径或运行时调用证据。
-  - 因为仍无法证明这两台公网服务器就是全部历史部署机，也没有拿到真实已部署静态资源目录，所以第 1 项继续保持待人工核实。
+  - `2026-04-10` Step 27 继续补拿更接近真实运行面的外部资产：
+    - repo 外前端源码树：`D:\software\GOT\html`
+    - Windows Recent 外部文档入口：`C:\Users\20278\AppData\Roaming\Microsoft\Windows\Recent\工信渝中校园代送平台_Codex提示词补充版_IDEA与HBuilderX工作流.md.lnk`
+    - 两台公网服务器的常见部署 / nginx 路径：`/www`、`/www/wwwroot`、`/var/log/nginx`、`/etc/nginx` 等
+  - Step 27 结果：
+    - `D:\software\GOT\html` 排除 `node_modules/dist/build/.venv` 后，对旧 bridge 关键字无命中
+    - Windows Recent 只证明当前机器近期打开过额外的 repo 外工作流文档，但目标文件当前缺失，无法继续读取
+    - 两台公网服务器在常见部署 / 日志路径下仍未发现业务部署物、`nginx.conf` 或 `access.log`
+  - 因为仍未拿到实际业务静态资源目录或历史发布包，所以第 1 项继续保持待人工核实。
 - 负责人：
   - Codex
 - 日期：
@@ -106,7 +114,15 @@
     - 未发现 `nginx` / `openresty` / `caddy` 业务进程
     - 未发现 `access.log` 或 endpoint 命中
   - 外部文档里只出现 bridge 策略说明，没有出现旧页面产物路径或运行时调用证据。
-  - 因为仍无法证明这两台公网服务器就是全部历史部署机，也没有拿到真实已部署静态资源目录，所以第 2 项继续保持待人工核实。
+  - `2026-04-10` Step 27 继续补拿更接近真实运行面的外部资产：
+    - repo 外前端源码树：`D:\software\GOT\html`
+    - Windows Recent 外部文档入口：`C:\Users\20278\AppData\Roaming\Microsoft\Windows\Recent\工信渝中校园代送平台_Codex提示词补充版_IDEA与HBuilderX工作流.md.lnk`
+    - 两台公网服务器的常见部署 / nginx 路径：`/www`、`/www/wwwroot`、`/var/log/nginx`、`/etc/nginx` 等
+  - Step 27 结果：
+    - `D:\software\GOT\html` 排除 `node_modules/dist/build/.venv` 后，对旧 bridge 关键字无命中
+    - Windows Recent 只证明当前机器近期打开过额外的 repo 外工作流文档，但目标文件当前缺失，无法继续读取
+    - 两台公网服务器在常见部署 / 日志路径下仍未发现业务部署物、`nginx.conf` 或 `access.log`
+  - 因为仍未拿到实际业务静态资源目录或历史发布包，所以第 2 项继续保持待人工核实。
 - 负责人：
   - Codex
 - 日期：
@@ -165,7 +181,20 @@
     - `getCourierReviewStatus`
   - 结果：未发现脚本、shell 历史或服务器日志依赖 `customer_token` 调旧 bridge 的命中。
   - 外部文档里只出现旧 bridge 的阶段性说明和执行提示，没有发现可执行脚本或集合导出。
-  - 因为当前仍没有团队共享 Postman / Apifox 集合、共享脚本仓库或其他机器上的调试资产，所以第 3 项继续保持待人工核实。
+  - `2026-04-10` Step 27 继续补拿更接近团队共享资产的入口：
+    - 当前机器标准 `Postman / Apifox` 目录：
+      - `C:\Users\20278\AppData\Roaming\Postman`
+      - `C:\Users\20278\AppData\Roaming\Apifox`
+      - `C:\Users\20278\AppData\Local\Apifox`
+      - `C:\Users\20278\Documents\Postman`
+      - `C:\Users\20278\Documents\Apifox`
+    - Windows Recent 外部文档入口：`C:\Users\20278\AppData\Roaming\Microsoft\Windows\Recent\工信渝中校园代送平台_Codex提示词补充版_IDEA与HBuilderX工作流.md.lnk`
+    - `D:\software\GOT\html` 与 `Downloads / Desktop / Documents / D:\software` 的文本 / 脚本类资产
+  - Step 27 结果：
+    - 当前机器不存在常见 `Postman / Apifox` 资产目录
+    - 在上述文本和脚本类资产中，未发现 `customer_token` 调旧 bridge 的真实脚本命中
+    - Windows Recent 只证明存在过额外工作流文档入口，但目标文件当前缺失，无法继续提取集合或脚本线索
+  - 因为仍没有团队共享 Postman / Apifox / 联调脚本资产，所以第 3 项继续保持待人工核实。
 - 负责人：
   - Codex
 - 日期：
@@ -279,3 +308,40 @@
   - 已知公网服务器未发现项目部署目录、业务访问日志和调试脚本命中
   - 外部文档只给出 bridge 说明，不构成运行时依赖证明
   - 因此三项阻塞仍然只能保留为“待人工核实”
+
+## Step 27 说明
+
+- 本轮没有把“当前范围内未命中”改写成“确认不存在依赖”。
+- 本轮新增的是更接近真实运行面的 repo 外资产与入口：
+  - repo 外前端源码树：`D:\software\GOT\html`
+  - Windows Recent 快捷方式：`C:\Users\20278\AppData\Roaming\Microsoft\Windows\Recent`
+  - 具体缺失的外部文档目标：`C:\Users\20278\Desktop\工信渝中校园代送平台_Codex提示词补充版_IDEA与HBuilderX工作流.md`
+  - 两台公网服务器上的真实部署候选路径：
+    - `/www`
+    - `/www/wwwroot`
+    - `/www/server/nginx/logs`
+    - `/var/log/nginx`
+    - `/var/log/openresty`
+    - `/usr/share/nginx/html`
+    - `/var/www`
+    - `/srv`
+    - `/etc/nginx`
+    - `/etc/openresty`
+- 本轮实际补充的关键结论：
+  - 在 `D:\software\GOT\html` 排除 `node_modules/dist/build/.venv` 后，对旧 bridge 关键字无命中
+  - Windows Recent 证明当前机器最近打开过额外的 repo 外工作流文档，但该目标文件已缺失，无法进一步读取其内容
+  - 当前机器不存在常见 `Postman / Apifox` 资产目录：
+    - `C:\Users\20278\AppData\Roaming\Postman`
+    - `C:\Users\20278\AppData\Roaming\Apifox`
+    - `C:\Users\20278\AppData\Local\Apifox`
+    - `C:\Users\20278\Documents\Postman`
+    - `C:\Users\20278\Documents\Apifox`
+  - 两台公网服务器在更贴近业务部署面的路径上仍未发现：
+    - 真实静态资源目录
+    - `nginx.conf`
+    - `access.log`
+    - `openresty` 配置
+- 这轮让三项阻塞的缺口更具体了：
+  - 第 1、2 项仍缺“实际业务静态资源目录或历史发布包”，理论上应在当前部署维护人或发布机备份目录手里
+  - 第 3 项仍缺“团队共享 Postman / Apifox / 联调脚本资产”，理论上应在接口联调维护人或共享资产目录里
+  - 当前环境无法证明具体持有人，只能明确下一步要向“当前部署维护人 / 联调资产维护人”索取
