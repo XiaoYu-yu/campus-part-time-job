@@ -21,6 +21,29 @@
 - 关联分支 / commit：
   - `main @ Step22/Step23 local verification`
 
+## Step 25 repo 外核查补充
+
+- 本轮没有新增完整链路执行结果，也没有新增 repo 外依赖“已关闭”的结论。
+- 本轮新增的是 repo 外人工核实的可共享入口和阴性证据：
+  - `frontend/dist/assets`
+  - `docs/deployment`
+  - `C:\Users\20278\Documents`
+  - `C:\Users\20278\Desktop`
+  - `C:\Users\20278\Downloads`
+  - `C:\Users\20278\AppData\Roaming\HBuilder X\projects`
+  - 常见 `Postman / Apifox` 目录
+  - 常见 `Nginx / gateway` 日志目录
+- 当前结果：
+  - 在当前可访问范围内未发现 repo 外旧 bridge 静态命中
+  - 未发现可用 Postman / Apifox 资产目录
+  - 未发现可归因的 Nginx / gateway 访问日志
+- 记录位置：
+  - `project-logs/campus-relay/step-25-repo-external-bridge-verification.md`
+  - `project-logs/campus-relay/bridge-execution-readiness-checklist.md`
+- 注意：
+  - 上述结果不能等同于“repo 外依赖已关闭”
+  - checklist 第 1~3 项仍然必须保留为待人工核实
+
 ## 链路步骤
 
 ### 1. customer onboarding 提交资料

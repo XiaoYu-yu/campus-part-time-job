@@ -1,13 +1,20 @@
 # 校园代送待处理事项
 
-## Step 25 最高优先级
+## Step 26 最高优先级
 
-1. 按 `bridge-execution-readiness-checklist.md` 继续关闭 repo 外人工核实项，判断 bridge 是否可以进入 `Phase A` 执行准备
-2. 结合 `bridge-regression-template.md` 与 `step-23-shared-regression-evidence.md` 补可共享回归留痕，尤其是 repo 外人工核实留痕
-3. 视真实使用反馈再评估 customer completed 结果回看页是否还需要补更明确摘要
-4. 若 bridge 评估推进顺利，再决定是否评估第五个 admin 最小只读页，但不再以“补页数”为目标
-5. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
-6. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
+1. 按 `bridge-execution-readiness-checklist.md` 继续关闭 repo 外人工核实项，重点补齐：
+   - 已部署静态资源目录核查结果
+   - Nginx / gateway 访问日志核查结果
+   - 团队共享 Postman / Apifox / 联调脚本核查结果
+2. 继续把 repo 外人工核实结果回填到：
+   - `bridge-execution-readiness-checklist.md`
+   - `bridge-phaseout-evaluation.md`
+   - `step-25-repo-external-bridge-verification.md`
+3. 只有在 repo 外阻塞项拿到真实关闭证据后，才重新评估 bridge 是否可以进入 `Phase A` 执行准备
+4. customer completed 结果回看页暂不继续扩功能，除非 repo 外核实过程暴露出演示阻塞
+5. 第五个 admin 页继续后置，不再以“补页数”为目标
+6. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
+7. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
 
 ## 已完成但仍需继续扩展的部分
 

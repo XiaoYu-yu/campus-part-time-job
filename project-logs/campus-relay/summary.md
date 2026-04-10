@@ -934,6 +934,47 @@
    - `.\mvnw.cmd -DskipTests compile`
    - `npm run build`
 
+## Step 25 实际完成事项
+
+1. 本轮没有改业务代码，没有扩新页面，没有新增接口，主目标是 repo 外 bridge 依赖核实与证据回填。
+2. 已按 Step 25 的核查顺序处理三类 repo 外阻塞项：
+   - 仓库外旧页面是否仍直接调用 `GET /api/campus/courier/profile`
+   - 仓库外旧页面是否仍直接调用 `GET /api/campus/courier/review-status`
+   - 是否仍有手工联调脚本依赖 `customer_token` 访问旧 bridge
+3. 本轮已真实核查的入口包括：
+   - `frontend/dist/assets`
+   - `docs/deployment`
+   - `C:\Users\20278\Documents`
+   - `C:\Users\20278\Desktop`
+   - `C:\Users\20278\Downloads`
+   - `C:\Users\20278\AppData\Roaming\HBuilder X\projects`
+   - `D:\20278\code`
+   - 常见 `Postman / Apifox` 目录
+   - 常见 `Nginx / gateway` 日志目录
+4. 本轮真实新增的 repo 外阴性证据：
+   - 在当前可访问范围内未发现 repo 外静态资源或旧页面直接命中 `/api/campus/courier/profile`
+   - 在当前可访问范围内未发现 repo 外静态资源或旧页面直接命中 `/api/campus/courier/review-status`
+   - 在当前可访问范围内未发现 repo 外脚本或集合依赖 `customer_token` 调旧 bridge
+5. 本轮真实新增的边界说明：
+   - `docs/deployment` 只给出通用部署方式，没有实际已部署静态资源路径
+   - 当前环境未发现可用 `Postman / Apifox` 资产目录
+   - 当前环境未发现可归因的 `Nginx / gateway` 访问日志
+   - `HBuilder X` 本地项目目录只看到空的 `setting.json`，不能证明存在仓库外旧页面项目
+6. 因为“当前核查范围内未发现命中”不等于“确认没有 repo 外依赖”，所以本轮没有把 checklist 第 1~3 项写成通过，三项都继续保留为“待人工核实”。
+7. 本轮同步更新了：
+   - `bridge-execution-readiness-checklist.md`
+   - `bridge-phaseout-evaluation.md`
+   - `bridge-regression-template.md`
+   并新增：
+   - `step-25-repo-external-bridge-verification.md`
+8. 本轮没有补第五个 admin 页。
+9. 不补第五页的原因：
+   - Step 25 的主线是 repo 外 bridge 依赖核实
+   - 继续补 admin 页只会稀释收口评估主线
+10. 执行：
+   - `.\mvnw.cmd -DskipTests compile`
+   - `npm run build`
+
 ## 当前锁定的技术事实
 
 1. 继续使用注解式 MyBatis，不改 XML
@@ -956,6 +997,7 @@
    - 当前缺口已收敛为 repo 外依赖人工核实和一轮可共享的稳定联调/回归证据
    - Step 22 已在本地 `test profile + H2` 下真实跑通一轮完整链路，repo 内阻塞已基本清掉
    - Step 23 已把这轮真实链路整理成共享回归留痕，并补了 customer completed 结果回看页
+   - Step 25 已把 repo 外核查范围、阴性证据和待人工核实边界写实
    - 因此当前不能直接删除旧 bridge，也不能启动执行准备
 
 ## 当前未解决的问题
@@ -1012,6 +1054,7 @@
 - [Step 23 日志](step-23-shared-regression-and-customer-result-readback.md)
 - [Step 23 共享回归留痕](step-23-shared-regression-evidence.md)
 - [Step 24 日志](step-24-bridge-readiness-and-customer-result-polish.md)
+- [Step 25 日志](step-25-repo-external-bridge-verification.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

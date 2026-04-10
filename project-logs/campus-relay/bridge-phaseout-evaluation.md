@@ -258,6 +258,50 @@
 3. checklist 与回归模板已经更适合真实执行
 4. 但当前仍不具备进入 `Phase A` 执行准备的完整条件
 
+## Step 25 repo 外 bridge 依赖核实与证据回填
+
+本轮没有新增 repo 外依赖“已关闭”的结论，也没有把待人工核实项改写成“已通过”。
+
+本轮新增的是一轮真实核查范围和阴性证据：
+
+1. 已核查当前环境可访问的静态资源 / 本地项目入口：
+   - `frontend/dist/assets`
+   - `docs/deployment`
+   - `C:\Users\20278\Documents`
+   - `C:\Users\20278\Desktop`
+   - `C:\Users\20278\Downloads`
+   - `C:\Users\20278\AppData\Roaming\HBuilder X\projects`
+   - `D:\20278\code`（搜索结果只命中当前 repo 内文件）
+2. 在上述范围内，未发现 repo 外旧页面或静态资源直接调用：
+   - `GET /api/campus/courier/profile`
+   - `GET /api/campus/courier/review-status`
+3. 已核查常见 API 调试资产目录：
+   - `C:\Users\20278\AppData\Roaming\Apifox`
+   - `C:\Users\20278\AppData\Local\Apifox`
+   - `C:\Users\20278\AppData\Roaming\Postman`
+   - `C:\Users\20278\AppData\Local\Postman`
+   - `C:\Users\20278\Documents\Postman`
+   - `C:\Users\20278\Documents\Postman Files`
+   当前环境未发现可用资产。
+4. 已核查常见日志目录：
+   - `C:\nginx\logs`
+   - `D:\nginx\logs`
+   - `C:\Program Files\nginx\logs`
+   - `D:\20278\deploy`
+   - `D:\deploy`
+   - `D:\logs`
+   当前环境未发现可归因的 Nginx / 网关访问日志。
+5. 已核查 `HBuilder X` 本地项目元数据：
+   - `C:\Users\20278\AppData\Roaming\HBuilder X\projects\89af163a3cc20c2544b1549ff099321a\setting.json`
+   - 当前文件内容为空对象 `{}`，不能证明存在仓库外旧页面项目。
+
+因此，本轮后的更准确状态是：
+
+1. repo 内证据仍然稳定。
+2. repo 外依赖在当前核查范围内未发现命中。
+3. 但由于缺少已部署静态资源目录、可归因访问日志和团队共享联调资产，本轮仍不能把 repo 外依赖判定为“已关闭”。
+4. 当前结论仍是：不能进入 `Phase A` 执行准备。
+
 ## 下一步人工核实建议
 
 1. 逐一确认是否还有仓库外旧页面直接调用旧 bridge 接口
@@ -305,7 +349,7 @@
 2. 当前仍然不具备进入 `Phase A` 执行准备的完整条件。
 3. 当前更准确的判断是：
    - repo 内证据已经稳定，并且本地完整链路已真实跑通
-   - repo 外依赖确认仍然只能列为待人工核实边界
+   - repo 外依赖在当前核查范围内未发现命中，但仍然只能列为待人工核实边界
    - 缺口已经从“概念性观察”收敛成“可人工关闭的 checklist + 可填写的联调模板 + 一轮本地真实留痕 + 一份共享回归证据”
-   - 但 repo 外依赖和仓库外历史调用结果仍待补齐
+   - 但 repo 外依赖关闭证据和仓库外历史调用结果仍待补齐
    - 因此下一步不是继续补 repo 内链路，而是按 checklist 关闭 repo 外人工核实项

@@ -550,3 +550,13 @@
 - [project-logs/campus-relay/bridge-execution-readiness-checklist.md](bridge-execution-readiness-checklist.md)
 - [project-logs/campus-relay/bridge-regression-template.md](bridge-regression-template.md)
 - [project-logs/campus-relay/step-24-bridge-readiness-and-customer-result-polish.md](step-24-bridge-readiness-and-customer-result-polish.md)
+
+## Step 25 - repo 外 bridge 依赖核实与证据回填
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/bridge-phaseout-evaluation.md](bridge-phaseout-evaluation.md)
+- [project-logs/campus-relay/bridge-execution-readiness-checklist.md](bridge-execution-readiness-checklist.md)
+- [project-logs/campus-relay/bridge-regression-template.md](bridge-regression-template.md)
+- [project-logs/campus-relay/step-25-repo-external-bridge-verification.md](step-25-repo-external-bridge-verification.md)

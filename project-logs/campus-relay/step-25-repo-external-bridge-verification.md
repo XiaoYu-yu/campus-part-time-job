@@ -1,0 +1,173 @@
+# Step 25 - repo 外 bridge 依赖核实与证据回填
+
+## 本轮目标
+
+1. 处理 Step 25 的三个 repo 外阻塞项，而不是继续扩 repo 内功能。
+2. 用真实核查范围和真实证据回填 bridge 文档，不伪造 repo 外结果。
+3. 明确哪些项在当前环境下能核，哪些项仍然只能保留为待人工核实。
+
+## 本轮核查范围
+
+### 1. 静态资源 / 页面产物 / 部署提示
+
+- `D:\20278\code\Campus part-time job\frontend\dist\assets`
+- `D:\20278\code\Campus part-time job\docs\deployment\production-deploy.md`
+- `D:\20278\code\Campus part-time job\docs\deployment\backup-and-rollback.md`
+- `C:\Users\20278\Documents`
+- `C:\Users\20278\Desktop`
+- `C:\Users\20278\Downloads`
+- `C:\Users\20278\AppData\Roaming\HBuilder X\projects`
+- `D:\20278\code`
+
+### 2. 访问日志 / 网关日志候选目录
+
+- `C:\nginx\logs`
+- `D:\nginx\logs`
+- `C:\Program Files\nginx\logs`
+- `D:\20278\deploy`
+- `D:\deploy`
+- `D:\logs`
+
+### 3. 调试资产 / 集合 / 脚本候选目录
+
+- `C:\Users\20278\AppData\Roaming\Apifox`
+- `C:\Users\20278\AppData\Local\Apifox`
+- `C:\Users\20278\AppData\Roaming\Postman`
+- `C:\Users\20278\AppData\Local\Postman`
+- `C:\Users\20278\Documents\Postman`
+- `C:\Users\20278\Documents\Postman Files`
+- `C:\Users\20278\Documents`
+- `C:\Users\20278\Desktop`
+- `C:\Users\20278\AppData\Roaming\HBuilder X\projects`
+- `D:\20278\code`
+
+## 实际使用了哪些入口做核查
+
+1. 静态资源目录：
+   - 搜索 `/api/campus/courier/profile`
+   - 搜索 `/api/campus/courier/review-status`
+   - 搜索 `getCourierProfile`
+   - 搜索 `getCourierReviewStatus`
+2. 部署文档：
+   - 读取 `docs/deployment/production-deploy.md`
+   - 读取 `docs/deployment/backup-and-rollback.md`
+3. 本机本地项目目录：
+   - 检查 `HBuilder X` 项目列表
+   - 读取 `C:\Users\20278\AppData\Roaming\HBuilder X\projects\89af163a3cc20c2544b1549ff099321a\setting.json`
+4. 调试资产与脚本目录：
+   - 搜索 `customer_token`
+   - 搜索旧 bridge endpoint
+   - 搜索辅助函数名
+5. 日志目录：
+   - 检查候选目录是否存在
+   - 若存在则查 `access.log / error.log / nginx.conf / gateway*.log`
+
+## 三个 repo 外阻塞项实际核查结果
+
+### 1. 仓库外旧页面是否仍直接调用 `GET /api/campus/courier/profile`
+
+- 核查结果：
+  - 在当前环境可访问范围内，未发现 repo 外静态资源、旧页面包或本地项目命中 `GET /api/campus/courier/profile`。
+  - `frontend/dist/assets` 搜索无命中。
+  - `docs/deployment` 只给出通用部署说明，没有配置具体已部署静态资源路径。
+  - `C:\Users\20278\AppData\Roaming\HBuilder X\projects\89af163a3cc20c2544b1549ff099321a\setting.json` 内容为空对象 `{}`，不能证明存在可继续追查的旧页面项目。
+  - `D:\20278\code` 全范围搜索该 endpoint 时，命中仅来自当前 repo 源码、测试和日志文档，没有 repo 外命中。
+- 证据位置：
+  - `project-logs/campus-relay/bridge-execution-readiness-checklist.md`
+  - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
+  - `D:\20278\code\Campus part-time job\docs\deployment\production-deploy.md`
+  - `D:\20278\code\Campus part-time job\frontend\dist\assets`
+  - `C:\Users\20278\AppData\Roaming\HBuilder X\projects\89af163a3cc20c2544b1549ff099321a\setting.json`
+- 结论：
+  - 当前核查范围内未发现命中。
+  - 但没有已部署静态资源目录和访问日志，不能写“确认不存在依赖”。
+- 状态：
+  - 待人工核实
+
+### 2. 仓库外旧页面是否仍直接调用 `GET /api/campus/courier/review-status`
+
+- 核查结果：
+  - 在当前环境可访问范围内，未发现 repo 外静态资源、旧页面包或本地项目命中 `GET /api/campus/courier/review-status`。
+  - `frontend/dist/assets` 搜索无命中。
+  - `docs/deployment` 未提供已部署静态资源真实路径。
+  - `D:\20278\code` 全范围搜索该 endpoint 时，命中仅来自当前 repo 源码、测试和日志文档，没有 repo 外命中。
+- 证据位置：
+  - `project-logs/campus-relay/bridge-execution-readiness-checklist.md`
+  - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
+  - `D:\20278\code\Campus part-time job\docs\deployment\production-deploy.md`
+  - `D:\20278\code\Campus part-time job\frontend\dist\assets`
+- 结论：
+  - 当前核查范围内未发现命中。
+  - 但没有已部署静态资源目录和访问日志，不能写“确认不存在依赖”。
+- 状态：
+  - 待人工核实
+
+### 3. 是否仍有手工联调脚本依赖 `customer_token` 访问旧 bridge
+
+- 核查结果：
+  - 在以下范围内搜索 `customer_token`、`/api/campus/courier/profile`、`/api/campus/courier/review-status`：
+    - `C:\Users\20278\Documents`
+    - `C:\Users\20278\Desktop`
+    - `C:\Users\20278\AppData\Roaming\HBuilder X\projects`
+    - `D:\20278\code`
+  - 未发现 repo 外脚本、集合或说明文档依赖 `customer_token` 访问旧 bridge。
+  - 当前环境未发现常见 `Postman / Apifox` 目录，因此无法对团队共享集合做进一步核查。
+- 证据位置：
+  - `project-logs/campus-relay/bridge-execution-readiness-checklist.md`
+  - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
+  - `C:\Users\20278\Documents`
+  - `C:\Users\20278\Desktop`
+  - `C:\Users\20278\AppData\Roaming\HBuilder X\projects`
+  - `D:\20278\code`
+- 结论：
+  - 当前核查范围内未发现命中。
+  - 但由于没有团队共享 Postman / Apifox 集合、仓库外脚本目录或其他机器上的联调资产，因此不能写“确认不存在依赖”。
+- 状态：
+  - 待人工核实
+
+## 访问日志核查结果
+
+1. 当前环境未发现可用的 Nginx / 网关日志目录：
+   - `C:\nginx\logs`
+   - `D:\nginx\logs`
+   - `C:\Program Files\nginx\logs`
+   - `D:\20278\deploy`
+   - `D:\deploy`
+   - `D:\logs`
+2. 在 `D:\` 全盘候选日志名搜索中，只发现与 `Trae` 插件构建相关的错误日志，不是业务访问日志，无法用于 bridge 来源归因。
+3. 本轮没有拿到任何可归因的 `access.log`、`gateway.log`、`Referer` 或 `UA` 证据。
+
+## 通过 / 不通过 / 待人工核实汇总
+
+- 通过：
+  - 无
+- 不通过：
+  - 无直接证据证明 repo 外依赖仍存在，因此本轮没有“明确不通过”的闭环项
+- 待人工核实：
+  - 仓库外旧页面是否仍直接调用 `GET /api/campus/courier/profile`
+  - 仓库外旧页面是否仍直接调用 `GET /api/campus/courier/review-status`
+  - 是否仍有手工联调脚本依赖 `customer_token` 访问旧 bridge
+
+## 当前卡点
+
+1. 没有可访问的已部署静态资源目录。
+2. 没有可归因的 Nginx / 网关访问日志。
+3. 没有可访问的团队共享 Postman / Apifox 集合。
+4. 不能从当前仓库和当前本机环境直接证明 repo 外依赖已经清空。
+
+## 本轮结束后的 bridge 结论
+
+1. repo 内证据继续稳定。
+2. repo 外依赖在当前核查范围内未发现命中。
+3. 但由于缺少已部署静态资源、访问日志和团队共享联调资产，本轮仍不能把 repo 外依赖写成“已关闭”。
+4. 因此 bridge 仍不能进入 `Phase A` 执行准备。
+
+## 下一轮建议
+
+1. 继续按 checklist 去真实拿 repo 外资产：
+   - 已部署静态资源目录
+   - Nginx / 网关访问日志
+   - 团队共享 Postman / Apifox 集合
+   - 仓库外联调脚本目录
+2. 每拿到一种资产，就按本日志结构继续补证据位置和结论。
+3. 在 repo 外阻塞项关闭前，不要把 Step 26 改成新页面或新接口开发轮。

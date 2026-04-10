@@ -31,17 +31,27 @@
 - 是否影响进入 `Phase A`：
   - 是，阻塞项
 - 记录位置：
-  - 
+  - `project-logs/campus-relay/step-25-repo-external-bridge-verification.md`
+  - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
 - 核实结果：
-  - 
+  - `2026-04-10` 已在当前环境核查以下可访问范围：
+    - `D:\20278\code\Campus part-time job\frontend\dist\assets`
+    - `D:\20278\code\Campus part-time job\docs\deployment`
+    - `C:\Users\20278\Documents`
+    - `C:\Users\20278\Desktop`
+    - `C:\Users\20278\Downloads`
+    - `C:\Users\20278\AppData\Roaming\HBuilder X\projects`
+    - `D:\20278\code`（搜索结果只命中当前 repo 内文件）
+  - 在上述范围内未发现 repo 外静态资源、旧页面包或本地项目直接调用 `GET /api/campus/courier/profile` 的命中。
+  - 但当前环境没有提供已部署静态资源目录，也没有提供可归因的 Nginx / 网关访问日志，因此不能据此判定 repo 外依赖已关闭。
 - 负责人：
-  - 
+  - Codex
 - 日期：
-  - 
+  - `2026-04-10`
 - 是否通过：
   - [ ] 通过
   - [ ] 不通过
-  - [ ] 待人工核实
+  - [x] 待人工核实
 
 ### 2. 仓库外旧页面是否仍直接调用 `GET /api/campus/courier/review-status`
 
@@ -64,17 +74,27 @@
 - 是否影响进入 `Phase A`：
   - 是，阻塞项
 - 记录位置：
-  - 
+  - `project-logs/campus-relay/step-25-repo-external-bridge-verification.md`
+  - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
 - 核实结果：
-  - 
+  - `2026-04-10` 已在当前环境核查以下可访问范围：
+    - `D:\20278\code\Campus part-time job\frontend\dist\assets`
+    - `D:\20278\code\Campus part-time job\docs\deployment`
+    - `C:\Users\20278\Documents`
+    - `C:\Users\20278\Desktop`
+    - `C:\Users\20278\Downloads`
+    - `C:\Users\20278\AppData\Roaming\HBuilder X\projects`
+    - `D:\20278\code`（搜索结果只命中当前 repo 内文件）
+  - 在上述范围内未发现 repo 外静态资源、旧页面包或本地项目直接调用 `GET /api/campus/courier/review-status` 的命中。
+  - 但当前环境没有提供已部署静态资源目录，也没有提供可归因的 Nginx / 网关访问日志，因此不能据此判定 repo 外依赖已关闭。
 - 负责人：
-  - 
+  - Codex
 - 日期：
-  - 
+  - `2026-04-10`
 - 是否通过：
   - [ ] 通过
   - [ ] 不通过
-  - [ ] 待人工核实
+  - [x] 待人工核实
 
 ### 3. 是否仍有手工联调脚本依赖 `customer_token` 访问旧 bridge
 
@@ -97,17 +117,31 @@
 - 是否影响进入 `Phase A`：
   - 是，阻塞项
 - 记录位置：
-  - 
+  - `project-logs/campus-relay/step-25-repo-external-bridge-verification.md`
+  - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
 - 核实结果：
-  - 
+  - `2026-04-10` 已在当前环境检查以下脚本和联调资产入口：
+    - `C:\Users\20278\Documents`
+    - `C:\Users\20278\Desktop`
+    - `C:\Users\20278\AppData\Roaming\HBuilder X\projects`
+    - `D:\20278\code`
+  - 在上述范围内对 `.json/.md/.txt/.bat/.sh/.ps1/.py` 等文本资产搜索 `customer_token`、`/api/campus/courier/profile`、`/api/campus/courier/review-status`，未发现 repo 外脚本或集合依赖 `customer_token` 调旧 bridge 的命中。
+  - 当前环境未发现常见 API 调试资产目录：
+    - `C:\Users\20278\AppData\Roaming\Apifox`
+    - `C:\Users\20278\AppData\Local\Apifox`
+    - `C:\Users\20278\AppData\Roaming\Postman`
+    - `C:\Users\20278\AppData\Local\Postman`
+    - `C:\Users\20278\Documents\Postman`
+    - `C:\Users\20278\Documents\Postman Files`
+  - 由于无法证明团队共享集合、仓库外脚本目录或其他机器上的联调资产不存在，当前仍只能标记为待人工核实。
 - 负责人：
-  - 
+  - Codex
 - 日期：
-  - 
+  - `2026-04-10`
 - 是否通过：
   - [ ] 通过
   - [ ] 不通过
-  - [ ] 待人工核实
+  - [x] 待人工核实
 
 ### 4. workbench 的 profile / review-status 请求是否全程只走 `courier_token`
 
@@ -190,3 +224,12 @@
   - 成功时如何留痕
   - 失败时如何留痕
 - 因此本文档当前仍是“可执行 checklist”，不是“repo 外依赖已关闭”的证明。
+
+## Step 25 说明
+
+- 本轮没有把 repo 外待核实项写成“已通过”。
+- 本轮新增的是三类真实阴性证据和边界说明：
+  - 当前环境可访问的静态资源 / 本地项目目录里未发现旧 bridge 命中
+  - 当前环境未发现常见 Postman / Apifox 资产目录
+  - 当前环境未发现可归因的 Nginx / 网关访问日志目录
+- 因为“未在当前核查范围命中”不等于“确认无 repo 外依赖”，所以第 1~3 项仍保留为“待人工核实”。
