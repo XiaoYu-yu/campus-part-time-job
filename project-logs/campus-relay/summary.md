@@ -37,8 +37,9 @@
 - 当前已完成：`Step 27 - 关键外部资产追补与阻塞项继续关闭`
 - 当前已完成：`Step 28 - 关键业务资产追补与阻塞项继续关闭`
 - 当前已完成：`Step 29 - owner 确认回填 / bridge repo 外阻塞关闭与阶段重评估`
+- 当前已完成：`Step 30 - Phase A 执行准备重新评估`
 - 当前日期：`2026-04-10`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 又基于项目 owner 的明确确认，关闭了“未部署发布项目的 repo 外部署物 / 日志 / 团队共享调试资产”这三类伪阻塞，当前阶段已从“继续追 repo 外证据”切换到“Phase A 执行准备重新评估”，但 bridge 仍保留、旧外卖模块仍保留可运行、旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，当前阶段可以进入 `Phase A` 执行准备重新评估，但 bridge 仍保留、旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
 
@@ -1041,6 +1042,7 @@
    - Step 29 owner 已明确确认：项目从未部署、从未发布、没有历史发布包、没有团队、没有团队共享调试资产、也没有仓库外旧页面副本或临时脚本
    - 因此这些 repo 外阻塞项已经按 owner 明确确认关闭
    - 当前可以进入 `Phase A` 执行准备重新评估
+   - Step 30 已正式固化 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单
    - 但当前仍不能直接删除旧 bridge，也不能跳过 `Phase A` 方案设计与回滚评估
 
 ## Step 27 实际完成事项
@@ -1149,6 +1151,44 @@
    - 当前主线已经从“追 repo 外证据”切到“Phase A 重新评估”
    - 继续补 admin 页会偏离 bridge 收口主线
 
+## Step 30 实际完成事项
+
+1. 本轮没有改业务代码、没有补新页面、没有新增接口，只做 `Phase A` 执行准备重新评估。
+2. 本轮正式把阶段结论从“repo 外阻塞已关闭”推进到“可以进入 `Phase A` 执行准备重新评估”。
+3. 本轮明确了 `Phase A` 的执行边界：
+   - 只做执行准备
+   - 不做真正收口动作
+   - 不删接口
+   - 不删 bridge
+   - 不改鉴权
+   - 不改 repo 内业务代码
+4. 本轮明确了 bridge 在 `Phase A` 期间的保留范围：
+   - `/api/campus/courier/profile` 继续保留
+   - `/api/campus/courier/review-status` 继续保留
+   - `customer_token -> bridge -> courier 前置读取` 继续允许，但只观察，不改行为
+   - `/courier/workbench` 继续维持优先 `courier_token` 的策略
+5. 本轮明确了回滚策略：
+   - 任何未来收口动作若导致 workbench、onboarding、token 或 completed 回读链路回归失败，第一回滚点就是恢复到 Step 29 结束时的 bridge 保守状态
+   - `request.js` 现有 token 附着逻辑、`CourierWorkbench.vue` 现有读取行为和 `customer/courier-onboarding/*` 前置链路都属于回滚关键点
+6. 本轮明确了最小回归清单，至少覆盖：
+   - customer onboarding 提交资料
+   - customer 查看审核状态
+   - customer 申请 courier token
+   - `/courier/workbench` 加载 profile / review-status
+   - pure `courier_token` 路径稳定
+   - 接单 / 取餐 / deliver / 异常上报
+   - customer confirm
+   - completed 回读
+   - customer 结果回看页
+7. 本轮同步统一了 bridge 文档口径：
+   - `bridge-execution-readiness-checklist.md`
+   - `bridge-phaseout-evaluation.md`
+   - `step-29-owner-confirmation-and-bridge-reassessment.md`
+8. 本轮没有补第五个 admin 页。
+9. 不补第五页的原因：
+   - Step 30 的唯一主线是 `Phase A` 执行准备重新评估
+   - 继续补展示页会稀释 bridge 收口评估主线
+
 ## 当前未解决的问题
 
 - customer 仍没有自助退款申请和结果确认交互，只能查看售后结果回执
@@ -1161,11 +1201,11 @@
 
 ## 下一轮建议
 
-- 进入 `Step 30`
+- 进入 `Step 31`
 - 推荐顺序：
-  1. 基于 Step 29 的 owner 明确确认，正式启动 `Phase A` 执行准备重新评估
-  2. 明确 bridge 在 `Phase A` 中的保留范围、回滚策略和最小回归清单
-  3. 若 `Phase A` 只涉及 repo 内调用收紧，先从 workbench 的旧 bridge 使用范围评估开始
+  1. 在 Step 30 已定义好的边界内，评估是否执行最小、可回滚的 `Phase A` 动作
+  2. 若要执行，优先从 repo 内调用边界最清晰、影响面最小的 bridge 使用范围开始
+  3. 执行前先按 Step 30 的最小回归清单复核一轮
   4. 第五个 admin 页继续后置，避免稀释当前优先级
 
 ## 日志索引
@@ -1208,6 +1248,7 @@
 - [Step 27 日志](step-27-key-external-asset-verification.md)
 - [Step 28 日志](step-28-critical-business-asset-followup.md)
 - [Step 29 日志](step-29-owner-confirmation-and-bridge-reassessment.md)
+- [Step 30 日志](step-30-phase-a-readiness-reassessment.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

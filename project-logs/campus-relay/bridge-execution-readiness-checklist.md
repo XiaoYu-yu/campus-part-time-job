@@ -449,3 +449,132 @@
   - repo 外阻塞项已关闭
   - 可以进入 `Phase A` 执行准备重新评估
   - 仍不等于立即删除 bridge 或直接修改鉴权策略
+
+## Step 30 说明
+
+- 本轮不再继续追 repo 外证据。
+- 本轮只做一件事：把“可以进入 `Phase A` 执行准备重新评估”落成可执行的正式方案。
+- 这里的“执行准备”仍不等于实际收口动作：
+  - 不删 `/api/campus/courier/profile`
+  - 不删 `/api/campus/courier/review-status`
+  - 不改 `request.js` 的现有 token 附着逻辑
+  - 不改后端鉴权规则
+
+## Step 30 - 进入 Phase A 前的执行准备项
+
+### 6. `Phase A` 的执行边界是否已明确
+
+- 记录位置：
+  - `project-logs/campus-relay/step-30-phase-a-readiness-reassessment.md`
+  - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
+- 核实结果：
+  - `2026-04-10` 已明确 `Phase A` 只做执行准备，不做真正收口动作。
+  - `Phase A` 明确做的事：
+    - 固化 repo 内调用边界
+    - 固化 bridge 保留范围
+    - 固化最小回归清单
+    - 固化回滚策略
+  - `Phase A` 明确不做的事：
+    - 不删接口
+    - 不删 bridge
+    - 不改鉴权
+    - 不改 repo 内业务代码
+- 负责人：
+  - Codex
+- 日期：
+  - `2026-04-10`
+- 是否通过：
+  - [x] 通过
+  - [ ] 不通过
+  - [ ] 待人工核实
+
+### 7. bridge 保留范围是否已明确
+
+- 记录位置：
+  - `project-logs/campus-relay/step-30-phase-a-readiness-reassessment.md`
+  - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
+- 核实结果：
+  - `2026-04-10` 已明确：
+    - `/api/campus/courier/profile` 继续保留
+    - `/api/campus/courier/review-status` 继续保留
+    - `customer_token -> bridge -> courier 前置读取` 在 `Phase A` 期间继续允许观察，不做行为变更
+    - `/courier/workbench` 继续维持优先 `courier_token` 的现有策略
+- 负责人：
+  - Codex
+- 日期：
+  - `2026-04-10`
+- 是否通过：
+  - [x] 通过
+  - [ ] 不通过
+  - [ ] 待人工核实
+
+### 8. 回滚策略是否已明确
+
+- 记录位置：
+  - `project-logs/campus-relay/step-30-phase-a-readiness-reassessment.md`
+  - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
+- 核实结果：
+  - `2026-04-10` 已明确回滚关键点：
+    - bridge 接口继续保留
+    - `frontend/src/utils/request.js` 的现有 token 附着逻辑继续保留
+    - `frontend/src/views/courier/CourierWorkbench.vue` 的现有行为不提前变更
+    - `customer/courier-onboarding/*` 仍作为新的前置入口，不回退到旧入口
+  - 已明确回滚触发条件：
+    - workbench 无法稳定读取 `profile / review-status`
+    - 纯 `courier_token` 路径失稳
+    - onboarding -> token -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> confirm / completed 回读任一关键链路回归失败
+- 负责人：
+  - Codex
+- 日期：
+  - `2026-04-10`
+- 是否通过：
+  - [x] 通过
+  - [ ] 不通过
+  - [ ] 待人工核实
+
+### 9. 最小回归清单是否已明确
+
+- 记录位置：
+  - `project-logs/campus-relay/step-30-phase-a-readiness-reassessment.md`
+  - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
+- 核实结果：
+  - `2026-04-10` 已明确最小回归清单至少覆盖：
+    - customer onboarding 提交资料
+    - customer 查看审核状态
+    - customer 申请 courier token
+    - `/courier/workbench` 加载 `profile / review-status`
+    - pure `courier_token` 路径稳定
+    - 接单
+    - 取餐
+    - deliver
+    - 异常上报
+    - customer confirm
+    - completed 回读
+    - customer 结果回看页
+- 负责人：
+  - Codex
+- 日期：
+  - `2026-04-10`
+- 是否通过：
+  - [x] 通过
+  - [ ] 不通过
+  - [ ] 待人工核实
+
+### 10. 执行动作与非执行动作边界是否已明确
+
+- 记录位置：
+  - `project-logs/campus-relay/step-30-phase-a-readiness-reassessment.md`
+  - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
+- 核实结果：
+  - `2026-04-10` 已明确：
+    - Step 30 只做 `Phase A` 执行准备重新评估
+    - 真正的收口动作应放到 Step 31 以后，在回滚和回归都准备好的前提下再做
+    - 当前阶段结论是“可以进入 `Phase A` 执行准备重新评估”，不是“现在就执行收口”
+- 负责人：
+  - Codex
+- 日期：
+  - `2026-04-10`
+- 是否通过：
+  - [x] 通过
+  - [ ] 不通过
+  - [ ] 待人工核实

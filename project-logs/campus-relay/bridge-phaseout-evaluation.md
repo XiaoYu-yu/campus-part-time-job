@@ -540,3 +540,115 @@
    - 立即删除 `/api/campus/courier/profile`
    - 立即删除 `/api/campus/courier/review-status`
    - 立即收紧双 token 鉴权策略
+
+## Step 30 Phase A 执行准备重新评估
+
+本轮不再继续追 repo 外证据，也不执行任何 bridge 收口动作。本轮只把“可以进入 `Phase A` 执行准备重新评估”落成正式方案。
+
+### 为什么 repo 外阻塞现在可以视为关闭
+
+1. Step 29 已基于项目 owner 的明确确认关闭 repo 外阻塞项：
+   - 项目从未部署、从未发布
+   - 不存在历史发布包
+   - 当前项目唯一维护人就是 owner 本人
+   - 当前没有团队
+   - 不存在团队共享 `Postman / Apifox / 联调脚本`
+   - 不存在仓库外旧页面副本、历史前端包或非 repo 管理的联调副本
+2. 因此 Step 25 到 Step 28 追的“部署物 / 访问日志 / 团队共享资产”不再是当前项目的未关闭阻塞项。
+3. 当前阶段已经不需要继续做 repo 外取证，可以进入 `Phase A` 执行准备重新评估。
+
+### 为什么这仍不等于立即删 bridge
+
+1. repo 外阻塞关闭，只意味着具备重新评估 `Phase A` 的条件，不意味着可以跳过回滚和回归设计。
+2. repo 内当前仍存在 bridge 的真实保留场景：
+   - `/api/campus/courier/profile`
+   - `/api/campus/courier/review-status`
+   - `/courier/workbench` 仍依赖这两个接口做资料和审核状态读取
+3. 当前 repo 内链路已经稳定：
+   - `customer/courier-onboarding/*`
+   - `/api/campus/courier/auth/token`
+   - `/courier/workbench`
+   - `customer` 结果回看页
+4. 因此本轮正确动作是先定义边界，不是先动行为。
+
+### `Phase A` 做什么
+
+1. 明确 `Phase A` 的执行边界。
+2. 明确 bridge 在 `Phase A` 期间的保留范围。
+3. 明确回滚策略与回滚触发条件。
+4. 明确最小回归清单。
+5. 统一 bridge 相关文档口径，为 Step 31 以后可能的真正执行动作做准备。
+
+### `Phase A` 不做什么
+
+1. 不删除 `/api/campus/courier/profile`。
+2. 不删除 `/api/campus/courier/review-status`。
+3. 不做大规模鉴权收紧。
+4. 不改 `frontend/src/utils/request.js` 的 token 附着逻辑。
+5. 不改 repo 内业务代码。
+6. 不补新页面、不补新接口、不进入功能开发轮。
+
+### bridge 保留范围
+
+1. `Phase A` 期间继续保留以下 bridge 接口：
+   - `GET /api/campus/courier/profile`
+   - `GET /api/campus/courier/review-status`
+2. `customer_token -> bridge -> courier 前置读取` 这条链路在 `Phase A` 期间继续允许存在，但只观察，不主动修改行为。
+3. `/courier/workbench` 继续维持现有优先 `courier_token` 的策略，不额外收紧。
+4. `customer/courier-onboarding/*` 继续作为新的前置入口，不回退到旧入口。
+5. `Phase A` 期间只做执行准备，不改变当前演示或联调行为。
+
+### 回滚策略
+
+1. 第一回滚点是恢复到 Step 29 结束时的 bridge 保守状态。
+2. 回滚关键点包括：
+   - bridge 接口继续保留
+   - `frontend/src/utils/request.js` 现有 token 附着逻辑保留
+   - `frontend/src/views/courier/CourierWorkbench.vue` 现有读取行为保留
+   - `customer/courier-onboarding/*` 继续作为 customer 前置链路
+3. 以下现象视为必须回滚：
+   - `/courier/workbench` 无法稳定读取 `profile / review-status`
+   - pure `courier_token` 路径失稳
+   - onboarding -> token -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读 任一关键链路回归失败
+   - customer 结果回看页的 `AWAITING_CONFIRMATION / COMPLETED` 结果异常
+4. 回滚后的目标状态是：
+   - repo 内现有链路恢复到 Step 29 结束时的工作方式
+   - bridge 继续保留
+   - 不引入新的行为变化
+
+### 最小回归清单
+
+1. customer onboarding 提交资料
+2. customer 查看审核状态
+3. customer 申请 courier token
+4. `/courier/workbench` 加载 `profile / review-status`
+5. pure `courier_token` 路径稳定
+6. 接单
+7. 取餐
+8. deliver
+9. 异常上报
+10. customer confirm
+11. completed 回读
+12. customer 结果回看页
+13. 任何 bridge 收紧候选动作都不能破坏上述链路
+
+### 执行前触发条件
+
+以下条件都满足，才允许从“执行准备重新评估”进入真正的执行动作：
+
+1. `Phase A` 范围已明确。
+2. bridge 保留范围已明确。
+3. 回滚策略已明确。
+4. 最小回归清单已明确。
+5. 执行动作和非执行动作边界已明确。
+6. bridge 文档口径一致，不再出现“有的文档写先观察，有的文档写准备删接口”的冲突。
+
+### 当前结论
+
+1. 当前已经可以进入 `Phase A` 执行准备重新评估。
+2. 当前 bridge 仍保留，且没有执行删除动作。
+3. 当前更准确的阶段判断是：
+   - repo 外阻塞已关闭
+   - `Phase A` 的边界、保留范围、回滚策略和最小回归清单已明确
+   - 真正的收口动作仍未开始
+4. Step 31 以后如果要推进收口动作，必须按本轮定义的边界先做最小、可回滚的执行，不得跳过回滚和回归约束。
