@@ -8,6 +8,25 @@
 4. 核实失败时不要覆盖成成功，要保留失败现象、失败证据和下一步处理建议。
 5. 进入 `Phase A` 执行准备前，至少需要把所有“阻塞项”明确填完。
 
+## Step 28 说明
+
+1. Step 28 不再重复 Step 25 到 Step 27 已做过的泛目录搜索。
+2. 本轮只追三类更接近业务持有人或真实运行面的关键资产：
+   - 云盘侧真实下载根路径与下载日志
+   - repo 外历史压缩包 / 构建产物
+   - 服务器 shell 历史里可能残留的部署线索
+3. 本轮新增拿到的关键资产与证据入口：
+   - `C:\Users\20278\AppData\Roaming\aDrive\preference.json`
+   - `C:\Users\20278\AppData\Roaming\aDrive\logs\main.log`
+   - `D:\software\GOT\html\project.zip`
+   - `ssh xiaoyu_TenXun_Ubuntu` 下 `/root/.bash_history`、`/home/ubuntu/.bash_history`
+   - `ssh xiaoyu_root_ALi_Ubuntu` 下 `/root/.bash_history`
+4. 本轮新增结论不是“通过”，而是：
+   - 已能证明 `D:\software` 是当前机器阿里云盘客户端下载根路径
+   - 已能证明 `D:\software\GOT\html\project.zip` 是 repo 外真实压缩包，但内容是 `healthy-management`，不是当前校园代送项目
+   - 已能证明当前已知两台公网服务器 shell 历史中没有业务部署痕迹
+   - 但仍拿不到真正承载校园代送的业务静态资源目录、历史发布包、可归因访问日志和团队共享调试资产
+
 ## 核实项
 
 ### 1. 仓库外旧页面是否仍直接调用 `GET /api/campus/courier/profile`
@@ -62,6 +81,36 @@
     - Windows Recent 只证明当前机器近期打开过额外的 repo 外工作流文档，但目标文件当前缺失，无法继续读取
     - 两台公网服务器在常见部署 / 日志路径下仍未发现业务部署物、`nginx.conf` 或 `access.log`
   - 因为仍未拿到实际业务静态资源目录或历史发布包，所以第 1 项继续保持待人工核实。
+  - `2026-04-10` Step 28 继续追关键业务资产：
+    - `C:\Users\20278\AppData\Roaming\aDrive\preference.json` 明确记录：
+      - `downloadPath = D:\software`
+      - 当前机器阿里云盘下载根路径就是 `D:\software`
+      - 当前用户侧偏好项键为 `e9b4317bda8649b7af3c521cd1a42293`
+    - `C:\Users\20278\AppData\Roaming\aDrive\logs\main.log` 明确出现真实下载落地路径：
+      - `D:\software\VMware-workstation-full-17.5.0-22583795 (1).exe.part`
+      - 这证明 `D:\software` 不是随机本机目录，而是云盘客户端下载根路径
+    - `D:\software\GOT\html\project.zip` 是 repo 外真实压缩包；解包清单与 `package.json` 显示其主体为：
+      - `project/healthy-management`
+      - `description: 健康颐养平台-管理端`
+      - `repository: http://gitlab.neumooc.com/yiyanghealthy/healthy-management.git`
+    - 对该压缩包内部搜索：
+      - `/api/campus/courier/profile`
+      - `/api/campus/courier/review-status`
+      - `getCourierProfile`
+      - `getCourierReviewStatus`
+      - `customer_token`
+      均无命中
+    - 因此 Step 28 拿到的是真实 repo 外发布包级资产，但它能证明的只是：
+      - 当前云盘根目录存在其他项目压缩包
+      - 尚未拿到校园代送项目自己的真实发布包或静态资源目录
+  - `2026-04-10` Step 28 服务器 shell 历史补证：
+    - `xiaoyu_TenXun_Ubuntu:/root/.bash_history` 与 `/home/ubuntu/.bash_history`
+    - `xiaoyu_root_ALi_Ubuntu:/root/.bash_history`
+    - 对 `nginx|openresty|wwwroot|/www|scp|rsync|zip|tar|deploy|campus|delivery|takeaway|git clone|git checkout` 检索后，未发现业务部署命令痕迹
+    - 这进一步说明当前已知两台公网服务器不像校园代送的实际静态资源承载机
+  - 但第 1 项仍不能关闭，因为还缺：
+    - 校园代送项目自己的真实业务静态资源目录或历史发布包
+    - 可归因访问日志
 - 负责人：
   - Codex
 - 日期：
@@ -123,6 +172,14 @@
     - Windows Recent 只证明当前机器近期打开过额外的 repo 外工作流文档，但目标文件当前缺失，无法继续读取
     - 两台公网服务器在常见部署 / 日志路径下仍未发现业务部署物、`nginx.conf` 或 `access.log`
   - 因为仍未拿到实际业务静态资源目录或历史发布包，所以第 2 项继续保持待人工核实。
+  - `2026-04-10` Step 28 继续追关键业务资产：
+    - `C:\Users\20278\AppData\Roaming\aDrive\preference.json` 与 `aDrive\logs\main.log` 证明 `D:\software` 是当前机器的云盘下载根路径
+    - `D:\software\GOT\html\project.zip` 是 repo 外真实压缩包，但内部项目为 `healthy-management`，对旧 bridge 关键字无命中
+    - `xiaoyu_TenXun_Ubuntu` 与 `xiaoyu_root_ALi_Ubuntu` 的 shell 历史对部署关键字无命中
+  - 因此 Step 28 拿到的新资产更接近“发布包/部署持有人”，但仍没有拿到校园代送项目自己的静态资源包或运行中页面产物。
+  - 第 2 项继续保持待人工核实，原因是：
+    - 仍缺校园代送真实发布包或静态目录
+    - 仍缺可归因访问日志
 - 负责人：
   - Codex
 - 日期：
@@ -195,6 +252,17 @@
     - 在上述文本和脚本类资产中，未发现 `customer_token` 调旧 bridge 的真实脚本命中
     - Windows Recent 只证明存在过额外工作流文档入口，但目标文件当前缺失，无法继续提取集合或脚本线索
   - 因为仍没有团队共享 Postman / Apifox / 联调脚本资产，所以第 3 项继续保持待人工核实。
+  - `2026-04-10` Step 28 继续补追团队共享调试资产线索：
+    - `C:\Users\20278\AppData\Roaming\aDrive\preference.json` 证明当前机器确实通过阿里云盘把文件下载到 `D:\software`
+    - 但在 `D:\software` 当前已知的校园代送相关 repo 外文件仍只有：
+      - `D:\software\重庆工信职业学院渝中校区_校园代送平台_信息采集表.md`
+      - `D:\software\校园代送项目_完整交接总结_Step24.md`
+    - 未拿到：
+      - 团队共享 `Postman collection / environment`
+      - `Apifox` 项目导出
+      - 联调脚本包
+    - `C:\Users\20278\AppData\Roaming\Microsoft\Windows\Recent\GOT.zip.lnk` 解析到目标 `D:\software\GOT.zip`，但目标文件已不存在，无法继续读取是否包含调试资产
+  - 因此第 3 项在 Step 28 后依然不能关闭，仍缺团队共享调试资产本体，不是只缺搜索动作。
 - 负责人：
   - Codex
 - 日期：

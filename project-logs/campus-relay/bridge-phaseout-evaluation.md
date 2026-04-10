@@ -404,6 +404,7 @@
    - repo 内证据已经稳定，并且本地完整链路已真实跑通
    - repo 外依赖在当前核查范围内未发现命中，并且已知两台公网服务器和 repo 外共享文档也未发现命中，但仍然只能列为待人工核实边界
    - 缺口已经从“概念性观察”收敛成“可人工关闭的 checklist + 可填写的联调模板 + 一轮本地真实留痕 + 一份共享回归证据”
+   - Step 28 已进一步拿到更接近真实业务持有面的云盘下载根路径、真实外部压缩包和服务器 shell 历史，但仍未拿到校园代送项目自己的静态资源目录、历史发布包、可归因访问日志和团队共享调试资产
    - 但 repo 外依赖关闭证据、真实部署产物和仓库外历史调用结果仍待补齐
    - 因此下一步不是继续补 repo 内链路，而是按 checklist 关闭 repo 外人工核实项
 
@@ -467,3 +468,38 @@
    - 静态资源 / 发布包：应向当前部署维护人或发布机持有人索取
    - 访问日志：应向当前运维或网关维护人索取
    - 调试集合 / 脚本：应向当前接口联调维护人或共享资产维护人索取
+
+## Step 28 关键业务资产追补结果
+
+本轮没有新增 repo 内功能，也没有删除 bridge。本轮只继续追三类真正可能关项的关键业务资产。
+
+### 本轮新增拿到的关键业务资产
+
+1. 云盘侧真实下载根路径与下载日志
+   - `C:\Users\20278\AppData\Roaming\aDrive\preference.json`
+   - `C:\Users\20278\AppData\Roaming\aDrive\logs\main.log`
+2. repo 外真实压缩包
+   - `D:\software\GOT\html\project.zip`
+3. 更接近部署持有面的服务器 shell 历史
+   - `xiaoyu_TenXun_Ubuntu:/root/.bash_history`
+   - `xiaoyu_TenXun_Ubuntu:/home/ubuntu/.bash_history`
+   - `xiaoyu_root_ALi_Ubuntu:/root/.bash_history`
+
+### 基于新资产的重新判断
+
+1. `aDrive` 配置和日志证明 `D:\software` 是当前机器阿里云盘客户端下载根路径，属于真实 repo 外资产持有入口，而不是随机本机目录。
+2. `D:\software\GOT\html\project.zip` 是真实外部压缩包，但其内部项目为 `healthy-management`，并非校园代送；对 `/api/campus/courier/profile`、`/api/campus/courier/review-status`、`getCourierProfile`、`getCourierReviewStatus`、`customer_token` 搜索均无命中。
+3. 两台公网服务器 shell 历史中未发现 `nginx`、`openresty`、`wwwroot`、`deploy`、`campus`、`delivery`、`takeaway` 等业务部署痕迹，进一步说明当前已知公网服务器不像校园代送前端静态资源承载机或发布机。
+4. 因此，Step 28 虽然比 Step 27 更接近真实业务持有面，但三项阻塞都还不能关闭：
+   - 第 1、2 项仍缺校园代送项目自己的真实业务静态资源目录或历史发布包，以及可归因访问日志
+   - 第 3 项仍缺团队共享 Postman / Apifox / 联调脚本资产
+
+### 当前是否可进入 Phase A 执行准备
+
+1. 仍然不可以。
+2. Step 28 新增资产只把“谁可能持有关键业务资产”写得更具体，并没有拿到真正能关闭阻塞项的资产本体。
+3. 当前仍缺：
+   - 校园代送项目自己的真实业务静态资源目录或历史发布包
+   - 可归因的 Nginx / gateway / reverse proxy 访问日志
+   - 团队共享 Postman / Apifox / 联调脚本资产
+4. 因此 bridge 仍不能进入 `Phase A` 执行准备。

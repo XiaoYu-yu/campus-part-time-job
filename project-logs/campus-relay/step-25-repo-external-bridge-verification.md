@@ -208,3 +208,21 @@
    - 还没有拿到团队共享 Postman / Apifox / 联调脚本资产
 4. 因此 Step 25 的最终阶段结论继续保持：
    - bridge 仍不能进入 `Phase A` 执行准备
+
+## Step 28 补充证据
+
+1. 本轮没有再重复 Step 25 到 Step 27 的泛目录搜索，而是继续追关键业务资产：
+   - `C:\Users\20278\AppData\Roaming\aDrive\preference.json`
+   - `C:\Users\20278\AppData\Roaming\aDrive\logs\main.log`
+   - `D:\software\GOT\html\project.zip`
+   - 两台公网服务器的 shell 历史
+2. 本轮新增真实核查结果：
+   - `aDrive` 配置和日志证明 `D:\software` 是当前机器阿里云盘客户端下载根路径
+   - `D:\software\GOT\html\project.zip` 是真实外部压缩包，但内部项目为 `healthy-management`，不是校园代送项目
+   - 两台公网服务器 shell 历史中未发现业务部署痕迹
+3. 这批证据比 Step 27 更接近“资产持有人和发布包入口”，但仍不足以关闭三项阻塞，因为：
+   - 没有校园代送项目自己的真实静态资源目录或历史发布包
+   - 没有可归因访问日志
+   - 没有团队共享 Postman / Apifox / 联调脚本资产
+4. 因此 Step 25 的最终阶段结论继续保持：
+   - bridge 仍不能进入 `Phase A` 执行准备

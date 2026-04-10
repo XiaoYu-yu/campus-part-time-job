@@ -156,3 +156,23 @@
 3. 这些证据让 repo 外边界继续收窄，但依然不足以关闭 3 个阻塞项。
 4. Step 26 的最终结论保持不变：
    - bridge 仍不能进入 `Phase A` 执行准备
+
+## Step 28 补充证据
+
+1. 本轮新增关键业务资产：
+   - `C:\Users\20278\AppData\Roaming\aDrive\preference.json`
+   - `C:\Users\20278\AppData\Roaming\aDrive\logs\main.log`
+   - `D:\software\GOT\html\project.zip`
+   - `xiaoyu_TenXun_Ubuntu:/root/.bash_history`
+   - `xiaoyu_TenXun_Ubuntu:/home/ubuntu/.bash_history`
+   - `xiaoyu_root_ALi_Ubuntu:/root/.bash_history`
+2. 本轮新增真实核查结果：
+   - 已能证明 `D:\software` 是云盘客户端下载根路径
+   - 已能证明当前云盘根路径里存在真实外部压缩包，但 `project.zip` 属于 `healthy-management`，不是校园代送项目
+   - 已能证明当前已知两台公网服务器 shell 历史没有业务部署命令痕迹
+3. 这些资产比 Step 26 更接近真实业务持有面，但仍不足以关闭三项阻塞，因为真正能关项的三类资产还没拿到：
+   - 校园代送真实静态资源目录或历史发布包
+   - 可归因访问日志
+   - 团队共享调试资产
+4. Step 26 的最终结论继续保持：
+   - bridge 仍不能进入 `Phase A` 执行准备

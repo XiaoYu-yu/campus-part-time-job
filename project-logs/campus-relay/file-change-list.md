@@ -581,3 +581,15 @@
 - [project-logs/campus-relay/step-25-repo-external-bridge-verification.md](step-25-repo-external-bridge-verification.md)
 - [project-logs/campus-relay/step-26-repo-external-evidence-closure.md](step-26-repo-external-evidence-closure.md)
 - [project-logs/campus-relay/step-27-key-external-asset-verification.md](step-27-key-external-asset-verification.md)
+
+## Step 28 - 关键业务资产追补与阻塞项继续关闭
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/bridge-phaseout-evaluation.md](bridge-phaseout-evaluation.md)
+- [project-logs/campus-relay/bridge-execution-readiness-checklist.md](bridge-execution-readiness-checklist.md)
+- [project-logs/campus-relay/step-25-repo-external-bridge-verification.md](step-25-repo-external-bridge-verification.md)
+- [project-logs/campus-relay/step-26-repo-external-evidence-closure.md](step-26-repo-external-evidence-closure.md)
+- [project-logs/campus-relay/step-27-key-external-asset-verification.md](step-27-key-external-asset-verification.md)
+- [project-logs/campus-relay/step-28-critical-business-asset-followup.md](step-28-critical-business-asset-followup.md)

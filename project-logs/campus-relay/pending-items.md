@@ -1,9 +1,9 @@
 # 校园代送待处理事项
 
-## Step 28 最高优先级
+## Step 29 最高优先级
 
-1. 基于 Step 27 已拿到的 repo 外源码树、Windows Recent 文档入口和公网服务器部署候选路径，继续追真正能关项的关键业务资产，重点仍是：
-   - 实际业务静态资源目录或历史发布包
+1. 基于 Step 28 已拿到的云盘下载根路径、真实外部压缩包和服务器 shell 历史，继续追真正能关项的关键业务资产，重点仍是：
+   - 校园代送项目自己的实际业务静态资源目录或历史发布包
    - 可归因的 Nginx / gateway 访问日志
    - 团队共享 Postman / Apifox / 联调脚本资产
 2. 继续把 repo 外人工核实结果回填到：
@@ -12,7 +12,8 @@
    - `step-25-repo-external-bridge-verification.md`
    - `step-26-repo-external-evidence-closure.md`
    - `step-27-key-external-asset-verification.md`
-3. 如果仍然拿不到关键资产，不要重复泛目录搜索，直接写清：
+   - `step-28-critical-business-asset-followup.md`
+3. 如果仍然拿不到关键资产，不要再回到泛目录搜索，直接写清：
    - 还缺哪类资产
    - 理论上在哪里
    - 当前为什么拿不到

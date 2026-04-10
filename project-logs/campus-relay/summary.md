@@ -35,6 +35,7 @@
 - 当前已完成：`Step 25 - repo 外 bridge 依赖核实与证据回填`
 - 当前已完成：`Step 26 - repo 外真实资产追补与阻塞项重新评估`
 - 当前已完成：`Step 27 - 关键外部资产追补与阻塞项继续关闭`
+- 当前已完成：`Step 28 - 关键业务资产追补与阻塞项继续关闭`
 - 当前日期：`2026-04-10`
 - 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 24 又补了 repo 外人工核实动作的可执行说明、customer 结果页的无订单号/查无订单/已完成态真实验证，以及 onboarding 提交体 `enabledWorkInOwnBuilding` 的真实类型核查；Step 25 明确了本机可访问范围内的 repo 外阴性证据，Step 26 拿到了可登录的公网服务器与 repo 外共享文档资产，Step 27 又进一步拿到了 repo 外源码树、Windows Recent 外部文档入口以及更贴近业务部署面的服务器路径/调试资产现状，并据此确认“当前新增外部资产范围内仍未发现旧 bridge 命中，但真实部署物、可归因日志和团队共享集合仍缺”；admin settlement 批次演示页、admin 售后执行演示页、admin courier 异常/位置联动演示页和 admin settlement 只读运营页继续可用，旧外卖模块仍保留可运行，旧前端主链路未被替换
 
@@ -1040,7 +1041,8 @@
    - Step 25 已把 repo 外核查范围、阴性证据和待人工核实边界写实
    - Step 26 已进一步拿到公网服务器与 repo 外共享文档等真实外部资产，并确认当前已知外部入口未发现旧 bridge 命中
    - Step 27 又补拿了 repo 外源码树、Windows Recent 外部文档入口以及更贴近业务部署面的服务器路径和调试资产现状，进一步证明“当前新增资产范围内未发现命中”但仍缺关键业务侧证据
-   - 但 Step 27 仍未拿到真实部署产物、可归因访问日志和团队共享集合，因此 bridge 仍不能进入 `Phase A` 执行准备
+   - Step 28 已继续拿到云盘下载根路径、真实外部压缩包和服务器 shell 历史，进一步收窄“谁持有真实业务资产”的边界
+   - 但 Step 28 仍未拿到校园代送项目自己的真实业务静态资源目录、历史发布包、可归因访问日志和团队共享集合，因此 bridge 仍不能进入 `Phase A` 执行准备
    - 因此当前不能直接删除旧 bridge，也不能启动执行准备
 
 ## Step 27 实际完成事项
@@ -1084,6 +1086,40 @@
    - 团队共享 Postman / Apifox / 联调脚本资产
    所以 bridge 结论没有变化，仍不能进入 `Phase A` 执行准备。
 
+## Step 28 实际完成事项
+
+1. 本轮没有扩 repo 内功能，也没有补第五个 admin 页。
+2. 本轮继续沿 Step 27 主线，只追三类真正可能关项的关键业务资产：
+   - 云盘侧真实下载根路径与下载日志
+   - repo 外真实压缩包 / 构建产物
+   - 更接近部署持有面的服务器 shell 历史
+3. 本轮新增拿到的关键业务资产：
+   - `C:\Users\20278\AppData\Roaming\aDrive\preference.json`
+   - `C:\Users\20278\AppData\Roaming\aDrive\logs\main.log`
+   - `D:\software\GOT\html\project.zip`
+   - `xiaoyu_TenXun_Ubuntu:/root/.bash_history`
+   - `xiaoyu_TenXun_Ubuntu:/home/ubuntu/.bash_history`
+   - `xiaoyu_root_ALi_Ubuntu:/root/.bash_history`
+4. 本轮真实确认：
+   - `D:\software` 是当前机器阿里云盘客户端下载根路径，而不是随机本机目录
+   - `D:\software\GOT\html\project.zip` 是真实 repo 外压缩包，但内部项目为 `healthy-management`，不是校园代送
+   - 两台公网服务器 shell 历史中没有 `nginx/openresty/wwwroot/deploy/campus/delivery/takeaway` 等业务部署痕迹
+5. 本轮对以下关键字做了真实搜索：
+   - `/api/campus/courier/profile`
+   - `/api/campus/courier/review-status`
+   - `getCourierProfile`
+   - `getCourierReviewStatus`
+   - `customer_token`
+6. 本轮结论没有变化：
+   - 当前新增资产范围内仍未发现旧 bridge 命中
+   - 但这仍不等于“确认无依赖”
+   - 因为还没有拿到校园代送真实业务静态资源目录、历史发布包、可归因访问日志和团队共享调试资产
+   - 所以 bridge 仍不能进入 `Phase A` 执行准备
+7. 本轮没有补第五个 admin 页。
+8. 不补第五页的原因：
+   - 当前更高优先级仍然是 bridge repo 外关键业务资产追补
+   - 继续补 admin 页会稀释收口评估主线
+
 ## 当前未解决的问题
 
 - customer 仍没有自助退款申请和结果确认交互，只能查看售后结果回执
@@ -1096,12 +1132,13 @@
 
 ## 下一轮建议
 
-- 进入 `Step 28`
+- 进入 `Step 29`
 - 推荐顺序：
-  1. 继续拿真实业务部署产物、可归因访问日志和团队共享调试资产，关闭 checklist 第 1~3 项
-  2. 如果仍拿不到关键资产，就把“缺什么、理论上在哪、应找谁拿”继续写实，不要回到泛目录搜索
-  3. 在三类 repo 外阻塞项真正关闭前，不要启动 `Phase A` 执行准备，也不要继续扩无关页面
-  4. 第五个 admin 页继续后置，避免稀释当前优先级
+  1. 继续向真实持有人索取校园代送项目自己的业务静态资源目录、历史发布包和共享交接包
+  2. 继续向运维或网关维护人索取可归因的 Nginx / gateway / reverse proxy 访问日志
+  3. 继续向接口联调维护人、测试负责人或共享资产维护人索取 Postman / Apifox / 联调脚本资产
+  4. 在三类 repo 外阻塞项真正关闭前，不要启动 `Phase A` 执行准备，也不要继续扩无关页面
+  5. 第五个 admin 页继续后置，避免稀释当前优先级
 
 ## 日志索引
 
@@ -1141,6 +1178,7 @@
 - [Step 25 日志](step-25-repo-external-bridge-verification.md)
 - [Step 26 日志](step-26-repo-external-evidence-closure.md)
 - [Step 27 日志](step-27-key-external-asset-verification.md)
+- [Step 28 日志](step-28-critical-business-asset-followup.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)
