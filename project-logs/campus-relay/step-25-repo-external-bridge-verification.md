@@ -171,3 +171,22 @@
    - 仓库外联调脚本目录
 2. 每拿到一种资产，就按本日志结构继续补证据位置和结论。
 3. 在 repo 外阻塞项关闭前，不要把 Step 26 改成新页面或新接口开发轮。
+
+## Step 26 补充证据
+
+1. 本轮新增拿到的 repo 外真实资产：
+   - `C:\Users\20278\.ssh\config`
+   - `xiaoyu_TenXun_Ubuntu (106.54.211.68)`
+   - `xiaoyu_root_ALi_Ubuntu (47.243.129.186)`
+   - `D:\software\校园代送项目_完整交接总结_Step24.md`
+   - `D:\software\step-25-execution-prompt.md`
+2. 本轮新增真实核查结果：
+   - 两台公网服务器均未发现项目部署目录、nginx 进程、docker 容器、bridge endpoint 命中或 `customer_token` 调试脚本痕迹
+   - repo 外共享文档只出现 bridge 阶段说明和执行提示，没有出现运行时调用证据
+3. 这轮新增证据比 Step 25 更强，但仍不足以关闭第 1~3 项阻塞，因为：
+   - 不能证明这两台公网服务器覆盖了全部历史部署环境
+   - 没有真实已部署静态资源目录或历史发布包
+   - 没有可归因的 Nginx / gateway 访问日志
+   - 没有团队共享 Postman / Apifox / 联调脚本资产
+4. 因此 Step 25 的最终阶段结论不变：
+   - bridge 仍不能进入 `Phase A` 执行准备

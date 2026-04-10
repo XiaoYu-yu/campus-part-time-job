@@ -302,12 +302,65 @@
 3. 但由于缺少已部署静态资源目录、可归因访问日志和团队共享联调资产，本轮仍不能把 repo 外依赖判定为“已关闭”。
 4. 当前结论仍是：不能进入 `Phase A` 执行准备。
 
+## Step 26 repo 外真实资产追补与阻塞项重新评估
+
+本轮没有重复 Step 25 的本机阴性搜索，而是继续追真实 repo 外资产。
+
+本轮新增拿到的 repo 外真实资产有三类：
+
+1. 可连接的公网服务器入口
+   - `C:\Users\20278\.ssh\config`
+   - `xiaoyu_TenXun_Ubuntu (106.54.211.68)`
+   - `xiaoyu_root_ALi_Ubuntu (47.243.129.186)`
+2. 公网服务器上的真实只读核查结果
+   - 通过 SSH 实际检查 `/opt`、`/data`、`/root`、`/home`、`/usr/local/bin`、`/var/log`
+   - 实际检查运行进程、docker 容器和 shell 历史
+3. repo 外共享文档资产
+   - `D:\software\校园代送项目_完整交接总结_Step24.md`
+   - `D:\software\step-25-execution-prompt.md`
+
+本轮真实核查结果如下：
+
+1. `xiaoyu_TenXun_Ubuntu`
+   - 仅发现空的 `/opt` 和 `/data`
+   - 未发现项目部署目录、静态资源目录、nginx 进程、docker 容器
+   - 未在 `/root`、`/home`、`/usr/local/bin`、`/var/log` 中发现以下关键字命中：
+     - `/api/campus/courier/profile`
+     - `/api/campus/courier/review-status`
+     - `customer_token`
+     - `getCourierProfile`
+     - `getCourierReviewStatus`
+2. `xiaoyu_root_ALi_Ubuntu`
+   - `/opt` 下仅见 `alibabacloud/hbrclient` 备份客户端
+   - 未发现项目部署目录、静态资源目录、nginx 进程、docker 容器
+   - 未在 `/root`、`/home`、`/usr/local/bin`、`/var/log` 中发现上述关键字命中
+3. `D:\software` 外部文档
+   - `校园代送项目_完整交接总结_Step24.md` 只记录 bridge 仍保留的阶段结论，不构成运行时调用证据
+   - `step-25-execution-prompt.md` 只记录执行要求，不构成运行时调用证据
+
+因此，本轮后的更准确状态是：
+
+1. 本轮确实拿到了新的 repo 外真实资产。
+2. 这些资产证明：
+   - 当前已知两台公网服务器没有承载该项目的可见部署物
+   - 当前拿到的 repo 外共享文档也没有暴露旧 bridge 的运行时调用证据
+3. 但这仍然不足以关闭第 1~3 项阻塞，因为：
+   - 还不能证明这两台公网服务器就是全部历史部署机
+   - 还没有拿到真实已部署静态资源目录或历史发布包
+   - 还没有拿到可归因的 Nginx / gateway 访问日志
+   - 还没有拿到团队共享 Postman / Apifox / 联调脚本资产
+4. 所以本轮仍不能把 repo 外依赖判定为“已关闭”，bridge 仍不能进入 `Phase A` 执行准备。
+
 ## 下一步人工核实建议
 
 1. 逐一确认是否还有仓库外旧页面直接调用旧 bridge 接口
 2. 逐一确认是否还有手工联调脚本使用 `customer_token` 调旧 bridge
 3. 留存一轮 `onboarding -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报` 的联调记录
 4. 在联调记录中单独确认 workbench 的 profile / review-status 请求是否全程只走 `courier_token`
+5. 向项目实际部署维护方补拿：
+   - 当前正式或测试环境静态资源目录
+   - 对应时间窗口的 Nginx / gateway 访问日志
+   - 团队共享 Postman / Apifox / 联调脚本资产
 
 ## 建议的分阶段动作
 
@@ -349,7 +402,7 @@
 2. 当前仍然不具备进入 `Phase A` 执行准备的完整条件。
 3. 当前更准确的判断是：
    - repo 内证据已经稳定，并且本地完整链路已真实跑通
-   - repo 外依赖在当前核查范围内未发现命中，但仍然只能列为待人工核实边界
+   - repo 外依赖在当前核查范围内未发现命中，并且已知两台公网服务器和 repo 外共享文档也未发现命中，但仍然只能列为待人工核实边界
    - 缺口已经从“概念性观察”收敛成“可人工关闭的 checklist + 可填写的联调模板 + 一轮本地真实留痕 + 一份共享回归证据”
-   - 但 repo 外依赖关闭证据和仓库外历史调用结果仍待补齐
+   - 但 repo 外依赖关闭证据、真实部署产物和仓库外历史调用结果仍待补齐
    - 因此下一步不是继续补 repo 内链路，而是按 checklist 关闭 repo 外人工核实项

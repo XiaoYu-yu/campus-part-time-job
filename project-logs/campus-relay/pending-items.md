@@ -1,17 +1,18 @@
 # 校园代送待处理事项
 
-## Step 26 最高优先级
+## Step 27 最高优先级
 
-1. 按 `bridge-execution-readiness-checklist.md` 继续关闭 repo 外人工核实项，重点补齐：
-   - 已部署静态资源目录核查结果
-   - Nginx / gateway 访问日志核查结果
-   - 团队共享 Postman / Apifox / 联调脚本核查结果
+1. 基于 Step 26 新拿到的公网服务器与 repo 外共享文档资产，继续补真正能关项的外部证据，重点仍是：
+   - 实际业务静态资源目录或历史发布包
+   - 可归因的 Nginx / gateway 访问日志
+   - 团队共享 Postman / Apifox / 联调脚本资产
 2. 继续把 repo 外人工核实结果回填到：
    - `bridge-execution-readiness-checklist.md`
    - `bridge-phaseout-evaluation.md`
    - `step-25-repo-external-bridge-verification.md`
-3. 只有在 repo 外阻塞项拿到真实关闭证据后，才重新评估 bridge 是否可以进入 `Phase A` 执行准备
-4. customer completed 结果回看页暂不继续扩功能，除非 repo 外核实过程暴露出演示阻塞
+   - `step-26-repo-external-evidence-closure.md`
+3. 只有在第 1~3 项 repo 外阻塞都拿到真实关闭证据后，才重新评估 bridge 是否可以进入 `Phase A` 执行准备
+4. customer completed 结果回看页继续冻结，除非 repo 外核实过程暴露出演示阻塞
 5. 第五个 admin 页继续后置，不再以“补页数”为目标
 6. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
 7. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力

@@ -44,6 +44,16 @@
     - `D:\20278\code`（搜索结果只命中当前 repo 内文件）
   - 在上述范围内未发现 repo 外静态资源、旧页面包或本地项目直接调用 `GET /api/campus/courier/profile` 的命中。
   - 但当前环境没有提供已部署静态资源目录，也没有提供可归因的 Nginx / 网关访问日志，因此不能据此判定 repo 外依赖已关闭。
+  - `2026-04-10` Step 26 继续补查 repo 外真实资产：
+    - 本机 SSH 配置：`C:\Users\20278\.ssh\config`
+    - 公网服务器：`xiaoyu_TenXun_Ubuntu (106.54.211.68)`、`xiaoyu_root_ALi_Ubuntu (47.243.129.186)`
+    - 外部文档：`D:\software\校园代送项目_完整交接总结_Step24.md`、`D:\software\step-25-execution-prompt.md`
+  - 通过 SSH 实际检查两台公网服务器的 `/opt`、`/data`、`/root`、`/home`、`/usr/local/bin`、`/var/log`、运行进程、docker 容器与 shell 历史：
+    - 未发现 campus / takeaway / delivery 相关部署目录
+    - 未发现 `nginx` / `openresty` / `caddy` 业务进程
+    - 未发现 `access.log` 或 endpoint 命中
+  - 外部文档里只出现 bridge 策略说明，没有出现旧页面产物路径或运行时调用证据。
+  - 因为仍无法证明这两台公网服务器就是全部历史部署机，也没有拿到真实已部署静态资源目录，所以第 1 项继续保持待人工核实。
 - 负责人：
   - Codex
 - 日期：
@@ -87,6 +97,16 @@
     - `D:\20278\code`（搜索结果只命中当前 repo 内文件）
   - 在上述范围内未发现 repo 外静态资源、旧页面包或本地项目直接调用 `GET /api/campus/courier/review-status` 的命中。
   - 但当前环境没有提供已部署静态资源目录，也没有提供可归因的 Nginx / 网关访问日志，因此不能据此判定 repo 外依赖已关闭。
+  - `2026-04-10` Step 26 继续补查 repo 外真实资产：
+    - 本机 SSH 配置：`C:\Users\20278\.ssh\config`
+    - 公网服务器：`xiaoyu_TenXun_Ubuntu (106.54.211.68)`、`xiaoyu_root_ALi_Ubuntu (47.243.129.186)`
+    - 外部文档：`D:\software\校园代送项目_完整交接总结_Step24.md`、`D:\software\step-25-execution-prompt.md`
+  - 通过 SSH 实际检查两台公网服务器的 `/opt`、`/data`、`/root`、`/home`、`/usr/local/bin`、`/var/log`、运行进程、docker 容器与 shell 历史：
+    - 未发现 campus / takeaway / delivery 相关部署目录
+    - 未发现 `nginx` / `openresty` / `caddy` 业务进程
+    - 未发现 `access.log` 或 endpoint 命中
+  - 外部文档里只出现 bridge 策略说明，没有出现旧页面产物路径或运行时调用证据。
+  - 因为仍无法证明这两台公网服务器就是全部历史部署机，也没有拿到真实已部署静态资源目录，所以第 2 项继续保持待人工核实。
 - 负责人：
   - Codex
 - 日期：
@@ -134,6 +154,18 @@
     - `C:\Users\20278\Documents\Postman`
     - `C:\Users\20278\Documents\Postman Files`
   - 由于无法证明团队共享集合、仓库外脚本目录或其他机器上的联调资产不存在，当前仍只能标记为待人工核实。
+  - `2026-04-10` Step 26 继续补查 repo 外真实资产：
+    - 外部文档：`D:\software\校园代送项目_完整交接总结_Step24.md`、`D:\software\step-25-execution-prompt.md`
+    - 公网服务器：`xiaoyu_TenXun_Ubuntu (106.54.211.68)`、`xiaoyu_root_ALi_Ubuntu (47.243.129.186)`
+  - 在上述公网服务器上对 `/root`、`/home`、`/usr/local/bin`、`/root/.bash_history` 和 `/var/log` 继续检索：
+    - `customer_token`
+    - `/api/campus/courier/profile`
+    - `/api/campus/courier/review-status`
+    - `getCourierProfile`
+    - `getCourierReviewStatus`
+  - 结果：未发现脚本、shell 历史或服务器日志依赖 `customer_token` 调旧 bridge 的命中。
+  - 外部文档里只出现旧 bridge 的阶段性说明和执行提示，没有发现可执行脚本或集合导出。
+  - 因为当前仍没有团队共享 Postman / Apifox 集合、共享脚本仓库或其他机器上的调试资产，所以第 3 项继续保持待人工核实。
 - 负责人：
   - Codex
 - 日期：
@@ -233,3 +265,17 @@
   - 当前环境未发现常见 Postman / Apifox 资产目录
   - 当前环境未发现可归因的 Nginx / 网关访问日志目录
 - 因为“未在当前核查范围命中”不等于“确认无 repo 外依赖”，所以第 1~3 项仍保留为“待人工核实”。
+
+## Step 26 说明
+
+- 本轮新增了真正的 repo 外资产入口：
+  - `C:\Users\20278\.ssh\config`
+  - `xiaoyu_TenXun_Ubuntu (106.54.211.68)`
+  - `xiaoyu_root_ALi_Ubuntu (47.243.129.186)`
+  - `D:\software\校园代送项目_完整交接总结_Step24.md`
+  - `D:\software\step-25-execution-prompt.md`
+- 本轮已在上述公网服务器和外部文档范围内完成真实核查，但结果仍不足以关闭第 1~3 项。
+- 更准确的状态是：
+  - 已知公网服务器未发现项目部署目录、业务访问日志和调试脚本命中
+  - 外部文档只给出 bridge 说明，不构成运行时依赖证明
+  - 因此三项阻塞仍然只能保留为“待人工核实”
