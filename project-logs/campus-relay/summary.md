@@ -39,8 +39,9 @@
 - 当前已完成：`Step 29 - owner 确认回填 / bridge repo 外阻塞关闭与阶段重评估`
 - 当前已完成：`Step 30 - Phase A 执行准备重新评估`
 - 当前已完成：`Step 31 - 最小 Phase A 动作候选评估 / 执行前最小回归复核`
-- 当前日期：`2026-04-10`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 又真实复核了一轮最小回归清单并评估了最小候选动作，最终结论为暂不执行收口动作；当前阶段仍停留在 `Phase A` 执行准备，bridge 仍保留、旧外卖模块仍保留可运行、旧前端主链路未被替换
+- 当前已完成：`Step 32 - Phase A 候选池扩展与 go / no-go 决策`
+- 当前日期：`2026-04-11`
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，最终继续确认当前应保持 `no-op`；当前阶段仍停留在 `Phase A` 执行准备，bridge 仍保留、旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
 
@@ -1222,6 +1223,24 @@
    - bridge 仍完全保留
    - 真正的收口动作还没有开始
 
+## Step 32 实际完成事项
+
+1. 本轮没有改业务代码、没有补新页面、没有新增接口。
+2. 本轮在 Step 31 已完成真实执行前复核的前提下，只继续扩大候选池，并做 go / no-go 决策。
+3. 本轮重新评估的候选只有两类：
+   - repo 内 bridge 使用边界的行为不变型显式隔离
+   - 把 Step 30 / Step 31 的执行边界转成代码旁证级约束
+4. 本轮两个候选都没有执行：
+   - 候选 A 不执行，因为收益仍不足以覆盖其对稳定链路结构的潜在影响
+   - 候选 B 不执行，因为收益仍偏低，属于“文档已清楚但代码动作本身没有推进边界”
+5. 本轮最终结论是继续 `no-op`。
+6. 继续 `no-op` 的原因不是链路不稳，而是当前仍没有一个同时满足“有明确收益 + 风险足够小 + 单提交可回滚”的最小候选动作。
+7. bridge 当前仍完全保留。
+8. 本轮没有补第五个 admin 页。
+9. 不补第五页的原因：
+   - 当前主线仍是 `Phase A` 的最小动作评估
+   - 继续补展示页会稀释当前 bridge 收口主线
+
 ## 当前未解决的问题
 
 - customer 仍没有自助退款申请和结果确认交互，只能查看售后结果回执
@@ -1234,9 +1253,9 @@
 
 ## 下一轮建议
 
-- 进入 `Step 32`
+- 进入 `Step 33`
 - 推荐顺序：
-  1. 继续在 Step 30 的边界内筛选下一个最小、可回滚且有实际收益的 `Phase A` 候选动作
+  1. 继续在 Step 30 的边界内筛选一个真正具备“明确收益 + 低风险 + 单提交可回滚”的 `Phase A` 候选动作
   2. 若仍找不到足够安全且值得执行的动作，就继续保持 bridge 完全保留，不强行推进
   3. 第五个 admin 页继续后置，避免稀释当前优先级
 
@@ -1282,6 +1301,7 @@
 - [Step 29 日志](step-29-owner-confirmation-and-bridge-reassessment.md)
 - [Step 30 日志](step-30-phase-a-readiness-reassessment.md)
 - [Step 31 日志](step-31-minimal-phase-a-candidate-and-preflight.md)
+- [Step 32 日志](step-32-phase-a-candidate-expansion-and-go-no-go.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)
