@@ -1,28 +1,23 @@
 # 校园代送待处理事项
 
-## Step 29 最高优先级
+## Step 30 最高优先级
 
-1. 基于 Step 28 已拿到的云盘下载根路径、真实外部压缩包和服务器 shell 历史，继续追真正能关项的关键业务资产，重点仍是：
-   - 校园代送项目自己的实际业务静态资源目录或历史发布包
-   - 可归因的 Nginx / gateway 访问日志
-   - 团队共享 Postman / Apifox / 联调脚本资产
-2. 继续把 repo 外人工核实结果回填到：
+1. 基于 Step 29 的 owner 明确确认，进入 `Phase A` 执行准备重新评估：
+   - 明确 bridge 在 `Phase A` 中的保留范围
+   - 明确哪些 repo 内调用可以先收紧或迁移
+   - 明确回滚策略与最小回归清单
+2. 继续把 Step 29 的 owner 确认结论同步到 bridge 文档体系：
    - `bridge-execution-readiness-checklist.md`
    - `bridge-phaseout-evaluation.md`
-   - `step-25-repo-external-bridge-verification.md`
-   - `step-26-repo-external-evidence-closure.md`
-   - `step-27-key-external-asset-verification.md`
-   - `step-28-critical-business-asset-followup.md`
-3. 如果仍然拿不到关键资产，不要再回到泛目录搜索，直接写清：
-   - 还缺哪类资产
-   - 理论上在哪里
-   - 当前为什么拿不到
-   - 下一步应该找谁拿
-4. 只有在第 1~3 项 repo 外阻塞都拿到真实关闭证据后，才重新评估 bridge 是否可以进入 `Phase A` 执行准备
-5. customer completed 结果回看页继续冻结，除非 repo 外核实过程暴露出演示阻塞
-6. 第五个 admin 页继续后置，不再以“补页数”为目标
-7. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
-8. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
+   - `summary.md`
+3. 在真正改 bridge 之前，先定义：
+   - 哪些调用仍允许保留兼容
+   - 哪些调用可以先只走新链路
+   - 如果回归失败如何快速恢复
+4. customer completed 结果回看页继续冻结，除非 `Phase A` 评估过程暴露出演示阻塞
+5. 第五个 admin 页继续后置，不再以“补页数”为目标
+6. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
+7. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
 
 ## 已完成但仍需继续扩展的部分
 
@@ -113,12 +108,15 @@
   - `/courier/workbench` 已具备接单、详情承接、最小取餐承接、最小 deliver 承接和最小异常上报承接
   - 当前仓库内前端对旧 bridge 的直接调用已盘点到只剩 `CourierWorkbench.vue`
   - onboarding 新入口已能承接未拿 courier token 前的主要前端场景
-- 仍缺：
-  - 仓库外或历史调用依赖确认
-  - 一轮可共享的稳定联调和回归证据归档
-  - `bridge-execution-readiness-checklist.md` 中人工核实项关闭结果
-  - `bridge-regression-template.md` 中可共享的完整链路联调记录
-- 默认处理：继续保留旧 bridge，不做删除动作；当前模板已可执行，但还不具备进入 `Phase A` 执行准备的完整条件
+- Step 29 owner 明确确认：
+  - 当前项目从未部署、从未发布、没有历史发布包
+  - 当前项目唯一维护人就是 owner 本人，且没有团队
+  - 不存在团队共享 `Postman / Apifox / 联调脚本` 资产
+  - 不存在仓库外旧页面副本、历史前端包或临时脚本继续依赖旧 bridge
+- 当前判断：
+  - repo 外阻塞项已关闭
+  - 当前可以进入 `Phase A` 执行准备重新评估
+- 默认处理：继续保留旧 bridge，不做删除动作；下一步先做 `Phase A` 范围设计、回滚策略和最小回归清单
 - repo 内已新增一轮真实局部留痕：
   - 真实 token 申请成功
   - 真实 workbench 加载成功
@@ -129,9 +127,9 @@
 - Step 23 已把该链路整理为可共享回归留痕：
   - `project-logs/campus-relay/step-23-shared-regression-evidence.md`
 - 仍缺：
-  - repo 外依赖人工核实结果
-  - 仓库外旧页面、历史客户端和手工脚本是否仍依赖旧 bridge 的人工证明
-  - Step 24 已把 repo 外核实项补成更可执行的 checklist，但本轮未新增 repo 外人工核实结果
+  - `Phase A` 的具体执行边界
+  - bridge 保留范围与回滚方案
+  - 进入真正执行前的最小回归清单
 
 ### 2. 前端 admin 侧已完成四个最小演示页
 
