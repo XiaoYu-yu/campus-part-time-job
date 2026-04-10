@@ -652,3 +652,68 @@
    - `Phase A` 的边界、保留范围、回滚策略和最小回归清单已明确
    - 真正的收口动作仍未开始
 4. Step 31 以后如果要推进收口动作，必须按本轮定义的边界先做最小、可回滚的执行，不得跳过回滚和回归约束。
+
+## Step 31 最小 `Phase A` 动作候选评估与执行前复核
+
+本轮没有直接执行 bridge 收口动作，而是先按 Step 30 固化的最小回归清单做了一轮真实执行前复核，再评估是否存在足够小、足够安全、足够可回滚的 `Phase A` 候选动作。
+
+### 执行前最小回归复核结果
+
+`2026-04-10` 在本地 `backend(test profile, 8080) + frontend(vite, 5173)` 下，已真实复核以下链路：
+
+1. `customer onboarding` 提交资料
+2. customer 查看审核状态
+3. admin 审核通过
+4. customer 申请 `courier token`
+5. `/courier/workbench` 加载 `profile / review-status / available orders`
+6. pure `courier_token` 路径稳定
+7. 接单
+8. 取餐
+9. `deliver -> AWAITING_CONFIRMATION`
+10. 异常上报
+11. customer confirm
+12. `completed` 回读
+13. customer 结果回看页
+
+本轮样本仍为：
+
+1. courier candidate：`13900139000 / 123456`
+2. customer order owner：`13900139001 / 123456`
+3. admin：`13800138000 / 123456`
+4. 订单：`CR202604070002`
+
+本轮新增的浏览器级确认包括：
+
+1. Playwright 已确认 `/courier/workbench` 在仅保留 `courier_token`、移除 `customer_token` 的情况下仍稳定加载
+2. Playwright network 已确认：
+   - `GET /api/campus/courier/profile`
+   - `GET /api/campus/courier/review-status`
+   - `GET /api/campus/courier/orders/available`
+   三个请求都附着 `courier_token`
+3. Playwright 已确认 `/user/campus/order-result?orderId=CR202604070002` 在 `COMPLETED` 状态下可正常回读结果摘要
+
+### 本轮评估过的最小动作候选
+
+1. 候选 A：进一步收紧 `CourierWorkbench.vue` 对 bridge 的运行时使用边界
+   - 结论：本轮不执行
+   - 原因：
+     - 当前 workbench 对 bridge 的 repo 内使用边界已经足够清晰
+     - 任意进一步收紧运行时行为，都会开始触碰稳定链路的实际语义
+     - Step 31 的正确目标是判断“是否值得动”，而不是为了推进阶段硬动
+2. 候选 B：在 `campus-courier.js / request.js` 中增加 bridge 使用边界的注释或显式隔离
+   - 结论：本轮不执行
+   - 原因：
+     - 这类改动不改变行为，回滚确实简单
+     - 但对 `Phase A` 的实际推进收益过低，只会制造“改了代码但没真正推进边界”的假动作
+     - 当前文档层面的边界、回滚和回归口径已经足够清楚
+
+### Step 31 结论
+
+1. 本轮已完成真实执行前复核。
+2. 本轮已评估最小动作候选。
+3. 本轮最终结论是：`暂不执行任何收口动作`。
+4. 原因不是链路不稳，而是当前不存在一个同时满足“有实际收益 + 风险足够小 + 单提交可回滚”的最小候选动作。
+5. 因此 Step 31 后的最准确状态是：
+   - 可以继续停留在 `Phase A` 执行准备阶段
+   - bridge 仍完全保留
+   - 尚未开始真正的收口动作

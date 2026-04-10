@@ -38,8 +38,9 @@
 - 当前已完成：`Step 28 - 关键业务资产追补与阻塞项继续关闭`
 - 当前已完成：`Step 29 - owner 确认回填 / bridge repo 外阻塞关闭与阶段重评估`
 - 当前已完成：`Step 30 - Phase A 执行准备重新评估`
+- 当前已完成：`Step 31 - 最小 Phase A 动作候选评估 / 执行前最小回归复核`
 - 当前日期：`2026-04-10`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，当前阶段可以进入 `Phase A` 执行准备重新评估，但 bridge 仍保留、旧外卖模块仍保留可运行、旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 又真实复核了一轮最小回归清单并评估了最小候选动作，最终结论为暂不执行收口动作；当前阶段仍停留在 `Phase A` 执行准备，bridge 仍保留、旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
 
@@ -1189,6 +1190,38 @@
    - Step 30 的唯一主线是 `Phase A` 执行准备重新评估
    - 继续补展示页会稀释 bridge 收口评估主线
 
+## Step 31 实际完成事项
+
+1. 本轮没有改业务代码、没有补新页面、没有新增接口。
+2. 本轮先按 Step 30 固化的最小回归清单做了一轮真实执行前复核。
+3. 本轮真实复核通过的链路包括：
+   - customer onboarding 提交资料
+   - customer 查看审核状态
+   - admin 审核通过
+   - customer 申请 courier token
+   - `/courier/workbench` 加载 `profile / review-status / available orders`
+   - pure `courier_token` 路径稳定
+   - 接单 / 取餐 / deliver / 异常上报
+   - customer confirm
+   - completed 回读
+   - customer 结果回看页
+4. 本轮继续使用真实样本订单 `CR202604070002` 与既有测试账号完成预检。
+5. 本轮新增的浏览器级确认：
+   - `/courier/workbench` 在仅保留 `courier_token` 的情况下可稳定加载
+   - `profile / review-status / available orders` 请求均附着 `courier_token`
+   - `/user/campus/order-result?orderId=CR202604070002` 可正常显示 `COMPLETED` 结果摘要
+6. 本轮评估了两个最小 `Phase A` 候选动作：
+   - 进一步收紧 `CourierWorkbench.vue` 对 bridge 的运行时使用边界
+   - 仅在 `campus-courier.js / request.js` 做注释级边界显式化
+7. 本轮最终结论是：`暂不执行任何收口动作`
+8. 不执行的原因：
+   - 候选 1 会开始触碰稳定链路语义，不够保守
+   - 候选 2 虽然安全，但实际推进收益过低，不值得作为一次正式 `Phase A` 动作
+9. 因此 Step 31 后的准确状态是：
+   - `Phase A` 执行准备仍有效
+   - bridge 仍完全保留
+   - 真正的收口动作还没有开始
+
 ## 当前未解决的问题
 
 - customer 仍没有自助退款申请和结果确认交互，只能查看售后结果回执
@@ -1201,12 +1234,11 @@
 
 ## 下一轮建议
 
-- 进入 `Step 31`
+- 进入 `Step 32`
 - 推荐顺序：
-  1. 在 Step 30 已定义好的边界内，评估是否执行最小、可回滚的 `Phase A` 动作
-  2. 若要执行，优先从 repo 内调用边界最清晰、影响面最小的 bridge 使用范围开始
-  3. 执行前先按 Step 30 的最小回归清单复核一轮
-  4. 第五个 admin 页继续后置，避免稀释当前优先级
+  1. 继续在 Step 30 的边界内筛选下一个最小、可回滚且有实际收益的 `Phase A` 候选动作
+  2. 若仍找不到足够安全且值得执行的动作，就继续保持 bridge 完全保留，不强行推进
+  3. 第五个 admin 页继续后置，避免稀释当前优先级
 
 ## 日志索引
 
@@ -1249,6 +1281,7 @@
 - [Step 28 日志](step-28-critical-business-asset-followup.md)
 - [Step 29 日志](step-29-owner-confirmation-and-bridge-reassessment.md)
 - [Step 30 日志](step-30-phase-a-readiness-reassessment.md)
+- [Step 31 日志](step-31-minimal-phase-a-candidate-and-preflight.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

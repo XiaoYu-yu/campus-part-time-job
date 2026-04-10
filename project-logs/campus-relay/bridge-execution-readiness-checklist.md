@@ -460,6 +460,16 @@
   - 不改 `request.js` 的现有 token 附着逻辑
   - 不改后端鉴权规则
 
+## Step 31 说明
+
+- 本轮没有直接执行 bridge 收口动作。
+- 本轮先按 Step 30 固化的最小回归清单做了一轮真实执行前复核。
+- 在复核通过后，又评估了 2 个最小 `Phase A` 候选动作：
+  - 进一步收紧 `CourierWorkbench.vue` 的 bridge 运行时使用边界
+  - 仅在 `campus-courier.js / request.js` 做注释级边界显式化
+- 最终结论是：`暂不执行`。
+- 原因不是链路失稳，而是当前没有一个同时满足“实际收益明显、风险足够小、单提交即可回滚”的最小候选动作。
+
 ## Step 30 - 进入 Phase A 前的执行准备项
 
 ### 6. `Phase A` 的执行边界是否已明确
@@ -570,6 +580,62 @@
     - Step 30 只做 `Phase A` 执行准备重新评估
     - 真正的收口动作应放到 Step 31 以后，在回滚和回归都准备好的前提下再做
     - 当前阶段结论是“可以进入 `Phase A` 执行准备重新评估”，不是“现在就执行收口”
+- 负责人：
+  - Codex
+- 日期：
+  - `2026-04-10`
+- 是否通过：
+  - [x] 通过
+  - [ ] 不通过
+  - [ ] 待人工核实
+
+### 11. Step 31 执行前最小回归是否已真实复核
+
+- 记录位置：
+  - `project-logs/campus-relay/step-31-minimal-phase-a-candidate-and-preflight.md`
+  - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
+- 核实结果：
+  - `2026-04-10` 已真实复核以下链路：
+    - customer onboarding 提交资料
+    - customer 查看审核状态
+    - admin 审核通过
+    - customer 申请 courier token
+    - `/courier/workbench` 加载 `profile / review-status / available orders`
+    - pure `courier_token` 路径稳定
+    - 接单
+    - 取餐
+    - `deliver -> AWAITING_CONFIRMATION`
+    - 异常上报
+    - customer confirm
+    - completed 回读
+    - customer 结果回看页
+  - 样本订单：`CR202604070002`
+  - Playwright 额外确认：
+    - `/courier/workbench` 在仅保留 `courier_token` 时可稳定加载
+    - `profile / review-status / available orders` 三个请求均附着 `courier_token`
+    - `/user/campus/order-result?orderId=CR202604070002` 可正常显示 `COMPLETED` 结果摘要
+- 负责人：
+  - Codex
+- 日期：
+  - `2026-04-10`
+- 是否通过：
+  - [x] 通过
+  - [ ] 不通过
+  - [ ] 待人工核实
+
+### 12. Step 31 是否存在足够安全的最小 `Phase A` 动作候选
+
+- 记录位置：
+  - `project-logs/campus-relay/step-31-minimal-phase-a-candidate-and-preflight.md`
+  - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
+- 核实结果：
+  - `2026-04-10` 已评估两个候选：
+    1. 收紧 `CourierWorkbench.vue` 对 bridge 的运行时使用边界
+    2. 只在 `campus-courier.js / request.js` 做注释级边界显式化
+  - 评估结论：
+    - 候选 1 会开始碰稳定链路的运行时语义，本轮不够保守
+    - 候选 2 虽然安全，但对 `Phase A` 的实际推进收益过低，不值得作为一次正式动作执行
+  - 因此 Step 31 的最终结论是：`暂不执行任何收口动作`
 - 负责人：
   - Codex
 - 日期：

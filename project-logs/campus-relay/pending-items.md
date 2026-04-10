@@ -1,19 +1,16 @@
 # 校园代送待处理事项
 
-## Step 31 最高优先级
+## Step 32 最高优先级
 
-1. 基于 Step 30 已明确的 `Phase A` 边界，评估是否执行最小、可回滚的 bridge 收口动作：
+1. 基于 Step 31 已完成的执行前最小回归复核，继续筛选下一个真正值得执行的最小 `Phase A` 候选动作：
    - 只在 repo 内调用边界最清晰、影响面最小的场景里评估
    - 仍不默认删 bridge
-2. 在真正执行任何收口动作前，先按 Step 30 的最小回归清单复核一轮：
-   - onboarding
-   - token 申请
-   - workbench `profile / review-status`
-   - pure `courier_token` 路径
-   - 接单 / 取餐 / deliver / 异常上报
-   - customer confirm / completed 回读 / customer 结果回看页
-3. 若评估后仍不适合执行收口动作，就继续保留当前 bridge 行为，不为了推进阶段而硬改代码
-4. customer completed 结果回看页继续冻结，除非 `Phase A` 执行评估暴露出演示阻塞
+2. 只有同时满足“有实际收益 + 风险足够小 + 单提交可回滚”时，才允许执行一个最小动作；否则继续维持 `暂不执行`
+3. 继续保持：
+   - bridge 完全保留
+   - `request.js` 现有 token 附着逻辑不变
+   - `CourierWorkbench.vue` 现有运行时行为不变
+4. customer completed 结果回看页继续冻结，除非下一轮候选评估暴露出演示阻塞
 5. 第五个 admin 页继续后置，不再以“补页数”为目标
 6. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
 7. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力

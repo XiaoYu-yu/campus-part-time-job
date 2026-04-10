@@ -612,3 +612,13 @@
 - [project-logs/campus-relay/bridge-execution-readiness-checklist.md](bridge-execution-readiness-checklist.md)
 - [project-logs/campus-relay/step-29-owner-confirmation-and-bridge-reassessment.md](step-29-owner-confirmation-and-bridge-reassessment.md)
 - [project-logs/campus-relay/step-30-phase-a-readiness-reassessment.md](step-30-phase-a-readiness-reassessment.md)
+
+## Step 31 - 最小 Phase A 动作候选评估 / 执行前最小回归复核
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/bridge-phaseout-evaluation.md](bridge-phaseout-evaluation.md)
+- [project-logs/campus-relay/bridge-execution-readiness-checklist.md](bridge-execution-readiness-checklist.md)
+- [project-logs/campus-relay/step-30-phase-a-readiness-reassessment.md](step-30-phase-a-readiness-reassessment.md)
+- [project-logs/campus-relay/step-31-minimal-phase-a-candidate-and-preflight.md](step-31-minimal-phase-a-candidate-and-preflight.md)
