@@ -715,3 +715,13 @@
 - [project-logs/campus-relay/step-40-delivery-packaging-and-demo-script.md](step-40-delivery-packaging-and-demo-script.md)
 
 本轮是交付整理轮，仅修改日志和交付说明文档；没有修改业务代码、bridge、接口、鉴权、路由或后端代码，也没有新增页面。
+
+## Step 41 - 交付材料补完 / 截图清单 / 录屏顺序 / 演示前检查
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-40-delivery-packaging-and-demo-script.md](step-40-delivery-packaging-and-demo-script.md)
+- [project-logs/campus-relay/step-41-delivery-assets-checklist-and-recording-plan.md](step-41-delivery-assets-checklist-and-recording-plan.md)
+
+本轮是交付材料补完轮，仅修改日志和交付说明文档；没有修改业务代码、bridge、接口、鉴权、路由或后端代码，也没有新增页面。

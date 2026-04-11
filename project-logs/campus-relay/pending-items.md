@@ -1,30 +1,28 @@
 # 校园代送待处理事项
 
-## Step 41 最高优先级
+## Step 42 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
-2. 只有出现以下恢复推进触发条件时，才重新打开 bridge 主线：
-   - 出现比 Step 31 / Step 32 更高收益且更低风险的新候选
-   - repo 内出现新的 bridge 使用点或边界变化
-   - 业务要求必须进一步收紧 bridge
-   - 出现新的真实回归信号，证明当前保留策略开始有成本
-   - 后续前端结构改造、入口整理或交付目标需要更清晰的桥接边界
-3. Step 35 已完成第一轮小范围展示级优化执行，已处理两个 P0 页面：
-   - `frontend/src/views/courier/CourierWorkbench.vue`
-   - `frontend/src/views/user/CampusOrderResult.vue`
-4. Step 36 已完成第二轮展示级优化执行，选择方案 A，只处理：
-   - `frontend/src/views/user/CourierOnboarding.vue`
-5. Step 37 已完成第三轮展示级优化执行，选择 settlement，只处理：
-   - `frontend/src/views/CampusSettlementOpsView.vue`
-6. Step 38 已完成第四轮展示级优化执行，只处理：
-   - `frontend/src/views/CampusAfterSaleExecutionList.vue`
-7. Step 39 已完成 Step 35 到 Step 38 展示 polish 线复盘，并将展示 polish 线收成冻结/维护态。
-8. Step 40 已完成交付整理与演示脚本固化，当前项目进入稳定交付整理阶段。
-9. Step 41 不再默认继续 polish 页面；只有出现真实展示反馈、明显展示缺陷或交付材料要求时，才重开展示 polish。
-10. Step 41 推荐优先判断交付材料是否仍缺：
-   - 若缺，继续补截图清单、录屏顺序和演示前检查 checklist。
-   - 若不缺，再评估是否进入非 bridge 后端能力梳理。
-11. Step 41 明确禁止：
+2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
+3. Step 40 已完成交付整理与演示脚本固化：
+   - 当前交付边界。
+   - 主演示脚本。
+   - 演示账号与样本数据索引。
+   - 页面展示清单。
+   - 风险与答辩口径。
+4. Step 41 已完成交付材料补完：
+   - 截图清单。
+   - 录屏顺序。
+   - 演示前检查 checklist。
+5. Step 42 的优先判断：
+   - 若需要答辩归档，优先按 Step 41 清单采集真实截图和录屏，并记录文件位置。
+   - 若不需要立即采集媒体，可评估是否进入非 bridge 后端能力梳理。
+6. 如果进入真实截图/录屏采集，应只记录实际产物路径，不要伪造截图、录屏或执行结果。
+7. 如果进入非 bridge 后端能力梳理，优先只做评估，不默认开发：
+   - 售后执行历史表是否值得做。
+   - 异常历史与处理闭环是否值得做。
+   - settlement 批次复核、撤回和对账是否值得做。
+8. Step 42 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -33,10 +31,10 @@
    - 不改路由
    - 不新增页面
    - 不改后端状态机
-12. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-13. 第五个 admin 页继续后置，不再以“补页数”为目标。
-14. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力。
-15. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力。
+9. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+10. 第五个 admin 页继续后置，不再以“补页数”为目标。
+11. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力。
+12. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力。
 
 ## 已完成但仍需继续扩展的部分
 

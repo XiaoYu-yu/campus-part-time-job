@@ -48,8 +48,9 @@
 - 当前已完成：`Step 38 - 展示级优化执行轮 4`
 - 当前已完成：`Step 39 - 展示 polish 复盘与冻结判断`
 - 当前已完成：`Step 40 - 交付整理与演示脚本固化`
+- 当前已完成：`Step 41 - 交付材料补完 / 截图清单 / 录屏顺序 / 演示前检查`
 - 当前日期：`2026-04-12`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 已转向不触 bridge 的非 bridge 方向收束，完成现有页面展示级优化候选评估与演示资料整理；Step 35 已完成第一轮小范围展示级优化执行，只 polish `CourierWorkbench.vue` 与 `CampusOrderResult.vue`；Step 36 已选择方案 A，只 polish `CourierOnboarding.vue`；Step 37 已选择 settlement，只 polish `CampusSettlementOpsView.vue`；Step 38 已只 polish `CampusAfterSaleExecutionList.vue`；Step 39 已复盘 Step 35 到 Step 38 的 5 个关键页面并将展示 polish 线收成冻结/维护态；Step 40 已进入稳定交付整理阶段，固化交付边界、主演示脚本、演示账号与样本数据索引、页面展示清单和答辩口径；Step 35 至 Step 40 均未改 bridge、接口、路由、鉴权、提交语义和后端；当前 bridge 完全保留、展示 polish 主线默认冻结、旧外卖模块仍保留可运行、旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 已转向不触 bridge 的非 bridge 方向收束，完成现有页面展示级优化候选评估与演示资料整理；Step 35 已完成第一轮小范围展示级优化执行，只 polish `CourierWorkbench.vue` 与 `CampusOrderResult.vue`；Step 36 已选择方案 A，只 polish `CourierOnboarding.vue`；Step 37 已选择 settlement，只 polish `CampusSettlementOpsView.vue`；Step 38 已只 polish `CampusAfterSaleExecutionList.vue`；Step 39 已复盘 Step 35 到 Step 38 的 5 个关键页面并将展示 polish 线收成冻结/维护态；Step 40 已进入稳定交付整理阶段，固化交付边界、主演示脚本、演示账号与样本数据索引、页面展示清单和答辩口径；Step 41 已补齐可执行截图清单、录屏顺序和演示前检查 checklist；Step 35 至 Step 41 均未改 bridge、接口、路由、鉴权、提交语义和后端；当前 bridge 完全保留、展示 polish 主线默认冻结、旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
 
@@ -1544,6 +1545,43 @@
    - 展示 polish 线继续冻结/维护。
    - 第五个 admin 页继续后置。
 
+## Step 41 实际完成事项
+
+1. 本轮没有改业务代码、没有补新页面、没有新增接口。
+2. 本轮继续停留在交付材料补完阶段，只整理截图清单、录屏顺序和演示前检查 checklist。
+3. 本轮新增 `step-41-delivery-assets-checklist-and-recording-plan.md`，集中整理：
+   - 14 项截图清单。
+   - 4 段式录屏顺序。
+   - 环境、账号、数据、页面和失败处理检查表。
+4. 截图清单已覆盖：
+   - customer onboarding。
+   - 审核状态与 token 资格。
+   - courier token 申请成功。
+   - courier workbench 首页。
+   - 可接单列表。
+   - 订单详情 drawer。
+   - 取餐、deliver、异常上报关键状态。
+   - customer completed 结果页。
+   - settlement 只读运营页。
+   - after-sale 只读运营页。
+5. 录屏顺序已拆成：
+   - customer onboarding 与 token 申请。
+   - courier workbench 动作链路。
+   - customer confirm 与 completed 结果回读。
+   - admin 只读运营页。
+6. 演示前检查 checklist 已覆盖：
+   - 后端、前端、profile、H2 初始状态。
+   - customer / courier / admin 三类账号和 token。
+   - `CR202604070002`、`CR202604060001` 与 settlement / after-sale 样本。
+   - 关键页面打开检查。
+   - 演示失败时哪些必须停止、哪些可以跳过。
+7. 当前交付材料已具备“可截图、可录屏、可检查”的执行基础。
+8. 当前仍未产出真实截图文件和录屏文件；如需答辩归档，下一轮可按清单采集并记录文件位置。
+9. 本轮继续确认：
+   - bridge 主线保持 `Phase A no-op` 冻结态。
+   - 展示 polish 线保持冻结/维护态。
+   - 第五个 admin 页继续后置。
+
 ## 当前未解决的问题
 
 - customer 仍没有自助退款申请和结果确认交互，只能查看售后结果回执
@@ -1556,12 +1594,12 @@
 
 ## 下一轮建议
 
-- 进入 `Step 41`
+- 进入 `Step 42`
 - 推荐顺序：
   1. 不再默认推进 bridge 主线；只有触发恢复推进条件时才重开
   2. 不再默认继续 polish 页面；只有出现真实展示反馈或明显展示缺陷时才重开
-  3. 若交付材料仍不完整，优先补截图清单、录屏顺序和演示前检查 checklist
-  4. 若交付材料已足够，再评估是否进入非 bridge 后端能力梳理
+  3. 若需要答辩归档，优先按 Step 41 清单采集真实截图和录屏，并记录文件位置
+  4. 若交付媒体不需要立即采集，可评估是否进入非 bridge 后端能力梳理
   5. 不改接口、不改路由、不改 token 附着、不新增页面
   6. 第五个 admin 页继续后置，除非新的非 bridge 优先级明确指向它
 
@@ -1616,6 +1654,7 @@
 - [Step 38 日志](step-38-display-polish-execution-round-4.md)
 - [Step 39 日志](step-39-display-polish-review-and-freeze-decision.md)
 - [Step 40 日志](step-40-delivery-packaging-and-demo-script.md)
+- [Step 41 日志](step-41-delivery-assets-checklist-and-recording-plan.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)
