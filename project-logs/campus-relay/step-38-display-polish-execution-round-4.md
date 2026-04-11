@@ -92,3 +92,24 @@
 2. 若没有明显展示短板，不建议继续机械寻找下一页 polish。
 3. 第五个 admin 页继续后置。
 4. bridge 主线继续冻结，除非出现 Step 33 定义的恢复推进触发条件。
+
+## Step 39 执行回填
+
+1. Step 39 已按本建议完成展示 polish 线复盘与冻结判断。
+2. 本轮复盘范围覆盖：
+   - `frontend/src/views/user/CourierOnboarding.vue`
+   - `frontend/src/views/courier/CourierWorkbench.vue`
+   - `frontend/src/views/user/CampusOrderResult.vue`
+   - `frontend/src/views/CampusSettlementOpsView.vue`
+   - `frontend/src/views/CampusAfterSaleExecutionList.vue`
+3. 复盘结论：
+   - customer / courier 主演示链路三页已覆盖 onboarding、token、workbench、completed 回读。
+   - admin 两个核心只读运营页已覆盖 settlement 和 after-sale。
+   - 当前没有发现会明显影响演示或答辩的展示短板。
+   - 继续 polish 的收益已经明显下降，容易变成机械美化。
+4. Step 39 正式将展示 polish 线收成冻结/维护态。
+5. Step 39 没有修改任何业务代码、Vue 页面、bridge、接口、路由或后端代码。
+6. Step 40 建议：
+   - 不再默认继续 polish 页面。
+   - 建议转入交付整理、演示脚本固化或非 bridge 后端能力梳理。
+   - bridge 与展示 polish 均保持冻结口径，除非出现明确触发条件。

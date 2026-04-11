@@ -46,8 +46,9 @@
 - 当前已完成：`Step 36 - 展示级优化执行轮 2`
 - 当前已完成：`Step 37 - 展示级优化执行轮 3`
 - 当前已完成：`Step 38 - 展示级优化执行轮 4`
-- 当前日期：`2026-04-11`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 已转向不触 bridge 的非 bridge 方向收束，完成现有页面展示级优化候选评估与演示资料整理；Step 35 已完成第一轮小范围展示级优化执行，只 polish `CourierWorkbench.vue` 与 `CampusOrderResult.vue`；Step 36 已选择方案 A，只 polish `CourierOnboarding.vue`；Step 37 已选择 settlement，只 polish `CampusSettlementOpsView.vue`；Step 38 已只 polish `CampusAfterSaleExecutionList.vue`；Step 35 至 Step 38 均未改 bridge、接口、路由、鉴权、提交语义和后端；当前 bridge 完全保留、旧外卖模块仍保留可运行、旧前端主链路未被替换
+- 当前已完成：`Step 39 - 展示 polish 复盘与冻结判断`
+- 当前日期：`2026-04-12`
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 已转向不触 bridge 的非 bridge 方向收束，完成现有页面展示级优化候选评估与演示资料整理；Step 35 已完成第一轮小范围展示级优化执行，只 polish `CourierWorkbench.vue` 与 `CampusOrderResult.vue`；Step 36 已选择方案 A，只 polish `CourierOnboarding.vue`；Step 37 已选择 settlement，只 polish `CampusSettlementOpsView.vue`；Step 38 已只 polish `CampusAfterSaleExecutionList.vue`；Step 39 已复盘 Step 35 到 Step 38 的 5 个关键页面并将展示 polish 线收成冻结/维护态；Step 35 至 Step 39 均未改 bridge、接口、路由、鉴权、提交语义和后端；当前 bridge 完全保留、展示 polish 主线默认冻结、旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
 
@@ -1471,6 +1472,37 @@
    - bridge 完全保留
    - 不删接口、不改鉴权、不改 token 附着逻辑
 
+## Step 39 实际完成事项
+
+1. 本轮没有改业务代码、没有补新页面、没有新增接口。
+2. 本轮完成 Step 35 到 Step 38 展示 polish 线复盘，覆盖 5 个关键页面：
+   - `frontend/src/views/user/CourierOnboarding.vue`
+   - `frontend/src/views/courier/CourierWorkbench.vue`
+   - `frontend/src/views/user/CampusOrderResult.vue`
+   - `frontend/src/views/CampusSettlementOpsView.vue`
+   - `frontend/src/views/CampusAfterSaleExecutionList.vue`
+3. 本轮复盘结论：
+   - customer / courier 主演示链路三页已覆盖 onboarding、token、workbench、completed 回读。
+   - admin 两个核心只读运营页已覆盖 settlement 和 after-sale。
+   - 当前没有发现会明显影响演示或答辩的展示短板。
+   - 继续 polish 的收益已经明显下降，容易变成机械美化。
+4. 本轮正式将展示 polish 线收成“冻结/维护态”：
+   - 不再默认为“还能美化一点”继续开页面 polish 轮次。
+   - 只有出现真实演示反馈、明显展示缺陷或交付材料要求时，才重新打开展示 polish。
+5. 当前形成双冻结状态：
+   - bridge 主线继续保持 `Phase A no-op` 冻结态。
+   - 展示 polish 线进入冻结/维护态。
+6. 本轮明确未做：
+   - 未改任何 Vue 页面。
+   - 未改 bridge。
+   - 未改 `request.js`。
+   - 未改任何 `campus-*` API 文件运行时行为。
+   - 未改 token 附着逻辑。
+   - 未改 API 调用顺序。
+   - 未改路由。
+   - 未改后端代码。
+   - 未新增页面。
+
 ## 当前未解决的问题
 
 - customer 仍没有自助退款申请和结果确认交互，只能查看售后结果回执
@@ -1483,11 +1515,11 @@
 
 ## 下一轮建议
 
-- 进入 `Step 39`
+- 进入 `Step 40`
 - 推荐顺序：
   1. 不再默认推进 bridge 主线；只有触发恢复推进条件时才重开
-  2. 先回看 Step 37 / Step 38 两个 admin 单页 polish 的实际展示效果
-  3. 若没有明显展示短板，不建议继续机械寻找下一页 polish
+  2. 不再默认继续 polish 页面；只有出现真实展示反馈或明显展示缺陷时才重开
+  3. 建议转入交付整理、演示脚本固化或非 bridge 后端能力梳理
   4. 不改接口、不改路由、不改 token 附着、不新增页面
   5. 第五个 admin 页继续后置，除非新的非 bridge 优先级明确指向它
 
@@ -1540,6 +1572,7 @@
 - [Step 36 日志](step-36-display-polish-execution-round-2.md)
 - [Step 37 日志](step-37-display-polish-execution-round-3.md)
 - [Step 38 日志](step-38-display-polish-execution-round-4.md)
+- [Step 39 日志](step-39-display-polish-review-and-freeze-decision.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)
