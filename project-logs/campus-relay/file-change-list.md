@@ -662,3 +662,14 @@
 - [project-logs/campus-relay/step-35-display-polish-execution-round-1.md](step-35-display-polish-execution-round-1.md)
 
 本轮没有修改 bridge、接口、鉴权、路由或后端代码，也没有新增页面。
+
+## Step 36 - 展示级优化执行轮 2
+
+- [frontend/src/views/user/CourierOnboarding.vue](../../frontend/src/views/user/CourierOnboarding.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-35-display-polish-execution-round-1.md](step-35-display-polish-execution-round-1.md)
+- [project-logs/campus-relay/step-36-display-polish-execution-round-2.md](step-36-display-polish-execution-round-2.md)
+
+本轮选择方案 A，只处理 `CourierOnboarding.vue`；没有修改 bridge、接口、鉴权、路由或后端代码，也没有新增页面。

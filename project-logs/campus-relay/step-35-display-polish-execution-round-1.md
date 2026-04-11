@@ -113,3 +113,32 @@
    - 或只处理一个 admin 只读运营页的空态 / loading / tag 一致性
 4. 第五个 admin 页继续后置。
 5. bridge 主线继续冻结，除非出现 Step 33 定义的恢复推进触发条件。
+
+## Step 36 执行回填
+
+1. Step 36 已按本轮建议进行二选一，最终选择方案 A，只处理 `frontend/src/views/user/CourierOnboarding.vue`。
+2. 选择 A 的原因：
+   - onboarding 是 customer 到 courier token 的前置入口
+   - Step 35 已 polish workbench 和 customer result，本轮补 onboarding 能补齐主演示链路前半段
+   - onboarding 的资料提交、审核状态、token 资格和 token 申请解释成本高于单个 admin 只读页
+3. Step 36 实际改动保持在展示层：
+   - 顶部新增 customer 前置入口标记
+   - 新增提交资料 / 等待审核 / 申请 token 三段式流程说明
+   - 审核与资格概览区新增标题说明
+   - token 申请区新增开放条件、申请凭证和成功后承接说明
+   - 资料表单区新增说明标题与字段分组说明
+4. Step 36 未改：
+   - bridge
+   - `request.js`
+   - `campus-courier.js`
+   - `campus-customer.js`
+   - token 附着逻辑
+   - API 调用顺序
+   - `enabledWorkInOwnBuilding` 的整数提交逻辑
+   - token 申请逻辑
+   - 按钮行为
+   - 路由
+   - 后端代码
+5. Step 36 验证：
+   - `.\mvnw.cmd -DskipTests compile` 通过
+   - `npm run build` 通过

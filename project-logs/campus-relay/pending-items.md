@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 36 最高优先级
+## Step 37 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 只有出现以下恢复推进触发条件时，才重新打开 bridge 主线：
@@ -9,14 +9,16 @@
    - 业务要求必须进一步收紧 bridge
    - 出现新的真实回归信号，证明当前保留策略开始有成本
    - 后续前端结构改造、入口整理或交付目标需要更清晰的桥接边界
-3. Step 35 已完成第一轮小范围展示级优化执行，优先回看两个 P0 页面效果：
+3. Step 35 已完成第一轮小范围展示级优化执行，已处理两个 P0 页面：
    - `frontend/src/views/courier/CourierWorkbench.vue`
    - `frontend/src/views/user/CampusOrderResult.vue`
-4. 若没有触发条件，Step 36 可继续评估第二批展示级优化，但不要自动铺开所有页面。
-5. Step 36 推荐二选一：
-   - 只处理 `frontend/src/views/user/CourierOnboarding.vue` 的说明层级与表单展示一致性
-   - 或只处理一个 admin 只读运营页的空态 / loading / tag 一致性
-6. Step 36 明确禁止：
+4. Step 36 已完成第二轮展示级优化执行，选择方案 A，只处理：
+   - `frontend/src/views/user/CourierOnboarding.vue`
+5. 若没有触发条件，Step 37 可继续评估一个 admin 只读运营页 polish，但不要自动铺开四页。
+6. Step 37 推荐二选一：
+   - `frontend/src/views/CampusSettlementOpsView.vue`
+   - `frontend/src/views/CampusAfterSaleExecutionList.vue`
+7. Step 37 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -25,10 +27,10 @@
    - 不改路由
    - 不新增页面
    - 不改后端状态机
-7. onboarding 页、admin 四个只读运营页和 Profile 页仍属于第二批展示级优化候选，不建议下一轮一次性铺开。
-8. 第五个 admin 页继续后置，不再以“补页数”为目标。
-9. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力。
-10. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力。
+8. admin 四个只读运营页和 Profile 页仍属于后续展示级优化候选，不建议下一轮一次性铺开。
+9. 第五个 admin 页继续后置，不再以“补页数”为目标。
+10. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力。
+11. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力。
 
 ## 已完成但仍需继续扩展的部分
 
@@ -58,6 +60,7 @@
   - 按订单查看位置记录、按订单查看异常摘要
 - customer 已打通售后结果回执查询与 courier onboarding 前台入口
 - customer onboarding 页面已补齐 courier token 申请动作衔接
+- customer onboarding 页面已在 Step 36 追加 customer 前置入口标记、三段式流程、审核资格概览、token 申请说明和表单分组 polish
 - frontend 已打通 admin settlement 批次列表页、批次详情页、售后执行分页页、courier 异常/位置联动页和 settlement 只读运营页最小演示入口
 - settlement 已在订单 `COMPLETED` 时自动生成或更新
 
