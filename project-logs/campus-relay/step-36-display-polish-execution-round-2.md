@@ -128,3 +128,33 @@
 4. 仍然不要自动铺开 admin 四页。
 5. 第五个 admin 页继续后置。
 6. bridge 主线继续冻结，除非出现 Step 33 定义的恢复推进触发条件。
+
+## Step 37 执行回填
+
+1. Step 37 已按本建议进入单页 admin 只读运营页 polish。
+2. 本轮选择 settlement，只处理 `frontend/src/views/CampusSettlementOpsView.vue`，没有处理 `CampusAfterSaleExecutionList.vue`。
+3. 选择原因：
+   - settlement 页已有摘要、筛选、列表和详情 drawer，后台只读运营展示形态更完整。
+   - settlement 可承接 completed 链路后的结算回看，与 Step 35 / Step 36 主演示链路互补性更强。
+   - after-sale 页涉及执行状态和纠正信息，解释成本更高，适合后续单独处理。
+4. 展示级优化摘要：
+   - 增加“只读运营”标记。
+   - 增加三段式运营引导。
+   - 增加筛选区说明和表格只读提示。
+   - 优化空态文案。
+   - 将 settlement / payout 状态 tag 改为中文展示文案。
+   - 优化详情 drawer 顶部摘要和字段来源说明。
+5. Step 37 明确未改：
+   - bridge
+   - `request.js`
+   - `campus-*` API 文件运行时行为
+   - token 附着逻辑
+   - API 调用顺序
+   - 路由
+   - 后端代码
+   - 新页面
+6. Step 38 建议：
+   - 先回看 Step 37 settlement 单页 polish 效果。
+   - 若继续 admin 展示级优化，优先只评估 `CampusAfterSaleExecutionList.vue`。
+   - 不要自动铺开剩余 admin 页面。
+   - bridge 继续保持 `Phase A no-op` 冻结态。

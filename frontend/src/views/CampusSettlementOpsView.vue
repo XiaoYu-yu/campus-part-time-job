@@ -3,7 +3,10 @@
     <div class="campus-admin-page">
       <div class="page-header">
         <div>
-          <h2>校园结算运营</h2>
+          <div class="title-row">
+            <h2>校园结算运营</h2>
+            <span class="readonly-badge">只读运营</span>
+          </div>
           <p>只读演示页，联动查看结算对账摘要、单笔结算记录和详情 drawer，不做任何写操作。</p>
         </div>
       </div>
@@ -15,6 +18,24 @@
         show-icon
         class="page-alert"
       />
+
+      <section class="ops-guide">
+        <div class="guide-item">
+          <span>摘要</span>
+          <strong>对账聚合</strong>
+          <p>先看当前筛选条件下的记录总数和金额分布。</p>
+        </div>
+        <div class="guide-item">
+          <span>筛选</span>
+          <strong>状态定位</strong>
+          <p>按结算状态、打款状态、配送员或订单号收窄列表。</p>
+        </div>
+        <div class="guide-item">
+          <span>详情</span>
+          <strong>单笔核对</strong>
+          <p>通过 drawer 只读查看打款、核对和备注字段。</p>
+        </div>
+      </section>
 
       <section class="summary-card" v-loading="summaryLoading">
         <div class="panel-header">
@@ -56,6 +77,12 @@
       </section>
 
       <section class="filter-card">
+        <div class="panel-header compact-header">
+          <div>
+            <h3>筛选条件</h3>
+            <p>筛选只影响摘要和列表读取，不触发任何结算、打款或核对写操作。</p>
+          </div>
+        </div>
         <el-form :inline="true" class="filter-form">
           <el-form-item label="结算状态">
             <el-select v-model="filters.settlementStatus" placeholder="全部" clearable style="width: 180px">
@@ -91,7 +118,12 @@
           </div>
         </div>
 
-        <el-table v-loading="listLoading" :data="records" border empty-text="当前筛选条件下暂无结算记录">
+        <div class="table-note">
+          <strong>只读提示</strong>
+          <span>本页只展示当前 settlement 记录，不提供确认结算、打款、撤回或核对写操作。</span>
+        </div>
+
+        <el-table v-loading="listLoading" :data="records" border empty-text="当前筛选条件下暂无结算记录，可调整状态或订单号后重新查询">
           <el-table-column prop="id" label="结算ID" width="96" align="center" />
           <el-table-column prop="relayOrderId" label="订单号" min-width="200" />
           <el-table-column prop="courierProfileId" label="配送员ID" width="110" align="center" />
@@ -112,12 +144,16 @@
           </el-table-column>
           <el-table-column label="结算状态" width="110" align="center">
             <template #default="{ row }">
-              <el-tag :type="settlementTagType(row.settlementStatus)">{{ row.settlementStatus || 'PENDING' }}</el-tag>
+              <el-tag :type="settlementTagType(row.settlementStatus)">
+                {{ settlementStatusText(row.settlementStatus) }}
+              </el-tag>
             </template>
           </el-table-column>
           <el-table-column label="打款状态" width="110" align="center">
             <template #default="{ row }">
-              <el-tag :type="payoutTagType(row.payoutStatus)">{{ row.payoutStatus || 'UNPAID' }}</el-tag>
+              <el-tag :type="payoutTagType(row.payoutStatus)">
+                {{ payoutStatusText(row.payoutStatus) }}
+              </el-tag>
             </template>
           </el-table-column>
           <el-table-column label="打款记录时间" min-width="170">
@@ -158,15 +194,35 @@
       <el-drawer v-model="detailVisible" size="720px" title="结算记录详情" destroy-on-close>
         <div v-loading="detailLoading" class="detail-wrapper">
           <template v-if="detail">
+            <div class="detail-status-card">
+              <div>
+                <span>当前结算记录</span>
+                <strong>{{ detail.relayOrderId }}</strong>
+              </div>
+              <div class="detail-tags">
+                <el-tag :type="settlementTagType(detail.settlementStatus)">
+                  {{ settlementStatusText(detail.settlementStatus) }}
+                </el-tag>
+                <el-tag :type="payoutTagType(detail.payoutStatus)">
+                  {{ payoutStatusText(detail.payoutStatus) }}
+                </el-tag>
+              </div>
+            </div>
+
+            <div class="detail-section-title">
+              <h3>单笔结算详情</h3>
+              <p>以下字段全部来自 `GET /api/campus/admin/settlements/{id}`，本轮只做展示分组，不改变读取逻辑。</p>
+            </div>
+
             <el-descriptions :column="2" border>
               <el-descriptions-item label="结算ID">{{ detail.id }}</el-descriptions-item>
               <el-descriptions-item label="订单号">{{ detail.relayOrderId }}</el-descriptions-item>
               <el-descriptions-item label="配送员ID">{{ displayText(detail.courierProfileId) }}</el-descriptions-item>
-              <el-descriptions-item label="结算状态">{{ detail.settlementStatus || 'PENDING' }}</el-descriptions-item>
+              <el-descriptions-item label="结算状态">{{ settlementStatusText(detail.settlementStatus) }}</el-descriptions-item>
               <el-descriptions-item label="总金额">{{ formatAmount(detail.grossAmount) }}</el-descriptions-item>
               <el-descriptions-item label="平台佣金">{{ formatAmount(detail.platformCommission) }}</el-descriptions-item>
               <el-descriptions-item label="待结算金额">{{ formatAmount(detail.pendingAmount) }}</el-descriptions-item>
-              <el-descriptions-item label="打款状态">{{ detail.payoutStatus || 'UNPAID' }}</el-descriptions-item>
+              <el-descriptions-item label="打款状态">{{ payoutStatusText(detail.payoutStatus) }}</el-descriptions-item>
               <el-descriptions-item label="结算备注" :span="2">{{ displayText(detail.remark) }}</el-descriptions-item>
               <el-descriptions-item label="打款备注" :span="2">{{ displayText(detail.payoutRemark) }}</el-descriptions-item>
               <el-descriptions-item label="打款参考号">{{ displayText(detail.payoutReferenceNo) }}</el-descriptions-item>
@@ -231,6 +287,17 @@ const payoutTagType = (status) => ({
   PAID: 'success',
   FAILED: 'danger'
 }[status] || 'info')
+
+const settlementStatusText = (status) => ({
+  PENDING: '待结算',
+  SETTLED: '已结算'
+}[status] || '待结算')
+
+const payoutStatusText = (status) => ({
+  UNPAID: '未打款',
+  PAID: '已打款',
+  FAILED: '打款失败'
+}[status] || '未打款')
 
 const buildQueryParams = () => ({
   settlementStatus: filters.settlementStatus || undefined,
@@ -335,6 +402,62 @@ onMounted(() => loadPageData())
   }
 }
 
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.readonly-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: #ecf5ff;
+  color: #337ecc;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ops-guide {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.guide-item {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid #eef2ff;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 3px 9px;
+    background: #f8fafc;
+    color: #71717a;
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #18181b;
+  }
+
+  p {
+    margin: 0;
+    color: #71717a;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+}
+
 .panel-header {
   display: flex;
   justify-content: space-between;
@@ -352,6 +475,10 @@ onMounted(() => loadPageData())
     color: #71717a;
     line-height: 1.5;
   }
+}
+
+.compact-header {
+  margin-bottom: 12px;
 }
 
 .summary-grid {
@@ -382,6 +509,23 @@ onMounted(() => loadPageData())
   margin-bottom: -18px;
 }
 
+.table-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #71717a;
+  padding: 12px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+
+  strong {
+    color: #337ecc;
+    white-space: nowrap;
+  }
+}
+
 .pagination-wrapper {
   margin-top: 20px;
   display: flex;
@@ -390,5 +534,67 @@ onMounted(() => loadPageData())
 
 .detail-wrapper {
   padding-right: 8px;
+}
+
+.detail-status-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef5ff 100%);
+  padding: 14px;
+  margin-bottom: 16px;
+
+  span {
+    display: block;
+    color: #71717a;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  strong {
+    color: #18181b;
+  }
+}
+
+.detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.detail-section-title {
+  margin-bottom: 12px;
+
+  h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    color: #18181b;
+  }
+
+  p {
+    margin: 0;
+    color: #71717a;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 900px) {
+  .ops-guide {
+    grid-template-columns: 1fr;
+  }
+
+  .table-note,
+  .detail-status-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .detail-tags {
+    justify-content: flex-start;
+  }
 }
 </style>

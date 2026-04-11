@@ -673,3 +673,14 @@
 - [project-logs/campus-relay/step-36-display-polish-execution-round-2.md](step-36-display-polish-execution-round-2.md)
 
 本轮选择方案 A，只处理 `CourierOnboarding.vue`；没有修改 bridge、接口、鉴权、路由或后端代码，也没有新增页面。
+
+## Step 37 - 展示级优化执行轮 3
+
+- [frontend/src/views/CampusSettlementOpsView.vue](../../frontend/src/views/CampusSettlementOpsView.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-36-display-polish-execution-round-2.md](step-36-display-polish-execution-round-2.md)
+- [project-logs/campus-relay/step-37-display-polish-execution-round-3.md](step-37-display-polish-execution-round-3.md)
+
+本轮选择 settlement，只处理 `CampusSettlementOpsView.vue`；没有修改 bridge、接口、鉴权、路由或后端代码，也没有新增页面。

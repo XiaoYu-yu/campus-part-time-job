@@ -44,8 +44,9 @@
 - 当前已完成：`Step 34 - 非 bridge 方向收束 / 展示级优化候选评估`
 - 当前已完成：`Step 35 - 展示级优化执行轮 1`
 - 当前已完成：`Step 36 - 展示级优化执行轮 2`
+- 当前已完成：`Step 37 - 展示级优化执行轮 3`
 - 当前日期：`2026-04-11`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 已转向不触 bridge 的非 bridge 方向收束，完成现有页面展示级优化候选评估与演示资料整理；Step 35 已完成第一轮小范围展示级优化执行，只 polish `CourierWorkbench.vue` 与 `CampusOrderResult.vue`；Step 36 已选择方案 A，只 polish `CourierOnboarding.vue`，未改 bridge、接口、路由、鉴权、提交语义和后端；当前 bridge 完全保留、旧外卖模块仍保留可运行、旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 已转向不触 bridge 的非 bridge 方向收束，完成现有页面展示级优化候选评估与演示资料整理；Step 35 已完成第一轮小范围展示级优化执行，只 polish `CourierWorkbench.vue` 与 `CampusOrderResult.vue`；Step 36 已选择方案 A，只 polish `CourierOnboarding.vue`；Step 37 已选择 settlement，只 polish `CampusSettlementOpsView.vue`；Step 35 至 Step 37 均未改 bridge、接口、路由、鉴权、提交语义和后端；当前 bridge 完全保留、旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
 
@@ -1389,6 +1390,44 @@
    - bridge 完全保留
    - 不删接口、不改鉴权、不改 token 附着逻辑
 
+## Step 37 实际完成事项
+
+1. 本轮在 Step 35 / Step 36 已完成 customer / courier 三个主演示页面 polish 后，进入单页 admin 只读运营页展示级优化执行轮。
+2. 本轮二选一后选择 settlement，只处理：
+   - `frontend/src/views/CampusSettlementOpsView.vue`
+3. 选择 settlement 的原因：
+   - `CampusSettlementOpsView.vue` 同时包含摘要、筛选、列表和详情 drawer，更适合作为完整后台只读运营演示页。
+   - settlement 能承接 completed 订单链路后的结算回看，和 Step 35 / Step 36 的主演示链路互补性更强。
+   - after-sale 执行页包含执行状态和纠正信息，解释成本更高，适合后续单独处理。
+4. `CampusSettlementOpsView.vue` 展示级优化：
+   - 顶部新增“只读运营”标记。
+   - 新增三段式运营引导：摘要、筛选、详情。
+   - 筛选区新增标题和说明，明确筛选只影响读取。
+   - 表格区新增只读提示，明确不提供确认结算、打款、撤回或核对写操作。
+   - 表格空态文案更明确。
+   - 结算状态和打款状态 tag 改为中文展示文案。
+   - 详情 drawer 新增当前结算记录摘要卡片和单笔详情说明。
+5. 本轮明确未做：
+   - 未改 bridge。
+   - 未改 `request.js`。
+   - 未改任何 `campus-*` API 文件运行时行为。
+   - 未改 token 附着逻辑。
+   - 未改 API 调用顺序。
+   - 未改分页逻辑。
+   - 未改筛选参数语义。
+   - 未改 settlement 业务逻辑。
+   - 未改路由。
+   - 未改后端代码。
+   - 未处理 `CampusAfterSaleExecutionList.vue`。
+   - 未新增第五个 admin 页。
+6. 执行：
+   - `.\mvnw.cmd -DskipTests compile`
+   - `npm run build`
+7. 当前 bridge 结论保持不变：
+   - `Phase A no-op` 冻结态
+   - bridge 完全保留
+   - 不删接口、不改鉴权、不改 token 附着逻辑
+
 ## 当前未解决的问题
 
 - customer 仍没有自助退款申请和结果确认交互，只能查看售后结果回执
@@ -1401,16 +1440,13 @@
 
 ## 下一轮建议
 
-- 进入 `Step 37`
+- 进入 `Step 38`
 - 推荐顺序：
   1. 不再默认推进 bridge 主线；只有触发恢复推进条件时才重开
-  2. 若没有触发条件，先回看 Step 35 / Step 36 三个 customer/courier 页面展示 polish 的效果
-  3. 如需继续展示级优化，Step 37 不要自动铺开所有 admin 页面，建议只选一个 admin 只读运营页
-  4. admin 单页候选建议二选一：
-     - `CampusSettlementOpsView.vue`
-     - `CampusAfterSaleExecutionList.vue`
-  5. 不改接口、不改路由、不改 token 附着、不新增页面
-  6. 第五个 admin 页继续后置，除非新的非 bridge 优先级明确指向它
+  2. 先回看 Step 37 settlement 单页 polish 的实际展示效果
+  3. 如需继续展示级优化，Step 38 不要自动铺开所有 admin 页面，建议只评估是否处理 `CampusAfterSaleExecutionList.vue`
+  4. 不改接口、不改路由、不改 token 附着、不新增页面
+  5. 第五个 admin 页继续后置，除非新的非 bridge 优先级明确指向它
 
 ## 日志索引
 
@@ -1459,6 +1495,7 @@
 - [Step 34 日志](step-34-non-bridge-direction-and-display-polish-assessment.md)
 - [Step 35 日志](step-35-display-polish-execution-round-1.md)
 - [Step 36 日志](step-36-display-polish-execution-round-2.md)
+- [Step 37 日志](step-37-display-polish-execution-round-3.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)
