@@ -41,8 +41,9 @@
 - 当前已完成：`Step 31 - 最小 Phase A 动作候选评估 / 执行前最小回归复核`
 - 当前已完成：`Step 32 - Phase A 候选池扩展与 go / no-go 决策`
 - 当前已完成：`Step 33 - Phase A no-op 冻结态 / 恢复推进条件`
+- 当前已完成：`Step 34 - 非 bridge 方向收束 / 展示级优化候选评估`
 - 当前日期：`2026-04-11`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；当前 bridge 完全保留、旧外卖模块仍保留可运行、旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 已转向不触 bridge 的非 bridge 方向收束，完成现有页面展示级优化候选评估与演示资料整理；当前 bridge 完全保留、旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
 
@@ -1272,6 +1273,44 @@
    - 不默认继续寻找 bridge 收口候选
    - 只有触发条件出现时才重新打开 bridge 主线
 
+## Step 34 实际完成事项
+
+1. 本轮没有改业务代码、没有补新页面、没有新增接口。
+2. 本轮没有重新打开 bridge 主线，也没有更新 bridge 收口评估文档。
+3. 本轮基于 Step 33 的 `Phase A no-op` 冻结态，正式转向不触 bridge 的并行工作。
+4. 本轮收束出的非 bridge 优先方向：
+   - 现有页面纯展示级优化候选评估
+   - 演示资料整理
+   - 与 bridge 无关的后端能力梳理
+5. 本轮完成了现有页面展示级优化候选池评估：
+   - P0：`frontend/src/views/courier/CourierWorkbench.vue`
+   - P0：`frontend/src/views/user/CampusOrderResult.vue`
+   - P1：`frontend/src/views/user/CourierOnboarding.vue`
+   - P1：admin 四个只读运营页
+   - P2：`frontend/src/views/user/Profile.vue`
+6. 本轮建议 Step 35 进入一个小范围展示级优化执行轮，优先只处理：
+   - `/courier/workbench`
+   - `/user/campus/order-result`
+7. Step 35 若执行，应限制为展示 polish：
+   - 状态提示
+   - 空态 / loading / 错误态文案
+   - drawer 分区层级
+   - 表格、卡片、tag 一致性
+8. 本轮整理了当前最适合演示的真实链路：
+   - onboarding
+   - admin 审核
+   - courier token 申请
+   - workbench
+   - 接单 / 取餐 / deliver / 异常上报
+   - customer confirm
+   - completed 回读
+   - customer 结果回看页
+9. 本轮继续确认第五个 admin 页后置。
+10. 当前 bridge 结论保持不变：
+   - `Phase A no-op` 冻结态
+   - bridge 完全保留
+   - 不删接口、不改鉴权、不改 token 附着逻辑
+
 ## 当前未解决的问题
 
 - customer 仍没有自助退款申请和结果确认交互，只能查看售后结果回执
@@ -1284,11 +1323,13 @@
 
 ## 下一轮建议
 
-- 进入 `Step 34`
+- 进入 `Step 35`
 - 推荐顺序：
   1. 不再默认推进 bridge 主线；只有触发恢复推进条件时才重开
-  2. 若没有触发条件，优先转向不触 bridge 的工作：演示资料整理、现有页面展示级优化评估、非 bridge 后端能力梳理
-  3. 第五个 admin 页继续后置，除非新的非 bridge 优先级明确指向它
+  2. 若没有触发条件，建议进入一个小范围展示级优化执行轮
+  3. Step 35 优先只处理 `CourierWorkbench.vue` 与 `CampusOrderResult.vue` 的状态提示、空态、loading、错误态、drawer 分区和卡片层级
+  4. 不改接口、不改路由、不改 token 附着、不新增页面
+  5. 第五个 admin 页继续后置，除非新的非 bridge 优先级明确指向它
 
 ## 日志索引
 
@@ -1334,6 +1375,7 @@
 - [Step 31 日志](step-31-minimal-phase-a-candidate-and-preflight.md)
 - [Step 32 日志](step-32-phase-a-candidate-expansion-and-go-no-go.md)
 - [Step 33 日志](step-33-phase-a-no-op-freeze-and-resume-criteria.md)
+- [Step 34 日志](step-34-non-bridge-direction-and-display-polish-assessment.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

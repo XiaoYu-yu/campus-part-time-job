@@ -1,27 +1,37 @@
 # 校园代送待处理事项
 
-## Step 34 最高优先级
+## Step 35 最高优先级
 
-1. bridge 主线已进入 `Phase A no-op` 冻结态，下一轮不再默认继续寻找 bridge 收口候选。
+1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 只有出现以下恢复推进触发条件时，才重新打开 bridge 主线：
    - 出现比 Step 31 / Step 32 更高收益且更低风险的新候选
    - repo 内出现新的 bridge 使用点或边界变化
    - 业务要求必须进一步收紧 bridge
    - 出现新的真实回归信号，证明当前保留策略开始有成本
    - 后续前端结构改造、入口整理或交付目标需要更清晰的桥接边界
-3. 若没有触发条件，下一轮最高优先级转向不触 bridge 的工作：
-   - 文档整理和演示资料整理
-   - 现有页面纯展示级优化候选评估
-   - 与 bridge 无关的后端能力梳理
-   - 售后执行、异常上报、settlement 等非 bridge 主线需求评估
-4. 继续保持：
-   - bridge 完全保留
-   - `request.js` 现有 token 附着逻辑不变
-   - `CourierWorkbench.vue` 现有运行时行为不变
-5. customer completed 结果回看页继续冻结，除非新的非 bridge 优先级明确要求展示级优化
-6. 第五个 admin 页继续后置，不再以“补页数”为目标
-7. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力
-8. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力
+3. 若没有触发条件，下一轮建议进入小范围展示级优化执行轮。
+4. Step 35 推荐优先范围：
+   - `frontend/src/views/courier/CourierWorkbench.vue`
+   - `frontend/src/views/user/CampusOrderResult.vue`
+5. Step 35 允许的展示级优化范围：
+   - 状态提示文案更清晰
+   - 空态 / loading / 错误态更一致
+   - drawer 分区层级更易读
+   - 表格、卡片、tag 展示一致性小修
+   - 演示说明文案更聚焦真实链路
+6. Step 35 明确禁止：
+   - 不改 bridge
+   - 不改 `request.js`
+   - 不改 `campus-courier.js` bridge 行为
+   - 不改 token 附着逻辑
+   - 不改 API 调用顺序
+   - 不改路由
+   - 不新增页面
+   - 不改后端状态机
+7. onboarding 页、admin 四个只读运营页和 Profile 页暂列第二批展示级优化候选，不建议下一轮一次性铺开。
+8. 第五个 admin 页继续后置，不再以“补页数”为目标。
+9. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力。
+10. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力。
 
 ## 已完成但仍需继续扩展的部分
 
@@ -103,7 +113,7 @@
 
 ## 当前主要阻塞点
 
-### 1. bridge 仍是过渡态，但已进入 `Phase A` 执行准备重新评估阶段
+### 1. bridge 仍是过渡态，但已进入 `Phase A no-op` 冻结态
 
 - 影响：`courier/profile` 与 `courier/review-status` 继续依赖双 token 兼容
 - 当前证据：
@@ -119,9 +129,10 @@
   - 不存在仓库外旧页面副本、历史前端包或临时脚本继续依赖旧 bridge
 - 当前判断：
   - repo 外阻塞项已关闭
-  - 当前可以进入 `Phase A` 执行准备重新评估
+  - Step 33 已正式进入 `Phase A no-op` 冻结态
   - Step 30 已明确 `Phase A` 的边界、bridge 保留范围、回滚策略和最小回归清单
-- 默认处理：继续保留旧 bridge，不做删除动作；Step 33 已正式进入 `Phase A no-op` 冻结态，后续不再默认寻找 bridge 候选，只有触发条件出现时才重开 bridge 主线
+  - Step 34 已转向不触 bridge 的展示级优化候选评估和演示资料整理
+- 默认处理：继续保留旧 bridge，不做删除动作；后续不再默认寻找 bridge 候选，只有触发条件出现时才重开 bridge 主线
 - repo 内已新增一轮真实局部留痕：
   - 真实 token 申请成功
   - 真实 workbench 加载成功

@@ -642,3 +642,11 @@
 - [project-logs/campus-relay/bridge-execution-readiness-checklist.md](bridge-execution-readiness-checklist.md)
 - [project-logs/campus-relay/step-32-phase-a-candidate-expansion-and-go-no-go.md](step-32-phase-a-candidate-expansion-and-go-no-go.md)
 - [project-logs/campus-relay/step-33-phase-a-no-op-freeze-and-resume-criteria.md](step-33-phase-a-no-op-freeze-and-resume-criteria.md)
+
+## Step 34 - 非 bridge 方向收束 / 展示级优化候选评估
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-33-phase-a-no-op-freeze-and-resume-criteria.md](step-33-phase-a-no-op-freeze-and-resume-criteria.md)
+- [project-logs/campus-relay/step-34-non-bridge-direction-and-display-polish-assessment.md](step-34-non-bridge-direction-and-display-polish-assessment.md)
