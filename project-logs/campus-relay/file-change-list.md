@@ -725,3 +725,33 @@
 - [project-logs/campus-relay/step-41-delivery-assets-checklist-and-recording-plan.md](step-41-delivery-assets-checklist-and-recording-plan.md)
 
 本轮是交付材料补完轮，仅修改日志和交付说明文档；没有修改业务代码、bridge、接口、鉴权、路由或后端代码，也没有新增页面。
+
+## Step 42 - 真实媒体采集与归档
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-41-delivery-assets-checklist-and-recording-plan.md](step-41-delivery-assets-checklist-and-recording-plan.md)
+- [project-logs/campus-relay/step-42-real-media-capture-and-archive.md](step-42-real-media-capture-and-archive.md)
+- [project-logs/campus-relay/runtime/step-42-media/screenshots/01-customer-onboarding-entry.png](runtime/step-42-media/screenshots/01-customer-onboarding-entry.png)
+- [project-logs/campus-relay/runtime/step-42-media/screenshots/02-onboarding-review-status-token-eligibility.png](runtime/step-42-media/screenshots/02-onboarding-review-status-token-eligibility.png)
+- [project-logs/campus-relay/runtime/step-42-media/screenshots/03-courier-token-issued.png](runtime/step-42-media/screenshots/03-courier-token-issued.png)
+- [project-logs/campus-relay/runtime/step-42-media/screenshots/04-courier-workbench-home.png](runtime/step-42-media/screenshots/04-courier-workbench-home.png)
+- [project-logs/campus-relay/runtime/step-42-media/screenshots/05-available-order-list.png](runtime/step-42-media/screenshots/05-available-order-list.png)
+- [project-logs/campus-relay/runtime/step-42-media/screenshots/06-courier-order-detail-drawer.png](runtime/step-42-media/screenshots/06-courier-order-detail-drawer.png)
+- [project-logs/campus-relay/runtime/step-42-media/screenshots/07-pickup-state.png](runtime/step-42-media/screenshots/07-pickup-state.png)
+- [project-logs/campus-relay/runtime/step-42-media/screenshots/08-deliver-awaiting-confirmation.png](runtime/step-42-media/screenshots/08-deliver-awaiting-confirmation.png)
+- [project-logs/campus-relay/runtime/step-42-media/screenshots/09-exception-report-result.png](runtime/step-42-media/screenshots/09-exception-report-result.png)
+- [project-logs/campus-relay/runtime/step-42-media/screenshots/10-customer-confirm-awaiting.png](runtime/step-42-media/screenshots/10-customer-confirm-awaiting.png)
+- [project-logs/campus-relay/runtime/step-42-media/screenshots/11-customer-completed-result.png](runtime/step-42-media/screenshots/11-customer-completed-result.png)
+- [project-logs/campus-relay/runtime/step-42-media/screenshots/12-admin-settlement-ops.png](runtime/step-42-media/screenshots/12-admin-settlement-ops.png)
+- [project-logs/campus-relay/runtime/step-42-media/screenshots/13-admin-after-sale-execution.png](runtime/step-42-media/screenshots/13-admin-after-sale-execution.png)
+- [project-logs/campus-relay/runtime/step-42-media/screenshots/10a-customer-confirm-blocked-after-exception.png](runtime/step-42-media/screenshots/10a-customer-confirm-blocked-after-exception.png)
+- [project-logs/campus-relay/runtime/step-42-media/screenshots/11a-customer-result-after-failed-confirm.png](runtime/step-42-media/screenshots/11a-customer-result-after-failed-confirm.png)
+- [project-logs/campus-relay/runtime/step-42-media/videos/01-onboarding-token.webm](runtime/step-42-media/videos/01-onboarding-token.webm)
+- [project-logs/campus-relay/runtime/step-42-media/videos/02-courier-workbench-actions.webm](runtime/step-42-media/videos/02-courier-workbench-actions.webm)
+- [project-logs/campus-relay/runtime/step-42-media/videos/03-customer-confirm-completed-readback.webm](runtime/step-42-media/videos/03-customer-confirm-completed-readback.webm)
+- [project-logs/campus-relay/runtime/step-42-media/videos/04-admin-readonly-ops.webm](runtime/step-42-media/videos/04-admin-readonly-ops.webm)
+- [project-logs/campus-relay/runtime/step-42-media/videos/03a-customer-confirm-blocked-after-exception.webm](runtime/step-42-media/videos/03a-customer-confirm-blocked-after-exception.webm)
+
+本轮是真实媒体采集轮，新增截图与录屏文件并回填媒体索引；没有修改业务代码、bridge、接口、鉴权、路由或后端代码，也没有新增页面。

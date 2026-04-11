@@ -316,6 +316,37 @@
 3. 当前仍未产出真实截图文件和录屏文件，但已有可执行清单，可以直接按清单采集。
 4. 如果下一轮仍留在交付整理，可优先做真实截图/录屏采集与文件归档；如果不采集媒体，则可以评估进入非 bridge 后端能力梳理。
 
+## Step 42 真实采集回填
+
+Step 42 已按本清单完成一版真实媒体采集，并归档到：
+
+`project-logs/campus-relay/runtime/step-42-media/`
+
+采集结果：
+
+1. 截图：
+   - 主交付截图 13 张。
+   - 异常后 customer confirm 被拒绝的失败留痕 2 张。
+2. 录屏：
+   - 主交付录屏 4 段。
+   - 异常后 customer confirm 被拒绝的失败留痕 1 段。
+3. 已覆盖：
+   - customer onboarding。
+   - token 资格与 token 申请。
+   - courier workbench。
+   - 可接单、详情、取餐、deliver、异常上报。
+   - customer confirm 前结果页与 completed 回读。
+   - admin settlement 与 after-sale 只读运营页。
+
+非阻塞缺口：
+
+1. after-sale 固定真实样本仍不是本轮新增重点；当前已采集页面结构与只读运营页展示，若答辩要求真实售后执行记录，需要演示前单独准备样本。
+2. customer confirm 动作通过真实接口完成并录屏记录，当前没有新增独立 customer confirm UI 按钮截图。
+
+详细媒体索引见：
+
+`project-logs/campus-relay/step-42-real-media-capture-and-archive.md`
+
 ## 当前 bridge 结论
 
 1. bridge 仍处于 `Phase A no-op` 冻结态。
