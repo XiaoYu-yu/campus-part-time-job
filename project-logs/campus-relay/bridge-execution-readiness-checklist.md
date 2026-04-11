@@ -507,6 +507,39 @@
   - [ ] 不通过
   - [ ] 待人工核实
 
+## Step 33 说明
+
+- 本轮没有继续机械扩候选池，也没有执行 bridge 收口动作。
+- 基于 Step 31 / Step 32 连续两轮 `no-go / no-op`，本轮正式将 bridge 主线收成 `Phase A no-op` 冻结态。
+- 冻结态不是失败，也不是 bridge 已可删除；冻结态表示：
+  - bridge 完全保留
+  - 当前不再默认继续寻找 bridge 收口候选
+  - 只有出现恢复推进触发条件，才重新打开 bridge 主线
+
+### 14. Step 33 是否已进入 `Phase A no-op` 冻结态
+
+- 记录位置：
+  - `project-logs/campus-relay/step-33-phase-a-no-op-freeze-and-resume-criteria.md`
+  - `project-logs/campus-relay/bridge-phaseout-evaluation.md`
+- 核实结果：
+  - `2026-04-11` 已正式确认进入 `Phase A no-op` 冻结态。
+  - 保持不动项包括：
+    - 继续保留 `/api/campus/courier/profile`
+    - 继续保留 `/api/campus/courier/review-status`
+    - 继续保留 `/courier/workbench` 现有优先 `courier_token` 的逻辑
+    - 继续保留 `customer_token -> bridge -> courier 前置读取` 的观察态存在
+    - 不改 `request.js`
+    - 不改后端鉴权
+  - 恢复推进必须满足明确触发条件，不再默认继续找 bridge 候选。
+- 负责人：
+  - Codex
+- 日期：
+  - `2026-04-11`
+- 是否通过：
+  - [x] 通过
+  - [ ] 不通过
+  - [ ] 待人工核实
+
 ## Step 30 - 进入 Phase A 前的执行准备项
 
 ### 6. `Phase A` 的执行边界是否已明确

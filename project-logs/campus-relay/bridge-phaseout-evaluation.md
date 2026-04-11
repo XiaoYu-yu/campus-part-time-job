@@ -759,3 +759,63 @@
    - 仍处于 `Phase A` 执行准备阶段
    - bridge 仍完全保留
    - `Phase A` 还没有进入真实执行动作阶段
+
+## Step 33 Phase A no-op 冻结态
+
+Step 31 与 Step 32 已经连续两轮给出 `no-go / no-op` 结论。当前继续机械扩候选池的收益已经很低，因此本轮正式把 bridge 主线收成 `Phase A no-op` 冻结态。
+
+### 冻结理由
+
+1. repo 外阻塞项已关闭。
+2. repo 内完整链路已真实跑通并完成共享留痕。
+3. Step 30 已明确 `Phase A` 边界、bridge 保留范围、回滚策略和最小回归清单。
+4. Step 31 / Step 32 均没有找到真正值得执行的最小动作。
+5. 当前继续保持 bridge 完全保留，比为了推进阶段制造低价值代码动作更稳。
+
+### 冻结态下保持不动项
+
+1. 继续保留 `GET /api/campus/courier/profile`。
+2. 继续保留 `GET /api/campus/courier/review-status`。
+3. 继续保留 `/courier/workbench` 现有优先 `courier_token` 的逻辑。
+4. 继续保留 `customer_token -> bridge -> courier 前置读取` 的观察态存在。
+5. 继续保留 `customer/courier-onboarding/*` 前置入口。
+6. 不改 `frontend/src/utils/request.js` 现有 token 附着逻辑。
+7. 不改后端鉴权。
+8. 不做 bridge 删除动作。
+
+### 恢复推进触发条件
+
+只有出现以下任一条件，才重新打开 bridge 收口动作评估：
+
+1. 出现比 Step 31 / Step 32 更高收益且更低风险的新候选。
+2. repo 内出现新的 bridge 使用点或边界变化。
+3. 业务要求必须进一步收紧 bridge。
+4. 出现新的真实回归信号，证明当前保留策略开始有成本。
+5. 后续前端结构改造、入口整理或交付目标需要更清晰的桥接边界。
+
+出现触发条件后，必须先重新明确影响面、回滚点和最小回归范围，不允许直接执行收口动作。
+
+### 冻结态下允许并行推进的工作
+
+1. 可继续推进但不触 bridge 的工作：
+   - 文档整理和演示资料整理
+   - 现有页面纯展示级优化候选评估
+   - 与 bridge 无关的后端能力梳理
+   - 售后执行、异常上报、settlement 等非 bridge 主线的需求评估
+2. 暂不推进的工作：
+   - bridge 收口动作
+   - bridge 鉴权调整
+   - 删除旧 bridge 接口
+   - 依赖 bridge 行为变化的大结构前端改造
+3. 只允许评估、不允许立即执行的工作：
+   - 更大范围前端结构整理
+   - UI 改造解锁时机判断
+   - 非 bridge 主线的新轮次规划
+
+### 当前结论
+
+1. 当前正式进入 `Phase A no-op` 冻结态。
+2. bridge 完全保留。
+3. 当前不再默认继续寻找 bridge 收口候选。
+4. 只有满足恢复推进触发条件时，才重新打开 bridge 主线。
+5. 当前最终结论仍不是“bridge 已可删除”。

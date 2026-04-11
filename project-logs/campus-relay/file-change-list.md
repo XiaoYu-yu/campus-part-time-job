@@ -632,3 +632,13 @@
 - [project-logs/campus-relay/bridge-execution-readiness-checklist.md](bridge-execution-readiness-checklist.md)
 - [project-logs/campus-relay/step-31-minimal-phase-a-candidate-and-preflight.md](step-31-minimal-phase-a-candidate-and-preflight.md)
 - [project-logs/campus-relay/step-32-phase-a-candidate-expansion-and-go-no-go.md](step-32-phase-a-candidate-expansion-and-go-no-go.md)
+
+## Step 33 - Phase A no-op 冻结态 / 恢复推进条件
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/bridge-phaseout-evaluation.md](bridge-phaseout-evaluation.md)
+- [project-logs/campus-relay/bridge-execution-readiness-checklist.md](bridge-execution-readiness-checklist.md)
+- [project-logs/campus-relay/step-32-phase-a-candidate-expansion-and-go-no-go.md](step-32-phase-a-candidate-expansion-and-go-no-go.md)
+- [project-logs/campus-relay/step-33-phase-a-no-op-freeze-and-resume-criteria.md](step-33-phase-a-no-op-freeze-and-resume-criteria.md)

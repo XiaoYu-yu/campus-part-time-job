@@ -40,8 +40,9 @@
 - 当前已完成：`Step 30 - Phase A 执行准备重新评估`
 - 当前已完成：`Step 31 - 最小 Phase A 动作候选评估 / 执行前最小回归复核`
 - 当前已完成：`Step 32 - Phase A 候选池扩展与 go / no-go 决策`
+- 当前已完成：`Step 33 - Phase A no-op 冻结态 / 恢复推进条件`
 - 当前日期：`2026-04-11`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，最终继续确认当前应保持 `no-op`；当前阶段仍停留在 `Phase A` 执行准备，bridge 仍保留、旧外卖模块仍保留可运行、旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；当前 bridge 完全保留、旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
 
@@ -1241,6 +1242,36 @@
    - 当前主线仍是 `Phase A` 的最小动作评估
    - 继续补展示页会稀释当前 bridge 收口主线
 
+## Step 33 实际完成事项
+
+1. 本轮没有改业务代码、没有补新页面、没有新增接口。
+2. 本轮没有继续机械扩 `Phase A` 候选池。
+3. 本轮基于 Step 31 / Step 32 连续两轮 `no-go / no-op`，正式将 bridge 主线收成 `Phase A no-op` 冻结态。
+4. 本轮明确了冻结态保持不动项：
+   - `/api/campus/courier/profile` 继续保留
+   - `/api/campus/courier/review-status` 继续保留
+   - `/courier/workbench` 继续维持优先 `courier_token`
+   - `customer_token -> bridge -> courier 前置读取` 继续保留观察态
+   - `customer/courier-onboarding/*` 继续作为前置入口
+   - 不改 `request.js`
+   - 不改后端鉴权
+5. 本轮明确了恢复推进触发条件：
+   - 出现更高收益且更低风险的新候选
+   - repo 内出现新的 bridge 使用点或边界变化
+   - 业务要求必须进一步收紧 bridge
+   - 出现新的真实回归信号，证明当前保留策略开始有成本
+   - 后续前端结构改造、入口整理或交付目标需要更清晰的桥接边界
+6. 本轮明确了冻结态下允许并行推进的非 bridge 工作：
+   - 文档整理和演示资料整理
+   - 现有页面纯展示级优化候选评估
+   - 与 bridge 无关的后端能力梳理
+   - 售后执行、异常上报、settlement 等非 bridge 主线需求评估
+7. 当前最终 bridge 结论：
+   - 正式进入 `Phase A no-op` 冻结态
+   - bridge 完全保留
+   - 不默认继续寻找 bridge 收口候选
+   - 只有触发条件出现时才重新打开 bridge 主线
+
 ## 当前未解决的问题
 
 - customer 仍没有自助退款申请和结果确认交互，只能查看售后结果回执
@@ -1253,11 +1284,11 @@
 
 ## 下一轮建议
 
-- 进入 `Step 33`
+- 进入 `Step 34`
 - 推荐顺序：
-  1. 继续在 Step 30 的边界内筛选一个真正具备“明确收益 + 低风险 + 单提交可回滚”的 `Phase A` 候选动作
-  2. 若仍找不到足够安全且值得执行的动作，就继续保持 bridge 完全保留，不强行推进
-  3. 第五个 admin 页继续后置，避免稀释当前优先级
+  1. 不再默认推进 bridge 主线；只有触发恢复推进条件时才重开
+  2. 若没有触发条件，优先转向不触 bridge 的工作：演示资料整理、现有页面展示级优化评估、非 bridge 后端能力梳理
+  3. 第五个 admin 页继续后置，除非新的非 bridge 优先级明确指向它
 
 ## 日志索引
 
@@ -1302,6 +1333,7 @@
 - [Step 30 日志](step-30-phase-a-readiness-reassessment.md)
 - [Step 31 日志](step-31-minimal-phase-a-candidate-and-preflight.md)
 - [Step 32 日志](step-32-phase-a-candidate-expansion-and-go-no-go.md)
+- [Step 33 日志](step-33-phase-a-no-op-freeze-and-resume-criteria.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)
