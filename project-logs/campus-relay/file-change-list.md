@@ -650,3 +650,15 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 - [project-logs/campus-relay/step-33-phase-a-no-op-freeze-and-resume-criteria.md](step-33-phase-a-no-op-freeze-and-resume-criteria.md)
 - [project-logs/campus-relay/step-34-non-bridge-direction-and-display-polish-assessment.md](step-34-non-bridge-direction-and-display-polish-assessment.md)
+
+## Step 35 - 展示级优化执行轮 1
+
+- [frontend/src/views/user/CampusOrderResult.vue](../../frontend/src/views/user/CampusOrderResult.vue)
+- [frontend/src/views/courier/CourierWorkbench.vue](../../frontend/src/views/courier/CourierWorkbench.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-34-non-bridge-direction-and-display-polish-assessment.md](step-34-non-bridge-direction-and-display-polish-assessment.md)
+- [project-logs/campus-relay/step-35-display-polish-execution-round-1.md](step-35-display-polish-execution-round-1.md)
+
+本轮没有修改 bridge、接口、鉴权、路由或后端代码，也没有新增页面。

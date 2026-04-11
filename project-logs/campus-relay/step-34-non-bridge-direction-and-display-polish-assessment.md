@@ -256,3 +256,27 @@
    - drawer 分区层级
    - 表格和卡片一致性
 4. 不触 bridge、不改鉴权、不新增接口、不新增页面。
+
+## Step 35 执行回填
+
+1. Step 35 已按本轮建议执行，只处理 P0 两个页面：
+   - `frontend/src/views/user/CampusOrderResult.vue`
+   - `frontend/src/views/courier/CourierWorkbench.vue`
+2. Step 35 实际改动保持在展示层：
+   - `CampusOrderResult.vue` 增加只读回看标记、三段式引导、初始/loading/错误态层级和结果状态提示层级。
+   - `CourierWorkbench.vue` 增加最小承接标记、四段式演示链路、可接单区提示、订单详情状态摘要和基本信息分组说明。
+3. Step 35 未改：
+   - bridge
+   - `request.js`
+   - `campus-courier.js`
+   - token 附着逻辑
+   - API 调用顺序
+   - 按钮动作语义
+   - 路由
+   - 后端代码
+4. Step 35 验证：
+   - `.\mvnw.cmd -DskipTests compile` 通过
+   - `npm run build` 通过
+5. Step 35 后续建议：
+   - Step 36 先回看两个 P0 页面 polish 效果
+   - 如继续展示级优化，不要自动铺开所有页面，可只选 onboarding 或单个 admin 只读页

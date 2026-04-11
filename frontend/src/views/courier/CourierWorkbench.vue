@@ -3,7 +3,10 @@
     <div class="workbench-page">
       <section class="card hero-card">
         <div>
-          <h2>配送员工作台</h2>
+          <div class="title-row">
+            <h2>配送员工作台</h2>
+            <span class="readonly-badge">最小承接</span>
+          </div>
           <p>这是 courier token 获取后的最小承接页。当前已补到接单、详情、取餐、送达和异常上报的最小闭环，但仍不扩完整 courier 主工作流。</p>
         </div>
         <div class="token-pill" :class="hasCourierToken ? 'active' : 'inactive'">
@@ -21,6 +24,25 @@
       />
 
       <template v-if="hasCourierToken">
+        <section class="flow-strip">
+          <div class="flow-step">
+            <span>身份</span>
+            <strong>profile / review-status</strong>
+          </div>
+          <div class="flow-step">
+            <span>订单</span>
+            <strong>可接单预览 / 详情</strong>
+          </div>
+          <div class="flow-step">
+            <span>动作</span>
+            <strong>接单 / 取餐 / 送达</strong>
+          </div>
+          <div class="flow-step">
+            <span>结果</span>
+            <strong>异常 / 确认 / 完成</strong>
+          </div>
+        </section>
+
         <section class="card">
           <div class="section-header">
             <div>
@@ -65,6 +87,11 @@
               <p>调用 `GET /api/campus/courier/orders/available`，本轮补一个最小接单动作，成功后直接刷新当前预览列表。</p>
             </div>
             <el-button text type="primary" :loading="loading" @click="loadWorkbench">刷新列表</el-button>
+          </div>
+
+          <div class="table-note">
+            <strong>演示提示</strong>
+            <span>列表只展示当前可接单记录；为空时不代表链路失败，可通过下方订单号回读入口查看已完成样本。</span>
           </div>
 
           <el-table
@@ -136,7 +163,22 @@
         >
           <div v-loading="detailLoading" class="detail-content">
             <template v-if="orderDetail.id">
-              <div class="summary-grid">
+              <div class="detail-status-card">
+                <div>
+                  <span>当前订单</span>
+                  <strong>{{ displayText(orderDetail.id) }}</strong>
+                </div>
+                <el-tag :type="isCompletedOrder ? 'success' : isAwaitingConfirmation ? 'warning' : 'info'">
+                  {{ displayText(orderDetail.status) }}
+                </el-tag>
+              </div>
+
+              <div class="drawer-section-title">
+                <h4>订单基本信息</h4>
+                <p>以下字段均来自 courier 订单详情读取接口，本轮只做展示分组，不改变字段来源。</p>
+              </div>
+
+              <div class="summary-grid detail-summary-grid">
                 <div class="summary-item">
                   <span>订单号</span>
                   <strong>{{ displayText(orderDetail.id) }}</strong>
@@ -401,7 +443,7 @@
                 </el-form>
               </div>
             </template>
-            <el-empty v-else description="当前没有可展示的订单详情" />
+            <el-empty v-else description="当前没有可展示的订单详情；可从可接单列表进入，或在快捷入口输入订单号回读。" />
           </div>
         </el-drawer>
       </template>
@@ -786,6 +828,24 @@ onMounted(() => {
   font-size: 14px;
 }
 
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.readonly-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: #ecf5ff;
+  color: #337ecc;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .token-pill {
   padding: 8px 14px;
   border-radius: 999px;
@@ -806,6 +866,32 @@ onMounted(() => {
   margin-bottom: 14px;
 }
 
+.flow-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.flow-step {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid #eef2ff;
+}
+
+.flow-step span {
+  display: block;
+  color: #909399;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.flow-step strong {
+  color: #18181b;
+  font-size: 14px;
+}
+
 .section-header {
   display: flex;
   align-items: center;
@@ -822,6 +908,23 @@ onMounted(() => {
   margin: 0;
   color: #909399;
   font-size: 14px;
+}
+
+.table-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #606266;
+  padding: 12px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.table-note strong {
+  color: #337ecc;
+  white-space: nowrap;
 }
 
 .summary-grid {
@@ -858,6 +961,47 @@ onMounted(() => {
 
 .detail-content {
   min-height: 160px;
+}
+
+.detail-status-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef5ff 100%);
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.detail-status-card span {
+  display: block;
+  color: #909399;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.detail-status-card strong {
+  color: #18181b;
+}
+
+.drawer-section-title {
+  margin-bottom: 12px;
+}
+
+.drawer-section-title h4 {
+  margin: 0 0 6px;
+}
+
+.drawer-section-title p {
+  margin: 0;
+  color: #909399;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.detail-summary-grid {
+  margin-bottom: 2px;
 }
 
 .pickup-section {
@@ -954,6 +1098,16 @@ onMounted(() => {
 
   .lookup-panel {
     flex-direction: column;
+  }
+
+  .flow-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .table-note,
+  .detail-status-card {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 </style>

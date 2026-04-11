@@ -1,10 +1,13 @@
 <template>
   <UserLayout>
     <div class="order-result-page">
-      <section class="card">
+      <section class="card hero-card">
         <div class="section-header">
           <div>
-            <h2>校园代送结果回看</h2>
+            <div class="title-row">
+              <h2>校园代送结果回看</h2>
+              <span class="readonly-badge">只读回看</span>
+            </div>
             <p>输入校园代送订单号，查看确认送达前后的当前结果，不新增写操作。</p>
           </div>
         </div>
@@ -18,22 +21,51 @@
           />
           <el-button type="primary" :loading="loading" @click="loadOrderResult">查询结果</el-button>
         </div>
+
+        <div class="guide-strip">
+          <div class="guide-item">
+            <span>1</span>
+            <strong>输入订单号</strong>
+            <p>支持从 URL query 自动带入，也可手工输入。</p>
+          </div>
+          <div class="guide-item">
+            <span>2</span>
+            <strong>查看确认状态</strong>
+            <p>重点区分等待确认与已完成两种演示状态。</p>
+          </div>
+          <div class="guide-item">
+            <span>3</span>
+            <strong>核对结果字段</strong>
+            <p>只读展示现有 customer 订单详情可返回字段。</p>
+          </div>
+        </div>
       </section>
 
       <section v-if="showInitialHint" class="card state-card">
-        <h3>等待输入订单号</h3>
-        <p>输入校园代送订单号后，可回看等待确认或已完成状态下的当前结果。</p>
+        <div class="state-icon">ID</div>
+        <div>
+          <h3>等待输入订单号</h3>
+          <p>输入校园代送订单号后，可回看等待确认或已完成状态下的当前结果。</p>
+          <p class="sub-tip">示例：`CR202604070002`，也可通过 `?orderId=` 直接打开结果回看。</p>
+        </div>
       </section>
 
       <section v-if="loading" class="card state-card">
-        <h3>正在读取结果</h3>
-        <p>正在查询订单 {{ queryingOrderId || orderId || '...' }} 的当前结果，请稍候。</p>
+        <div class="state-icon loading-state">...</div>
+        <div>
+          <h3>正在读取结果</h3>
+          <p>正在查询订单 {{ queryingOrderId || orderId || '...' }} 的当前结果，请稍候。</p>
+          <p class="sub-tip">本页只调用 customer 订单详情读取接口，不会触发确认或写操作。</p>
+        </div>
       </section>
 
       <section v-if="errorMessage" class="card state-card error-state">
-        <h3>结果读取失败</h3>
-        <p>{{ errorMessage }}</p>
-        <p class="sub-tip">请检查订单号是否正确，或稍后重试。</p>
+        <div class="state-icon error-icon">!</div>
+        <div>
+          <h3>结果读取失败</h3>
+          <p>{{ errorMessage }}</p>
+          <p class="sub-tip">请检查订单号是否正确、当前账号是否有权限查看该订单，或稍后重试。</p>
+        </div>
       </section>
 
       <section v-if="result" class="card result-card">
@@ -48,7 +80,8 @@
         </div>
 
         <div class="message-box" :class="statusClass(result.status)">
-          {{ statusMessage(result) }}
+          <strong>{{ statusTitle(result.status) }}</strong>
+          <span>{{ statusMessage(result) }}</span>
         </div>
 
         <div class="summary-grid">
@@ -258,7 +291,14 @@ onMounted(() => {
   margin-bottom: 14px;
 }
 
+.hero-card {
+  border: 1px solid #eef2ff;
+}
+
 .state-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
   text-align: left;
 }
 
@@ -283,6 +323,36 @@ onMounted(() => {
   font-size: 13px;
 }
 
+.state-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: #eef5ff;
+  color: #337ecc;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.state-icon.loading-state {
+  background: #f4f4f5;
+  color: #606266;
+}
+
+.state-icon.error-icon {
+  background: #fde2e2;
+  color: #f56c6c;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .section-header h2 {
   margin: 0 0 6px;
 }
@@ -293,11 +363,61 @@ onMounted(() => {
   font-size: 14px;
 }
 
+.readonly-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: #f0f9eb;
+  color: #67c23a;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .search-row {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 12px;
   margin-top: 16px;
+}
+
+.guide-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.guide-item {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.guide-item span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #ecf5ff;
+  color: #337ecc;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.guide-item strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.guide-item p {
+  margin: 0;
+  color: #909399;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .result-header {
@@ -344,6 +464,9 @@ onMounted(() => {
   padding: 14px;
   margin-bottom: 16px;
   line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .message-box.processing {
@@ -428,6 +551,14 @@ onMounted(() => {
   .result-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .guide-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .state-card {
+    flex-direction: column;
   }
 }
 </style>

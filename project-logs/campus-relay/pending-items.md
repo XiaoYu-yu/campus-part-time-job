@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 35 最高优先级
+## Step 36 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 只有出现以下恢复推进触发条件时，才重新打开 bridge 主线：
@@ -9,17 +9,14 @@
    - 业务要求必须进一步收紧 bridge
    - 出现新的真实回归信号，证明当前保留策略开始有成本
    - 后续前端结构改造、入口整理或交付目标需要更清晰的桥接边界
-3. 若没有触发条件，下一轮建议进入小范围展示级优化执行轮。
-4. Step 35 推荐优先范围：
+3. Step 35 已完成第一轮小范围展示级优化执行，优先回看两个 P0 页面效果：
    - `frontend/src/views/courier/CourierWorkbench.vue`
    - `frontend/src/views/user/CampusOrderResult.vue`
-5. Step 35 允许的展示级优化范围：
-   - 状态提示文案更清晰
-   - 空态 / loading / 错误态更一致
-   - drawer 分区层级更易读
-   - 表格、卡片、tag 展示一致性小修
-   - 演示说明文案更聚焦真实链路
-6. Step 35 明确禁止：
+4. 若没有触发条件，Step 36 可继续评估第二批展示级优化，但不要自动铺开所有页面。
+5. Step 36 推荐二选一：
+   - 只处理 `frontend/src/views/user/CourierOnboarding.vue` 的说明层级与表单展示一致性
+   - 或只处理一个 admin 只读运营页的空态 / loading / tag 一致性
+6. Step 36 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -28,7 +25,7 @@
    - 不改路由
    - 不新增页面
    - 不改后端状态机
-7. onboarding 页、admin 四个只读运营页和 Profile 页暂列第二批展示级优化候选，不建议下一轮一次性铺开。
+7. onboarding 页、admin 四个只读运营页和 Profile 页仍属于第二批展示级优化候选，不建议下一轮一次性铺开。
 8. 第五个 admin 页继续后置，不再以“补页数”为目标。
 9. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力。
 10. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力。
@@ -40,6 +37,7 @@
 - customer 已打通 onboarding 新入口：资料提交、资料读取、审核状态、token 资格判断
 - customer 已新增 `/user/campus/order-result`，可最小回看 `AWAITING_CONFIRMATION / COMPLETED` 下的代送结果
 - `frontend/src/views/user/CampusOrderResult.vue` 已补清晰的初始提示、错误态和 completed 结果摘要，适合真实演示与回读
+- `frontend/src/views/user/CampusOrderResult.vue` 已在 Step 35 追加只读回看标记、三段式引导、状态卡片和错误态说明 polish
 - frontend 已新增 `/courier/workbench`，作为 token 获取后的最小 courier 前台承接页
 - courier workbench 已补最小接单动作，token 获取后不再停在纯只读承接页
 - courier workbench 已补订单详情 drawer，接单后可直接查看当前订单详情
@@ -48,6 +46,7 @@
 - courier workbench 已补最小异常上报承接，可在详情 drawer 中按真实后端 DTO 上报最新一次异常
 - courier workbench 已补最小 confirm 前可视化与 completed 后只读承接，可在 `AWAITING_CONFIRMATION / COMPLETED` 状态下只读展示送达后状态
 - courier workbench 已补按订单号查看详情的最小入口，可在可接单列表为空时回读已完成订单结果
+- courier workbench 已在 Step 35 追加最小承接标记、四段式演示链路、可接单区提示和详情 drawer 状态摘要 polish
 - courier 已打通：资料提交、资料详情、审核状态、token 发行、可接单列表、接单、取餐、配送推进、异常上报、位置上报
 - admin 已打通：
   - 订单分页、详情、时间线
