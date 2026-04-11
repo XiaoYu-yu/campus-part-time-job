@@ -755,3 +755,13 @@
 - [project-logs/campus-relay/runtime/step-42-media/videos/03a-customer-confirm-blocked-after-exception.webm](runtime/step-42-media/videos/03a-customer-confirm-blocked-after-exception.webm)
 
 本轮是真实媒体采集轮，新增截图与录屏文件并回填媒体索引；没有修改业务代码、bridge、接口、鉴权、路由或后端代码，也没有新增页面。
+
+## Step 43 - 媒体缺口分叉判断 / 非 bridge 后端评估入口
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-42-real-media-capture-and-archive.md](step-42-real-media-capture-and-archive.md)
+- [project-logs/campus-relay/step-43-media-gap-gate-or-non-bridge-backend-assessment.md](step-43-media-gap-gate-or-non-bridge-backend-assessment.md)
+
+本轮选择路径 B，是判断/评估轮：不补固定 after-sale 样本，不继续补媒体，不写代码；只完成非 bridge 后端方向评估。没有修改业务代码、bridge、接口、鉴权、路由或后端代码，也没有新增页面。
