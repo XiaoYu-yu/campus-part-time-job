@@ -3,7 +3,10 @@
     <div class="campus-admin-page">
       <div class="page-header">
         <div>
-          <h2>校园售后执行</h2>
+          <div class="title-row">
+            <h2>校园售后执行</h2>
+            <span class="readonly-badge">只读执行</span>
+          </div>
           <p>只读演示页，查看售后执行状态、纠正审计与单笔售后结果汇总。</p>
         </div>
       </div>
@@ -16,7 +19,31 @@
         class="page-alert"
       />
 
+      <section class="ops-guide">
+        <div class="guide-item">
+          <span>列表</span>
+          <strong>执行记录分页</strong>
+          <p>按执行状态、决策类型和人工纠正条件定位售后执行记录。</p>
+        </div>
+        <div class="guide-item">
+          <span>状态</span>
+          <strong>结果与纠正</strong>
+          <p>直接查看执行状态、执行备注和是否经过人工纠正。</p>
+        </div>
+        <div class="guide-item">
+          <span>详情</span>
+          <strong>售后结果汇总</strong>
+          <p>通过 drawer 只读回看申请、处理、决策和执行字段。</p>
+        </div>
+      </section>
+
       <section class="filter-card">
+        <div class="panel-header compact-header">
+          <div>
+            <h3>筛选条件</h3>
+            <p>筛选只影响售后执行记录读取，不触发任何退款、补偿或纠正写操作。</p>
+          </div>
+        </div>
         <el-form :inline="true" class="filter-form">
           <el-form-item label="执行状态">
             <el-select v-model="filters.afterSaleExecutionStatus" placeholder="全部" clearable style="width: 180px">
@@ -44,14 +71,28 @@
       </section>
 
       <section class="table-card">
-        <el-table v-loading="loading" :data="records" border empty-text="当前筛选条件下暂无售后执行记录">
+        <div class="panel-header table-header">
+          <div>
+            <h3>售后执行记录</h3>
+            <p>当前页只展示执行结果、执行备注和纠正审计字段，详情继续复用现有 after-sale-result 读取接口。</p>
+          </div>
+        </div>
+
+        <div class="table-note">
+          <strong>只读提示</strong>
+          <span>本页不提供售后处理、执行纠正或状态推进按钮，只用于运营演示和结果核对。</span>
+        </div>
+
+        <el-table v-loading="loading" :data="records" border empty-text="当前筛选条件下暂无售后执行记录，可调整执行状态、决策类型或纠正条件后重新查询">
           <el-table-column prop="relayOrderId" label="订单号" min-width="200" />
           <el-table-column prop="orderStatus" label="订单状态" width="150" />
           <el-table-column prop="customerUserId" label="用户ID" width="100" align="center" />
           <el-table-column prop="courierProfileId" label="配送员ID" width="110" align="center" />
           <el-table-column label="决策类型" width="130" align="center">
             <template #default="{ row }">
-              <el-tag :type="decisionTagType(row.decisionType)">{{ row.decisionType || 'NONE' }}</el-tag>
+              <el-tag :type="decisionTagType(row.decisionType)">
+                {{ decisionTypeText(row.decisionType) }}
+              </el-tag>
             </template>
           </el-table-column>
           <el-table-column label="决策金额" width="130" align="right">
@@ -62,7 +103,7 @@
           <el-table-column label="执行状态" width="130" align="center">
             <template #default="{ row }">
               <el-tag :type="executionTagType(row.afterSaleExecutionStatus)">
-                {{ row.afterSaleExecutionStatus || 'PENDING' }}
+                {{ executionStatusText(row.afterSaleExecutionStatus) }}
               </el-tag>
             </template>
           </el-table-column>
@@ -74,7 +115,7 @@
           <el-table-column label="人工纠正" width="110" align="center">
             <template #default="{ row }">
               <el-tag :type="Number(row.afterSaleExecutionCorrected) === 1 ? 'warning' : 'info'">
-                {{ Number(row.afterSaleExecutionCorrected) === 1 ? '是' : '否' }}
+                {{ correctionText(row.afterSaleExecutionCorrected) }}
               </el-tag>
             </template>
           </el-table-column>
@@ -111,6 +152,30 @@
       <el-drawer v-model="detailVisible" size="720px" title="售后结果详情" destroy-on-close>
         <div v-loading="detailLoading" class="detail-wrapper">
           <template v-if="detail">
+            <div class="detail-status-card">
+              <div>
+                <span>当前售后订单</span>
+                <strong>{{ detail.relayOrderId }}</strong>
+              </div>
+              <div class="detail-tags">
+                <el-tag type="info">{{ detail.orderStatus || '暂无状态' }}</el-tag>
+                <el-tag :type="decisionTagType(detail.afterSaleDecisionType)">
+                  {{ decisionTypeText(detail.afterSaleDecisionType) }}
+                </el-tag>
+                <el-tag :type="executionTagType(detail.afterSaleExecutionStatus)">
+                  {{ executionStatusText(detail.afterSaleExecutionStatus) }}
+                </el-tag>
+                <el-tag :type="Number(detail.afterSaleExecutionCorrected) === 1 ? 'warning' : 'info'">
+                  {{ correctionText(detail.afterSaleExecutionCorrected) }}
+                </el-tag>
+              </div>
+            </div>
+
+            <div class="detail-section-title">
+              <h3>订单与配送摘要</h3>
+              <p>以下字段来自 `GET /api/campus/admin/orders/{id}/after-sale-result`，本轮只做展示层分组。</p>
+            </div>
+
             <el-descriptions :column="2" border>
               <el-descriptions-item label="订单号">{{ detail.relayOrderId }}</el-descriptions-item>
               <el-descriptions-item label="订单状态">{{ detail.orderStatus }}</el-descriptions-item>
@@ -128,6 +193,7 @@
 
             <div class="detail-section">
               <h3>售后申请</h3>
+              <p>展示用户提交的售后原因和申请时间，不在本页处理售后。</p>
               <el-descriptions :column="2" border>
                 <el-descriptions-item label="申请时间">{{ formatDateTime(detail.afterSaleAppliedAt) }}</el-descriptions-item>
                 <el-descriptions-item label="申请原因">{{ displayText(detail.afterSaleReason) }}</el-descriptions-item>
@@ -136,11 +202,12 @@
 
             <div class="detail-section">
               <h3>售后处理与决策</h3>
+              <p>展示 admin 已记录的处理动作、决策类型和金额，不在本页修改决策。</p>
               <el-descriptions :column="2" border>
                 <el-descriptions-item label="处理动作">{{ displayText(detail.afterSaleHandleAction) }}</el-descriptions-item>
                 <el-descriptions-item label="处理时间">{{ formatDateTime(detail.afterSaleHandledAt) }}</el-descriptions-item>
                 <el-descriptions-item label="处理备注">{{ displayText(detail.afterSaleHandleRemark) }}</el-descriptions-item>
-                <el-descriptions-item label="决策类型">{{ displayText(detail.afterSaleDecisionType) }}</el-descriptions-item>
+                <el-descriptions-item label="决策类型">{{ decisionTypeText(detail.afterSaleDecisionType) }}</el-descriptions-item>
                 <el-descriptions-item label="决策金额">{{ formatAmount(detail.afterSaleDecisionAmount) }}</el-descriptions-item>
                 <el-descriptions-item label="决策时间">{{ formatDateTime(detail.afterSaleDecidedAt) }}</el-descriptions-item>
                 <el-descriptions-item label="决策备注" :span="2">{{ displayText(detail.afterSaleDecisionRemark) }}</el-descriptions-item>
@@ -149,13 +216,14 @@
 
             <div class="detail-section">
               <h3>售后执行</h3>
+              <p>展示执行结果和一次人工纠正审计字段，不在本页追加执行记录。</p>
               <el-descriptions :column="2" border>
-                <el-descriptions-item label="执行状态">{{ displayText(detail.afterSaleExecutionStatus) }}</el-descriptions-item>
+                <el-descriptions-item label="执行状态">{{ executionStatusText(detail.afterSaleExecutionStatus) }}</el-descriptions-item>
                 <el-descriptions-item label="执行时间">{{ formatDateTime(detail.afterSaleExecutedAt) }}</el-descriptions-item>
                 <el-descriptions-item label="执行备注">{{ displayText(detail.afterSaleExecutionRemark) }}</el-descriptions-item>
                 <el-descriptions-item label="执行参考号">{{ displayText(detail.afterSaleExecutionReferenceNo) }}</el-descriptions-item>
                 <el-descriptions-item label="人工纠正">
-                  {{ Number(detail.afterSaleExecutionCorrected) === 1 ? '是' : '否' }}
+                  {{ correctionText(detail.afterSaleExecutionCorrected) }}
                 </el-descriptions-item>
                 <el-descriptions-item label="纠正时间">
                   {{ formatDateTime(detail.afterSaleExecutionCorrectedAt) }}
@@ -163,6 +231,7 @@
               </el-descriptions>
             </div>
           </template>
+          <el-empty v-else-if="!detailLoading" description="暂无售后结果详情，请从列表选择一条记录查看" />
         </div>
       </el-drawer>
     </div>
@@ -214,6 +283,21 @@ const decisionTagType = (type) => ({
   COMPENSATE: 'warning',
   NONE: 'info'
 }[type] || 'info')
+
+const executionStatusText = (status) => ({
+  PENDING: '待执行',
+  SUCCESS: '执行成功',
+  FAILED: '执行失败',
+  NOT_REQUIRED: '无需执行'
+}[status] || '待执行')
+
+const decisionTypeText = (type) => ({
+  REFUND: '退款',
+  COMPENSATE: '补偿',
+  NONE: '无需金额处理'
+}[type] || '无需金额处理')
+
+const correctionText = (value) => (Number(value) === 1 ? '已纠正' : '未纠正')
 
 const loadExecutions = async () => {
   loading.value = true
@@ -302,8 +386,106 @@ onMounted(() => loadExecutions())
   }
 }
 
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.readonly-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: #fff7ed;
+  color: #c2410c;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ops-guide {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.guide-item {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid #ffedd5;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 3px 9px;
+    background: #f8fafc;
+    color: #71717a;
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #18181b;
+  }
+
+  p {
+    margin: 0;
+    color: #71717a;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+
+  h3 {
+    margin: 0 0 6px;
+    font-size: 17px;
+    color: #18181b;
+  }
+
+  p {
+    margin: 0;
+    color: #71717a;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+}
+
+.compact-header,
+.table-header {
+  margin-bottom: 12px;
+}
+
 .filter-form {
   margin-bottom: -18px;
+}
+
+.table-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #71717a;
+  padding: 12px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+
+  strong {
+    color: #c2410c;
+    white-space: nowrap;
+  }
 }
 
 .pagination-wrapper {
@@ -316,6 +498,52 @@ onMounted(() => loadExecutions())
   padding-right: 8px;
 }
 
+.detail-status-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #fff7ed 0%, #fff 100%);
+  padding: 14px;
+  margin-bottom: 16px;
+
+  span {
+    display: block;
+    color: #71717a;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  strong {
+    color: #18181b;
+  }
+}
+
+.detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.detail-section-title {
+  margin-bottom: 12px;
+
+  h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    color: #18181b;
+  }
+
+  p {
+    margin: 0;
+    color: #71717a;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+}
+
 .detail-section {
   margin-top: 20px;
 
@@ -323,6 +551,29 @@ onMounted(() => loadExecutions())
     margin: 0 0 12px;
     font-size: 16px;
     color: #18181b;
+  }
+
+  p {
+    margin: -4px 0 12px;
+    color: #71717a;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 900px) {
+  .ops-guide {
+    grid-template-columns: 1fr;
+  }
+
+  .table-note,
+  .detail-status-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .detail-tags {
+    justify-content: flex-start;
   }
 }
 </style>

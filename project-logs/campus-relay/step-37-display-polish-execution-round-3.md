@@ -122,3 +122,36 @@
 2. 若继续 admin 展示级优化，建议只处理 `CampusAfterSaleExecutionList.vue`，不要铺开其余 admin 页。
 3. 第五个 admin 页继续后置。
 4. bridge 主线继续冻结，除非出现 Step 33 定义的恢复推进触发条件。
+
+## Step 38 执行回填
+
+1. Step 38 已按本建议进入 after-sale 单页 admin 只读运营页 polish。
+2. 本轮只处理 `frontend/src/views/CampusAfterSaleExecutionList.vue`，没有继续回改 `CampusSettlementOpsView.vue`，也没有处理其余 admin 页。
+3. 选择原因：
+   - Step 37 已完成 settlement 只读运营页，Step 38 处理 after-sale 能补齐当前两个最主要 admin 只读运营演示面。
+   - after-sale 页承载执行状态、决策类型、人工纠正和售后结果 drawer，解释成本高，适合单独 polish。
+   - 本轮改动可限制在模板、状态文案和样式层，不需要改售后执行逻辑。
+4. 展示级优化摘要：
+   - 增加“只读执行”标记。
+   - 增加三段式页面导览。
+   - 增加筛选区说明和表格只读提示。
+   - 优化空态文案。
+   - 将决策类型、执行状态和人工纠正 tag 改为中文展示文案。
+   - 优化售后结果 drawer 顶部摘要、字段来源说明和只读分区说明。
+5. Step 38 明确未改：
+   - bridge
+   - `request.js`
+   - `campus-*` API 文件运行时行为
+   - token 附着逻辑
+   - API 调用顺序
+   - 售后执行逻辑
+   - 筛选参数语义
+   - 分页逻辑
+   - 路由
+   - 后端代码
+   - 新页面
+6. Step 39 建议：
+   - 先回看 Step 37 / Step 38 两个 admin 单页 polish 效果。
+   - 若没有明显展示短板，不建议继续机械寻找下一页 polish。
+   - 第五个 admin 页继续后置。
+   - bridge 继续保持 `Phase A no-op` 冻结态。

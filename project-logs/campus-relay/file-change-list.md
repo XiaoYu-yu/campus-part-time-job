@@ -684,3 +684,14 @@
 - [project-logs/campus-relay/step-37-display-polish-execution-round-3.md](step-37-display-polish-execution-round-3.md)
 
 本轮选择 settlement，只处理 `CampusSettlementOpsView.vue`；没有修改 bridge、接口、鉴权、路由或后端代码，也没有新增页面。
+
+## Step 38 - 展示级优化执行轮 4
+
+- [frontend/src/views/CampusAfterSaleExecutionList.vue](../../frontend/src/views/CampusAfterSaleExecutionList.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-37-display-polish-execution-round-3.md](step-37-display-polish-execution-round-3.md)
+- [project-logs/campus-relay/step-38-display-polish-execution-round-4.md](step-38-display-polish-execution-round-4.md)
+
+本轮只处理 `CampusAfterSaleExecutionList.vue`；没有修改 bridge、接口、鉴权、路由或后端代码，也没有新增页面。
