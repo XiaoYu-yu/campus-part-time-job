@@ -705,3 +705,13 @@
 - [project-logs/campus-relay/step-39-display-polish-review-and-freeze-decision.md](step-39-display-polish-review-and-freeze-decision.md)
 
 本轮是展示 polish 复盘与冻结判断轮，仅修改日志和评估文档；没有修改业务代码、bridge、接口、鉴权、路由或后端代码，也没有新增页面。
+
+## Step 40 - 交付整理与演示脚本固化
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-39-display-polish-review-and-freeze-decision.md](step-39-display-polish-review-and-freeze-decision.md)
+- [project-logs/campus-relay/step-40-delivery-packaging-and-demo-script.md](step-40-delivery-packaging-and-demo-script.md)
+
+本轮是交付整理轮，仅修改日志和交付说明文档；没有修改业务代码、bridge、接口、鉴权、路由或后端代码，也没有新增页面。

@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 40 最高优先级
+## Step 41 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 只有出现以下恢复推进触发条件时，才重新打开 bridge 主线：
@@ -19,12 +19,12 @@
 6. Step 38 已完成第四轮展示级优化执行，只处理：
    - `frontend/src/views/CampusAfterSaleExecutionList.vue`
 7. Step 39 已完成 Step 35 到 Step 38 展示 polish 线复盘，并将展示 polish 线收成冻结/维护态。
-8. Step 40 不再默认继续 polish 页面；只有出现真实展示反馈、明显展示缺陷或交付材料要求时，才重开展示 polish。
-9. Step 40 建议优先转入：
-   - 交付整理
-   - 演示脚本固化
-   - 非 bridge 后端能力梳理
-10. Step 40 明确禁止：
+8. Step 40 已完成交付整理与演示脚本固化，当前项目进入稳定交付整理阶段。
+9. Step 41 不再默认继续 polish 页面；只有出现真实展示反馈、明显展示缺陷或交付材料要求时，才重开展示 polish。
+10. Step 41 推荐优先判断交付材料是否仍缺：
+   - 若缺，继续补截图清单、录屏顺序和演示前检查 checklist。
+   - 若不缺，再评估是否进入非 bridge 后端能力梳理。
+11. Step 41 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -33,10 +33,10 @@
    - 不改路由
    - 不新增页面
    - 不改后端状态机
-11. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-12. 第五个 admin 页继续后置，不再以“补页数”为目标。
-13. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力。
-14. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力。
+12. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+13. 第五个 admin 页继续后置，不再以“补页数”为目标。
+14. 视业务需要为售后执行、异常上报补更细粒度的历史审计能力。
+15. 视业务需要为 settlement 补更完整的批次复核、撤回和对账能力。
 
 ## 已完成但仍需继续扩展的部分
 
@@ -71,6 +71,7 @@
 - `frontend/src/views/CampusSettlementOpsView.vue` 已在 Step 37 追加只读运营标记、三段式运营引导、筛选区说明、只读提示、中文状态 tag 和详情 drawer 摘要卡片 polish
 - `frontend/src/views/CampusAfterSaleExecutionList.vue` 已在 Step 38 追加只读执行标记、三段式页面导览、筛选区说明、只读提示、中文状态 tag 和售后结果 drawer 摘要卡片 polish
 - Step 39 已复盘 `CourierOnboarding.vue`、`CourierWorkbench.vue`、`CampusOrderResult.vue`、`CampusSettlementOpsView.vue`、`CampusAfterSaleExecutionList.vue` 五个关键页面，并将展示 polish 线收成冻结/维护态
+- Step 40 已固化交付边界、主演示脚本、演示账号与样本数据索引、页面展示清单和答辩口径
 - settlement 已在订单 `COMPLETED` 时自动生成或更新
 
 ## 已锁定的默认处理策略
