@@ -86,6 +86,21 @@ Step 42 已经完成 15 张真实截图与 5 段真实录屏，覆盖 customer/c
 
 推荐 Step 44 先进入“异常历史与处理闭环”的最小方案设计轮，不直接写代码。
 
+## Step 44 方案设计回填
+
+Step 44 已进入 P1 “异常历史与处理闭环”的最小方案设计轮，并形成以下结论：
+
+1. 建议新增 `campus_exception_record` 作为异常历史审计主表。
+2. 继续保留 `campus_relay_order.exception_type / exception_remark / exception_reported_at` 作为 latest exception 兼容摘要字段。
+3. courier 现有 `POST /api/campus/courier/orders/{id}/exception-report` 入口继续复用，仅在后续实现中调整持久化策略。
+4. 最小状态集建议只保留 `REPORTED` 与 `RESOLVED`，避免扩成完整工单系统。
+5. admin 侧建议先做异常历史分页、详情只读接口，再评估最小 `resolve` 处理接口。
+6. customer 侧不新增异常处理接口或页面。
+
+详细方案见：
+
+`project-logs/campus-relay/step-44-exception-history-minimal-solution-design.md`
+
 ## 当前媒体材料是否已足够
 
 结论：已足够用于当前答辩和交接。

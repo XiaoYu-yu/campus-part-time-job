@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 44 最高优先级
+## Step 45 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -23,28 +23,34 @@
    - 不继续补媒体。
    - 正式收住媒体线。
    - 完成 3 个非 bridge 后端方向评估。
-7. Step 44 最高优先级建议：
-   - 进入“异常历史与处理闭环”的最小方案设计轮。
-   - 先做方案，不默认写代码。
-   - 明确新表边界、状态边界、接口边界、与现有订单 latest exception 字段的兼容策略。
-8. Step 44 可评估但不应默认执行：
-   - 是否新增异常历史表。
-   - 是否新增 admin 异常处理状态。
-   - 是否新增只读异常历史查询接口。
-   - 是否保留现有订单 latest exception 字段作为兼容摘要。
-9. Step 44 明确禁止：
+7. Step 44 已完成异常历史与处理闭环最小方案设计：
+   - 建议新增 `campus_exception_record`。
+   - 继续保留 `campus_relay_order.exception_type / exception_remark / exception_reported_at` 作为 latest exception 兼容摘要。
+   - 复用现有 courier `exception-report` 入口。
+   - 最小状态集建议为 `REPORTED / RESOLVED`。
+   - admin 侧先做历史分页和详情只读，再评估最小 resolve。
+8. Step 45 最高优先级建议：
+   - 先判断是否进入 Step 45A：异常历史表 + 写入 + admin 只读查询最小实现。
+   - 若进入实现，优先只做历史表、写入和只读查询，不默认做 resolve。
+   - 若方案仍需补充，继续方案细化，不写代码。
+9. Step 45 如果进入实现，必须同步维护：
+   - `backend/db/init.sql`
+   - `backend/db/migrations`
+   - `backend/src/main/resources/db/schema-h2.sql`
+   - `backend/src/main/resources/db/data-h2.sql`
+10. Step 45 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
    - 不改 token 附着逻辑
-   - 不改 API 调用顺序
    - 不改路由
    - 不新增页面
-   - 不改后端状态机
-10. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-11. 第五个 admin 页继续后置，不再以“补页数”为目标。
-12. 售后执行历史表暂列 P2。
-13. settlement 批次复核、撤回和对账暂列 P3。
+   - 不改订单主状态机
+   - 不补完整异常工单系统
+11. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+12. 第五个 admin 页继续后置，不再以“补页数”为目标。
+13. 售后执行历史表暂列 P2。
+14. settlement 批次复核、撤回和对账暂列 P3。
 
 ## 已完成但仍需继续扩展的部分
 
