@@ -806,3 +806,18 @@
 - [project-logs/campus-relay/step-45b-exception-resolve-minimal-action-design.md](step-45b-exception-resolve-minimal-action-design.md)
 
 本轮是异常最小处理动作方案评估轮：只设计 `REPORTED -> RESOLVED` 的 resolve 边界；没有修改业务代码、SQL、前端页面、bridge、接口实现、鉴权或路由。
+
+## Step 46 - 异常 resolve 最小实现
+
+- [backend/src/main/java/com/cangqiong/takeaway/campus/dto/CampusAdminExceptionResolveDTO.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/dto/CampusAdminExceptionResolveDTO.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/controller/CampusAdminExceptionController.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/controller/CampusAdminExceptionController.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/service/CampusExceptionRecordService.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/service/CampusExceptionRecordService.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusExceptionRecordServiceImpl.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusExceptionRecordServiceImpl.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/mapper/CampusExceptionRecordMapper.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/mapper/CampusExceptionRecordMapper.java)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-45b-exception-resolve-minimal-action-design.md](step-45b-exception-resolve-minimal-action-design.md)
+- [project-logs/campus-relay/step-46-exception-resolve-minimal-implementation.md](step-46-exception-resolve-minimal-implementation.md)
+
+本轮是异常 resolve 最小后端实现轮：新增 `POST /api/campus/admin/exceptions/{id}/resolve` 和最小请求 DTO，只更新异常历史处理字段；没有修改 bridge、前端页面、路由、鉴权、订单主状态或 settlement。

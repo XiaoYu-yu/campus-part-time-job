@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -110,4 +112,21 @@ public interface CampusExceptionRecordMapper {
             "WHERE cer.id = #{id}"
     })
     CampusExceptionRecordVO selectDetailById(Long id);
+
+    @Update("UPDATE campus_exception_record SET " +
+            "process_status = 'RESOLVED', " +
+            "process_result = #{processResult}, " +
+            "processed_by_employee_id = #{processedByEmployeeId}, " +
+            "processed_at = #{processedAt}, " +
+            "admin_note = #{adminNote}, " +
+            "updated_at = #{updatedAt} " +
+            "WHERE id = #{id} AND process_status = 'REPORTED'")
+    int resolveByAdmin(
+            @Param("id") Long id,
+            @Param("processResult") String processResult,
+            @Param("adminNote") String adminNote,
+            @Param("processedByEmployeeId") Long processedByEmployeeId,
+            @Param("processedAt") LocalDateTime processedAt,
+            @Param("updatedAt") LocalDateTime updatedAt
+    );
 }

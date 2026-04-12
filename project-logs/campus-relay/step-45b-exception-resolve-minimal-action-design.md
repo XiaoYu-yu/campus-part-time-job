@@ -176,3 +176,18 @@ admin 如需判断是否已处理，应读取：
 2. 只新增 admin resolve 后端接口和必要 DTO / service / mapper 更新。
 3. 验证：`REPORTED` 可处理为 `RESOLVED`，重复处理失败，详情和列表可回读 `RESOLVED`。
 4. 继续不补前端页面，除非 Step 46 后明确只读/处理承接成为最高优先级。
+
+## Step 46 回填
+
+Step 46 已按本设计落地最小实现：
+
+1. 已新增 `POST /api/campus/admin/exceptions/{id}/resolve`。
+2. 请求体使用 `processResult` 与 `adminNote`。
+3. `processResult` 最小值固定为：
+   - `HANDLED`
+   - `MARKED_INVALID`
+   - `FOLLOWED_UP`
+4. service / mapper 层通过 `WHERE process_status = 'REPORTED'` 限制只允许 `REPORTED -> RESOLVED`。
+5. 重复处理已验证返回“异常记录已处理，不能重复处理”。
+6. resolve 只更新 `campus_exception_record` 处理字段，不改订单主状态、不改 settlement、不清空 latest exception 摘要。
+7. 本轮没有补前端页面，没有改 bridge，没有改路由。

@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 46 最高优先级
+## Step 47 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -39,12 +39,20 @@
    - 不引入 `ACKNOWLEDGED`。
    - 不把 `REJECTED` 做成主状态，后续如需标记无效可使用 `processResult = MARKED_INVALID`。
    - resolve 只更新 `campus_exception_record` 处理字段，不改订单主状态、不改 settlement、不清空 latest exception 摘要。
-10. Step 46 最高优先级建议：
-   - 如果进入实现，只新增 `POST /api/campus/admin/exceptions/{id}/resolve`。
+10. Step 46 已完成异常 resolve 最小实现：
+   - 新增 `POST /api/campus/admin/exceptions/{id}/resolve`。
    - 请求体最小字段为 `processResult` 与 `adminNote`。
-   - 最小 `processResult` 候选：`HANDLED`、`MARKED_INVALID`、`FOLLOWED_UP`。
-   - 仍不默认补 admin 前端页面。
-11. Step 46 明确禁止：
+   - 最小 `processResult` 固定为 `HANDLED`、`MARKED_INVALID`、`FOLLOWED_UP`。
+   - 只允许 `REPORTED -> RESOLVED`。
+   - 重复处理返回“异常记录已处理，不能重复处理”。
+   - 不改订单主状态、不改 settlement、不清空 latest exception 摘要。
+   - 没有补 admin 前端页面。
+11. Step 47 最高优先级建议：
+   - 先评估 admin 异常历史/resolve 是否值得做最小前端承接。
+   - 如果前端承接收益不足，再重新比较 P2 售后执行历史表是否应回到最高优先级。
+   - 不要直接扩成完整异常工单系统。
+   - 不要为了补页数直接新增第五个 admin 页。
+12. Step 47 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -53,11 +61,11 @@
    - 不新增页面
    - 不改订单主状态机
    - 不补完整异常工单系统
-12. admin 异常历史前端页面暂不默认补，除非 Step 46 resolve 后确认只读展示承接比处理动作更优先。
-13. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-14. 第五个 admin 页继续后置，不再以“补页数”为目标。
-15. 售后执行历史表暂列 P2。
-16. settlement 批次复核、撤回和对账暂列 P3。
+13. admin 异常历史前端页面暂不默认补，必须先做 go / no-go 判断。
+14. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+15. 第五个 admin 页继续后置，不再以“补页数”为目标。
+16. 售后执行历史表暂列 P2。
+17. settlement 批次复核、撤回和对账暂列 P3。
 
 ## 已完成但仍需继续扩展的部分
 
@@ -83,6 +91,7 @@
   - 售后结果分页、售后结果汇总
   - 售后执行分页、人工纠正审计
   - 配送员分页、审核、最近异常、低频位置记录
+  - 异常历史分页、详情、最小 resolve 处理
   - 结算分页、详情、确认结算、单笔打款记录、批量打款记录、对账摘要、批次列表、批次详情、二次核对
   - 按订单查看位置记录、按订单查看异常摘要
 - customer 已打通售后结果回执查询与 courier onboarding 前台入口
@@ -129,8 +138,9 @@
 
 ### 4. 异常与位置
 
-- 异常仍只保留订单上的最新一次异常信息
-- 不补异常历史表
+- 异常历史已落地到 `campus_exception_record`
+- 订单上的 latest exception 字段继续作为兼容摘要保留
+- admin resolve 仅支持 `REPORTED -> RESOLVED`，不改订单主状态和 settlement
 - 位置上报继续只写 `campus_location_report`
 - 不做实时轨迹、地图页、频控策略
 

@@ -54,7 +54,9 @@
 - 当前已完成：`Step 44 - 异常历史与处理闭环最小方案设计`
 - 当前已完成：`Step 45A - 异常历史最小实现`
 - 当前已完成：`Step 45B - 异常最小处理动作设计`
+- 当前已完成：`Step 46 - 异常 resolve 最小实现`
 - 当前日期：`2026-04-12`
+- Step 46 补充：已新增 admin 异常 resolve 后端接口 `POST /api/campus/admin/exceptions/{id}/resolve`，只允许 `REPORTED -> RESOLVED`，重复处理返回明确业务错误；本轮未改订单主状态、settlement、latest exception 摘要、bridge、前端页面或路由。
 - 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 已转向不触 bridge 的非 bridge 方向收束，完成现有页面展示级优化候选评估与演示资料整理；Step 35 已完成第一轮小范围展示级优化执行，只 polish `CourierWorkbench.vue` 与 `CampusOrderResult.vue`；Step 36 已选择方案 A，只 polish `CourierOnboarding.vue`；Step 37 已选择 settlement，只 polish `CampusSettlementOpsView.vue`；Step 38 已只 polish `CampusAfterSaleExecutionList.vue`；Step 39 已复盘 Step 35 到 Step 38 的 5 个关键页面并将展示 polish 线收成冻结/维护态；Step 40 已进入稳定交付整理阶段，固化交付边界、主演示脚本、演示账号与样本数据索引、页面展示清单和答辩口径；Step 41 已补齐可执行截图清单、录屏顺序和演示前检查 checklist；Step 42 已按清单采集真实截图与录屏，归档到 `project-logs/campus-relay/runtime/step-42-media/`，并保留异常后 customer confirm 被拒绝的真实失败留痕；Step 43 已选择路径 B，确认当前媒体材料足够，正式收住媒体线，并完成售后执行历史、异常历史处理闭环、settlement 深化三条非 bridge 后端方向评估；Step 44 已完成异常历史与处理闭环最小方案设计，明确建议新增 `campus_exception_record` 历史表、保留订单 latest exception 摘要字段、复用 courier exception-report 入口、先做 admin 历史只读能力再评估最小 resolve；Step 45A 已落地异常历史最小后端闭环：新增 `campus_exception_record`、现有 courier `exception-report` 同事务写入历史并继续更新订单 latest exception 摘要、新增 admin 异常历史列表/详情只读接口；Step 45B 已完成异常最小处理动作设计，明确 `REPORTED -> RESOLVED` 足以构成下一步最小闭环，建议 Step 46 只新增 admin resolve 后端接口，且不改订单主状态、不改 settlement、不清空 latest exception 摘要、不补前端页面；当前 bridge 完全保留、展示 polish 主线默认冻结、媒体线已收住、旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
@@ -115,6 +117,7 @@
   - `/api/campus/admin/orders/{id}/exception-summary`
   - `/api/campus/admin/exceptions`
   - `/api/campus/admin/exceptions/{id}`
+  - `/api/campus/admin/exceptions/{id}/resolve`
   - `/api/campus/admin/couriers`
   - `/api/campus/admin/couriers/{id}/review`
   - `/api/campus/admin/couriers/{courierProfileId}/exceptions/recent`
@@ -160,7 +163,7 @@
 - `FAILED -> SUCCESS` 的售后执行人工纠正会写入 `after_sale_execution_corrected*` 审计字段，初次 `SUCCESS` 不算纠正
 - batch payout 未传 `batchNo` 时会在 service 层自动生成统一批次号，只写入本次成功处理的 settlement 记录
 - `payout_verified*` 字段独立表达二次核对结果，不复用 `settlement_status`
-- courier 异常上报仍只保留订单上的最新一次异常，不改 `order_status`
+- courier 异常上报会新增 `campus_exception_record` 历史，并继续同步订单 latest exception 摘要；admin resolve 只更新异常历史处理字段，不改 `order_status`
 - courier 位置上报仍只写 `campus_location_report`，不进入 timeline
 
 ### frontend 最小接入
@@ -1595,20 +1598,59 @@
 - customer 仍没有自助退款申请和结果确认交互，只能查看售后结果回执
 - admin 仍没有独立售后执行历史表，只保留订单上的当前执行结果和一次纠正审计
 - settlement 仍没有真实打款、撤回打款和复杂对账
-- 异常仍只保留最新一次，没有历史记录和处理结果流
+- 异常历史表和 admin resolve 最小处理动作已落地，但尚无 admin 前端处理页和完整工单系统
 - 位置记录仍是低频明细，没有地图、轨迹聚合和频控
 - frontend 目前已接入 customer 三个演示页与 admin 四个只读运营演示页，但仍不是完整校园代送后台
 - `CampusRuleCatalog` 仍是代码常量
 
+## Step 46 实际完成事项
+
+1. 本轮只做后端最小 resolve 实现，没有补前端页面、没有新增路由、没有改 bridge。
+2. 新增 `CampusAdminExceptionResolveDTO`，请求体保持最小：
+   - `processResult`
+   - `adminNote`
+3. 新增 admin resolve 接口：
+   - `POST /api/campus/admin/exceptions/{id}/resolve`
+4. service / mapper 层已落地状态保护：
+   - 只允许 `REPORTED -> RESOLVED`
+   - SQL 更新条件限制 `process_status = 'REPORTED'`
+   - 已 `RESOLVED` 的记录重复处理会返回“异常记录已处理，不能重复处理”
+5. 最小 `processResult` 固定为：
+   - `HANDLED`
+   - `MARKED_INVALID`
+   - `FOLLOWED_UP`
+6. resolve 只更新 `campus_exception_record` 的处理字段：
+   - `process_status`
+   - `process_result`
+   - `admin_note`
+   - `processed_by_employee_id`
+   - `processed_at`
+   - `updated_at`
+7. 本轮兼容策略保持不变：
+   - 不改订单主状态
+   - 不改 settlement
+   - 不清空 `campus_relay_order.exception_type / exception_remark / exception_reported_at`
+   - 旧 latest exception 摘要继续作为兼容摘要
+8. H2/test profile 运行态已验证：
+   - 异常上报生成 `REPORTED`
+   - resolve 后详情和列表可回读 `RESOLVED`
+   - 重复 resolve 返回业务错误
+   - courier order detail、customer order detail、admin recent exceptions 仍可正常读取 latest summary
+9. 本轮继续确认：
+   - bridge 主线保持 `Phase A no-op` 冻结态
+   - 展示 polish 线保持冻结/维护态
+   - 媒体线继续收住
+   - 第五个 admin 页继续后置
+
 ## 下一轮建议
 
-- 进入 `Step 42`
+- 进入 `Step 47`
 - 推荐顺序：
-  1. 不再默认推进 bridge 主线；只有触发恢复推进条件时才重开
-  2. 不再默认继续 polish 页面；只有出现真实展示反馈或明显展示缺陷时才重开
-  3. 若需要答辩归档，优先按 Step 41 清单采集真实截图和录屏，并记录文件位置
-  4. 若交付媒体不需要立即采集，可评估是否进入非 bridge 后端能力梳理
-  5. 不改接口、不改路由、不改 token 附着、不新增页面
+  1. 先评估 admin 异常历史/resolve 是否需要最小前端承接
+  2. 如果前端承接收益不足，再比较 P2 售后执行历史表是否重新成为最高优先级
+  3. 不要直接扩成完整异常工单系统
+  4. 不改 bridge、不改鉴权、不改 token 附着
+  5. 展示 polish 线和媒体线继续冻结
   6. 第五个 admin 页继续后置，除非新的非 bridge 优先级明确指向它
 
 ## 日志索引
@@ -1666,6 +1708,9 @@
 - [Step 42 日志](step-42-real-media-capture-and-archive.md)
 - [Step 43 日志](step-43-media-gap-gate-or-non-bridge-backend-assessment.md)
 - [Step 44 日志](step-44-exception-history-minimal-solution-design.md)
+- [Step 45A 日志](step-45a-exception-history-minimal-implementation.md)
+- [Step 45B 日志](step-45b-exception-resolve-minimal-action-design.md)
+- [Step 46 日志](step-46-exception-resolve-minimal-implementation.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)
