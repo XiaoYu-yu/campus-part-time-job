@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 47 最高优先级
+## Step 48 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -47,24 +47,30 @@
    - 重复处理返回“异常记录已处理，不能重复处理”。
    - 不改订单主状态、不改 settlement、不清空 latest exception 摘要。
    - 没有补 admin 前端页面。
-11. Step 47 最高优先级建议：
-   - 先评估 admin 异常历史/resolve 是否值得做最小前端承接。
-   - 如果前端承接收益不足，再重新比较 P2 售后执行历史表是否应回到最高优先级。
-   - 不要直接扩成完整异常工单系统。
+11. Step 47 已完成 admin 异常前端承接 go / no-go：
+   - 方向 A：admin 异常历史 / resolve 最小前端承接，收益明确、风险可控、现有接口已足够。
+   - 方向 B：P2 售后执行历史表，长期审计价值高，但需要新表、迁移和独立兼容策略设计，复杂度更高。
+   - 最终选择方向 A。
+   - 本轮没有写前端页面、没有新增后端接口、没有改 bridge。
+12. Step 48 最高优先级建议：
+   - 进入 admin 异常前端最小承接方案 / 实现准备。
+   - 只允许围绕既有接口 `GET /api/campus/admin/exceptions`、`GET /api/campus/admin/exceptions/{id}`、`POST /api/campus/admin/exceptions/{id}/resolve` 设计。
+   - 若实现，最多新增一个 admin 异常历史页，采用列表 + 详情 drawer + 最小 resolve 区。
+   - resolve 区只允许在 `processStatus = REPORTED` 时展示。
+   - 不要扩成完整异常工单系统。
    - 不要为了补页数直接新增第五个 admin 页。
-12. Step 47 明确禁止：
+13. Step 48 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
    - 不改 token 附着逻辑
    - 不改路由
-   - 不新增页面
+   - 不新增超出异常最小承接范围的页面
    - 不改订单主状态机
    - 不补完整异常工单系统
-13. admin 异常历史前端页面暂不默认补，必须先做 go / no-go 判断。
 14. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
 15. 第五个 admin 页继续后置，不再以“补页数”为目标。
-16. 售后执行历史表暂列 P2。
+16. 售后执行历史表暂列 P2，待异常前端承接完成或明确 no-go 后再评估。
 17. settlement 批次复核、撤回和对账暂列 P3。
 
 ## 已完成但仍需继续扩展的部分

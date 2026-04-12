@@ -192,3 +192,17 @@ resolve 后：
 5. 展示 polish 线继续冻结。
 6. 媒体线继续收住。
 7. 第五个 admin 页继续后置。
+
+## Step 47 回填
+
+Step 47 已完成 admin 异常前端承接 go / no-go 评估，最终选择方向 A：
+
+1. admin 异常历史 / resolve 后端闭环已经稳定，缺少前端承接会让查询和处理停留在 curl / 手工接口层。
+2. 最小前端承接可限制为一个 admin 页面、列表、详情 drawer 和一个 `processStatus = REPORTED` 下的 resolve 区。
+3. 现有接口已经足够支撑承接：
+   - `GET /api/campus/admin/exceptions`
+   - `GET /api/campus/admin/exceptions/{id}`
+   - `POST /api/campus/admin/exceptions/{id}/resolve`
+4. P2 售后执行历史表继续后置，因为它需要新增表、迁移和兼容策略设计，复杂度高于异常前端最小承接。
+5. Step 48 建议进入 admin 异常前端最小承接方案 / 实现准备。
+6. bridge 仍处于 `Phase A no-op` 冻结态，本轮没有新增页面、没有改后端接口、没有改 bridge。

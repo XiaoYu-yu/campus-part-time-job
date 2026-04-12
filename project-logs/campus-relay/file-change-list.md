@@ -821,3 +821,13 @@
 - [project-logs/campus-relay/step-46-exception-resolve-minimal-implementation.md](step-46-exception-resolve-minimal-implementation.md)
 
 本轮是异常 resolve 最小后端实现轮：新增 `POST /api/campus/admin/exceptions/{id}/resolve` 和最小请求 DTO，只更新异常历史处理字段；没有修改 bridge、前端页面、路由、鉴权、订单主状态或 settlement。
+
+## Step 47 - admin 异常前端承接 go / no-go
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-46-exception-resolve-minimal-implementation.md](step-46-exception-resolve-minimal-implementation.md)
+- [project-logs/campus-relay/step-47-admin-exception-frontend-go-no-go.md](step-47-admin-exception-frontend-go-no-go.md)
+
+本轮是 admin 异常前端承接 go / no-go 评估轮：最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备；没有修改业务代码、前端页面、后端接口、bridge、鉴权、路由、订单主状态或 settlement。
