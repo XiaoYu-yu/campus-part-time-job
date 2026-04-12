@@ -139,7 +139,19 @@
 
 ## 下一轮建议
 
-1. Step 45B 先评估是否进入 admin 异常最小处理动作，即 `REPORTED -> RESOLVED`。
-2. 如果进入实现，优先只做后端最小处理接口，不默认补前端页面。
-3. 如果处理状态边界仍需收敛，Step 45B 先补方案，不写代码。
-4. bridge、展示 polish、媒体线继续冻结。
+1. Step 45B 已完成 admin 异常最小处理动作设计。
+2. Step 45B 结论：`REPORTED -> RESOLVED` 足以构成当前最小处理闭环。
+3. Step 46 可以进入 resolve 最小实现轮，优先只做 `POST /api/campus/admin/exceptions/{id}/resolve`。
+4. Step 46 不默认补前端页面。
+5. Step 46 不做 `ACKNOWLEDGED / REJECTED / reopen / delete`。
+6. bridge、展示 polish、媒体线继续冻结。
+
+## Step 45B 回填
+
+Step 45B 已明确：
+
+1. `resolve` 只更新异常历史表自己的处理字段。
+2. `resolve` 不修改订单主状态。
+3. `resolve` 不修改 settlement。
+4. `resolve` 不清空订单 latest exception 摘要。
+5. 旧页面和旧接口继续读 latest exception 摘要；admin 如需查看处理状态，应读取 `campus_exception_record`。

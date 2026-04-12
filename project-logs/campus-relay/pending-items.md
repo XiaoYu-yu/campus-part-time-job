@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 45B 最高优先级
+## Step 46 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -34,11 +34,17 @@
    - 现有 courier `POST /api/campus/courier/orders/{id}/exception-report` 同事务写入历史表并继续更新订单 latest exception 摘要。
    - 新增 admin 只读接口 `GET /api/campus/admin/exceptions` 与 `GET /api/campus/admin/exceptions/{id}`。
    - MySQL init、V9 migration、H2 schema 已同步；H2 未预置复杂样本，运行态通过真实异常上报生成历史。
-9. Step 45B 最高优先级建议：
-   - 先评估是否进入 admin 异常处理最小动作，即 `REPORTED -> RESOLVED` 的最小 resolve。
-   - 如果进入实现，仍只做单个处理动作接口，不默认补前端页面。
-   - 如果处理动作边界仍不清晰，先补 Step 45B 方案，不写代码。
-10. Step 45B 明确禁止：
+9. Step 45B 已完成 admin 异常最小处理动作设计：
+   - 继续坚持最小状态集 `REPORTED / RESOLVED`。
+   - 不引入 `ACKNOWLEDGED`。
+   - 不把 `REJECTED` 做成主状态，后续如需标记无效可使用 `processResult = MARKED_INVALID`。
+   - resolve 只更新 `campus_exception_record` 处理字段，不改订单主状态、不改 settlement、不清空 latest exception 摘要。
+10. Step 46 最高优先级建议：
+   - 如果进入实现，只新增 `POST /api/campus/admin/exceptions/{id}/resolve`。
+   - 请求体最小字段为 `processResult` 与 `adminNote`。
+   - 最小 `processResult` 候选：`HANDLED`、`MARKED_INVALID`、`FOLLOWED_UP`。
+   - 仍不默认补 admin 前端页面。
+11. Step 46 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -47,11 +53,11 @@
    - 不新增页面
    - 不改订单主状态机
    - 不补完整异常工单系统
-11. admin 异常历史前端页面暂不默认补，除非 Step 45B 后确认只读展示承接比处理动作更优先。
-12. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-13. 第五个 admin 页继续后置，不再以“补页数”为目标。
-14. 售后执行历史表暂列 P2。
-15. settlement 批次复核、撤回和对账暂列 P3。
+12. admin 异常历史前端页面暂不默认补，除非 Step 46 resolve 后确认只读展示承接比处理动作更优先。
+13. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+14. 第五个 admin 页继续后置，不再以“补页数”为目标。
+15. 售后执行历史表暂列 P2。
+16. settlement 批次复核、撤回和对账暂列 P3。
 
 ## 已完成但仍需继续扩展的部分
 

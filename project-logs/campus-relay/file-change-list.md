@@ -796,3 +796,13 @@
 - [project-logs/campus-relay/step-45a-exception-history-minimal-implementation.md](step-45a-exception-history-minimal-implementation.md)
 
 本轮是异常历史最小后端实现轮：新增异常历史表、写入链路和 admin 只读查询接口；没有修改 bridge、前端页面、路由、鉴权，也没有新增 resolve 处理接口。
+
+## Step 45B - 异常最小处理动作设计
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-45a-exception-history-minimal-implementation.md](step-45a-exception-history-minimal-implementation.md)
+- [project-logs/campus-relay/step-45b-exception-resolve-minimal-action-design.md](step-45b-exception-resolve-minimal-action-design.md)
+
+本轮是异常最小处理动作方案评估轮：只设计 `REPORTED -> RESOLVED` 的 resolve 边界；没有修改业务代码、SQL、前端页面、bridge、接口实现、鉴权或路由。
