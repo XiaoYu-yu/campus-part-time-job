@@ -65,3 +65,20 @@ export const getCampusSettlementDetail = (id) => request({
   url: `/campus/admin/settlements/${id}`,
   method: 'get'
 })
+
+export const getCampusExceptionRecords = (params) => request({
+  url: '/campus/admin/exceptions',
+  method: 'get',
+  params: normalizePageParams(params)
+})
+
+export const getCampusExceptionDetail = (id) => request({
+  url: `/campus/admin/exceptions/${id}`,
+  method: 'get'
+})
+
+export const resolveCampusException = (id, data) => request({
+  url: `/campus/admin/exceptions/${id}/resolve`,
+  method: 'post',
+  data
+})

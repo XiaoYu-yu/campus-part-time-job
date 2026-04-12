@@ -56,9 +56,11 @@
 - 当前已完成：`Step 45B - 异常最小处理动作设计`
 - 当前已完成：`Step 46 - 异常 resolve 最小实现`
 - 当前已完成：`Step 47 - admin 异常前端承接 go / no-go`
+- 当前已完成：`Step 48 - admin 异常历史 / resolve 最小前端承接`
 - 当前日期：`2026-04-13`
 - Step 46 补充：已新增 admin 异常 resolve 后端接口 `POST /api/campus/admin/exceptions/{id}/resolve`，只允许 `REPORTED -> RESOLVED`，重复处理返回明确业务错误；本轮未改订单主状态、settlement、latest exception 摘要、bridge、前端页面或路由。
 - Step 47 补充：本轮只做 admin 异常前端承接 go / no-go 评估，不写业务代码、不补页面；最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备，P2 售后执行历史表继续后置。
+- Step 48 补充：已新增 `/campus/exceptions` admin 异常处理页，接入异常历史列表、详情 drawer 和 `REPORTED -> RESOLVED` 最小 resolve 动作；本轮未改后端接口、bridge、鉴权、订单主状态、settlement 或 latest exception 摘要。
 - 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 已转向不触 bridge 的非 bridge 方向收束，完成现有页面展示级优化候选评估与演示资料整理；Step 35 已完成第一轮小范围展示级优化执行，只 polish `CourierWorkbench.vue` 与 `CampusOrderResult.vue`；Step 36 已选择方案 A，只 polish `CourierOnboarding.vue`；Step 37 已选择 settlement，只 polish `CampusSettlementOpsView.vue`；Step 38 已只 polish `CampusAfterSaleExecutionList.vue`；Step 39 已复盘 Step 35 到 Step 38 的 5 个关键页面并将展示 polish 线收成冻结/维护态；Step 40 已进入稳定交付整理阶段，固化交付边界、主演示脚本、演示账号与样本数据索引、页面展示清单和答辩口径；Step 41 已补齐可执行截图清单、录屏顺序和演示前检查 checklist；Step 42 已按清单采集真实截图与录屏，归档到 `project-logs/campus-relay/runtime/step-42-media/`，并保留异常后 customer confirm 被拒绝的真实失败留痕；Step 43 已选择路径 B，确认当前媒体材料足够，正式收住媒体线，并完成售后执行历史、异常历史处理闭环、settlement 深化三条非 bridge 后端方向评估；Step 44 已完成异常历史与处理闭环最小方案设计，明确建议新增 `campus_exception_record` 历史表、保留订单 latest exception 摘要字段、复用 courier exception-report 入口、先做 admin 历史只读能力再评估最小 resolve；Step 45A 已落地异常历史最小后端闭环：新增 `campus_exception_record`、现有 courier `exception-report` 同事务写入历史并继续更新订单 latest exception 摘要、新增 admin 异常历史列表/详情只读接口；Step 45B 已完成异常最小处理动作设计，明确 `REPORTED -> RESOLVED` 足以构成下一步最小闭环，建议 Step 46 只新增 admin resolve 后端接口，且不改订单主状态、不改 settlement、不清空 latest exception 摘要、不补前端页面；当前 bridge 完全保留、展示 polish 主线默认冻结、媒体线已收住、旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
@@ -1664,18 +1666,46 @@
    - 未改订单主状态、settlement、latest exception 摘要。
    - 未改 bridge、鉴权、token 附着逻辑或路由。
 
+## Step 48 实际完成事项
+
+1. 新增 admin 异常处理页：
+   - `/campus/exceptions`
+   - `frontend/src/views/CampusExceptionOpsView.vue`
+2. 新增 admin 侧 API 封装：
+   - `getCampusExceptionRecords`
+   - `getCampusExceptionDetail`
+   - `resolveCampusException`
+3. MainLayout 已新增“校园异常处理”入口，并补齐菜单高亮和 breadcrumb。
+4. 页面只接入 Step 45A / Step 46 已有接口：
+   - `GET /api/campus/admin/exceptions`
+   - `GET /api/campus/admin/exceptions/{id}`
+   - `POST /api/campus/admin/exceptions/{id}/resolve`
+5. 页面能力保持最小：
+   - 列表支持订单号、配送员 ID、处理状态筛选。
+   - 详情 drawer 展示异常历史、订单关联、配送员关联、latest exception 兼容摘要和处理字段。
+   - resolve 区只在 `processStatus = REPORTED` 时展示。
+   - resolve 成功后刷新详情和列表。
+6. 本轮明确未做：
+   - 未新增后端接口。
+   - 未做完整异常工单系统。
+   - 未做 reopen、delete、ACKNOWLEDGED、消息通知或多角色审批。
+   - 未改订单主状态、settlement、latest exception 摘要。
+   - 未改 bridge、鉴权、token 附着逻辑或旧前端主链路。
+7. 验证结果：
+   - `.\mvnw.cmd -DskipTests compile` 通过。
+   - `npm run build` 通过，仅保留既有 Sass `@import` deprecation 与 chunk size warning。
+   - `git diff --check` 通过，仅有 Windows 工作区 LF/CRLF 提示。
+
 ## 下一轮建议
 
-- 进入 `Step 48`
+- 进入 `Step 49`
 - 推荐顺序：
-  1. 围绕方向 A 固定 admin 异常前端最小承接范围。
-  2. 若 Step 48 进入实现，最多新增一个 admin 异常历史页，并只接既有列表、详情、resolve 三个接口。
-  3. resolve 前端动作仅允许放在详情 drawer 内，且只对 `processStatus = REPORTED` 展示。
-  4. 不扩完整异常工单系统，不做 reopen、delete、acknowledged、通知或多角色审批。
-  5. 不改 bridge、不改鉴权、不改 token 附着。
-  6. 展示 polish 线和媒体线继续冻结。
-  7. P2 售后执行历史表继续后置，待异常前端承接完成或明确 no-go 后再评估。
-  8. 第五个 admin 页继续后置，不能以“补页数”为目标。
+  1. 优先对 `/campus/exceptions` 做一次 H2/test 运行态联调，覆盖列表、详情、resolve 成功和重复 resolve 失败。
+  2. 若 Step 49 运行态联调通过，再评估是否切入 P2 售后执行历史表方案设计。
+  3. 不扩完整异常工单系统，不做 reopen、delete、acknowledged、通知或多角色审批。
+  4. 不改 bridge、不改鉴权、不改 token 附着。
+  5. 展示 polish 线和媒体线继续冻结。
+  6. 第五个 admin 页继续后置，不能以“补页数”为目标。
 
 ## 日志索引
 
@@ -1736,6 +1766,7 @@
 - [Step 45B 日志](step-45b-exception-resolve-minimal-action-design.md)
 - [Step 46 日志](step-46-exception-resolve-minimal-implementation.md)
 - [Step 47 日志](step-47-admin-exception-frontend-go-no-go.md)
+- [Step 48 日志](step-48-admin-exception-frontend-minimal-handoff.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

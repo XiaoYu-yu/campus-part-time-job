@@ -192,3 +192,21 @@ Step 48 可以进入 admin 异常前端最小承接方案 / 实现准备轮。
 6. 展示 polish 线继续冻结。
 7. 媒体线继续收住。
 8. 第五个 admin 页仍不以“补页数”为目标。
+
+## Step 48 回填
+
+Step 48 已按方向 A 完成 admin 异常前端最小承接：
+
+1. 新增页面：`frontend/src/views/CampusExceptionOpsView.vue`。
+2. 新增路由：`/campus/exceptions`。
+3. MainLayout 新增“校园异常处理”入口，并补齐菜单高亮与 breadcrumb。
+4. `frontend/src/api/campus-admin.js` 新增：
+   - `getCampusExceptionRecords`
+   - `getCampusExceptionDetail`
+   - `resolveCampusException`
+5. 页面只接既有接口：
+   - `GET /api/campus/admin/exceptions`
+   - `GET /api/campus/admin/exceptions/{id}`
+   - `POST /api/campus/admin/exceptions/{id}/resolve`
+6. resolve 区只在 `processStatus = REPORTED` 时展示，成功后刷新详情和列表。
+7. 本轮没有新增后端接口，没有改订单主状态、settlement、latest exception 摘要或 bridge。

@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 48 最高优先级
+## Step 49 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -52,14 +52,20 @@
    - 方向 B：P2 售后执行历史表，长期审计价值高，但需要新表、迁移和独立兼容策略设计，复杂度更高。
    - 最终选择方向 A。
    - 本轮没有写前端页面、没有新增后端接口、没有改 bridge。
-12. Step 48 最高优先级建议：
-   - 进入 admin 异常前端最小承接方案 / 实现准备。
-   - 只允许围绕既有接口 `GET /api/campus/admin/exceptions`、`GET /api/campus/admin/exceptions/{id}`、`POST /api/campus/admin/exceptions/{id}/resolve` 设计。
-   - 若实现，最多新增一个 admin 异常历史页，采用列表 + 详情 drawer + 最小 resolve 区。
-   - resolve 区只允许在 `processStatus = REPORTED` 时展示。
-   - 不要扩成完整异常工单系统。
-   - 不要为了补页数直接新增第五个 admin 页。
-13. Step 48 明确禁止：
+12. Step 48 已完成 admin 异常前端最小承接：
+   - 新增 `/campus/exceptions`。
+   - 新增 `CampusExceptionOpsView.vue`。
+   - 列表接入 `GET /api/campus/admin/exceptions`。
+   - 详情 drawer 接入 `GET /api/campus/admin/exceptions/{id}`。
+   - 最小 resolve 区接入 `POST /api/campus/admin/exceptions/{id}/resolve`。
+   - resolve 区只在 `processStatus = REPORTED` 时展示。
+   - 没有新增后端接口，没有改订单主状态、settlement、latest exception 摘要或 bridge。
+13. Step 49 最高优先级建议：
+   - 先对 `/campus/exceptions` 做一轮 H2/test 运行态联调。
+   - 至少覆盖列表、详情 drawer、resolve 成功、重复 resolve 失败。
+   - 确认页面不会影响 `/campus/courier-ops` 的最近异常摘要、`/courier/workbench` 和 customer result。
+   - 如果运行态联调通过，再评估是否进入 P2 售后执行历史表方案设计。
+14. Step 49 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -68,10 +74,10 @@
    - 不新增超出异常最小承接范围的页面
    - 不改订单主状态机
    - 不补完整异常工单系统
-14. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-15. 第五个 admin 页继续后置，不再以“补页数”为目标。
-16. 售后执行历史表暂列 P2，待异常前端承接完成或明确 no-go 后再评估。
-17. settlement 批次复核、撤回和对账暂列 P3。
+15. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+16. 第五个 admin 页继续后置，不再以“补页数”为目标。
+17. 售后执行历史表暂列 P2，待异常前端承接运行态联调通过后再评估。
+18. settlement 批次复核、撤回和对账暂列 P3。
 
 ## 已完成但仍需继续扩展的部分
 

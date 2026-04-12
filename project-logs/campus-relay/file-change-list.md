@@ -831,3 +831,17 @@
 - [project-logs/campus-relay/step-47-admin-exception-frontend-go-no-go.md](step-47-admin-exception-frontend-go-no-go.md)
 
 本轮是 admin 异常前端承接 go / no-go 评估轮：最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备；没有修改业务代码、前端页面、后端接口、bridge、鉴权、路由、订单主状态或 settlement。
+
+## Step 48 - admin 异常历史 / resolve 最小前端承接
+
+- [frontend/src/api/campus-admin.js](../../frontend/src/api/campus-admin.js)
+- [frontend/src/router/index.js](../../frontend/src/router/index.js)
+- [frontend/src/layout/MainLayout.vue](../../frontend/src/layout/MainLayout.vue)
+- [frontend/src/views/CampusExceptionOpsView.vue](../../frontend/src/views/CampusExceptionOpsView.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-47-admin-exception-frontend-go-no-go.md](step-47-admin-exception-frontend-go-no-go.md)
+- [project-logs/campus-relay/step-48-admin-exception-frontend-minimal-handoff.md](step-48-admin-exception-frontend-minimal-handoff.md)
+
+本轮新增 admin 异常处理最小前端承接：新增 `/campus/exceptions`、异常历史列表、详情 drawer 和 `REPORTED -> RESOLVED` 最小 resolve 区；没有修改后端接口、bridge、鉴权、订单主状态、settlement、latest exception 摘要或旧前端主链路。

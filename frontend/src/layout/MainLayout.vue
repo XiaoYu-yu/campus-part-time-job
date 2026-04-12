@@ -74,6 +74,10 @@
           <el-icon><Coin /></el-icon>
           <template #title>校园结算运营</template>
         </el-menu-item>
+        <el-menu-item index="/campus/exceptions">
+          <el-icon><Document /></el-icon>
+          <template #title>校园异常处理</template>
+        </el-menu-item>
         <el-menu-item index="/shop-status">
           <el-icon><Position /></el-icon>
           <template #title>店铺营业状态</template>
@@ -181,6 +185,9 @@ const activeMenu = computed(() => {
   if (path.startsWith('/campus/settlements')) {
     return '/campus/settlements'
   }
+  if (path.startsWith('/campus/exceptions')) {
+    return '/campus/exceptions'
+  }
   return path
 })
 
@@ -201,6 +208,7 @@ const breadcrumb = computed(() => {
     '/campus/after-sale-executions': '校园售后执行',
     '/campus/courier-ops': '校园配送运营',
     '/campus/settlements': '校园结算运营',
+    '/campus/exceptions': '校园异常处理',
     '/shop-status': '店铺营业状态'
   }
   return pathMap[path] || ''

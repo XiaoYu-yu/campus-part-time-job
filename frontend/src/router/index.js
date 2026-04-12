@@ -88,6 +88,12 @@ const router = createRouter({
       component: () => import('../views/CampusSettlementOpsView.vue')
     },
     {
+      path: '/campus/exceptions',
+      name: 'CampusExceptions',
+      meta: { requiresAdminAuth: true },
+      component: () => import('../views/CampusExceptionOpsView.vue')
+    },
+    {
       path: '/shop-status',
       name: 'ShopStatus',
       meta: { requiresAdminAuth: true },
