@@ -1,0 +1,50 @@
+{
+  "startedAt": "2026-04-13T00:43:55",
+  "backend": "http://127.0.0.1:8080/api",
+  "orderId": "CR202604070002",
+  "validationScope": [
+    "admin exception list",
+    "admin exception detail",
+    "admin resolve readback",
+    "duplicate resolve rejection",
+    "latest exception compatibility",
+    "customer detail compatibility"
+  ],
+  "allExceptionCount": 2,
+  "reportedCount": 1,
+  "resolvedCount": 1,
+  "resolvedExceptionId": 2,
+  "resolvedDetail": {
+    "id": 2,
+    "relayOrderId": "CR202604070002",
+    "processStatus": "RESOLVED",
+    "processResult": "HANDLED",
+    "adminNote": "Step49 runtime validation resolved",
+    "processedByEmployeeId": 1,
+    "processedAt": "2026-04-13 00:43:06",
+    "latestExceptionType": "CONTACT_FAILED",
+    "latestExceptionRemark": "Step49 runtime validation second report",
+    "latestExceptionReportedAt": "2026-04-13 00:43:06"
+  },
+  "duplicateResolve": {
+    "code": 500,
+    "msg": "异常记录已处理，不能重复处理"
+  },
+  "latestSummary": {
+    "courierOrderStatus": "ACCEPTED",
+    "exceptionType": "CONTACT_FAILED",
+    "exceptionRemark": "Step49 runtime validation second report",
+    "exceptionReportedAt": "2026-04-13 00:43:06",
+    "adminSummaryType": "CONTACT_FAILED",
+    "adminSummaryRemark": "Step49 runtime validation second report",
+    "adminSummaryReportedAt": "2026-04-13 00:43:06",
+    "recentCount": 1
+  },
+  "customerCompatibility": {
+    "orderStatus": "ACCEPTED",
+    "exceptionType": "CONTACT_FAILED",
+    "exceptionRemark": "Step49 runtime validation second report",
+    "exceptionReportedAt": "2026-04-13 00:43:06"
+  },
+  "completedAt": "2026-04-13T00:43:56"
+}

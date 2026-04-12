@@ -845,3 +845,15 @@
 - [project-logs/campus-relay/step-48-admin-exception-frontend-minimal-handoff.md](step-48-admin-exception-frontend-minimal-handoff.md)
 
 本轮新增 admin 异常处理最小前端承接：新增 `/campus/exceptions`、异常历史列表、详情 drawer 和 `REPORTED -> RESOLVED` 最小 resolve 区；没有修改后端接口、bridge、鉴权、订单主状态、settlement、latest exception 摘要或旧前端主链路。
+
+## Step 49 - admin 异常处理页运行态验证
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-48-admin-exception-frontend-minimal-handoff.md](step-48-admin-exception-frontend-minimal-handoff.md)
+- [project-logs/campus-relay/step-49-admin-exception-runtime-validation.md](step-49-admin-exception-runtime-validation.md)
+- [project-logs/campus-relay/runtime/step-49/admin-exception-api-validation.json](runtime/step-49/admin-exception-api-validation.json)
+- [project-logs/campus-relay/runtime/step-49/admin-exception-page-validation.json](runtime/step-49/admin-exception-page-validation.json)
+
+本轮是 admin 异常处理页 H2/test 运行态验证轮：真实验证异常历史列表、详情、resolve、重复 resolve 失败、latest exception 兼容回读和前端页面加载；没有修改业务代码、bridge、接口、鉴权、路由、订单主状态或 settlement，也没有新增页面。

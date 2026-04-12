@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 49 最高优先级
+## Step 50 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -60,12 +60,17 @@
    - 最小 resolve 区接入 `POST /api/campus/admin/exceptions/{id}/resolve`。
    - resolve 区只在 `processStatus = REPORTED` 时展示。
    - 没有新增后端接口，没有改订单主状态、settlement、latest exception 摘要或 bridge。
-13. Step 49 最高优先级建议：
-   - 先对 `/campus/exceptions` 做一轮 H2/test 运行态联调。
-   - 至少覆盖列表、详情 drawer、resolve 成功、重复 resolve 失败。
-   - 确认页面不会影响 `/campus/courier-ops` 的最近异常摘要、`/courier/workbench` 和 customer result。
-   - 如果运行态联调通过，再评估是否进入 P2 售后执行历史表方案设计。
-14. Step 49 明确禁止：
+13. Step 49 已完成 admin 异常页运行态验证：
+   - H2/test 下使用 `CR202604070002` 真实完成接单、两次异常上报、异常历史列表、详情、resolve、重复 resolve 失败。
+   - `campus_exception_record` 对该订单产生 2 条历史，1 条 `REPORTED`、1 条 `RESOLVED`。
+   - latest exception 摘要仍保留最后一次上报内容，`/courier/workbench`、customer 订单详情和 admin 最近异常摘要语义未被破坏。
+   - `/campus/exceptions` 已通过 Playwright 验证页面加载、列表展示、详情 drawer 和 resolve 区展示。
+   - 证据文件位于 `project-logs/campus-relay/runtime/step-49/`。
+14. Step 50 最高优先级建议：
+   - 进入 P2 售后执行历史表方案设计轮。
+   - 先设计历史表边界、写入时机、兼容策略、最小查询接口和不做范围。
+   - 不要直接写代码，不要顺手补前端页面。
+15. Step 50 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -74,9 +79,8 @@
    - 不新增超出异常最小承接范围的页面
    - 不改订单主状态机
    - 不补完整异常工单系统
-15. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-16. 第五个 admin 页继续后置，不再以“补页数”为目标。
-17. 售后执行历史表暂列 P2，待异常前端承接运行态联调通过后再评估。
+16. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+17. 第五个 admin 页继续后置，不再以“补页数”为目标。
 18. settlement 批次复核、撤回和对账暂列 P3。
 
 ## 已完成但仍需继续扩展的部分
@@ -200,15 +204,15 @@
 - 仍缺：
   - 若执行失败时的实际回滚操作演练
 
-### 2. 前端 admin 侧已完成四个最小演示页
+### 2. 前端 admin 侧已完成四个只读运营演示页和一个异常处理承接页
 
-- 影响：admin 现在已有 settlement 批次演示页、售后执行演示页、courier 异常/位置联动演示页和 settlement 只读运营页，但更多运营视图仍未接入
-- 默认处理：继续保持现有四页稳定，不为补页数机械新增第五页
+- 影响：admin 现在已有 settlement 批次演示页、售后执行演示页、courier 异常/位置联动演示页、settlement 只读运营页，以及异常历史 / resolve 最小承接页
+- 默认处理：继续保持现有 admin 演示页和异常处理页稳定，不为补页数机械新增第五页
 
-### 3. 售后与异常仍是最小审计模型
+### 3. 售后仍缺完整历史，异常已完成最小历史与处理闭环
 
-- 影响：售后执行和异常上报目前只保留当前结果与一次纠正信息，缺少完整历史
-- 默认处理：在 Step 07 之后再评估是否需要单独历史表，当前先避免过度设计
+- 影响：异常已有历史表、只读查询、最小 resolve 和 admin 前端承接；售后执行仍只有当前执行结果与一次纠正信息，缺少完整历史审计
+- 默认处理：Step 50 优先进入售后执行历史表方案设计，先设计边界，不直接写代码
 
 ### 4. settlement 仍没有真实财务执行能力
 
@@ -222,6 +226,6 @@
 - 没有改旧 `orders/cart/address` 语义
 - 没有接真实支付、真实退款、真实打款
 - 没有做完整售后工单系统
-- 没有做异常历史表
+- 没有做完整异常工单系统；异常历史表和最小 resolve 已完成，但没有做 ACKNOWLEDGED、reopen、delete、通知或多角色审批
 - 没有做地图和轨迹大屏
 - 没有新增第二套返回体

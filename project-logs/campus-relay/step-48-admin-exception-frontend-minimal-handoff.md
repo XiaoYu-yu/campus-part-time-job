@@ -172,3 +172,21 @@ Step 45A / Step 46 已经让异常历史后端闭环具备：
 6. 展示 polish 线继续冻结。
 7. 媒体线继续收住。
 8. 第五个 admin 页继续后置。
+
+## Step 49 回填
+
+1. 已完成 `/campus/exceptions` H2/test 运行态验证。
+2. 使用订单 `CR202604070002` 真实完成：
+   - 接单。
+   - 连续两次 courier 异常上报。
+   - admin 异常历史列表查询。
+   - admin 异常详情查询。
+   - `REPORTED -> RESOLVED`。
+   - 重复 resolve 失败。
+   - latest exception 摘要兼容回读。
+   - customer 订单详情兼容回读。
+3. Playwright 已验证 admin 异常处理页可加载、列表可见、详情 drawer 可打开、REPORTED 记录可展示 resolve 区。
+4. 证据文件：
+   - `project-logs/campus-relay/runtime/step-49/admin-exception-api-validation.json`
+   - `project-logs/campus-relay/runtime/step-49/admin-exception-page-validation.json`
+5. Step 49 验证通过后，下一主线可转入 P2 售后执行历史表方案设计；异常前端承接当前先保持稳定，不继续扩完整异常工单系统。

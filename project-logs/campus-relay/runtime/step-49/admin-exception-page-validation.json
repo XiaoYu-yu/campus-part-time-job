@@ -1,0 +1,17 @@
+{
+  "validatedAt": "2026-04-13T00:45:44",
+  "frontend": "http://127.0.0.1:5173/campus/exceptions",
+  "method": "Playwright browser validation with admin token in localStorage",
+  "checks": {
+    "pageLoaded": true,
+    "titleVisible": true,
+    "listVisible": true,
+    "orderVisible": "CR202604070002",
+    "resolvedRecordVisible": true,
+    "reportedRecordVisible": true,
+    "detailDrawerOpenedForReportedRecord": true,
+    "resolvePanelVisible": true,
+    "latestSummaryVisible": true
+  },
+  "note": "No frontend mutation was executed; resolve action was validated through API evidence."
+}
