@@ -775,3 +775,24 @@
 - [project-logs/campus-relay/step-44-exception-history-minimal-solution-design.md](step-44-exception-history-minimal-solution-design.md)
 
 本轮是异常历史与处理闭环方案设计轮：只设计数据模型、状态边界、接口边界和 latest exception 兼容策略；没有修改业务代码、SQL、bridge、接口实现、鉴权、路由或前端页面。
+
+## Step 45A - 异常历史最小实现
+
+- [backend/db/init.sql](../../backend/db/init.sql)
+- [backend/db/migrations/V9__campus_exception_record.sql](../../backend/db/migrations/V9__campus_exception_record.sql)
+- [backend/src/main/resources/db/schema-h2.sql](../../backend/src/main/resources/db/schema-h2.sql)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/entity/CampusExceptionRecord.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/entity/CampusExceptionRecord.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/query/CampusExceptionRecordQuery.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/query/CampusExceptionRecordQuery.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/vo/CampusExceptionRecordVO.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/vo/CampusExceptionRecordVO.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/mapper/CampusExceptionRecordMapper.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/mapper/CampusExceptionRecordMapper.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/service/CampusExceptionRecordService.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/service/CampusExceptionRecordService.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusExceptionRecordServiceImpl.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusExceptionRecordServiceImpl.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/controller/CampusAdminExceptionController.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/controller/CampusAdminExceptionController.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusRelayOrderServiceImpl.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusRelayOrderServiceImpl.java)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-44-exception-history-minimal-solution-design.md](step-44-exception-history-minimal-solution-design.md)
+- [project-logs/campus-relay/step-45a-exception-history-minimal-implementation.md](step-45a-exception-history-minimal-implementation.md)
+
+本轮是异常历史最小后端实现轮：新增异常历史表、写入链路和 admin 只读查询接口；没有修改 bridge、前端页面、路由、鉴权，也没有新增 resolve 处理接口。

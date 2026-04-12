@@ -9,6 +9,7 @@ import com.cangqiong.takeaway.campus.dto.CampusCourierPickupDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderAfterSaleDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCancelDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCreateDTO;
+import com.cangqiong.takeaway.campus.entity.CampusExceptionRecord;
 import com.cangqiong.takeaway.campus.enums.CampusAfterSaleDecisionType;
 import com.cangqiong.takeaway.campus.enums.CampusAfterSaleExecutionStatus;
 import com.cangqiong.takeaway.campus.enums.CampusAfterSaleHandleAction;
@@ -23,6 +24,7 @@ import com.cangqiong.takeaway.campus.enums.CampusRelayOrderStatus;
 import com.cangqiong.takeaway.campus.enums.CampusSettlementStatus;
 import com.cangqiong.takeaway.campus.mapper.CampusPickupPointMapper;
 import com.cangqiong.takeaway.campus.mapper.CampusLocationReportMapper;
+import com.cangqiong.takeaway.campus.mapper.CampusExceptionRecordMapper;
 import com.cangqiong.takeaway.campus.mapper.CampusRelayOrderMapper;
 import com.cangqiong.takeaway.campus.mapper.CampusSettlementRecordMapper;
 import com.cangqiong.takeaway.campus.query.CampusAdminAfterSaleExecutionQuery;
@@ -69,6 +71,8 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
     private static final BigDecimal MAX_DECIMAL_10_2 = new BigDecimal("99999999.99");
     private static final String SETTLEMENT_REMARK = "订单完成待结算";
     private static final int ENABLED = 1;
+    private static final String EXCEPTION_PROCESS_STATUS_REPORTED = "REPORTED";
+    private static final String EXCEPTION_SOURCE_COURIER = "COURIER";
     private static final DateTimeFormatter ORDER_ID_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
     @Autowired
@@ -88,6 +92,9 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
 
     @Autowired
     private CampusLocationReportMapper campusLocationReportMapper;
+
+    @Autowired
+    private CampusExceptionRecordMapper campusExceptionRecordMapper;
 
     @Override
     public PageResult<CampusRelayOrderVO> pageQuery(CampusRelayOrderQuery query) {
@@ -763,6 +770,18 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         if (updated == 0) {
             throw new BusinessException("订单状态已变化，无法上报异常");
         }
+
+        CampusExceptionRecord exceptionRecord = new CampusExceptionRecord();
+        exceptionRecord.setRelayOrderId(id);
+        exceptionRecord.setCourierProfileId(courierProfile.getId());
+        exceptionRecord.setExceptionType(exceptionType);
+        exceptionRecord.setExceptionRemark(exceptionRemark);
+        exceptionRecord.setReportedAt(now);
+        exceptionRecord.setProcessStatus(EXCEPTION_PROCESS_STATUS_REPORTED);
+        exceptionRecord.setSource(EXCEPTION_SOURCE_COURIER);
+        exceptionRecord.setCreatedAt(now);
+        exceptionRecord.setUpdatedAt(now);
+        campusExceptionRecordMapper.insert(exceptionRecord);
     }
 
     @Override

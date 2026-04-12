@@ -347,6 +347,30 @@ CREATE TABLE IF NOT EXISTS campus_relay_order (
     FOREIGN KEY (after_sale_execution_corrected_by_employee_id) REFERENCES employee(id)
 ) COMMENT='校园代送订单表';
 
+CREATE TABLE IF NOT EXISTS campus_exception_record (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '异常历史记录ID',
+    relay_order_id VARCHAR(32) NOT NULL COMMENT '代送订单号',
+    courier_profile_id BIGINT NOT NULL COMMENT '配送员资料ID',
+    exception_type VARCHAR(50) NOT NULL COMMENT '异常类型',
+    exception_remark VARCHAR(255) NOT NULL COMMENT '异常说明',
+    reported_at DATETIME NOT NULL COMMENT '异常上报时间',
+    process_status VARCHAR(20) NOT NULL DEFAULT 'REPORTED' COMMENT '处理状态(REPORTED/RESOLVED)',
+    process_result VARCHAR(50) COMMENT '处理结果',
+    processed_by_employee_id BIGINT COMMENT '处理管理员ID',
+    processed_at DATETIME COMMENT '处理时间',
+    admin_note VARCHAR(255) COMMENT '管理员处理备注',
+    source VARCHAR(30) NOT NULL DEFAULT 'COURIER' COMMENT '来源',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    INDEX idx_campus_exception_record_order_id (relay_order_id),
+    INDEX idx_campus_exception_record_courier_profile_id (courier_profile_id),
+    INDEX idx_campus_exception_record_process_status (process_status),
+    INDEX idx_campus_exception_record_reported_at (reported_at),
+    FOREIGN KEY (relay_order_id) REFERENCES campus_relay_order(id),
+    FOREIGN KEY (courier_profile_id) REFERENCES campus_courier_profile(id),
+    FOREIGN KEY (processed_by_employee_id) REFERENCES employee(id)
+) COMMENT='校园代送异常历史记录表';
+
 CREATE TABLE IF NOT EXISTS campus_location_report (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '位置上报ID',
     relay_order_id VARCHAR(32) NOT NULL COMMENT '代送订单号',

@@ -52,8 +52,9 @@
 - 当前已完成：`Step 42 - 真实媒体采集与归档`
 - 当前已完成：`Step 43 - 媒体缺口分叉判断 / 非 bridge 后端评估入口`
 - 当前已完成：`Step 44 - 异常历史与处理闭环最小方案设计`
+- 当前已完成：`Step 45A - 异常历史最小实现`
 - 当前日期：`2026-04-12`
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 已转向不触 bridge 的非 bridge 方向收束，完成现有页面展示级优化候选评估与演示资料整理；Step 35 已完成第一轮小范围展示级优化执行，只 polish `CourierWorkbench.vue` 与 `CampusOrderResult.vue`；Step 36 已选择方案 A，只 polish `CourierOnboarding.vue`；Step 37 已选择 settlement，只 polish `CampusSettlementOpsView.vue`；Step 38 已只 polish `CampusAfterSaleExecutionList.vue`；Step 39 已复盘 Step 35 到 Step 38 的 5 个关键页面并将展示 polish 线收成冻结/维护态；Step 40 已进入稳定交付整理阶段，固化交付边界、主演示脚本、演示账号与样本数据索引、页面展示清单和答辩口径；Step 41 已补齐可执行截图清单、录屏顺序和演示前检查 checklist；Step 42 已按清单采集真实截图与录屏，归档到 `project-logs/campus-relay/runtime/step-42-media/`，并保留异常后 customer confirm 被拒绝的真实失败留痕；Step 43 已选择路径 B，确认当前媒体材料足够，正式收住媒体线，并完成售后执行历史、异常历史处理闭环、settlement 深化三条非 bridge 后端方向评估；Step 44 已完成异常历史与处理闭环最小方案设计，明确建议新增 `campus_exception_record` 历史表、保留订单 latest exception 摘要字段、复用 courier exception-report 入口、先做 admin 历史只读能力再评估最小 resolve；Step 35 至 Step 44 均未改 bridge、接口、路由、鉴权、提交语义和后端实现；当前 bridge 完全保留、展示 polish 主线默认冻结、媒体线已收住、旧外卖模块仍保留可运行、旧前端主链路未被替换
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 已转向不触 bridge 的非 bridge 方向收束，完成现有页面展示级优化候选评估与演示资料整理；Step 35 已完成第一轮小范围展示级优化执行，只 polish `CourierWorkbench.vue` 与 `CampusOrderResult.vue`；Step 36 已选择方案 A，只 polish `CourierOnboarding.vue`；Step 37 已选择 settlement，只 polish `CampusSettlementOpsView.vue`；Step 38 已只 polish `CampusAfterSaleExecutionList.vue`；Step 39 已复盘 Step 35 到 Step 38 的 5 个关键页面并将展示 polish 线收成冻结/维护态；Step 40 已进入稳定交付整理阶段，固化交付边界、主演示脚本、演示账号与样本数据索引、页面展示清单和答辩口径；Step 41 已补齐可执行截图清单、录屏顺序和演示前检查 checklist；Step 42 已按清单采集真实截图与录屏，归档到 `project-logs/campus-relay/runtime/step-42-media/`，并保留异常后 customer confirm 被拒绝的真实失败留痕；Step 43 已选择路径 B，确认当前媒体材料足够，正式收住媒体线，并完成售后执行历史、异常历史处理闭环、settlement 深化三条非 bridge 后端方向评估；Step 44 已完成异常历史与处理闭环最小方案设计，明确建议新增 `campus_exception_record` 历史表、保留订单 latest exception 摘要字段、复用 courier exception-report 入口、先做 admin 历史只读能力再评估最小 resolve；Step 45A 已落地异常历史最小后端闭环：新增 `campus_exception_record`、现有 courier `exception-report` 同事务写入历史并继续更新订单 latest exception 摘要、新增 admin 异常历史列表/详情只读接口；本轮未做 resolve 处理接口、未新增前端页面、未改 bridge、未改路由、未改鉴权；当前 bridge 完全保留、展示 polish 主线默认冻结、媒体线已收住、旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
 
@@ -64,6 +65,7 @@
   - `campus_courier_profile`
   - `campus_pickup_point`
   - `campus_relay_order`
+  - `campus_exception_record`
   - `campus_location_report`
   - `campus_settlement_record`
 - 普通用户继续复用 `user`
@@ -110,6 +112,8 @@
   - `/api/campus/admin/orders/after-sale-executions`
   - `/api/campus/admin/orders/{id}/location-reports`
   - `/api/campus/admin/orders/{id}/exception-summary`
+  - `/api/campus/admin/exceptions`
+  - `/api/campus/admin/exceptions/{id}`
   - `/api/campus/admin/couriers`
   - `/api/campus/admin/couriers/{id}/review`
   - `/api/campus/admin/couriers/{courierProfileId}/exceptions/recent`

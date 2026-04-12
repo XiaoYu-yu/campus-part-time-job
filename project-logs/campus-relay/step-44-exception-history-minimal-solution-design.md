@@ -299,12 +299,23 @@ admin 侧当前能力也主要围绕“最近异常”：
 
 ## 下一轮建议
 
-1. Step 45 先评估是否进入 Step 45A：异常历史表 + 写入 + admin 只读查询最小实现。
-2. 如果实现，必须同步维护：
+1. Step 45A 已按本方案落地历史表 + 写入 + admin 只读查询最小实现。
+2. Step 45A 已同步维护：
    - `backend/db/init.sql`
    - `backend/db/migrations`
    - `backend/src/main/resources/db/schema-h2.sql`
-   - `backend/src/main/resources/db/data-h2.sql`
-3. Step 45 不要默认补前端页面。
-4. Step 45 不要默认补完整处理工单。
-5. bridge、展示 polish、媒体线继续冻结。
+3. Step 45A 未修改 `backend/src/main/resources/db/data-h2.sql`，原因是 H2 演示样本可以通过现有 courier 异常上报接口真实生成，预置历史样本反而会弱化“新增历史不覆盖”的验证。
+4. Step 45B 如继续推进，应先评估 `REPORTED -> RESOLVED` 的最小 admin 处理动作接口。
+5. Step 45B 不要默认补前端页面。
+6. Step 45B 不要默认补完整处理工单。
+7. bridge、展示 polish、媒体线继续冻结。
+
+## Step 45A 落地回填
+
+Step 45A 已真实实现本方案中的最小后端部分：
+
+1. 新增 `campus_exception_record`，作为异常审计主数据。
+2. 复用 `POST /api/campus/courier/orders/{id}/exception-report`，每次上报新增历史记录。
+3. 同事务继续更新 `campus_relay_order.exception_type / exception_remark / exception_reported_at` 兼容摘要。
+4. 新增 `GET /api/campus/admin/exceptions` 与 `GET /api/campus/admin/exceptions/{id}`，用于 admin 只读查看历史和详情。
+5. 本轮没有实现 `resolve`、没有前端页面、没有 bridge 变更。
