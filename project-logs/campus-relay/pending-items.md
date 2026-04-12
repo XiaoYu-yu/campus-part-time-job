@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 50 最高优先级
+## Step 51A 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -66,22 +66,29 @@
    - latest exception 摘要仍保留最后一次上报内容，`/courier/workbench`、customer 订单详情和 admin 最近异常摘要语义未被破坏。
    - `/campus/exceptions` 已通过 Playwright 验证页面加载、列表展示、详情 drawer 和 resolve 区展示。
    - 证据文件位于 `project-logs/campus-relay/runtime/step-49/`。
-14. Step 50 最高优先级建议：
-   - 进入 P2 售后执行历史表方案设计轮。
-   - 先设计历史表边界、写入时机、兼容策略、最小查询接口和不做范围。
-   - 不要直接写代码，不要顺手补前端页面。
-15. Step 50 明确禁止：
+14. Step 50 已完成 P2 售后执行历史表最小方案设计：
+   - 建议新增 `campus_after_sale_execution_record` 作为售后执行审计主表。
+   - 每次 admin 成功记录售后执行结果时新增一条历史。
+   - 同事务内继续更新 `campus_relay_order` 上的当前售后执行摘要。
+   - 订单表现有 `after_sale_execution_*` 字段继续作为兼容摘要保留。
+   - Step 51A 才允许评估进入最小后端实现。
+15. Step 51A 最高优先级建议：
+   - 新增售后执行历史表，并同步 MySQL init、migration、H2 schema。
+   - 复用现有 `POST /api/campus/admin/orders/{id}/after-sale-execution`，在同事务内追加历史写入。
+   - 新增 admin 售后执行历史只读分页接口。
+   - 不补前端页面，不做真实退款，不做 settlement 联动，不扩完整售后工单系统。
+16. Step 51A 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
    - 不改 token 附着逻辑
    - 不改路由
-   - 不新增超出异常最小承接范围的页面
+   - 不新增售后执行历史前端页面
    - 不改订单主状态机
    - 不补完整异常工单系统
-16. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-17. 第五个 admin 页继续后置，不再以“补页数”为目标。
-18. settlement 批次复核、撤回和对账暂列 P3。
+17. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+18. 第五个 admin 页继续后置，不再以“补页数”为目标。
+19. settlement 批次复核、撤回和对账暂列 P3。
 
 ## 已完成但仍需继续扩展的部分
 
@@ -212,7 +219,8 @@
 ### 3. 售后仍缺完整历史，异常已完成最小历史与处理闭环
 
 - 影响：异常已有历史表、只读查询、最小 resolve 和 admin 前端承接；售后执行仍只有当前执行结果与一次纠正信息，缺少完整历史审计
-- 默认处理：Step 50 优先进入售后执行历史表方案设计，先设计边界，不直接写代码
+- 当前进展：Step 50 已完成售后执行历史表最小方案设计，明确建议新增 `campus_after_sale_execution_record` 并保留订单表当前摘要字段
+- 默认处理：Step 51A 才允许进入售后执行历史最小后端实现，先做表、写入和 admin 只读查询，不补前端页面
 
 ### 4. settlement 仍没有真实财务执行能力
 

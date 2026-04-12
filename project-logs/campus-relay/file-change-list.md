@@ -857,3 +857,13 @@
 - [project-logs/campus-relay/runtime/step-49/admin-exception-page-validation.json](runtime/step-49/admin-exception-page-validation.json)
 
 本轮是 admin 异常处理页 H2/test 运行态验证轮：真实验证异常历史列表、详情、resolve、重复 resolve 失败、latest exception 兼容回读和前端页面加载；没有修改业务代码、bridge、接口、鉴权、路由、订单主状态或 settlement，也没有新增页面。
+
+## Step 50 - 售后执行历史表最小方案设计
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-49-admin-exception-runtime-validation.md](step-49-admin-exception-runtime-validation.md)
+- [project-logs/campus-relay/step-50-after-sale-execution-history-design.md](step-50-after-sale-execution-history-design.md)
+
+本轮是 P2 售后执行历史表方案设计轮：只设计 `campus_after_sale_execution_record` 的数据边界、写入时机、状态边界、只读接口边界和当前摘要兼容策略；没有修改业务代码、SQL、前端页面、bridge、接口实现、鉴权或路由。

@@ -1736,17 +1736,37 @@
    - 未改订单主状态、settlement、latest exception 摘要。
    - 未改 bridge、鉴权、token 附着逻辑或旧前端主链路。
 
+## Step 50 实际完成事项
+
+1. 完成 P2 售后执行历史表最小方案设计。
+2. 基于真实代码确认当前售后执行现状：
+   - 写接口为 `POST /api/campus/admin/orders/{id}/after-sale-execution`。
+   - 查询接口为 `GET /api/campus/admin/orders/after-sale-executions`。
+   - 当前订单表只保存 latest/current 售后执行摘要与 `FAILED -> SUCCESS` 的 corrected 字段。
+   - 当前执行状态只允许 `SUCCESS / FAILED` 写入，`FAILED -> SUCCESS` 作为人工纠正。
+3. 设计建议：
+   - 后续新增 `campus_after_sale_execution_record` 作为售后执行审计主表。
+   - 每次 admin 成功记录售后执行结果时新增一条历史。
+   - 同事务内继续更新 `campus_relay_order` 上的当前售后执行摘要。
+   - 订单表现有 `after_sale_execution_*` 字段继续作为兼容摘要保留。
+4. 明确 Step 51A 推荐实现边界：
+   - 只做后端最小实现：表、同事务写入、admin 只读分页查询。
+   - 不做前端页面。
+   - 不做修改、删除、回滚、真实退款、settlement 联动或完整售后工单系统。
+5. 本轮没有修改业务代码、SQL、前端页面、bridge、接口实现、鉴权或路由。
+
 ## 下一轮建议
 
-- 进入 `Step 50`
+- 进入 `Step 51A`
 - 推荐顺序：
-  1. 优先进入 P2 售后执行历史表方案设计轮。
-  2. 先设计售后执行历史表边界、写入时机、兼容策略和最小接口，不要直接写代码。
-  3. 异常历史 / resolve / admin 异常页面当前先保持稳定，不继续扩完整异常工单系统。
-  4. 不做 reopen、delete、acknowledged、通知或多角色审批。
-  5. 不改 bridge、不改鉴权、不改 token 附着。
-  6. 展示 polish 线和媒体线继续冻结。
-  7. 第五个 admin 页继续后置，不能以“补页数”为目标。
+  1. 进入售后执行历史最小实现轮。
+  2. 新增 `campus_after_sale_execution_record`，并同步 MySQL init、migration、H2 schema。
+  3. 复用现有 `POST /api/campus/admin/orders/{id}/after-sale-execution`，在同事务内追加历史写入。
+  4. 新增 admin 只读分页查询接口，优先支持 `relayOrderId`、`executionStatus`、`corrected`、`page`、`pageSize`。
+  5. 不补前端页面，不补第五个 admin 页。
+  6. 不做真实退款、settlement 联动或售后完整工单系统。
+  7. 不改 bridge、不改鉴权、不改 token 附着。
+  8. 展示 polish 线和媒体线继续冻结。
 
 ## 日志索引
 
@@ -1809,6 +1829,7 @@
 - [Step 47 日志](step-47-admin-exception-frontend-go-no-go.md)
 - [Step 48 日志](step-48-admin-exception-frontend-minimal-handoff.md)
 - [Step 49 日志](step-49-admin-exception-runtime-validation.md)
+- [Step 50 日志](step-50-after-sale-execution-history-design.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)
