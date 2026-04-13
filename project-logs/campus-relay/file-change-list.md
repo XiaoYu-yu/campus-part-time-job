@@ -867,3 +867,25 @@
 - [project-logs/campus-relay/step-50-after-sale-execution-history-design.md](step-50-after-sale-execution-history-design.md)
 
 本轮是 P2 售后执行历史表方案设计轮：只设计 `campus_after_sale_execution_record` 的数据边界、写入时机、状态边界、只读接口边界和当前摘要兼容策略；没有修改业务代码、SQL、前端页面、bridge、接口实现、鉴权或路由。
+
+## Step 51A - 售后执行历史最小实现
+
+- [backend/db/init.sql](../../backend/db/init.sql)
+- [backend/db/migrations/V10__campus_after_sale_execution_record.sql](../../backend/db/migrations/V10__campus_after_sale_execution_record.sql)
+- [backend/src/main/resources/db/schema-h2.sql](../../backend/src/main/resources/db/schema-h2.sql)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/entity/CampusAfterSaleExecutionRecord.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/entity/CampusAfterSaleExecutionRecord.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/query/CampusAfterSaleExecutionRecordQuery.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/query/CampusAfterSaleExecutionRecordQuery.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/vo/CampusAfterSaleExecutionRecordVO.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/vo/CampusAfterSaleExecutionRecordVO.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/mapper/CampusAfterSaleExecutionRecordMapper.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/mapper/CampusAfterSaleExecutionRecordMapper.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/service/CampusAfterSaleExecutionRecordService.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/service/CampusAfterSaleExecutionRecordService.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusAfterSaleExecutionRecordServiceImpl.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusAfterSaleExecutionRecordServiceImpl.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/controller/CampusAdminAfterSaleExecutionRecordController.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/controller/CampusAdminAfterSaleExecutionRecordController.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusRelayOrderServiceImpl.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusRelayOrderServiceImpl.java)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-50-after-sale-execution-history-design.md](step-50-after-sale-execution-history-design.md)
+- [project-logs/campus-relay/step-51a-after-sale-execution-history-minimal-implementation.md](step-51a-after-sale-execution-history-minimal-implementation.md)
+- [project-logs/campus-relay/runtime/step-51a/after-sale-execution-history-validation.json](runtime/step-51a/after-sale-execution-history-validation.json)
+
+本轮是售后执行历史最小后端实现轮：新增历史表、现有售后执行接口同事务追加历史写入、admin 只读分页查询接口，并完成 H2/test 运行态验证；没有新增前端页面，没有修改 bridge、鉴权、路由、订单主状态、settlement 或旧外卖模块。

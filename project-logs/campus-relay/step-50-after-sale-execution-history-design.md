@@ -377,10 +377,13 @@ Step 51A 如果进入实现，只改变后端持久化策略：
 
 ## 下一轮建议
 
-1. Step 51A 可进入售后执行历史最小实现轮。
-2. 只做后端最小实现：表、写入、admin 只读查询。
-3. 不补前端页面，不补第五个 admin 页。
-4. 不做真实退款、真实支付、settlement 联动或售后完整工单系统。
-5. bridge 主线继续冻结。
-6. 展示 polish 线继续冻结。
-7. 媒体线继续收住。
+1. Step 51A 已完成售后执行历史最小实现。
+2. 已新增 `campus_after_sale_execution_record`，并同步 MySQL init、V10 migration、H2 schema。
+3. 已复用现有 `POST /api/campus/admin/orders/{id}/after-sale-execution`，在同事务内追加历史写入。
+4. 已新增 admin 只读分页接口 `GET /api/campus/admin/after-sale-execution-records`。
+5. 已通过 H2/test 运行态验证 `PENDING -> FAILED -> SUCCESS` 产生 2 条历史，且当前售后执行摘要保持兼容。
+6. Step 51B 建议进入售后执行历史前端承接 go / no-go 评估轮，不默认补页面。
+7. 不补第五个 admin 页。
+8. bridge 主线继续冻结。
+9. 展示 polish 线继续冻结。
+10. 媒体线继续收住。

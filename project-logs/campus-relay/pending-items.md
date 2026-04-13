@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 51A 最高优先级
+## Step 51B 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -72,23 +72,29 @@
    - 同事务内继续更新 `campus_relay_order` 上的当前售后执行摘要。
    - 订单表现有 `after_sale_execution_*` 字段继续作为兼容摘要保留。
    - Step 51A 才允许评估进入最小后端实现。
-15. Step 51A 最高优先级建议：
-   - 新增售后执行历史表，并同步 MySQL init、migration、H2 schema。
+15. Step 51A 已完成售后执行历史最小实现：
+   - 新增 `campus_after_sale_execution_record`，并同步 MySQL init、V10 migration、H2 schema。
    - 复用现有 `POST /api/campus/admin/orders/{id}/after-sale-execution`，在同事务内追加历史写入。
-   - 新增 admin 售后执行历史只读分页接口。
-   - 不补前端页面，不做真实退款，不做 settlement 联动，不扩完整售后工单系统。
-16. Step 51A 明确禁止：
+   - 新增 admin 只读分页接口 `GET /api/campus/admin/after-sale-execution-records`。
+   - H2/test 下已验证 `PENDING -> FAILED -> SUCCESS` 产生 2 条历史，且当前售后执行摘要保持兼容。
+   - 证据文件：`project-logs/campus-relay/runtime/step-51a/after-sale-execution-history-validation.json`。
+16. Step 51B 最高优先级建议：
+   - 进入售后执行历史前端承接 go / no-go 评估轮。
+   - 先判断是否需要最小 admin 前端承接，不默认补页面。
+   - 如果值得做，限定为只读历史列表和详情 drawer。
+   - 如果收益不足，可转向 P3 settlement 批次复核、撤回和对账方案设计。
+17. Step 51B 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
    - 不改 token 附着逻辑
    - 不改路由
-   - 不新增售后执行历史前端页面
+   - 不默认新增售后执行历史前端页面
    - 不改订单主状态机
    - 不补完整异常工单系统
-17. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-18. 第五个 admin 页继续后置，不再以“补页数”为目标。
-19. settlement 批次复核、撤回和对账暂列 P3。
+18. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+19. 第五个 admin 页继续后置，不再以“补页数”为目标。
+20. settlement 批次复核、撤回和对账暂列 P3。
 
 ## 已完成但仍需继续扩展的部分
 
@@ -216,11 +222,11 @@
 - 影响：admin 现在已有 settlement 批次演示页、售后执行演示页、courier 异常/位置联动演示页、settlement 只读运营页，以及异常历史 / resolve 最小承接页
 - 默认处理：继续保持现有 admin 演示页和异常处理页稳定，不为补页数机械新增第五页
 
-### 3. 售后仍缺完整历史，异常已完成最小历史与处理闭环
+### 3. 售后执行历史后端已落地，前端承接仍待评估
 
-- 影响：异常已有历史表、只读查询、最小 resolve 和 admin 前端承接；售后执行仍只有当前执行结果与一次纠正信息，缺少完整历史审计
-- 当前进展：Step 50 已完成售后执行历史表最小方案设计，明确建议新增 `campus_after_sale_execution_record` 并保留订单表当前摘要字段
-- 默认处理：Step 51A 才允许进入售后执行历史最小后端实现，先做表、写入和 admin 只读查询，不补前端页面
+- 影响：售后执行现在已有历史表、同事务写入和 admin 只读分页接口，但尚未判断是否需要前端承接
+- 当前进展：Step 51A 已完成 `campus_after_sale_execution_record`、现有执行接口追加历史写入和 `GET /api/campus/admin/after-sale-execution-records`
+- 默认处理：Step 51B 先做 admin 售后执行历史前端承接 go / no-go，不默认补页面
 
 ### 4. settlement 仍没有真实财务执行能力
 

@@ -1,0 +1,68 @@
+{
+  "startedAt": "2026-04-13T01:23:21",
+  "backend": "http://127.0.0.1:8082/api",
+  "orderId": "CR202604060001",
+  "validationScope": [
+    "customer open after sale",
+    "admin handle after sale",
+    "admin decision",
+    "after-sale execution FAILED",
+    "after-sale execution SUCCESS correction",
+    "history list readback",
+    "existing execution snapshot compatibility",
+    "customer after-sale result compatibility"
+  ],
+  "ready": true,
+  "historyAfterFailed": {
+    "total": 1,
+    "records": [
+      {
+        "id": 1,
+        "executionStatus": "FAILED",
+        "previousExecutionStatus": "PENDING",
+        "corrected": 0
+      }
+    ]
+  },
+  "historyAfterCorrection": {
+    "total": 2,
+    "records": [
+      {
+        "id": 2,
+        "relayOrderId": "CR202604060001",
+        "executionStatus": "SUCCESS",
+        "previousExecutionStatus": "FAILED",
+        "corrected": 1,
+        "executionReferenceNo": "STEP51A-REFUND-001"
+      },
+      {
+        "id": 1,
+        "relayOrderId": "CR202604060001",
+        "executionStatus": "FAILED",
+        "previousExecutionStatus": "PENDING",
+        "corrected": 0,
+        "executionReferenceNo": null
+      }
+    ]
+  },
+  "correctedSuccessFilter": {
+    "total": 1,
+    "firstRecord": {
+      "id": 2,
+      "executionStatus": "SUCCESS",
+      "corrected": 1
+    }
+  },
+  "currentExecutionSnapshot": {
+    "afterSaleExecutionStatus": "SUCCESS",
+    "afterSaleExecutionCorrected": 1,
+    "afterSaleExecutionRemark": "Step51A correction execution success"
+  },
+  "customerAfterSaleResultCompatibility": {
+    "orderStatus": "AFTER_SALE_RESOLVED",
+    "decisionType": "REFUND",
+    "afterSaleExecutionStatus": "SUCCESS",
+    "afterSaleExecutionRemark": null
+  },
+  "completedAt": "2026-04-13T01:23:26"
+}

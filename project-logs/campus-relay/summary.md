@@ -1755,18 +1755,57 @@
    - 不做修改、删除、回滚、真实退款、settlement 联动或完整售后工单系统。
 5. 本轮没有修改业务代码、SQL、前端页面、bridge、接口实现、鉴权或路由。
 
+## Step 51A 实际完成事项
+
+1. 完成售后执行历史最小后端实现。
+2. 新增 `campus_after_sale_execution_record`：
+   - MySQL init 已同步。
+   - 新增 `V10__campus_after_sale_execution_record.sql`。
+   - H2 schema 已同步。
+   - H2 data 未预置复杂样本，运行态通过真实售后执行链路生成历史。
+3. 复用现有 `POST /api/campus/admin/orders/{id}/after-sale-execution`：
+   - 请求体、路径和前端调用方式不变。
+   - 现有状态校验不变。
+   - 成功写入售后执行结果后，同事务追加一条历史记录。
+   - `FAILED -> SUCCESS` 会生成 `corrected = 1` 的历史记录。
+4. 新增 admin 只读分页接口：
+   - `GET /api/campus/admin/after-sale-execution-records`
+   - 支持 `relayOrderId`、`executionStatus`、`corrected`、`page`、`pageSize / size`。
+   - 默认按 `executed_at desc, id desc` 返回。
+5. 兼容策略：
+   - 订单表 `after_sale_execution_*` 继续作为当前摘要字段。
+   - 现有售后执行分页、admin 售后结果、customer 售后结果继续读当前摘要。
+   - 新接口只承担历史审计读取。
+6. H2/test 运行态验证：
+   - 对 `CR202604060001` 真实执行 `PENDING -> FAILED -> SUCCESS`。
+   - 历史表得到 2 条记录。
+   - 最新 `SUCCESS` 记录 `previousExecutionStatus = FAILED` 且 `corrected = 1`。
+   - 旧售后执行分页仍显示当前摘要 `SUCCESS / corrected = 1`。
+   - customer 售后结果仍可回读当前执行状态。
+   - 证据文件：`project-logs/campus-relay/runtime/step-51a/after-sale-execution-history-validation.json`。
+7. 验证结果：
+   - `.\mvnw.cmd -DskipTests compile` 通过。
+   - `.\mvnw.cmd -DskipTests package` 通过。
+   - `npm run build` 通过，仅保留既有 Sass `@import` deprecation 与 chunk size warning。
+   - `git diff --check` 通过，仅有 Windows 工作区 LF/CRLF 提示。
+8. 本轮明确未做：
+   - 未新增前端页面。
+   - 未新增售后执行历史详情页。
+   - 未新增修改、删除、回滚接口。
+   - 未做真实退款、settlement 联动或完整售后工单系统。
+   - 未改 bridge、鉴权、token 附着、路由或旧外卖模块。
+
 ## 下一轮建议
 
-- 进入 `Step 51A`
+- 进入 `Step 51B`
 - 推荐顺序：
-  1. 进入售后执行历史最小实现轮。
-  2. 新增 `campus_after_sale_execution_record`，并同步 MySQL init、migration、H2 schema。
-  3. 复用现有 `POST /api/campus/admin/orders/{id}/after-sale-execution`，在同事务内追加历史写入。
-  4. 新增 admin 只读分页查询接口，优先支持 `relayOrderId`、`executionStatus`、`corrected`、`page`、`pageSize`。
-  5. 不补前端页面，不补第五个 admin 页。
-  6. 不做真实退款、settlement 联动或售后完整工单系统。
-  7. 不改 bridge、不改鉴权、不改 token 附着。
-  8. 展示 polish 线和媒体线继续冻结。
+  1. 进入售后执行历史前端承接 go / no-go 评估轮。
+  2. 先判断是否需要最小 admin 前端承接，不要默认补页面。
+  3. 如果值得做，限定为只读历史列表和详情 drawer；不做修改、删除、回滚或真实退款。
+  4. 如果收益不足，可转向 P3 settlement 批次复核、撤回和对账方案设计。
+  5. 不补第五个 admin 页。
+  6. 不改 bridge、不改鉴权、不改 token 附着。
+  7. 展示 polish 线和媒体线继续冻结。
 
 ## 日志索引
 
@@ -1830,6 +1869,7 @@
 - [Step 48 日志](step-48-admin-exception-frontend-minimal-handoff.md)
 - [Step 49 日志](step-49-admin-exception-runtime-validation.md)
 - [Step 50 日志](step-50-after-sale-execution-history-design.md)
+- [Step 51A 日志](step-51a-after-sale-execution-history-minimal-implementation.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

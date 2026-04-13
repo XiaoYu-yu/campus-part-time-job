@@ -9,6 +9,7 @@ import com.cangqiong.takeaway.campus.dto.CampusCourierPickupDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderAfterSaleDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCancelDTO;
 import com.cangqiong.takeaway.campus.dto.CampusCustomerOrderCreateDTO;
+import com.cangqiong.takeaway.campus.entity.CampusAfterSaleExecutionRecord;
 import com.cangqiong.takeaway.campus.entity.CampusExceptionRecord;
 import com.cangqiong.takeaway.campus.enums.CampusAfterSaleDecisionType;
 import com.cangqiong.takeaway.campus.enums.CampusAfterSaleExecutionStatus;
@@ -22,6 +23,7 @@ import com.cangqiong.takeaway.campus.enums.CampusDeliveryTargetType;
 import com.cangqiong.takeaway.campus.enums.CampusPaymentStatus;
 import com.cangqiong.takeaway.campus.enums.CampusRelayOrderStatus;
 import com.cangqiong.takeaway.campus.enums.CampusSettlementStatus;
+import com.cangqiong.takeaway.campus.mapper.CampusAfterSaleExecutionRecordMapper;
 import com.cangqiong.takeaway.campus.mapper.CampusPickupPointMapper;
 import com.cangqiong.takeaway.campus.mapper.CampusLocationReportMapper;
 import com.cangqiong.takeaway.campus.mapper.CampusExceptionRecordMapper;
@@ -95,6 +97,9 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
 
     @Autowired
     private CampusExceptionRecordMapper campusExceptionRecordMapper;
+
+    @Autowired
+    private CampusAfterSaleExecutionRecordMapper campusAfterSaleExecutionRecordMapper;
 
     @Override
     public PageResult<CampusRelayOrderVO> pageQuery(CampusRelayOrderQuery query) {
@@ -743,6 +748,21 @@ public class CampusRelayOrderServiceImpl implements CampusRelayOrderService {
         if (updated == 0) {
             throw new BusinessException("订单状态已变化，无法记录售后执行结果");
         }
+
+        CampusAfterSaleExecutionRecord executionRecord = new CampusAfterSaleExecutionRecord();
+        executionRecord.setRelayOrderId(id);
+        executionRecord.setDecisionType(order.getAfterSaleDecisionType());
+        executionRecord.setDecisionAmount(order.getAfterSaleDecisionAmount());
+        executionRecord.setPreviousExecutionStatus(currentExecutionStatus.name());
+        executionRecord.setExecutionStatus(executionStatus.name());
+        executionRecord.setExecutionRemark(executionRemark);
+        executionRecord.setExecutionReferenceNo(executionReferenceNo);
+        executionRecord.setExecutedByEmployeeId(employeeId);
+        executionRecord.setExecutedAt(now);
+        executionRecord.setCorrected(corrected ? 1 : 0);
+        executionRecord.setCreatedAt(now);
+        executionRecord.setUpdatedAt(now);
+        campusAfterSaleExecutionRecordMapper.insert(executionRecord);
     }
 
     @Override

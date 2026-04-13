@@ -371,6 +371,28 @@ CREATE TABLE IF NOT EXISTS campus_exception_record (
     FOREIGN KEY (processed_by_employee_id) REFERENCES employee(id)
 ) COMMENT='校园代送异常历史记录表';
 
+CREATE TABLE IF NOT EXISTS campus_after_sale_execution_record (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '售后执行历史记录ID',
+    relay_order_id VARCHAR(32) NOT NULL COMMENT '代送订单号',
+    decision_type VARCHAR(20) NOT NULL COMMENT '售后决策类型快照',
+    decision_amount DECIMAL(10,2) COMMENT '售后决策金额快照',
+    previous_execution_status VARCHAR(20) NOT NULL COMMENT '写入前执行状态',
+    execution_status VARCHAR(20) NOT NULL COMMENT '本次执行结果(SUCCESS/FAILED)',
+    execution_remark VARCHAR(255) NOT NULL COMMENT '本次执行备注',
+    execution_reference_no VARCHAR(100) COMMENT '本次执行参考号',
+    executed_by_employee_id BIGINT NOT NULL COMMENT '执行管理员ID',
+    executed_at DATETIME NOT NULL COMMENT '执行时间',
+    corrected TINYINT NOT NULL DEFAULT 0 COMMENT '是否为FAILED到SUCCESS的人工纠正',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    INDEX idx_campus_after_sale_execution_record_order_id (relay_order_id),
+    INDEX idx_campus_after_sale_execution_record_status (execution_status),
+    INDEX idx_campus_after_sale_execution_record_executed_at (executed_at),
+    INDEX idx_campus_after_sale_execution_record_corrected (corrected),
+    FOREIGN KEY (relay_order_id) REFERENCES campus_relay_order(id),
+    FOREIGN KEY (executed_by_employee_id) REFERENCES employee(id)
+) COMMENT='校园代送售后执行历史记录表';
+
 CREATE TABLE IF NOT EXISTS campus_location_report (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '位置上报ID',
     relay_order_id VARCHAR(32) NOT NULL COMMENT '代送订单号',
