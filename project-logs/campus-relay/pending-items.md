@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 53 最高优先级
+## Step 54 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -88,24 +88,27 @@
    - `frontend/src/views/CampusAfterSaleExecutionList.vue` 详情 drawer 新增“执行历史”只读区。
    - 打开详情时继续读取原 after-sale-result 当前摘要，同时按 `relayOrderId` 读取历史记录。
    - 未新增页面、未新增路由、未新增写接口。
-18. Step 53 最高优先级建议：
-   - 进入售后执行历史前端运行态验证轮。
-   - 使用 H2/test 下 `CR202604060001` 的 `PENDING -> FAILED -> SUCCESS` 售后执行历史样本。
-   - 验证 `/campus/after-sale-executions` 页面、详情 drawer、当前摘要和执行历史区。
-   - 验证通过后，再评估是否进入 P3 settlement 批次复核、撤回和对账方案设计。
-19. Step 53 明确禁止：
+18. Step 53 已完成售后执行历史前端运行态验证：
+   - H2/test 下重新生成 `CR202604060001` 的 `PENDING -> FAILED -> SUCCESS` 售后执行历史样本。
+   - `GET /api/campus/admin/after-sale-execution-records` 返回 2 条历史。
+   - `/campus/after-sale-executions` 详情 drawer 可展示当前摘要和执行历史区。
+   - 证据文件位于 `project-logs/campus-relay/runtime/step-53/`。
+19. Step 54 最高优先级建议：
+   - 进入 P3 settlement 批次复核、撤回和对账方案设计轮。
+   - 先做方案，不默认写代码、不默认改库。
+   - 重点评估批次复核后的撤回边界、对账差异记录边界、当前摘要和批次历史兼容策略。
+20. Step 54 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
    - 不改 token 附着逻辑
    - 不改路由
-   - 不新增售后执行历史独立页面
+   - 不默认新增 settlement 新页面
    - 不改订单主状态机
-   - 不改 settlement
-   - 不补完整售后工单系统
-20. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-21. 第五个 admin 页继续后置，不再以“补页数”为目标。
-22. settlement 批次复核、撤回和对账暂列 P3。
+   - 不接真实打款
+   - 不补完整财务系统
+21. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+22. 第五个 admin 页继续后置，不再以“补页数”为目标。
 
 ## 已完成但仍需继续扩展的部分
 
@@ -233,13 +236,14 @@
 - 影响：admin 现在已有 settlement 批次演示页、售后执行演示页、courier 异常/位置联动演示页、settlement 只读运营页，以及异常历史 / resolve 最小承接页
 - 默认处理：继续保持现有 admin 演示页和异常处理页稳定，不为补页数机械新增第五页
 
-### 3. 售后执行历史后端和最小前端承接已落地，待运行态验证
+### 3. 售后执行历史后端和最小前端承接已落地，运行态验证已通过
 
-- 影响：售后执行现在已有历史表、同事务写入、admin 只读分页接口和 drawer 内只读历史区，但仍需运行态确认历史区与当前摘要同时稳定
+- 影响：售后执行现在已有历史表、同事务写入、admin 只读分页接口和 drawer 内只读历史区
 - 当前进展：Step 51A 已完成 `campus_after_sale_execution_record`、现有执行接口追加历史写入和 `GET /api/campus/admin/after-sale-execution-records`
 - 当前进展：Step 51B 已选择方向 A，售后执行历史值得做最小前端承接
 - 当前进展：Step 52 已在现有 `CampusAfterSaleExecutionList.vue` 详情 drawer 内增加只读历史区
-- 默认处理：Step 53 先做运行态验证，不继续扩页面、不新增写操作
+- 当前进展：Step 53 已通过 H2/test API 和 Playwright 页面验证
+- 默认处理：售后执行历史主线暂可收住，下一轮转向 P3 settlement 批次复核、撤回和对账方案设计
 
 ### 4. settlement 仍没有真实财务执行能力
 

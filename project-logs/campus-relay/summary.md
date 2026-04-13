@@ -1840,17 +1840,40 @@
    - 未做修改、删除、回滚、真实退款或 settlement 联动。
    - 未改 bridge、鉴权、token 附着、路由或旧外卖模块。
 
+## Step 53 实际完成事项
+
+1. 完成售后执行历史前端运行态验证。
+2. H2/test 下重新生成 `CR202604060001` 售后执行历史样本：
+   - customer 发起售后。
+   - admin 处理售后为 `RESOLVED`。
+   - admin 记录 `REFUND` 决策。
+   - 第一次执行 `FAILED`。
+   - 第二次执行 `SUCCESS`，参考号 `STEP53-REFUND-001`。
+3. API 验证结果：
+   - `GET /api/campus/admin/after-sale-execution-records` 返回 2 条历史。
+   - 最新记录为 `FAILED -> SUCCESS`，`corrected = 1`。
+   - 旧记录为 `PENDING -> FAILED`，`corrected = 0`。
+   - 旧售后执行分页仍返回当前摘要 `SUCCESS / corrected = 1`。
+   - customer 售后结果仍可回读当前执行状态。
+4. 前端验证结果：
+   - `/campus/after-sale-executions` 可正常打开。
+   - `CR202604060001` 详情 drawer 可正常打开。
+   - 当前售后执行摘要正常展示。
+   - “执行历史”只读区正常展示 2 条历史。
+5. 证据文件：
+   - `project-logs/campus-relay/runtime/step-53/after-sale-execution-history-api-validation.json`
+   - `project-logs/campus-relay/runtime/step-53/after-sale-execution-history-page-validation.json`
+6. 本轮没有修改业务代码、前端页面、后端接口、SQL、bridge、鉴权或路由。
+
 ## 下一轮建议
 
-- 进入 `Step 53`
+- 进入 `Step 54`
 - 推荐顺序：
-  1. 进入售后执行历史前端运行态验证轮。
-  2. 使用 H2/test 样本验证 `/campus/after-sale-executions` 详情 drawer。
-  3. 确认当前摘要仍正常展示。
-  4. 确认执行历史区可展示同一订单的多条执行历史。
-  5. 验证通过后，再评估是否进入 P3 settlement 批次复核、撤回和对账方案设计。
-  6. 不补第五个 admin 页。
-  7. 不改 bridge、不改鉴权、不改 token 附着。
+  1. 进入 P3 settlement 批次复核、撤回和对账方案设计轮。
+  2. 先设计批次复核后的撤回边界、对账差异记录边界和兼容策略。
+  3. 不默认写代码，不默认改库。
+  4. 不补第五个 admin 页。
+  5. 不改 bridge、不改鉴权、不改 token 附着。
 
 ## 日志索引
 
@@ -1917,6 +1940,7 @@
 - [Step 51A 日志](step-51a-after-sale-execution-history-minimal-implementation.md)
 - [Step 51B 日志](step-51b-after-sale-execution-history-frontend-go-no-go.md)
 - [Step 52 日志](step-52-after-sale-execution-history-frontend-minimal-handoff.md)
+- [Step 53 日志](step-53-after-sale-execution-history-frontend-runtime-validation.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

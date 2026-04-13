@@ -911,3 +911,15 @@
 - [project-logs/campus-relay/step-52-after-sale-execution-history-frontend-minimal-handoff.md](step-52-after-sale-execution-history-frontend-minimal-handoff.md)
 
 本轮是售后执行历史前端最小承接实现轮：只在现有售后执行页详情 drawer 内新增只读执行历史区，并新增 admin API 封装；没有新增页面、路由、后端接口、写操作，也没有修改 bridge、鉴权、订单主状态、settlement 或旧外卖模块。
+
+## Step 53 - 售后执行历史前端运行态验证
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-52-after-sale-execution-history-frontend-minimal-handoff.md](step-52-after-sale-execution-history-frontend-minimal-handoff.md)
+- [project-logs/campus-relay/step-53-after-sale-execution-history-frontend-runtime-validation.md](step-53-after-sale-execution-history-frontend-runtime-validation.md)
+- [project-logs/campus-relay/runtime/step-53/after-sale-execution-history-api-validation.json](runtime/step-53/after-sale-execution-history-api-validation.json)
+- [project-logs/campus-relay/runtime/step-53/after-sale-execution-history-page-validation.json](runtime/step-53/after-sale-execution-history-page-validation.json)
+
+本轮是售后执行历史前端运行态验证轮：H2/test 下真实生成售后执行历史样本，并用 Playwright 验证 `/campus/after-sale-executions` 详情 drawer 当前摘要和执行历史区；没有修改业务代码、前端页面、后端接口、SQL、bridge、鉴权或路由。

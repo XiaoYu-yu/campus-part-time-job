@@ -1,0 +1,30 @@
+{
+  "validatedAt": "2026-04-13T16:18:00",
+  "tool": "Playwright MCP browser_run_code",
+  "frontend": "http://127.0.0.1:5173",
+  "page": "/campus/after-sale-executions",
+  "orderId": "CR202604060001",
+  "adminAccount": "13800138000",
+  "result": {
+    "url": "http://127.0.0.1:5173/campus/after-sale-executions",
+    "heading": "园区售后执行",
+    "drawerTitle": "售后结果详情",
+    "historyRows": 2,
+    "hasHistorySection": true,
+    "hasCurrentSnapshot": true,
+    "hasFailedHistory": true,
+    "hasReferenceNo": true,
+    "hasCorrectedText": true,
+    "hasFailedStatus": true,
+    "hasSuccessStatus": true
+  },
+  "validatedExpectations": [
+    "admin page opened",
+    "target order detail drawer opened",
+    "current after-sale execution snapshot visible",
+    "execution history section visible",
+    "FAILED history record visible",
+    "SUCCESS correction history record visible",
+    "history row count is 2"
+  ]
+}

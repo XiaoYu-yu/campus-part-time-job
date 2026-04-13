@@ -101,3 +101,23 @@
 5. bridge 主线继续冻结。
 6. 展示 polish 线继续冻结。
 7. 媒体线继续收住。
+
+## Step 53 回填
+
+Step 53 已完成售后执行历史前端运行态验证：
+
+1. H2/test 下重新生成 `CR202604060001` 的售后执行历史样本。
+2. API 验证确认：
+   - `GET /api/campus/admin/after-sale-execution-records` 返回 2 条历史。
+   - 最新记录为 `FAILED -> SUCCESS`，`corrected = 1`。
+   - 旧记录为 `PENDING -> FAILED`，`corrected = 0`。
+   - 当前售后执行摘要仍为 `SUCCESS / corrected = 1`。
+3. Playwright 页面验证确认：
+   - `/campus/after-sale-executions` 可正常打开。
+   - 订单详情 drawer 可正常打开。
+   - “执行历史”区可展示 2 条记录。
+   - `STEP53-REFUND-001`、失败备注和成功备注均可见。
+4. 证据文件：
+   - `project-logs/campus-relay/runtime/step-53/after-sale-execution-history-api-validation.json`
+   - `project-logs/campus-relay/runtime/step-53/after-sale-execution-history-page-validation.json`
+5. 本轮未修改业务代码、前端页面、后端接口、SQL、bridge、鉴权或路由。
