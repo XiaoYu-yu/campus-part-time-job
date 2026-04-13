@@ -923,3 +923,13 @@
 - [project-logs/campus-relay/runtime/step-53/after-sale-execution-history-page-validation.json](runtime/step-53/after-sale-execution-history-page-validation.json)
 
 本轮是售后执行历史前端运行态验证轮：H2/test 下真实生成售后执行历史样本，并用 Playwright 验证 `/campus/after-sale-executions` 详情 drawer 当前摘要和执行历史区；没有修改业务代码、前端页面、后端接口、SQL、bridge、鉴权或路由。
+
+## Step 54 - settlement 批次复核、撤回和对账最小方案设计
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-53-after-sale-execution-history-frontend-runtime-validation.md](step-53-after-sale-execution-history-frontend-runtime-validation.md)
+- [project-logs/campus-relay/step-54-settlement-batch-review-withdraw-reconcile-design.md](step-54-settlement-batch-review-withdraw-reconcile-design.md)
+
+本轮是 P3 settlement 批次复核、撤回和对账方案设计轮：只设计批次操作审计、对账差异记录和现有 settlement 摘要兼容策略；没有修改业务代码、SQL、前端页面、bridge、接口实现、鉴权或路由。

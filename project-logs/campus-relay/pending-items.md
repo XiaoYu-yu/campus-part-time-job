@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 54 最高优先级
+## Step 55 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -93,11 +93,18 @@
    - `GET /api/campus/admin/after-sale-execution-records` 返回 2 条历史。
    - `/campus/after-sale-executions` 详情 drawer 可展示当前摘要和执行历史区。
    - 证据文件位于 `project-logs/campus-relay/runtime/step-53/`。
-19. Step 54 最高优先级建议：
-   - 进入 P3 settlement 批次复核、撤回和对账方案设计轮。
-   - 先做方案，不默认写代码、不默认改库。
-   - 重点评估批次复核后的撤回边界、对账差异记录边界、当前摘要和批次历史兼容策略。
-20. Step 54 明确禁止：
+19. Step 54 已完成 P3 settlement 批次复核、撤回和对账最小方案设计：
+   - 当前 settlement 批次仍由 `campus_settlement_record.payout_batch_no` 聚合产生，不是独立批次主表。
+   - 建议后续新增 `campus_settlement_batch_operation_record`，先承接批次复核/撤回操作审计。
+   - 建议后续新增 `campus_settlement_reconcile_difference_record`，承接对账差异和处理状态。
+   - 现有 `campus_settlement_record` payout 摘要字段继续作为单笔、批次和 reconcile-summary 的兼容读取基础。
+   - 本轮只写方案，没有写 SQL、Java、Vue、接口或页面。
+20. Step 55 最高优先级建议：
+   - 先做 settlement 批次操作审计 go / no-go。
+   - 如果进入实现，优先只落 `campus_settlement_batch_operation_record`。
+   - review / withdraw 先只写批次操作审计，不改 `payout_status`，不清空 `payout_batch_no`，不做真实财务撤回。
+   - 对账差异记录继续作为后续小步评估，不要和批次操作审计并发实现。
+21. Step 55 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -107,8 +114,8 @@
    - 不改订单主状态机
    - 不接真实打款
    - 不补完整财务系统
-21. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-22. 第五个 admin 页继续后置，不再以“补页数”为目标。
+22. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+23. 第五个 admin 页继续后置，不再以“补页数”为目标。
 
 ## 已完成但仍需继续扩展的部分
 

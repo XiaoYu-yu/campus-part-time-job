@@ -1865,15 +1865,37 @@
    - `project-logs/campus-relay/runtime/step-53/after-sale-execution-history-page-validation.json`
 6. 本轮没有修改业务代码、前端页面、后端接口、SQL、bridge、鉴权或路由。
 
+## Step 54 实际完成事项
+
+1. 完成 P3 settlement 批次复核、撤回和对账最小方案设计。
+2. 基于真实代码核查确认当前 settlement 能力：
+   - `campus_settlement_record` 仍是单笔结算与打款摘要主表。
+   - `payout_batch_no` 仍是当前批次聚合依据。
+   - 已有批次列表、批次详情、对账摘要、单笔核对和批量打款结果记录。
+3. 明确后续最小模型建议：
+   - 先新增批次操作审计表，承接批次复核和撤回记录。
+   - 再新增对账差异记录表，承接差异项和处理状态。
+4. 明确兼容策略：
+   - 现有 `campus_settlement_record` payout 摘要字段继续保留。
+   - 现有 settlement 单笔页、批次页和 reconcile-summary 继续按当前字段读取。
+   - 后续新增模型只作为批次操作审计和差异审计主数据。
+5. 本轮明确未做：
+   - 未写 SQL。
+   - 未写 Java 代码。
+   - 未改前端页面。
+   - 未新增接口。
+   - 未做真实打款、真实撤回或完整财务后台。
+   - 未改 bridge、鉴权、token 附着、路由或旧外卖模块。
+
 ## 下一轮建议
 
-- 进入 `Step 54`
+- 进入 `Step 55`
 - 推荐顺序：
-  1. 进入 P3 settlement 批次复核、撤回和对账方案设计轮。
-  2. 先设计批次复核后的撤回边界、对账差异记录边界和兼容策略。
-  3. 不默认写代码，不默认改库。
-  4. 不补第五个 admin 页。
-  5. 不改 bridge、不改鉴权、不改 token 附着。
+  1. 先做 settlement 批次操作审计 go / no-go。
+  2. 若进入实现，优先只落 `campus_settlement_batch_operation_record`，承接批次复核/撤回操作审计。
+  3. review / withdraw 先只写操作审计，不改 `payout_status`，不清空 `payout_batch_no`。
+  4. 对账差异记录可作为下一小步继续评估，不要和批次操作审计并发实现。
+  5. 不补第五个 admin 页，不接真实打款，不改 bridge、不改鉴权、不改 token 附着。
 
 ## 日志索引
 
@@ -1941,6 +1963,7 @@
 - [Step 51B 日志](step-51b-after-sale-execution-history-frontend-go-no-go.md)
 - [Step 52 日志](step-52-after-sale-execution-history-frontend-minimal-handoff.md)
 - [Step 53 日志](step-53-after-sale-execution-history-frontend-runtime-validation.md)
+- [Step 54 日志](step-54-settlement-batch-review-withdraw-reconcile-design.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

@@ -116,3 +116,10 @@
 5. bridge 主线继续冻结。
 6. 展示 polish 线继续冻结。
 7. 媒体线继续收住。
+
+## Step 54 回填
+
+1. Step 54 已按本建议进入 P3 settlement 批次复核、撤回和对账最小方案设计。
+2. Step 54 仅产出设计文档，没有写 SQL、Java、Vue、接口或页面。
+3. Step 54 明确建议后续优先以批次操作审计表承接 review / withdraw，再单独评估对账差异记录。
+4. bridge、展示 polish 和媒体线冻结口径未变化。
