@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 51B 最高优先级
+## Step 52 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -78,23 +78,30 @@
    - 新增 admin 只读分页接口 `GET /api/campus/admin/after-sale-execution-records`。
    - H2/test 下已验证 `PENDING -> FAILED -> SUCCESS` 产生 2 条历史，且当前售后执行摘要保持兼容。
    - 证据文件：`project-logs/campus-relay/runtime/step-51a/after-sale-execution-history-validation.json`。
-16. Step 51B 最高优先级建议：
-   - 进入售后执行历史前端承接 go / no-go 评估轮。
-   - 先判断是否需要最小 admin 前端承接，不默认补页面。
-   - 如果值得做，限定为只读历史列表和详情 drawer。
-   - 如果收益不足，可转向 P3 settlement 批次复核、撤回和对账方案设计。
-17. Step 51B 明确禁止：
+16. Step 51B 已完成售后执行历史前端承接 go / no-go：
+   - 方向 A：在现有 `CampusAfterSaleExecutionList.vue` 详情 drawer 内增加售后执行历史只读区。
+   - 方向 B：切到 P3 settlement 批次复核、撤回和对账方案设计。
+   - 最终选择方向 A。
+   - 本轮没有写前端页面、没有新增后端接口、没有改 bridge。
+17. Step 52 最高优先级建议：
+   - 进入售后执行历史前端最小承接实现轮。
+   - 只改 `frontend/src/api/campus-admin.js` 和 `frontend/src/views/CampusAfterSaleExecutionList.vue`。
+   - 只在现有售后结果详情 drawer 内增加只读执行历史区。
+   - 接口仅使用 `GET /api/campus/admin/after-sale-execution-records`。
+   - 不新增页面、不新增路由、不新增写接口。
+18. Step 52 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
    - 不改 token 附着逻辑
    - 不改路由
-   - 不默认新增售后执行历史前端页面
+   - 不新增售后执行历史独立页面
    - 不改订单主状态机
-   - 不补完整异常工单系统
-18. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-19. 第五个 admin 页继续后置，不再以“补页数”为目标。
-20. settlement 批次复核、撤回和对账暂列 P3。
+   - 不改 settlement
+   - 不补完整售后工单系统
+19. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+20. 第五个 admin 页继续后置，不再以“补页数”为目标。
+21. settlement 批次复核、撤回和对账暂列 P3。
 
 ## 已完成但仍需继续扩展的部分
 
@@ -222,11 +229,12 @@
 - 影响：admin 现在已有 settlement 批次演示页、售后执行演示页、courier 异常/位置联动演示页、settlement 只读运营页，以及异常历史 / resolve 最小承接页
 - 默认处理：继续保持现有 admin 演示页和异常处理页稳定，不为补页数机械新增第五页
 
-### 3. 售后执行历史后端已落地，前端承接仍待评估
+### 3. 售后执行历史后端已落地，前端承接已评估，待最小实现
 
-- 影响：售后执行现在已有历史表、同事务写入和 admin 只读分页接口，但尚未判断是否需要前端承接
+- 影响：售后执行现在已有历史表、同事务写入和 admin 只读分页接口，但现有 admin 售后执行页仍只能看当前摘要
 - 当前进展：Step 51A 已完成 `campus_after_sale_execution_record`、现有执行接口追加历史写入和 `GET /api/campus/admin/after-sale-execution-records`
-- 默认处理：Step 51B 先做 admin 售后执行历史前端承接 go / no-go，不默认补页面
+- 当前判断：Step 51B 已选择方向 A，售后执行历史值得做最小前端承接
+- 默认处理：Step 52 只在现有 `CampusAfterSaleExecutionList.vue` 详情 drawer 内增加只读历史区，不新增路由、不新增页面、不新增写接口
 
 ### 4. settlement 仍没有真实财务执行能力
 

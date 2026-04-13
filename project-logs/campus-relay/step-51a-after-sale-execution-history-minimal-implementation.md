@@ -237,3 +237,14 @@ H2 data：
 5. bridge 主线继续冻结。
 6. 展示 polish 线继续冻结。
 7. 媒体线继续收住。
+
+## Step 51B 回填
+
+Step 51B 已完成售后执行历史前端承接 go / no-go 评估，最终选择方向 A：
+
+1. 售后执行历史值得做最小 admin 前端承接。
+2. 不新增独立页面，不新增路由，不补第五个 admin 页。
+3. Step 52 建议只在现有 `CampusAfterSaleExecutionList.vue` 详情 drawer 内增加只读执行历史区。
+4. 接口只使用 `GET /api/campus/admin/after-sale-execution-records`。
+5. 不新增写接口，不做修改、删除、回滚、真实退款或 settlement 联动。
+6. bridge、鉴权、token 附着、订单主状态和旧外卖模块继续保持不变。

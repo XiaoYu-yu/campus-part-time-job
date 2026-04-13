@@ -889,3 +889,13 @@
 - [project-logs/campus-relay/runtime/step-51a/after-sale-execution-history-validation.json](runtime/step-51a/after-sale-execution-history-validation.json)
 
 本轮是售后执行历史最小后端实现轮：新增历史表、现有售后执行接口同事务追加历史写入、admin 只读分页查询接口，并完成 H2/test 运行态验证；没有新增前端页面，没有修改 bridge、鉴权、路由、订单主状态、settlement 或旧外卖模块。
+
+## Step 51B - 售后执行历史前端承接 go / no-go
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-51a-after-sale-execution-history-minimal-implementation.md](step-51a-after-sale-execution-history-minimal-implementation.md)
+- [project-logs/campus-relay/step-51b-after-sale-execution-history-frontend-go-no-go.md](step-51b-after-sale-execution-history-frontend-go-no-go.md)
+
+本轮是售后执行历史前端承接 go / no-go 评估轮：最终选择方向 A，建议 Step 52 在现有 `CampusAfterSaleExecutionList.vue` 详情 drawer 内增加只读执行历史区；没有修改业务代码、前端页面、后端接口、SQL、bridge、鉴权或路由。

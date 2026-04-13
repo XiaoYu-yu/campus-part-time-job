@@ -1795,14 +1795,33 @@
    - 未做真实退款、settlement 联动或完整售后工单系统。
    - 未改 bridge、鉴权、token 附着、路由或旧外卖模块。
 
+## Step 51B 实际完成事项
+
+1. 完成售后执行历史前端承接 go / no-go 评估。
+2. 对比方向 A 与方向 B：
+   - 方向 A：在现有 `CampusAfterSaleExecutionList.vue` 详情 drawer 内增加售后执行历史只读区。
+   - 方向 B：切到 P3 settlement 批次复核、撤回和对账方案设计。
+3. 最终选择方向 A：
+   - Step 51A 后端历史表和分页接口已稳定，缺少前端承接会让审计能力停留在 API 层。
+   - drawer 内只读历史区可以解释“当前摘要”和“历史审计”的兼容关系。
+   - 相比 P3 settlement，方向 A 不需要改库、不需要后端实现、不新增路由，风险更低。
+   - 该方向不是补第五个 admin 页，而是承接已完成的售后执行历史后端闭环。
+4. 固定 Step 52 推荐实现边界：
+   - 只复用现有 `CampusAfterSaleExecutionList.vue`。
+   - 只在详情 drawer 中增加售后执行历史只读区。
+   - 只接 `GET /api/campus/admin/after-sale-execution-records`。
+   - 不新增页面、不新增路由、不新增写接口。
+   - 不改 bridge、鉴权、token 附着、订单主状态或 settlement。
+5. 本轮没有修改业务代码、前端页面、后端接口、SQL、bridge、鉴权或路由。
+
 ## 下一轮建议
 
-- 进入 `Step 51B`
+- 进入 `Step 52`
 - 推荐顺序：
-  1. 进入售后执行历史前端承接 go / no-go 评估轮。
-  2. 先判断是否需要最小 admin 前端承接，不要默认补页面。
-  3. 如果值得做，限定为只读历史列表和详情 drawer；不做修改、删除、回滚或真实退款。
-  4. 如果收益不足，可转向 P3 settlement 批次复核、撤回和对账方案设计。
+  1. 进入售后执行历史前端最小承接实现轮。
+  2. 只改 `frontend/src/api/campus-admin.js` 和 `frontend/src/views/CampusAfterSaleExecutionList.vue`。
+  3. 在售后结果详情 drawer 内增加只读执行历史区。
+  4. 不新增路由、不新增页面、不新增写接口。
   5. 不补第五个 admin 页。
   6. 不改 bridge、不改鉴权、不改 token 附着。
   7. 展示 polish 线和媒体线继续冻结。
@@ -1870,6 +1889,7 @@
 - [Step 49 日志](step-49-admin-exception-runtime-validation.md)
 - [Step 50 日志](step-50-after-sale-execution-history-design.md)
 - [Step 51A 日志](step-51a-after-sale-execution-history-minimal-implementation.md)
+- [Step 51B 日志](step-51b-after-sale-execution-history-frontend-go-no-go.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)
