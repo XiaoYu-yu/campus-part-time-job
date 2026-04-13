@@ -230,6 +230,69 @@
                 </el-descriptions-item>
               </el-descriptions>
             </div>
+
+            <div class="detail-section">
+              <h3>执行历史</h3>
+              <p>以下记录来自售后执行历史表，只读展示每次执行尝试；当前摘要仍以订单上的最新执行字段为准。</p>
+              <el-alert
+                v-if="historyError"
+                :title="historyError"
+                type="warning"
+                :closable="false"
+                show-icon
+                class="history-alert"
+              />
+              <el-table
+                v-loading="historyLoading"
+                :data="executionHistory"
+                border
+                size="small"
+                empty-text="当前订单暂无售后执行历史，可能尚未发生执行动作"
+              >
+                <el-table-column prop="id" label="记录ID" width="90" align="center" />
+                <el-table-column label="上次状态" width="110" align="center">
+                  <template #default="{ row }">
+                    <el-tag :type="executionTagType(row.previousExecutionStatus)">
+                      {{ executionStatusText(row.previousExecutionStatus) }}
+                    </el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="本次状态" width="110" align="center">
+                  <template #default="{ row }">
+                    <el-tag :type="executionTagType(row.executionStatus)">
+                      {{ executionStatusText(row.executionStatus) }}
+                    </el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="纠正" width="90" align="center">
+                  <template #default="{ row }">
+                    <el-tag :type="Number(row.corrected) === 1 ? 'warning' : 'info'">
+                      {{ correctionText(row.corrected) }}
+                    </el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="执行备注" min-width="180" show-overflow-tooltip>
+                  <template #default="{ row }">
+                    {{ displayText(row.executionRemark) }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="参考号" min-width="150" show-overflow-tooltip>
+                  <template #default="{ row }">
+                    {{ displayText(row.executionReferenceNo) }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="执行人" width="100" align="center">
+                  <template #default="{ row }">
+                    {{ displayText(row.executedByEmployeeId) }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="执行时间" min-width="160">
+                  <template #default="{ row }">
+                    {{ formatDateTime(row.executedAt) }}
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
           </template>
           <el-empty v-else-if="!detailLoading" description="暂无售后结果详情，请从列表选择一条记录查看" />
         </div>
@@ -241,13 +304,20 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
 import MainLayout from '../layout/MainLayout.vue'
-import { getCampusAdminAfterSaleResult, getCampusAfterSaleExecutions } from '../api/campus-admin'
+import {
+  getCampusAdminAfterSaleResult,
+  getCampusAfterSaleExecutionRecords,
+  getCampusAfterSaleExecutions
+} from '../api/campus-admin'
 
 const loading = ref(false)
 const detailLoading = ref(false)
+const historyLoading = ref(false)
 const detailVisible = ref(false)
 const records = ref([])
 const detail = ref(null)
+const executionHistory = ref([])
+const historyError = ref('')
 
 const filters = reactive({
   afterSaleExecutionStatus: '',
@@ -316,12 +386,33 @@ const loadExecutions = async () => {
   }
 }
 
+const loadExecutionHistory = async (relayOrderId) => {
+  historyLoading.value = true
+  historyError.value = ''
+  executionHistory.value = []
+  try {
+    const response = await getCampusAfterSaleExecutionRecords({
+      relayOrderId,
+      page: 1,
+      pageSize: 20
+    })
+    executionHistory.value = response.records || []
+  } catch (error) {
+    historyError.value = '执行历史加载失败，请稍后重试或保留当前摘要结果'
+  } finally {
+    historyLoading.value = false
+  }
+}
+
 const openDetail = async (relayOrderId) => {
   detailVisible.value = true
   detailLoading.value = true
   detail.value = null
+  executionHistory.value = []
+  historyError.value = ''
   try {
     detail.value = await getCampusAdminAfterSaleResult(relayOrderId)
+    await loadExecutionHistory(relayOrderId)
   } finally {
     detailLoading.value = false
   }
@@ -559,6 +650,10 @@ onMounted(() => loadExecutions())
     font-size: 13px;
     line-height: 1.6;
   }
+}
+
+.history-alert {
+  margin-bottom: 12px;
 }
 
 @media (max-width: 900px) {

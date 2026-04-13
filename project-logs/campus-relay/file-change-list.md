@@ -899,3 +899,15 @@
 - [project-logs/campus-relay/step-51b-after-sale-execution-history-frontend-go-no-go.md](step-51b-after-sale-execution-history-frontend-go-no-go.md)
 
 本轮是售后执行历史前端承接 go / no-go 评估轮：最终选择方向 A，建议 Step 52 在现有 `CampusAfterSaleExecutionList.vue` 详情 drawer 内增加只读执行历史区；没有修改业务代码、前端页面、后端接口、SQL、bridge、鉴权或路由。
+
+## Step 52 - 售后执行历史前端最小承接
+
+- [frontend/src/api/campus-admin.js](../../frontend/src/api/campus-admin.js)
+- [frontend/src/views/CampusAfterSaleExecutionList.vue](../../frontend/src/views/CampusAfterSaleExecutionList.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-51b-after-sale-execution-history-frontend-go-no-go.md](step-51b-after-sale-execution-history-frontend-go-no-go.md)
+- [project-logs/campus-relay/step-52-after-sale-execution-history-frontend-minimal-handoff.md](step-52-after-sale-execution-history-frontend-minimal-handoff.md)
+
+本轮是售后执行历史前端最小承接实现轮：只在现有售后执行页详情 drawer 内新增只读执行历史区，并新增 admin API 封装；没有新增页面、路由、后端接口、写操作，也没有修改 bridge、鉴权、订单主状态、settlement 或旧外卖模块。

@@ -1814,17 +1814,43 @@
    - 不改 bridge、鉴权、token 附着、订单主状态或 settlement。
 5. 本轮没有修改业务代码、前端页面、后端接口、SQL、bridge、鉴权或路由。
 
+## Step 52 实际完成事项
+
+1. 完成售后执行历史前端最小承接。
+2. 新增 API 封装：
+   - `getCampusAfterSaleExecutionRecords`
+   - 请求 `GET /api/campus/admin/after-sale-execution-records`
+   - 继续复用现有 `request` 和 `normalizePageParams`
+3. 复用现有 `CampusAfterSaleExecutionList.vue`：
+   - 不新增页面。
+   - 不新增路由。
+   - 不改 admin 主框架。
+4. 在售后结果详情 drawer 中新增“执行历史”只读区：
+   - 打开详情时继续读取原 after-sale-result 当前摘要。
+   - 同时按 `relayOrderId` 读取售后执行历史。
+   - 展示上次状态、本次状态、纠正标记、执行备注、参考号、执行人和执行时间。
+   - 增加历史区 loading、空态和失败提示。
+5. 兼容策略保持不变：
+   - 当前摘要仍读订单表 `after_sale_execution_*`。
+   - 历史区读 `campus_after_sale_execution_record`。
+   - customer 售后结果、admin 售后执行分页和 after-sale-result drawer 语义不变。
+6. 本轮明确未做：
+   - 未新增独立售后执行历史页。
+   - 未新增写接口。
+   - 未做修改、删除、回滚、真实退款或 settlement 联动。
+   - 未改 bridge、鉴权、token 附着、路由或旧外卖模块。
+
 ## 下一轮建议
 
-- 进入 `Step 52`
+- 进入 `Step 53`
 - 推荐顺序：
-  1. 进入售后执行历史前端最小承接实现轮。
-  2. 只改 `frontend/src/api/campus-admin.js` 和 `frontend/src/views/CampusAfterSaleExecutionList.vue`。
-  3. 在售后结果详情 drawer 内增加只读执行历史区。
-  4. 不新增路由、不新增页面、不新增写接口。
-  5. 不补第五个 admin 页。
-  6. 不改 bridge、不改鉴权、不改 token 附着。
-  7. 展示 polish 线和媒体线继续冻结。
+  1. 进入售后执行历史前端运行态验证轮。
+  2. 使用 H2/test 样本验证 `/campus/after-sale-executions` 详情 drawer。
+  3. 确认当前摘要仍正常展示。
+  4. 确认执行历史区可展示同一订单的多条执行历史。
+  5. 验证通过后，再评估是否进入 P3 settlement 批次复核、撤回和对账方案设计。
+  6. 不补第五个 admin 页。
+  7. 不改 bridge、不改鉴权、不改 token 附着。
 
 ## 日志索引
 
@@ -1890,6 +1916,7 @@
 - [Step 50 日志](step-50-after-sale-execution-history-design.md)
 - [Step 51A 日志](step-51a-after-sale-execution-history-minimal-implementation.md)
 - [Step 51B 日志](step-51b-after-sale-execution-history-frontend-go-no-go.md)
+- [Step 52 日志](step-52-after-sale-execution-history-frontend-minimal-handoff.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

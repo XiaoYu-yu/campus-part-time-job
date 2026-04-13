@@ -26,6 +26,12 @@ export const getCampusAfterSaleExecutions = (params) => request({
   params: normalizePageParams(params)
 })
 
+export const getCampusAfterSaleExecutionRecords = (params) => request({
+  url: '/campus/admin/after-sale-execution-records',
+  method: 'get',
+  params: normalizePageParams(params)
+})
+
 export const getCampusAdminAfterSaleResult = (relayOrderId) => request({
   url: `/campus/admin/orders/${encodeURIComponent(relayOrderId)}/after-sale-result`,
   method: 'get'

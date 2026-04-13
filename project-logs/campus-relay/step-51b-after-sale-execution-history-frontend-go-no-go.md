@@ -179,3 +179,15 @@ Step 52 可以进入售后执行历史前端最小承接实现轮，但必须保
 6. bridge 主线继续冻结。
 7. 展示 polish 线继续冻结。
 8. 媒体线继续收住。
+
+## Step 52 回填
+
+Step 52 已按方向 A 完成售后执行历史前端最小承接：
+
+1. `frontend/src/api/campus-admin.js` 新增 `getCampusAfterSaleExecutionRecords`。
+2. `frontend/src/views/CampusAfterSaleExecutionList.vue` 继续复用现有页面和详情 drawer。
+3. 打开售后结果详情时，继续读取原 after-sale-result 当前摘要。
+4. 同时按 `relayOrderId` 调用 `GET /api/campus/admin/after-sale-execution-records`。
+5. drawer 内新增“执行历史”只读区，展示每次执行尝试、上次状态、本次状态、纠正标记、备注、参考号、执行人和执行时间。
+6. 本轮未新增页面、未新增路由、未新增写接口。
+7. bridge、鉴权、token 附着、订单主状态、settlement 和旧外卖模块均未修改。
