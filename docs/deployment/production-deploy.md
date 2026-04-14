@@ -1,16 +1,16 @@
-# 生产部署说明
+# 部署说明
 
-## 部署目标
+## 当前定位
 
-将 `show_shop1` 以“前端静态资源 + Spring Boot 后端 + MySQL 数据库”的方式部署到生产环境。
+当前项目可用于本地演示、试运营验证和交接答辩。它不是完整生产版，真实支付、真实退款、真实打款、地图 SDK、消息推送、生产监控与限流尚未接入。
+
+如需正式上线，应先补齐这些外部能力和生产安全能力，再按正式发布流程部署。
 
 ## 前置条件
 
 - JDK 17 或 21 LTS
 - Node.js 18+
-- Maven 3.9+
-- MySQL 8+
-- 已准备正式域名
+- MySQL 8+ 或 MariaDB
 - 已准备环境变量：
   - `SPRING_PROFILES_ACTIVE=prod`
   - `JWT_SECRET`
@@ -22,53 +22,51 @@
   - `DB_PASSWORD`
   - 可选：`APP_UPLOAD_STORAGE_PATH`
 
-## 部署步骤
+## 数据库准备
 
-### 1. 数据库准备
+1. 创建生产数据库。
+2. 按顺序执行 `backend/db/migrations/` 中的版本脚本。
+3. 不建议生产环境直接依赖 H2 或自动初始化脚本。
+4. 初始化 admin、customer、演示样本数据前，应先确认是否为演示环境。
 
-1. 创建生产数据库
-2. 执行 [V1__baseline_schema.sql](D:/20278/code/show_shop1/backend/db/migrations/V1__baseline_schema.sql)
-3. 按正式业务要求导入初始员工、分类、菜品、套餐等基础数据
+## 前端构建
 
-### 2. 构建前端
-
-```bash
-cd frontend
+```powershell
+cd D:\20278\code\Campus part-time job\frontend
 npm install
-npm run lint
-npm run test
 npm run build
 ```
 
-将 `frontend/dist/` 部署到 Nginx、对象存储静态站点或 CDN。
+将 `frontend/dist/` 部署到 Nginx、静态资源服务器或对象存储静态站点。
 
-### 3. 构建后端
+## 后端构建
 
-```bash
-cd backend
-..\apache-maven-3.9.14\bin\mvn.cmd test
-..\apache-maven-3.9.14\bin\mvn.cmd -DskipTests package
+```powershell
+cd D:\20278\code\Campus part-time job\backend
+.\mvnw.cmd -DskipTests compile
+.\mvnw.cmd -DskipTests package
 ```
 
-### 4. 启动后端
+## 后端启动
 
-```bash
+```powershell
 java -jar target/takeaway-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 ```
 
-也可以通过环境变量设置：
+或通过环境变量指定：
 
-```bash
+```powershell
 set SPRING_PROFILES_ACTIVE=prod
 java -jar target/takeaway-0.0.1-SNAPSHOT.jar
 ```
 
-## 上线前检查清单
+## 上线前检查
 
-- `JWT_SECRET` 已配置且长度至少 32
-- `APP_CORS_ALLOWED_ORIGINS` 已指向正式前端域名
-- 生产环境未启用 H2
-- 生产环境未启用自动初始化脚本
-- 上传目录位于受控存储路径
-- 关键接口回归测试已通过
-- 生产 JVM 使用 LTS 版本，避免在高版本 JDK 下放大三方依赖兼容性告警
+1. `JWT_SECRET` 已配置且长度足够。
+2. `APP_CORS_ALLOWED_ORIGINS` 只包含正式前端域名。
+3. 生产环境未启用 H2 Console。
+4. 数据库迁移脚本已在预发环境验证。
+5. 上传目录位于受控存储路径。
+6. customer / courier / admin 关键链路已完成回归。
+7. bridge 当前仍保留，不应在上线前临时删除。
+8. 真实支付、地图、消息、打款若未接入，应在页面和交付说明中明确为模拟或试运营能力。

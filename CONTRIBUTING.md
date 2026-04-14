@@ -2,50 +2,45 @@
 
 ## Scope
 
-This repository is a training project. Contributions should prioritize:
-
-- Clear code structure
-- Stable local startup on Windows
-- Frontend/backend contract consistency
-- Minimal, reviewable changes
-
-Avoid submitting purely visual reworks or unrelated framework migrations unless they fix a concrete issue.
+This repository is now centered on the campus part-time delivery trial system. The legacy takeaway modules remain in place, but new work should prioritize the `campus` domain unless a task explicitly targets legacy behavior.
 
 ## Local setup
 
 ### Backend
 
-- JDK 17
-- Maven: use [backend/mvnw.cmd](D:/20278/code/show_shop1/backend/mvnw.cmd)
-- MariaDB running on `127.0.0.1:3306`
-- Start with `--spring.profiles.active=dev`
+```powershell
+cd D:\20278\code\Campus part-time job\backend
+.\mvnw.cmd -DskipTests compile
+.\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=test
+```
 
 ### Frontend
 
-- Node.js 18+
-- Run `npm install`
-- Start with `npm run dev`
+```powershell
+cd D:\20278\code\Campus part-time job\frontend
+npm install
+npm run dev
+```
 
 ## Development rules
 
-- Keep API contracts explicit and synchronized across frontend and backend
-- Prefer fixing the root cause instead of patching UI symptoms
-- Do not commit build artifacts such as `dist/`, `target/`, or `node_modules/`
-- Keep docs updated when changing startup steps, environment variables, or data flow
+1. Do not delete legacy takeaway modules unless the task explicitly says so.
+2. New campus tables must use the `campus_` prefix.
+3. New campus Java code should stay under `com.cangqiong.takeaway.campus`.
+4. Keep API contracts explicit and synchronized across frontend and backend.
+5. Keep bridge behavior frozen unless a task explicitly reopens that line.
+6. Do not commit build artifacts such as `dist/`, `target/`, or `node_modules/`.
+7. Update `project-logs/campus-relay/` when changing campus behavior or project status.
 
 ## Validation checklist
 
-Before opening a pull request, run:
-
-```bash
+```powershell
 cd backend
-.\mvnw.cmd test
 .\mvnw.cmd -DskipTests compile
 ```
 
-```bash
+```powershell
 cd frontend
-npm install
 npm run lint
 npm run test
 npm run build
@@ -53,7 +48,8 @@ npm run build
 
 ## Pull request expectations
 
-- Describe the problem being solved
-- Describe the implementation choice
-- List any config, database, or contract changes
-- Include verification commands and results
+1. Describe the problem being solved.
+2. Describe the implementation choice.
+3. List config, database, API, or route changes.
+4. Include verification commands and results.
+5. State whether bridge, auth, token attachment, legacy modules, or old order/cart/address semantics were touched.

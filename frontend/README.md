@@ -1,75 +1,93 @@
 # Frontend
 
-前端基于 Vue 3 + Vite，包含管理后台与用户端两套路由。这个 README 只负责前端本地开发说明，整项目交付请先看根目录 [README.md](D:/20278/code/show_shop1/README.md) 和 [项目交付说明.md](D:/20278/code/show_shop1/项目交付说明.md)。
+前端基于 Vue 3 + Vite，保留旧外卖管理端和用户端，同时新增校园代送 customer / courier / admin 演示链路。
 
-## 本地联调前提
+整项目入口请先看：
 
-- 前端默认代理 `/api` 到 `http://localhost:8080`
-- 后端开发环境默认连接本机 MariaDB
-- 后端必须显式以 `dev` profile 启动，例如 `mvn spring-boot:run -Dspring-boot.run.profiles=dev`
-- 启动顺序建议先后端，再前端
+- [根 README](../README.md)
+- [交付与启动说明](../docs/delivery-guide.md)
+- [校园代送总览](../project-logs/campus-relay/summary.md)
 
-## 在 HBuilder X 中使用
+## 本地启动
 
-- HBuilder X 可以直接打开 `frontend` 目录进行编辑
-- 这个项目是标准 Vite 项目，不使用 HBuilder X 专属运行器
-- 前端启动仍然通过终端执行：
-
-```bash
+```powershell
+cd D:\20278\code\Campus part-time job\frontend
 npm install
 npm run dev
 ```
 
-## 运行命令
+前端默认代理 `/api` 到 `http://localhost:8080`。
 
-```bash
-npm install
-npm run dev
+## 验证命令
+
+```powershell
 npm run lint
 npm run test
 npm run build
 ```
 
-## 路由说明
+## 主要路由
 
-### 管理端
+### customer
 
-- 登录页：`/login`
-- 主布局：`/`
-- 受保护页面：仪表盘、员工、分类、菜品、套餐、订单、统计、店铺营业状态
-- 未登录访问管理端受保护路由时，会跳转到 `/login`
+- `/user/login`
+- `/user`
+- `/user/orders`
+- `/user/profile`
+- `/user/campus/courier-onboarding`
+- `/user/campus/order-result`
+- `/user/campus/after-sale-result`
 
-### 用户端
+### courier
 
-- 登录页：`/user/login`
-- 主要页面：`/user/home`、`/user/category/:id`、`/user/dish/:id`、`/user/cart`、`/user/checkout`、`/user/orders`、`/user/profile`
-- 用户端采用全量登录守卫，未登录访问 `/user/**` 业务页会跳转到 `/user/login`
+- `/courier/workbench`
 
-## API 模块
+### admin
 
-- [src/api/order.js](D:/20278/code/show_shop1/frontend/src/api/order.js)：管理端订单接口
-- [src/api/statistics.js](D:/20278/code/show_shop1/frontend/src/api/statistics.js)：统计接口
-- [src/api/public.js](D:/20278/code/show_shop1/frontend/src/api/public.js)：用户端公开浏览接口
-- [src/api/customer.js](D:/20278/code/show_shop1/frontend/src/api/customer.js)：用户登录和用户信息
-- [src/api/cart.js](D:/20278/code/show_shop1/frontend/src/api/cart.js)：购物车接口
-- [src/api/address.js](D:/20278/code/show_shop1/frontend/src/api/address.js)：地址接口
-- [src/api/customer-order.js](D:/20278/code/show_shop1/frontend/src/api/customer-order.js)：用户订单接口
-- [src/api/shop.js](D:/20278/code/show_shop1/frontend/src/api/shop.js)：店铺营业状态接口
+- `/login`
+- `/dashboard`
+- `/campus/settlement-batches`
+- `/campus/settlement-batches/:batchNo`
+- `/campus/settlements`
+- `/campus/after-sale-executions`
+- `/campus/courier-ops`
+- `/campus/exceptions`
 
-## 状态管理
+旧外卖后台路由仍保留，包括员工、分类、菜品、套餐、订单、统计和店铺状态。
 
-- [src/stores/user.js](D:/20278/code/show_shop1/frontend/src/stores/user.js)：管理端身份与资料
-- [src/stores/customer.js](D:/20278/code/show_shop1/frontend/src/stores/customer.js)：用户端身份与资料
-- [src/stores/mock.js](D:/20278/code/show_shop1/frontend/src/stores/mock.js)：保留为旧辅助文件，核心用户页已不再依赖
+## API 封装
 
-## 关键实现约束
+### campus
 
-- 前端订单页统一传 `orderNo/customerName/status/beginTime/endTime/page/pageSize`
-- 状态展示由前端完成中文映射，后端只处理整数状态码
-- 请求拦截器会按 URL 前缀自动选择 `admin_token` 或 `customer_token`
-- `BaseDialogForm.vue` 已改为操作内部副本，避免直接修改 props
+- `src/api/campus-customer.js`
+- `src/api/campus-courier.js`
+- `src/api/campus-admin.js`
 
-## 当前已知非阻塞问题
+### 旧外卖与通用模块
 
-- 构建时仍存在 Sass `@import` 弃用告警
-- 统计与图表相关打包 chunk 体积偏大，`npm run build` 会给出告警
+- `src/api/customer.js`
+- `src/api/customer-order.js`
+- `src/api/cart.js`
+- `src/api/address.js`
+- `src/api/order.js`
+- `src/api/statistics.js`
+- `src/api/shop.js`
+
+## token 约束
+
+1. `admin_token` 用于 `/api/campus/admin/**` 和旧管理端接口。
+2. `customer_token` 用于 `/api/campus/customer/**`。
+3. `courier_token` 用于 `/api/campus/courier/orders/**`、courier workbench 等 courier 主链路。
+4. `/api/campus/courier/profile` 与 `/api/campus/courier/review-status` 仍保留 bridge 兼容读取，不要随意删除或收紧。
+
+## 当前冻结线
+
+1. bridge 主线处于 `Phase A no-op` 冻结态。
+2. 展示 polish 线处于冻结/维护态。
+3. 不要为了展示继续机械新增页面或改 token 附着逻辑。
+
+## 已知非阻塞问题
+
+1. 构建可能出现 Sass `@import` 弃用告警。
+2. ECharts / 统计相关 chunk 体积可能偏大。
+3. 这些告警不阻塞本地演示和试运营闭环。

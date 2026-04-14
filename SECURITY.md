@@ -2,41 +2,44 @@
 
 ## Supported use
 
-This repository is published as a training project. It is suitable for:
+This repository is suitable for:
 
-- Learning
-- Local development
-- Demo environments
-- Internal testing
+- local development
+- course or project demonstration
+- trial-operation validation
+- internal testing
 
-It is not positioned as a production-grade hosted service without additional hardening.
+It is not a full production-grade hosted service until external payment, mapping, monitoring, rate limiting, secret management, and operational security have been completed.
+
+## Current security baseline
+
+1. JWT-based authentication is used for admin, customer, and courier paths.
+2. Password storage uses BCrypt for active storage.
+3. Production JWT secret must be explicitly configured.
+4. Production CORS origins must be explicitly configured.
+5. Uploads are validated by extension, MIME type, size, and image parsing.
+6. Bridge endpoints remain intentionally retained in `Phase A no-op` freeze status.
+
+## Current out-of-scope items
+
+1. CAPTCHA.
+2. Rate limiting.
+3. SMS verification.
+4. Payment provider signing.
+5. Map provider key management.
+6. Centralized audit logging.
+7. Managed secret rotation.
+8. WAF / bot defense.
 
 ## Reporting a vulnerability
 
 Do not open a public issue for a security vulnerability.
 
-Instead:
+Prepare a short report with:
 
-1. Prepare a short report with:
-   - affected area
-   - reproduction steps
-   - impact
-   - suggested mitigation if known
-2. Send the report privately to the repository owner
-3. Wait for confirmation before publishing details
+1. affected area
+2. reproduction steps
+3. impact
+4. suggested mitigation if known
 
-## Current security baseline
-
-- Passwords use BCrypt for active storage
-- Legacy MD5 passwords are migrated on successful login
-- Production JWT secret must be explicitly configured
-- Uploads are validated by extension, MIME type, size, and image parsing
-- Production CORS origins must be explicitly configured
-
-## Out of scope for the current training version
-
-- CAPTCHA
-- Rate limiting
-- Object storage malware scanning
-- Centralized audit logging
-- Managed secret rotation
+Send it privately to the repository owner and wait for confirmation before publishing details.

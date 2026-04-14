@@ -933,3 +933,32 @@
 - [project-logs/campus-relay/step-54-settlement-batch-review-withdraw-reconcile-design.md](step-54-settlement-batch-review-withdraw-reconcile-design.md)
 
 本轮是 P3 settlement 批次复核、撤回和对账方案设计轮：只设计批次操作审计、对账差异记录和现有 settlement 摘要兼容策略；没有修改业务代码、SQL、前端页面、bridge、接口实现、鉴权或路由。
+
+## Step 55 - 旧外卖文档清理与目录归档
+
+- [README.md](../../README.md)
+- [CHANGELOG.md](../../CHANGELOG.md)
+- [CONTRIBUTING.md](../../CONTRIBUTING.md)
+- [SECURITY.md](../../SECURITY.md)
+- [docs/README.md](../../docs/README.md)
+- [docs/delivery-guide.md](../../docs/delivery-guide.md)
+- [docs/project-status-review.md](../../docs/project-status-review.md)
+- [docs/api-overview.md](../../docs/api-overview.md)
+- [docs/db-overview.md](../../docs/db-overview.md)
+- [docs/campus-relay/legacy-to-campus-mapping.md](../../docs/campus-relay/legacy-to-campus-mapping.md)
+- [docs/deployment/production-deploy.md](../../docs/deployment/production-deploy.md)
+- [docs/deployment/backup-and-rollback.md](../../docs/deployment/backup-and-rollback.md)
+- [docs/legacy-takeaway/README.md](../../docs/legacy-takeaway/README.md)
+- [docs/legacy-takeaway/api-design.md](../../docs/legacy-takeaway/api-design.md)
+- [docs/legacy-takeaway/db-design.md](../../docs/legacy-takeaway/db-design.md)
+- [frontend/README.md](../../frontend/README.md)
+- [backend/db/migrations/README.md](../../backend/db/migrations/README.md)
+- [project-logs/README.md](../README.md)
+- [project-logs/legacy-takeaway/](../legacy-takeaway/)
+- [project-logs/legacy-takeaway/README.md](../legacy-takeaway/README.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-55-docs-cleanup-and-legacy-archive.md](step-55-docs-cleanup-and-legacy-archive.md)
+
+本轮是旧外卖文档清理与目录归档轮：将旧外卖文档和旧修复日志归档到 legacy 目录，并把当前入口文档改为校园代送试运营口径；没有修改 Java、SQL、Vue 业务代码、接口、bridge、鉴权、路由或旧外卖模块。

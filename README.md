@@ -1,189 +1,169 @@
-# show_shop1
+# 校内兼职平台 / 校园代送试运营版
 
 ![Vue](https://img.shields.io/badge/Vue-3-42b883?logo=vue.js&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.4-6DB33F?logo=springboot&logoColor=white)
-![MariaDB](https://img.shields.io/badge/MariaDB-12.2-003545?logo=mariadb&logoColor=white)
 ![JDK](https://img.shields.io/badge/JDK-17-007396?logo=openjdk&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+![MySQL](https://img.shields.io/badge/MySQL%20%2F%20MariaDB-supported-003545?logo=mysql&logoColor=white)
+![H2](https://img.shields.io/badge/H2-test%20profile-blue)
 
-一个前后端分离的外卖系统训练项目，包含管理后台和用户端两条业务链路。当前版本已经完成核心功能修复、接口契约统一、权限拆分、用户端去 mock 化，以及基础生产准备加固。
+本项目由苍穹外卖风格项目增量改造而来。当前主线是“校园代送 / 校内兼职配送”试运营闭环，旧外卖模块仍保留可运行，不作为当前演示主线。
 
-## Overview
+当前交付定位：
 
-- 管理后台：员工、分类、菜品、套餐、订单、统计、店铺营业状态
-- 用户端：登录、首页、分类、菜品详情、购物车、地址、下单、订单、个人中心
-- 本地开发：`MariaDB + Spring Boot + Vue 3 + Vite`
-- 公开仓库交付：`README + LICENSE + CHANGELOG + CONTRIBUTING + SECURITY + Logs`
+- 可本地启动
+- 可完整演示 customer / courier / admin 三端闭环
+- 可使用 H2/test 数据完成主链路联调
+- 支付、地图、真实打款等外部公司能力暂用模拟数据或只读记录代替
+- bridge 主线处于 `Phase A no-op` 冻结态，不删除旧兼容接口
 
-## Highlights
+## 当前核心能力
 
-- 后端构建已恢复，支持 `Maven Wrapper`
-- 订单主表统一为 `orders`
-- 订单查询契约已统一为 `orderNo/customerName/status/beginTime/endTime/page/pageSize`
-- 统计页和仪表盘改为真实聚合接口
-- 管理端与用户端 token 鉴权已分离
-- 用户端核心页面已改为真实接口，不再依赖 mock
-- 密码存储已升级为 `BCrypt`，兼容老 `MD5` 首次登录迁移
-- `prod` 环境要求显式提供 `JWT_SECRET` 和 CORS 域名配置
-- 上传接口已增加扩展名、MIME、大小和图片内容校验
+### customer
 
-## Tech Stack
+- 校园代送下单与模拟支付
+- courier onboarding 资料提交、审核状态查看、token 资格判断与 token 申请
+- 售后结果回看
+- completed 结果回看页
 
-- Frontend: `Vue 3`、`Vite`、`Vue Router`、`Pinia`、`Element Plus`、`ECharts`、`Axios`、`Vitest`、`ESLint`
-- Backend: `Spring Boot 3.2.4`、`MyBatis`、`MariaDB/MySQL`、`JWT`、`JUnit 5`
-- Runtime: `Node.js 18+`、`JDK 17`
+### courier
 
-## Repository Structure
+- courier workbench
+- 可接单列表
+- 接单
+- 取餐
+- deliver
+- 异常上报
+- 送达后等待确认与 completed 只读回读
+
+### admin
+
+- courier 审核与运营查看
+- settlement 单笔、批次、对账摘要只读运营页
+- after-sale 执行分页与执行历史 drawer
+- 异常历史列表、详情与最小 resolve 处理
+- 旧外卖后台基础页面仍保留
+
+## 明确边界
+
+当前版本不是完整商业生产版。以下能力仍不接真实外部服务：
+
+- 真实支付
+- 真实退款
+- 真实打款
+- 地图 SDK / 轨迹回放
+- 消息推送
+- 生产级风控、限流、审计平台
+
+这些能力如果需要上线，应作为独立阶段接入，不应混入当前试运营闭环。
+
+## 技术栈
+
+- Frontend: `Vue 3`、`Vite`、`Vue Router`、`Pinia`、`Element Plus`、`Axios`
+- Backend: `Spring Boot 3.2.4`、`MyBatis`、`JWT`、`H2`、`MySQL/MariaDB`
+- Runtime: `JDK 17`、`Node.js 18+`
+
+## 目录结构
 
 ```text
-show_shop1/
-├── backend/                Spring Boot 后端
-├── frontend/               Vue 3 前端
-├── docs/                   文档索引与部署说明
-├── project-logs/           修复、交付、发布日志
-├── 项目交付说明.md         本地交付与启动说明
-├── 项目检查说明.md         项目审计说明
-└── README.md               GitHub 首页说明
+Campus part-time job/
+├── backend/                         Spring Boot 后端
+├── frontend/                        Vue 3 前端
+├── docs/                            当前交付、API、数据库、部署文档
+│   ├── campus-relay/                校园代送规划与映射
+│   ├── deployment/                  部署、备份和回滚说明
+│   └── legacy-takeaway/             旧外卖阶段参考文档归档
+├── project-logs/
+│   ├── campus-relay/                当前校园代送主线日志
+│   └── legacy-takeaway/             旧外卖修复日志归档
+├── AGENTS.md                        协作约束
+└── README.md                        当前项目入口
 ```
 
-## Architecture
+## 快速启动
 
-```mermaid
-flowchart LR
-    A["Admin Web<br/>Vue 3 + Vite"] --> C["Spring Boot API"]
-    B["User Web<br/>Vue 3 + Vite"] --> C
-    C --> D["MariaDB"]
-    C --> E["JWT Auth"]
-    C --> F["File Storage"]
-```
+### 后端
 
-## Feature Status
-
-| 模块 | 状态 | 说明 |
-| --- | --- | --- |
-| 管理端登录 | 已完成 | 员工登录与管理端鉴权 |
-| 分类/菜品/套餐 | 已完成 | 基础 CRUD 已接通 |
-| 订单管理 | 已完成 | 查询契约已统一 |
-| 仪表盘/统计 | 已完成 | 真实聚合接口已补齐 |
-| 用户端登录 | 已完成 | 独立 token 与用户态 |
-| 购物车/下单/订单 | 已完成 | 已接真实接口 |
-| 地址管理 | 已完成 | 默认地址与增删改 |
-| 上传安全 | 已完成 | 白名单、MIME、大小校验 |
-| 生产准备 | 已完成基础版 | 密钥、CORS、profile、迁移文档 |
-
-## Quick Start
-
-### 1. Prerequisites
-
-- `JDK 17`
-- `Node.js 18+`
-- `MariaDB`
-- Windows 环境下推荐：
-  - 后端使用 `IntelliJ IDEA`
-  - 前端使用 `HBuilder X` 或任意代码编辑器
-  - 数据库管理使用 `HeidiSQL` 或 `DBeaver`
-
-### 2. Database
-
-开发环境默认连接本机 `MariaDB`：
-
-- Host: `127.0.0.1`
-- Port: `3306`
-- Database: `cangqiong_takeaway`
-- User: `root`
-
-初始化脚本：
-
-- [`backend/db/init.sql`](backend/db/init.sql)
-
-### 3. Start Backend
-
-```bash
+```powershell
 cd backend
-.\mvnw.cmd test
 .\mvnw.cmd -DskipTests compile
-.\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=dev
+.\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=test
 ```
 
-Backend URL:
+后端默认地址：
 
 - `http://localhost:8080`
 
-### 4. Start Frontend
+### 前端
 
-```bash
+```powershell
 cd frontend
 npm install
-npm run lint
-npm run test
 npm run dev
 ```
 
-Frontend URL:
+前端默认地址：
 
 - `http://localhost:5173`
 
-### 5. Demo Accounts
+## 常用演示账号
 
-管理端：
+| 角色 | 手机号 | 密码 | 说明 |
+| --- | --- | --- | --- |
+| admin | `13800138000` | `123456` | 管理后台 |
+| customer | `13900139000` | `123456` | 用户端与 onboarding |
+| courier | 通过 customer onboarding 申请 | `123456` | 使用 courier token 进入 workbench |
 
-- Phone: `13800138000`
-- Password: `123456`
+典型样本订单与媒体证据见：
 
-用户端：
+- [Step 40 交付整理](project-logs/campus-relay/step-40-delivery-packaging-and-demo-script.md)
+- [Step 42 媒体归档](project-logs/campus-relay/step-42-real-media-capture-and-archive.md)
 
-- Phone: `13900139000`
-- Password: `123456`
+## 关键页面
 
-## Production Notes
+### customer
 
-- 必须显式指定 `SPRING_PROFILES_ACTIVE=prod`
-- 必须显式配置 `JWT_SECRET`，且长度至少 32
-- 必须显式配置 `APP_CORS_ALLOWED_ORIGINS`
-- `prod` 环境禁用 H2、H2 Console 和自动初始化脚本
-- 上传文件通过受控接口访问，不直接暴露裸目录
+- `/user/campus/courier-onboarding`
+- `/user/campus/order-result`
+- `/user/campus/after-sale-result`
 
-## Documentation
+### courier
 
-- [项目交付说明](项目交付说明.md)
-- [项目检查说明](项目检查说明.md)
+- `/courier/workbench`
+
+### admin
+
+- `/campus/settlement-batches`
+- `/campus/settlements`
+- `/campus/after-sale-executions`
+- `/campus/courier-ops`
+- `/campus/exceptions`
+
+## 验证命令
+
+```powershell
+cd backend
+.\mvnw.cmd -DskipTests compile
+```
+
+```powershell
+cd frontend
+npm run build
+```
+
+更完整的历史运行态验证见：
+
+- [校园代送总览](project-logs/campus-relay/summary.md)
+- [待处理事项](project-logs/campus-relay/pending-items.md)
+- [文件改动清单](project-logs/campus-relay/file-change-list.md)
+
+## 文档入口
+
 - [文档索引](docs/README.md)
-- [前端说明](frontend/README.md)
-- [部署说明](docs/deployment/production-deploy.md)
-- [备份与回滚](docs/deployment/backup-and-rollback.md)
-- [变更记录](CHANGELOG.md)
-- [贡献说明](CONTRIBUTING.md)
-- [安全说明](SECURITY.md)
-
-## Validation
-
-当前仓库已验证：
-
-- Backend: `mvn test`
-- Backend: `mvn -DskipTests compile`
-- Frontend: `npm run lint`
-- Frontend: `npm run test`
-- Frontend: `npm run build`
-
-当前仍有两项非阻塞告警：
-
-- Sass `@import` 弃用告警
-- 前端 chunk 体积偏大告警
-
-## Roadmap
-
-- 将 Sass `@import` 迁移为 `@use`
-- 继续优化前端打包体积
-- 增加更多接口级回归测试
-- 视训练需求补充截图、演示 GIF 或 API 文档页
-
-## Logs
-
-- [修复总览](project-logs/summary.md)
-- [生产准备日志](project-logs/production-readiness.md)
-- [交付整理日志](project-logs/delivery-handover.md)
-- [GitHub 发布日志](project-logs/github-release.md)
-- [环境搭建日志](project-logs/runtime-setup.md)
+- [交付与启动说明](docs/delivery-guide.md)
+- [项目状态检查](docs/project-status-review.md)
+- [API 总览](docs/api-overview.md)
+- [数据库总览](docs/db-overview.md)
+- [旧外卖文档归档](docs/legacy-takeaway/README.md)
 
 ## License
 

@@ -273,3 +273,9 @@
 2. `/api/campus/courier/profile` 与 `/api/campus/courier/review-status` 继续保留。
 3. 本轮未修改 bridge、鉴权、token 附着逻辑或前端主链路。
 4. 当前最终结论仍不是“bridge 已可删除”。
+
+## Step 55 回填
+
+1. Step 55 因用户要求先处理旧外卖文档清理，暂未进入 settlement 批次操作审计实现。
+2. Step 55 已完成旧外卖文档归档和当前文档入口重写。
+3. Step 56 可回到本设计建议，继续评估 `campus_settlement_batch_operation_record` 是否进入最小实现。

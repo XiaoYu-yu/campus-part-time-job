@@ -1887,11 +1887,30 @@
    - 未做真实打款、真实撤回或完整财务后台。
    - 未改 bridge、鉴权、token 附着、路由或旧外卖模块。
 
+## Step 55 实际完成事项
+
+1. 完成旧外卖文档清理与目录归档。
+2. 将旧外卖阶段 API/DB 设计归档到 `docs/legacy-takeaway/`。
+3. 将根 `project-logs/` 下旧外卖修复日志归档到 `project-logs/legacy-takeaway/`。
+4. 将当前入口文档改为校园代送试运营口径：
+   - 根 `README.md`
+   - `docs/README.md`
+   - `docs/delivery-guide.md`
+   - `docs/project-status-review.md`
+   - `frontend/README.md`
+   - 部署、回滚、贡献、安全和变更文档
+5. 新增当前主线总览文档：
+   - `docs/api-overview.md`
+   - `docs/db-overview.md`
+   - `docs/legacy-takeaway/README.md`
+   - `project-logs/README.md`
+6. 本轮没有修改 Java、SQL、Vue 业务代码、接口、路由、bridge、鉴权或 token 附着逻辑。
+
 ## 下一轮建议
 
-- 进入 `Step 55`
+- 进入 `Step 56`
 - 推荐顺序：
-  1. 先做 settlement 批次操作审计 go / no-go。
+  1. 回到 settlement 批次操作审计 go / no-go。
   2. 若进入实现，优先只落 `campus_settlement_batch_operation_record`，承接批次复核/撤回操作审计。
   3. review / withdraw 先只写操作审计，不改 `payout_status`，不清空 `payout_batch_no`。
   4. 对账差异记录可作为下一小步继续评估，不要和批次操作审计并发实现。
@@ -1964,6 +1983,7 @@
 - [Step 52 日志](step-52-after-sale-execution-history-frontend-minimal-handoff.md)
 - [Step 53 日志](step-53-after-sale-execution-history-frontend-runtime-validation.md)
 - [Step 54 日志](step-54-settlement-batch-review-withdraw-reconcile-design.md)
+- [Step 55 日志](step-55-docs-cleanup-and-legacy-archive.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

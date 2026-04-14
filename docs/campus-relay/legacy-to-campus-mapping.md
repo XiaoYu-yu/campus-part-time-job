@@ -93,8 +93,8 @@
 | 现有模块 | 当前语义 | 校园代送处理方式 | 说明 |
 | --- | --- | --- | --- |
 | `backend/db/init.sql` | 外卖初始化脚本 | 延后扩展 | 下一轮新增校园代送表时补充新的初始化与迁移脚本 |
-| `docs/api-design.md` | 旧接口设计 | 延后补充 | 后续补校园代送接口文档 |
-| `docs/db-design.md` | 旧数据库设计 | 延后补充 | 后续补校园代送表设计 |
+| `docs/legacy-takeaway/api-design.md` | 旧接口设计归档 | 仅保留参考 | 当前 API 入口改为 `docs/api-overview.md` |
+| `docs/legacy-takeaway/db-design.md` | 旧数据库设计归档 | 仅保留参考 | 当前数据库入口改为 `docs/db-overview.md` |
 | `project-logs/*` | 旧修复日志 | 保留 | 新增 `project-logs/campus-relay/`，与旧日志并行存在 |
 
 ## 7. 当前结论
