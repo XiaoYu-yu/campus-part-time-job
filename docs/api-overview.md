@@ -60,6 +60,9 @@
 - `POST /api/campus/admin/settlements/{id}/verify-payout`
 - `GET /api/campus/admin/settlements/payout-batches`
 - `GET /api/campus/admin/settlements/payout-batches/{batchNo}`
+- `GET /api/campus/admin/settlements/payout-batches/{batchNo}/operations`
+- `POST /api/campus/admin/settlements/payout-batches/{batchNo}/review`
+- `POST /api/campus/admin/settlements/payout-batches/{batchNo}/withdraw`
 
 ## customer
 

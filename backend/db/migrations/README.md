@@ -17,6 +17,7 @@
 - `V8__campus_courier_onboarding_bridge_replacement.sql`：courier onboarding 新入口与 bridge 并行。
 - `V9__campus_exception_record.sql`：异常历史记录。
 - `V10__campus_after_sale_execution_record.sql`：售后执行历史记录。
+- `V11__campus_settlement_batch_operation_record.sql`：结算批次操作审计记录。
 
 ## 维护规则
 

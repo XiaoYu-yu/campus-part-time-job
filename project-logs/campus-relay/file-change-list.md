@@ -972,3 +972,27 @@
 - [project-logs/campus-relay/step-56-settlement-batch-operation-audit-go-no-go.md](step-56-settlement-batch-operation-audit-go-no-go.md)
 
 本轮是 settlement 批次操作审计 go / no-go 决策轮：选择 Step 57 进入 `campus_settlement_batch_operation_record` 最小实现，并明确 review / withdraw 只写批次操作审计，不改 `payout_status`、不清空 `payout_batch_no`、不做真实财务撤回；本轮没有修改 Java、SQL、Vue 业务代码、接口实现、bridge、鉴权、路由或旧外卖模块。
+
+## Step 57 - settlement 批次操作审计最小实现
+
+- [backend/db/init.sql](../../backend/db/init.sql)
+- [backend/db/migrations/README.md](../../backend/db/migrations/README.md)
+- [backend/db/migrations/V11__campus_settlement_batch_operation_record.sql](../../backend/db/migrations/V11__campus_settlement_batch_operation_record.sql)
+- [backend/src/main/resources/db/schema-h2.sql](../../backend/src/main/resources/db/schema-h2.sql)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/controller/CampusAdminSettlementBatchOperationController.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/controller/CampusAdminSettlementBatchOperationController.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/dto/CampusAdminSettlementBatchOperationDTO.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/dto/CampusAdminSettlementBatchOperationDTO.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/entity/CampusSettlementBatchOperationRecord.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/entity/CampusSettlementBatchOperationRecord.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/mapper/CampusSettlementBatchOperationRecordMapper.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/mapper/CampusSettlementBatchOperationRecordMapper.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/query/CampusSettlementBatchOperationQuery.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/query/CampusSettlementBatchOperationQuery.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/service/CampusSettlementBatchOperationRecordService.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/service/CampusSettlementBatchOperationRecordService.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusSettlementBatchOperationRecordServiceImpl.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusSettlementBatchOperationRecordServiceImpl.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/vo/CampusSettlementBatchOperationRecordVO.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/vo/CampusSettlementBatchOperationRecordVO.java)
+- [docs/api-overview.md](../../docs/api-overview.md)
+- [docs/db-overview.md](../../docs/db-overview.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-56-settlement-batch-operation-audit-go-no-go.md](step-56-settlement-batch-operation-audit-go-no-go.md)
+- [project-logs/campus-relay/step-57-settlement-batch-operation-audit-minimal-implementation.md](step-57-settlement-batch-operation-audit-minimal-implementation.md)
+
+本轮是 settlement 批次操作审计最小后端实现轮：新增批次操作审计表、三个 admin 最小接口和当前 API/DB 总览同步；review / withdraw 只写操作审计，不改 `payout_status`、不清空 `payout_batch_no`、不做真实财务撤回；本轮没有新增前端页面，没有改 bridge、鉴权、路由、token 附着或旧外卖模块。

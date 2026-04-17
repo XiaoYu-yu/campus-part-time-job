@@ -187,3 +187,12 @@ Step 57 至少验证：
 2. 只落 `campus_settlement_batch_operation_record` 和三个最小 admin 接口。
 3. 对账差异记录继续后置到 Step 58 或之后单独评估。
 4. 如果 Step 57 实现中发现会触碰 payout 状态或真实财务语义，应立即停下并回到方案评估。
+
+## Step 57 回填
+
+1. Step 57 已按本轮边界落地 `campus_settlement_batch_operation_record`。
+2. 已新增 `/operations`、`/review`、`/withdraw` 三个 admin 最小接口。
+3. review / withdraw 实现只写操作审计，不改 `campus_settlement_record`。
+4. 已同步 MySQL init、V11 migration 和 H2 schema。
+5. 本轮未新增前端页面，未做对账差异记录。
+6. Step 58 建议先做 H2/test 运行态验证，再决定是否前端承接或进入对账差异方案。

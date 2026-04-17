@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 57 最高优先级
+## Step 58 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -112,17 +112,27 @@
    - 明确 review / withdraw 只写批次操作审计，不改 `payout_status`，不清空 `payout_batch_no`，不做真实财务撤回。
    - 对账差异记录继续后置，不和批次操作审计并发实现。
    - 本轮没有写 SQL、Java、Vue、接口实现或页面。
-22. Step 57 最高优先级建议：
-   - 进入 settlement 批次操作审计最小实现。
+22. Step 57 已完成 settlement 批次操作审计最小实现：
    - 新增 `campus_settlement_batch_operation_record`。
-   - 同步 MySQL init、migration、H2 schema。
-   - 新增最小 admin 接口：
+   - 同步 MySQL init、V11 migration、H2 schema。
+   - 新增 admin 接口：
      - `GET /api/campus/admin/settlements/payout-batches/{batchNo}/operations`
      - `POST /api/campus/admin/settlements/payout-batches/{batchNo}/review`
      - `POST /api/campus/admin/settlements/payout-batches/{batchNo}/withdraw`
-   - 写入前必须校验 `batchNo` 在当前 settlement 批次聚合中真实存在。
-   - 操作人使用当前 admin employee 上下文。
-23. Step 57 明确禁止：
+   - 写入前复用当前 settlement 批次聚合查询校验 `batchNo` 真实存在。
+   - review / withdraw 只写操作审计，不改 `payout_status`，不清空 `payout_batch_no`。
+   - 本轮没有新增前端页面，没有实现对账差异记录。
+   - `.\mvnw.cmd -DskipTests compile` 和 `npm run build` 已通过。
+23. Step 58 最高优先级建议：
+   - 做 settlement 批次操作审计 H2/test 运行态验证。
+   - 准备或生成一个真实 `payout_batch_no`。
+   - 调用 review 写入 `PASSED / REJECTED` 审计。
+   - 调用 withdraw 写入 `REQUESTED / RECORDED` 审计。
+   - 调用 `/operations` 查询操作历史。
+   - 验证原 settlement 批次详情和单笔 payout 摘要未被 review / withdraw 改写。
+   - 如果运行态验证不通过，下一轮先修实现，不要扩功能。
+   - 如果运行态验证通过，再评估是否需要前端只读承接或进入对账差异记录方案。
+24. Step 58 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -135,8 +145,8 @@
    - 不改 `payout_status`
    - 不清空 `payout_batch_no`
    - 不并发实现对账差异记录
-24. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-25. 第五个 admin 页继续后置，不再以“补页数”为目标。
+25. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+26. 第五个 admin 页继续后置，不再以“补页数”为目标。
 
 ## 已完成但仍需继续扩展的部分
 

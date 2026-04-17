@@ -1927,15 +1927,48 @@
 7. 明确对账差异记录继续后置，不和批次操作审计并发实现。
 8. 本轮没有修改 Java、SQL、Vue 业务代码、接口实现、路由、bridge、鉴权或 token 附着逻辑。
 
+## Step 57 实际完成事项
+
+1. 完成 settlement 批次操作审计最小后端实现。
+2. 新增 `campus_settlement_batch_operation_record`，用于记录批次级 `REVIEW / WITHDRAW` 操作审计。
+3. 同步维护：
+   - `backend/db/init.sql`
+   - `backend/db/migrations/V11__campus_settlement_batch_operation_record.sql`
+   - `backend/src/main/resources/db/schema-h2.sql`
+   - `backend/db/migrations/README.md`
+4. 新增后端模型与接口层：
+   - entity / DTO / query / VO
+   - mapper
+   - service / service impl
+   - controller
+5. 新增 admin 最小接口：
+   - `GET /api/campus/admin/settlements/payout-batches/{batchNo}/operations`
+   - `POST /api/campus/admin/settlements/payout-batches/{batchNo}/review`
+   - `POST /api/campus/admin/settlements/payout-batches/{batchNo}/withdraw`
+6. 写入前会复用现有批次聚合查询校验 `batchNo` 真实存在。
+7. review / withdraw 只写 `campus_settlement_batch_operation_record`：
+   - 不改 `payout_status`。
+   - 不改 `payout_verified*`。
+   - 不清空 `payout_batch_no`。
+   - 不做真实财务撤回。
+8. 本轮同步更新当前 API/DB 总览文档。
+9. 本轮没有新增前端页面，没有改 bridge、鉴权、token 附着、路由、订单主状态或旧外卖模块。
+10. 验证结果：
+   - `.\mvnw.cmd -DskipTests compile` 通过。
+   - `npm run build` 通过。
+   - H2/test 接口运行态验证尚未执行，后置到 Step 58。
+
 ## 下一轮建议
 
-- 进入 `Step 57`
+- 进入 `Step 58`
 - 推荐顺序：
-  1. 按 Step 56 结论进入 settlement 批次操作审计最小实现。
-  2. 只落 `campus_settlement_batch_operation_record`、MySQL/H2 schema 同步和三个最小 admin 接口。
-  3. review / withdraw 继续只写操作审计，不改 `payout_status`，不清空 `payout_batch_no`。
-  4. 对账差异记录继续作为下一小步单独评估，不要和批次操作审计并发实现。
-  5. 不补第五个 admin 页，不接真实打款，不改 bridge、不改鉴权、不改 token 附着。
+  1. 先做 settlement 批次操作审计运行态验证。
+  2. H2/test 下准备真实 `payout_batch_no`。
+  3. 调用 review / withdraw 写入审计记录。
+  4. 验证 `/operations` 可查询历史。
+  5. 验证原 settlement 批次详情和单笔 payout 摘要未被改写。
+  6. 运行态验证通过后，再评估是否需要前端最小只读承接或进入对账差异记录方案。
+  7. 不补第五个 admin 页，不接真实打款，不改 bridge、不改鉴权、不改 token 附着。
 
 ## 日志索引
 
@@ -2006,6 +2039,7 @@
 - [Step 54 日志](step-54-settlement-batch-review-withdraw-reconcile-design.md)
 - [Step 55 日志](step-55-docs-cleanup-and-legacy-archive.md)
 - [Step 56 日志](step-56-settlement-batch-operation-audit-go-no-go.md)
+- [Step 57 日志](step-57-settlement-batch-operation-audit-minimal-implementation.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)
