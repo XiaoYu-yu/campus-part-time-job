@@ -962,3 +962,13 @@
 - [project-logs/campus-relay/step-55-docs-cleanup-and-legacy-archive.md](step-55-docs-cleanup-and-legacy-archive.md)
 
 本轮是旧外卖文档清理与目录归档轮：将旧外卖文档和旧修复日志归档到 legacy 目录，并把当前入口文档改为校园代送试运营口径；没有修改 Java、SQL、Vue 业务代码、接口、bridge、鉴权、路由或旧外卖模块。
+
+## Step 56 - settlement 批次操作审计 go / no-go
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-55-docs-cleanup-and-legacy-archive.md](step-55-docs-cleanup-and-legacy-archive.md)
+- [project-logs/campus-relay/step-56-settlement-batch-operation-audit-go-no-go.md](step-56-settlement-batch-operation-audit-go-no-go.md)
+
+本轮是 settlement 批次操作审计 go / no-go 决策轮：选择 Step 57 进入 `campus_settlement_batch_operation_record` 最小实现，并明确 review / withdraw 只写批次操作审计，不改 `payout_status`、不清空 `payout_batch_no`、不做真实财务撤回；本轮没有修改 Java、SQL、Vue 业务代码、接口实现、bridge、鉴权、路由或旧外卖模块。

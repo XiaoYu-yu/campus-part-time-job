@@ -1906,14 +1906,35 @@
    - `project-logs/README.md`
 6. 本轮没有修改 Java、SQL、Vue 业务代码、接口、路由、bridge、鉴权或 token 附着逻辑。
 
+## Step 56 实际完成事项
+
+1. 完成 settlement 批次操作审计 go / no-go 评估。
+2. 确认当前 settlement 批次仍由 `campus_settlement_record.payout_batch_no` 聚合产生，不引入批次主表迁移。
+3. 选择下一步进入 `campus_settlement_batch_operation_record` 最小实现。
+4. 将 Step 54 的操作枚举草案收敛为两段式字段：
+   - `operation_type`: `REVIEW` / `WITHDRAW`
+   - `operation_result`: `PASSED` / `REJECTED` / `REQUESTED` / `RECORDED`
+5. 明确 Step 57 只允许实现：
+   - 批次操作审计表。
+   - 批次操作历史列表接口。
+   - review 审计写入接口。
+   - withdraw 审计写入接口。
+6. 明确 review / withdraw 只写操作审计：
+   - 不改 `payout_status`。
+   - 不改 `payout_verified*`。
+   - 不清空 `payout_batch_no`。
+   - 不做真实财务撤回。
+7. 明确对账差异记录继续后置，不和批次操作审计并发实现。
+8. 本轮没有修改 Java、SQL、Vue 业务代码、接口实现、路由、bridge、鉴权或 token 附着逻辑。
+
 ## 下一轮建议
 
-- 进入 `Step 56`
+- 进入 `Step 57`
 - 推荐顺序：
-  1. 回到 settlement 批次操作审计 go / no-go。
-  2. 若进入实现，优先只落 `campus_settlement_batch_operation_record`，承接批次复核/撤回操作审计。
-  3. review / withdraw 先只写操作审计，不改 `payout_status`，不清空 `payout_batch_no`。
-  4. 对账差异记录可作为下一小步继续评估，不要和批次操作审计并发实现。
+  1. 按 Step 56 结论进入 settlement 批次操作审计最小实现。
+  2. 只落 `campus_settlement_batch_operation_record`、MySQL/H2 schema 同步和三个最小 admin 接口。
+  3. review / withdraw 继续只写操作审计，不改 `payout_status`，不清空 `payout_batch_no`。
+  4. 对账差异记录继续作为下一小步单独评估，不要和批次操作审计并发实现。
   5. 不补第五个 admin 页，不接真实打款，不改 bridge、不改鉴权、不改 token 附着。
 
 ## 日志索引
@@ -1984,6 +2005,7 @@
 - [Step 53 日志](step-53-after-sale-execution-history-frontend-runtime-validation.md)
 - [Step 54 日志](step-54-settlement-batch-review-withdraw-reconcile-design.md)
 - [Step 55 日志](step-55-docs-cleanup-and-legacy-archive.md)
+- [Step 56 日志](step-56-settlement-batch-operation-audit-go-no-go.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

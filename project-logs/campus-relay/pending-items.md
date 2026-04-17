@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 56 最高优先级
+## Step 57 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -105,12 +105,24 @@
    - 当前 README、docs index、frontend README、交付说明、检查说明、部署说明等已改为校园代送试运营口径。
    - 新增 `docs/api-overview.md` 与 `docs/db-overview.md` 作为当前主线入口。
    - 本轮没有改 Java、SQL、Vue 业务代码、bridge、接口、鉴权或路由。
-21. Step 56 最高优先级建议：
-   - 先做 settlement 批次操作审计 go / no-go。
-   - 如果进入实现，优先只落 `campus_settlement_batch_operation_record`。
-   - review / withdraw 先只写批次操作审计，不改 `payout_status`，不清空 `payout_batch_no`，不做真实财务撤回。
-   - 对账差异记录继续作为后续小步评估，不要和批次操作审计并发实现。
-22. Step 56 明确禁止：
+21. Step 56 已完成 settlement 批次操作审计 go / no-go：
+   - 确认下一步进入 `campus_settlement_batch_operation_record` 最小实现。
+   - 确认批次操作审计只承接 `REVIEW / WITHDRAW` 操作留痕。
+   - 确认 `operation_result` 最小使用 `PASSED / REJECTED / REQUESTED / RECORDED`。
+   - 明确 review / withdraw 只写批次操作审计，不改 `payout_status`，不清空 `payout_batch_no`，不做真实财务撤回。
+   - 对账差异记录继续后置，不和批次操作审计并发实现。
+   - 本轮没有写 SQL、Java、Vue、接口实现或页面。
+22. Step 57 最高优先级建议：
+   - 进入 settlement 批次操作审计最小实现。
+   - 新增 `campus_settlement_batch_operation_record`。
+   - 同步 MySQL init、migration、H2 schema。
+   - 新增最小 admin 接口：
+     - `GET /api/campus/admin/settlements/payout-batches/{batchNo}/operations`
+     - `POST /api/campus/admin/settlements/payout-batches/{batchNo}/review`
+     - `POST /api/campus/admin/settlements/payout-batches/{batchNo}/withdraw`
+   - 写入前必须校验 `batchNo` 在当前 settlement 批次聚合中真实存在。
+   - 操作人使用当前 admin employee 上下文。
+23. Step 57 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -120,8 +132,11 @@
    - 不改订单主状态机
    - 不接真实打款
    - 不补完整财务系统
-23. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-24. 第五个 admin 页继续后置，不再以“补页数”为目标。
+   - 不改 `payout_status`
+   - 不清空 `payout_batch_no`
+   - 不并发实现对账差异记录
+24. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+25. 第五个 admin 页继续后置，不再以“补页数”为目标。
 
 ## 已完成但仍需继续扩展的部分
 

@@ -84,3 +84,11 @@
 2. 如果进入实现，优先只落 `campus_settlement_batch_operation_record`。
 3. 不要把文档清理轮扩成业务开发轮。
 4. 继续保持 bridge、展示 polish、媒体线冻结口径。
+
+## Step 56 回填
+
+1. Step 56 已完成 settlement 批次操作审计 go / no-go。
+2. 最终选择进入 `campus_settlement_batch_operation_record` 最小实现。
+3. Step 57 实现边界已收紧为批次操作审计表和三个最小 admin 接口。
+4. review / withdraw 继续只写操作审计，不改 `payout_status`，不清空 `payout_batch_no`，不做真实财务撤回。
+5. 对账差异记录继续后置，避免和批次操作审计并发扩范围。
