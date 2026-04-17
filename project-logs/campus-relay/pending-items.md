@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 58 最高优先级
+## Step 59 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -123,16 +123,22 @@
    - review / withdraw 只写操作审计，不改 `payout_status`，不清空 `payout_batch_no`。
    - 本轮没有新增前端页面，没有实现对账差异记录。
    - `.\mvnw.cmd -DskipTests compile` 和 `npm run build` 已通过。
-23. Step 58 最高优先级建议：
-   - 做 settlement 批次操作审计 H2/test 运行态验证。
-   - 准备或生成一个真实 `payout_batch_no`。
-   - 调用 review 写入 `PASSED / REJECTED` 审计。
-   - 调用 withdraw 写入 `REQUESTED / RECORDED` 审计。
-   - 调用 `/operations` 查询操作历史。
-   - 验证原 settlement 批次详情和单笔 payout 摘要未被 review / withdraw 改写。
-   - 如果运行态验证不通过，下一轮先修实现，不要扩功能。
-   - 如果运行态验证通过，再评估是否需要前端只读承接或进入对账差异记录方案。
-24. Step 58 明确禁止：
+23. Step 58 已完成 settlement 批次操作审计 H2/test 运行态验证：
+   - 通过 API 生成固定批次 `PBSTEP58VALIDATION`。
+   - review 写入 `REVIEW / PASSED`。
+   - withdraw 写入 `WITHDRAW / REQUESTED`。
+   - `/operations` 返回 2 条操作历史。
+   - 单笔结算 `payoutStatus / payoutBatchNo / payoutVerified` 在 review / withdraw 后保持不变。
+   - 批次详情 `totalCount / paidCount / payoutStatus` 在 review / withdraw 后保持不变。
+   - 证据文件：`project-logs/campus-relay/runtime/step-58/settlement-batch-operation-api-validation.json`。
+24. Step 59 最高优先级建议：
+   - 基于 Step 58 已通过的运行态证据，做 settlement 批次操作审计下一步 go / no-go。
+   - 方向 A：在现有 settlement 批次详情前端中做操作审计只读承接。
+   - 方向 B：进入 settlement 对账差异记录最小方案设计。
+   - 默认不要新增独立第五个 admin 页。
+   - 如果做前端承接，优先在现有批次详情页增加只读操作历史区，不新增写操作。
+   - 如果进入对账差异设计，先做方案边界，不并发实现前端页面。
+25. Step 59 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -145,8 +151,8 @@
    - 不改 `payout_status`
    - 不清空 `payout_batch_no`
    - 不并发实现对账差异记录
-25. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-26. 第五个 admin 页继续后置，不再以“补页数”为目标。
+26. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+27. 第五个 admin 页继续后置，不再以“补页数”为目标。
 
 ## 已完成但仍需继续扩展的部分
 

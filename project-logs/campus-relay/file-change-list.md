@@ -996,3 +996,14 @@
 - [project-logs/campus-relay/step-57-settlement-batch-operation-audit-minimal-implementation.md](step-57-settlement-batch-operation-audit-minimal-implementation.md)
 
 本轮是 settlement 批次操作审计最小后端实现轮：新增批次操作审计表、三个 admin 最小接口和当前 API/DB 总览同步；review / withdraw 只写操作审计，不改 `payout_status`、不清空 `payout_batch_no`、不做真实财务撤回；本轮没有新增前端页面，没有改 bridge、鉴权、路由、token 附着或旧外卖模块。
+
+## Step 58 - settlement 批次操作审计运行态验证
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-57-settlement-batch-operation-audit-minimal-implementation.md](step-57-settlement-batch-operation-audit-minimal-implementation.md)
+- [project-logs/campus-relay/step-58-settlement-batch-operation-runtime-validation.md](step-58-settlement-batch-operation-runtime-validation.md)
+- [project-logs/campus-relay/runtime/step-58/settlement-batch-operation-api-validation.json](runtime/step-58/settlement-batch-operation-api-validation.json)
+
+本轮是 settlement 批次操作审计 H2/test 运行态验证轮：通过 API 生成固定批次 `PBSTEP58VALIDATION`，写入 `REVIEW / PASSED` 与 `WITHDRAW / REQUESTED` 两条操作审计，并验证原 settlement 批次详情与单笔 payout 摘要未被改写；本轮没有修改 Java、SQL、Vue 业务代码，没有新增前端页面，没有改 bridge、鉴权、路由、token 附着或旧外卖模块。

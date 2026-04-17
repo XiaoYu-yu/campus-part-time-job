@@ -1958,17 +1958,37 @@
    - `npm run build` 通过。
    - H2/test 接口运行态验证尚未执行，后置到 Step 58。
 
+## Step 58 实际完成事项
+
+1. 完成 settlement 批次操作审计 H2/test 运行态验证。
+2. 使用 `campus_settlement_record.id = 1`、订单 `CR202604060001` 作为 H2 验证基线。
+3. 通过 admin API 真实完成：
+   - `POST /api/campus/admin/settlements/1/confirm`
+   - `POST /api/campus/admin/settlements/batch-payout-result`
+4. 生成固定验证批次号：`PBSTEP58VALIDATION`。
+5. 调用 review 写入 `REVIEW / PASSED` 操作审计。
+6. 调用 withdraw 写入 `WITHDRAW / REQUESTED` 操作审计。
+7. 调用 `/operations` 查询到 2 条操作历史。
+8. 验证 review / withdraw 后：
+   - 单笔结算 `payoutStatus` 保持 `PAID`。
+   - 单笔结算 `payoutBatchNo` 保持 `PBSTEP58VALIDATION`。
+   - 单笔结算 `payoutVerified` 保持不变。
+   - 批次详情 `totalCount / paidCount / payoutStatus` 保持不变。
+9. 新增运行态证据文件：
+   - `project-logs/campus-relay/runtime/step-58/settlement-batch-operation-api-validation.json`
+10. 本轮没有修改 Java、SQL、Vue 业务代码，没有新增前端页面，没有改 bridge、鉴权、token 附着、路由或旧外卖模块。
+
 ## 下一轮建议
 
-- 进入 `Step 58`
+- 进入 `Step 59`
 - 推荐顺序：
-  1. 先做 settlement 批次操作审计运行态验证。
-  2. H2/test 下准备真实 `payout_batch_no`。
-  3. 调用 review / withdraw 写入审计记录。
-  4. 验证 `/operations` 可查询历史。
-  5. 验证原 settlement 批次详情和单笔 payout 摘要未被改写。
-  6. 运行态验证通过后，再评估是否需要前端最小只读承接或进入对账差异记录方案。
-  7. 不补第五个 admin 页，不接真实打款，不改 bridge、不改鉴权、不改 token 附着。
+  1. 基于 Step 58 已通过的运行态证据，先做 settlement 批次操作审计下一步 go / no-go。
+  2. 方向 A：在现有 settlement 批次详情前端中做操作审计只读承接。
+  3. 方向 B：进入 settlement 对账差异记录最小方案设计。
+  4. 默认不要新增独立第五个 admin 页。
+  5. 如果做前端承接，优先在现有批次详情页增加只读操作历史区，不新增写操作。
+  6. 如果进入对账差异设计，先做方案边界，不并发实现前端页面。
+  7. 不接真实打款，不改 bridge、不改鉴权、不改 token 附着。
 
 ## 日志索引
 
@@ -2040,6 +2060,7 @@
 - [Step 55 日志](step-55-docs-cleanup-and-legacy-archive.md)
 - [Step 56 日志](step-56-settlement-batch-operation-audit-go-no-go.md)
 - [Step 57 日志](step-57-settlement-batch-operation-audit-minimal-implementation.md)
+- [Step 58 日志](step-58-settlement-batch-operation-runtime-validation.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

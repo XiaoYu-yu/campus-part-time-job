@@ -165,3 +165,15 @@ withdraw 接口：
 4. 调用 withdraw 写入 `REQUESTED / RECORDED` 审计。
 5. 验证 `/operations` 可查到历史，且原 settlement record payout 摘要未变化。
 6. 运行态验证通过后，再评估是否需要前端最小只读承接或进入对账差异记录方案。
+
+## Step 58 运行态验证回填
+
+Step 58 已完成 H2/test 运行态验证：
+
+1. 使用 `campus_settlement_record.id = 1` 和订单 `CR202604060001` 生成固定批次 `PBSTEP58VALIDATION`。
+2. review 成功写入 `REVIEW / PASSED`。
+3. withdraw 成功写入 `WITHDRAW / REQUESTED`。
+4. `/operations` 可查询 2 条操作历史。
+5. 单笔结算 `payoutStatus / payoutBatchNo / payoutVerified` 在 review / withdraw 前后保持不变。
+6. 批次详情 `totalCount / paidCount / payoutStatus` 在 review / withdraw 前后保持不变。
+7. 证据文件：`project-logs/campus-relay/runtime/step-58/settlement-batch-operation-api-validation.json`。
