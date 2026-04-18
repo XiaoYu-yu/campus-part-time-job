@@ -1017,3 +1017,15 @@
 - [project-logs/campus-relay/step-59-settlement-batch-operation-frontend-go-no-go.md](step-59-settlement-batch-operation-frontend-go-no-go.md)
 
 本轮是 settlement 批次操作审计前端承接 go / no-go 评估轮：最终选择方向 A，建议 Step 60 在现有 `CampusSettlementBatchDetail.vue` 中增加 operations 只读承接；本轮没有修改业务代码、前端页面、后端接口、SQL、bridge、鉴权、路由或旧外卖模块。
+
+## Step 60 - settlement 批次操作审计前端最小只读承接
+
+- [frontend/src/api/campus-admin.js](../../frontend/src/api/campus-admin.js)
+- [frontend/src/views/CampusSettlementBatchDetail.vue](../../frontend/src/views/CampusSettlementBatchDetail.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-59-settlement-batch-operation-frontend-go-no-go.md](step-59-settlement-batch-operation-frontend-go-no-go.md)
+- [project-logs/campus-relay/step-60-settlement-batch-operation-frontend-minimal-handoff.md](step-60-settlement-batch-operation-frontend-minimal-handoff.md)
+
+本轮是 settlement 批次操作审计前端最小只读承接实现轮：只在现有批次详情页增加“批次操作历史”只读区，并新增 admin API 封装；没有新增页面、路由、后端接口、写操作，也没有修改 bridge、鉴权、token 附着、订单主状态、settlement payout 摘要或旧外卖模块。

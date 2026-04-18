@@ -20,6 +20,12 @@ export const getCampusSettlementPayoutBatchDetail = (batchNo) => request({
   method: 'get'
 })
 
+export const getCampusSettlementBatchOperations = (batchNo, params) => request({
+  url: `/campus/admin/settlements/payout-batches/${encodeURIComponent(batchNo)}/operations`,
+  method: 'get',
+  params: normalizePageParams(params)
+})
+
 export const getCampusAfterSaleExecutions = (params) => request({
   url: '/campus/admin/orders/after-sale-executions',
   method: 'get',

@@ -1980,15 +1980,16 @@
 
 ## 下一轮建议
 
-- 进入 `Step 60`
+- 进入 `Step 61`
 - 推荐顺序：
-  1. 按 Step 59 结论进入 settlement 批次操作审计前端最小只读承接。
-  2. 优先只改 `frontend/src/api/campus-admin.js` 与 `frontend/src/views/CampusSettlementBatchDetail.vue`。
-  3. 新增 `getCampusSettlementBatchOperations(batchNo, params)` API 封装。
-  4. 在现有批次详情页增加“批次操作历史”只读区。
-  5. 只调用 `GET /api/campus/admin/settlements/payout-batches/{batchNo}/operations`。
-  6. 不调用 review / withdraw 写接口，不新增按钮动作。
-  7. 不新增第五个 admin 页，不实现对账差异记录，不接真实打款，不改 bridge、不改鉴权、不改 token 附着。
+  1. 先做 settlement 批次操作审计前端运行态验证。
+  2. H2/test 下准备固定 `payout_batch_no`。
+  3. 写入 review / withdraw 操作审计。
+  4. 打开 `/campus/settlement-batches/{batchNo}`。
+  5. 验证“批次操作历史”只读区能展示操作审计记录。
+  6. 验证原 settlement 明细表仍正常展示。
+  7. 运行态验证通过后，再评估是否进入 settlement 对账差异记录方案设计。
+  8. 不新增第五个 admin 页，不接真实打款，不改 bridge、不改鉴权、不改 token 附着。
 
 ## Step 59 实际完成事项
 
@@ -2003,6 +2004,27 @@
    - 改动范围可限制在一个 API 封装和一个现有页面。
    - 不新增第五个 admin 页，不改后端、不改状态、不改 bridge。
 6. 本轮没有修改 Java、SQL、Vue 业务代码，没有新增前端页面，没有改 bridge、鉴权、token 附着、路由或旧外卖模块。
+
+## Step 60 实际完成事项
+
+1. 完成 settlement 批次操作审计前端最小只读承接。
+2. `frontend/src/api/campus-admin.js` 新增：
+   - `getCampusSettlementBatchOperations(batchNo, params)`
+3. `frontend/src/views/CampusSettlementBatchDetail.vue` 新增“批次操作历史”只读区。
+4. 操作历史区只调用：
+   - `GET /api/campus/admin/settlements/payout-batches/{batchNo}/operations`
+5. 展示字段：
+   - `id`
+   - `operationType`
+   - `operationResult`
+   - `operationRemark`
+   - `operatedByEmployeeId`
+   - `operatedAt`
+6. 增加中文 tag、空态、错误态和刷新操作历史按钮。
+7. 本轮没有新增页面、路由、写操作按钮或后端接口。
+8. 本轮没有调用 review / withdraw 写接口，没有改 bridge、鉴权、token 附着、订单主状态或真实财务动作。
+9. 验证结果：
+   - `npm run build` 通过。
 
 ## 日志索引
 
@@ -2076,6 +2098,7 @@
 - [Step 57 日志](step-57-settlement-batch-operation-audit-minimal-implementation.md)
 - [Step 58 日志](step-58-settlement-batch-operation-runtime-validation.md)
 - [Step 59 日志](step-59-settlement-batch-operation-frontend-go-no-go.md)
+- [Step 60 日志](step-60-settlement-batch-operation-frontend-minimal-handoff.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

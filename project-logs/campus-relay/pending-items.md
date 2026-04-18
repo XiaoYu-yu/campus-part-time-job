@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 60 最高优先级
+## Step 61 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -137,15 +137,24 @@
    - 最终选择方向 A。
    - 选择原因：后端 operations 已通过 Step 58 运行态验证，现有批次详情页天然具备 `batchNo` 上下文，且只读承接能补齐批次操作审计展示闭环。
    - 本轮没有写业务代码，没有新增页面，没有改 bridge。
-25. Step 60 最高优先级建议：
-   - 进入 settlement 批次操作审计前端最小只读承接。
-   - 优先只改 `frontend/src/api/campus-admin.js` 与 `frontend/src/views/CampusSettlementBatchDetail.vue`。
-   - 新增 `getCampusSettlementBatchOperations(batchNo, params)` API 封装。
-   - 在现有批次详情页增加“批次操作历史”只读区。
+25. Step 60 已完成 settlement 批次操作审计前端最小只读承接：
+   - `frontend/src/api/campus-admin.js` 新增 `getCampusSettlementBatchOperations(batchNo, params)`。
+   - `frontend/src/views/CampusSettlementBatchDetail.vue` 新增“批次操作历史”只读区。
    - 只调用 `GET /api/campus/admin/settlements/payout-batches/{batchNo}/operations`。
-   - 不调用 review / withdraw 写接口，不新增按钮动作。
-   - 如果接口字段不足，先记录问题，不要顺手改后端。
-26. Step 60 明确禁止：
+   - 展示 `operationType / operationResult / operationRemark / operatedByEmployeeId / operatedAt`。
+   - 没有调用 review / withdraw 写接口。
+   - 没有新增页面、路由、后端接口或 bridge 改动。
+   - `npm run build` 已通过。
+26. Step 61 最高优先级建议：
+   - 做 settlement 批次操作审计前端运行态验证。
+   - H2/test 下准备固定 `payout_batch_no`。
+   - 写入 review / withdraw 操作审计。
+   - 打开 `/campus/settlement-batches/{batchNo}`。
+   - 验证“批次操作历史”区能展示审计记录。
+   - 验证原 settlement 明细表仍正常展示。
+   - 若验证失败，下一轮先修前端承接，不要扩功能。
+   - 若验证通过，再评估是否进入 settlement 对账差异记录方案设计。
+27. Step 61 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -158,8 +167,8 @@
    - 不改 `payout_status`
    - 不清空 `payout_batch_no`
    - 不并发实现对账差异记录
-27. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-28. 第五个 admin 页继续后置，不再以“补页数”为目标。
+28. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+29. 第五个 admin 页继续后置，不再以“补页数”为目标。
 
 ## 已完成但仍需继续扩展的部分
 

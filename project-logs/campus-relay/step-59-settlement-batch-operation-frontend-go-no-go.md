@@ -142,3 +142,13 @@
    - `.\mvnw.cmd -DskipTests compile`
    - `git diff --check`
 4. 如果实现过程中发现现有接口字段不足，先停在问题记录，不要顺手改后端。
+
+## Step 60 实现回填
+
+Step 60 已按方向 A 完成前端最小只读承接：
+
+1. `frontend/src/api/campus-admin.js` 新增 `getCampusSettlementBatchOperations(batchNo, params)`。
+2. `frontend/src/views/CampusSettlementBatchDetail.vue` 新增“批次操作历史”只读区。
+3. 只调用 `GET /api/campus/admin/settlements/payout-batches/{batchNo}/operations`。
+4. 未调用 review / withdraw 写接口。
+5. 未新增页面、路由、后端接口、bridge 改动或真实财务动作。

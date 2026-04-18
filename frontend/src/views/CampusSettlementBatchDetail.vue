@@ -56,6 +56,12 @@
       </section>
 
       <section class="table-card">
+        <div class="section-heading">
+          <div>
+            <h3>批次结算明细</h3>
+            <p>来源于当前批次下的 settlement 记录，继续只读展示单笔打款与核对摘要。</p>
+          </div>
+        </div>
         <el-table v-loading="loading" :data="detail?.records || []" border>
           <el-table-column prop="id" label="结算ID" width="100" />
           <el-table-column prop="relayOrderId" label="订单号" min-width="200" />
@@ -90,6 +96,68 @@
           </el-table-column>
         </el-table>
       </section>
+
+      <section class="table-card">
+        <div class="section-heading">
+          <div>
+            <h3>批次操作历史</h3>
+            <p>只读展示 review / withdraw 操作审计，不改变打款状态、批次号或核对结果。</p>
+          </div>
+          <el-tag type="info" effect="plain">只读审计</el-tag>
+        </div>
+
+        <el-alert
+          v-if="operationError"
+          :title="operationError"
+          type="error"
+          show-icon
+          :closable="false"
+          class="section-alert"
+        />
+
+        <el-table
+          v-loading="operationLoading"
+          :data="operationRecords"
+          border
+          empty-text="暂无批次操作记录"
+        >
+          <el-table-column prop="id" label="记录ID" width="100" />
+          <el-table-column label="操作类型" width="120" align="center">
+            <template #default="{ row }">
+              <el-tag :type="operationTypeTag(row.operationType)">
+                {{ formatOperationType(row.operationType) }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作结果" width="130" align="center">
+            <template #default="{ row }">
+              <el-tag :type="operationResultTag(row.operationResult)">
+                {{ formatOperationResult(row.operationResult) }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="operationRemark" label="操作备注" min-width="220" show-overflow-tooltip>
+            <template #default="{ row }">
+              {{ row.operationRemark || '暂无' }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="operatedByEmployeeId" label="操作员工ID" width="120" align="center">
+            <template #default="{ row }">
+              {{ row.operatedByEmployeeId || '暂无' }}
+            </template>
+          </el-table-column>
+          <el-table-column label="操作时间" min-width="170">
+            <template #default="{ row }">
+              {{ formatDateTime(row.operatedAt) }}
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <div class="operation-footer">
+          <span>共 {{ operationTotal }} 条操作记录</span>
+          <el-button text type="primary" :loading="operationLoading" @click="loadOperations">刷新操作历史</el-button>
+        </div>
+      </section>
     </div>
   </MainLayout>
 </template>
@@ -98,12 +166,19 @@
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import MainLayout from '../layout/MainLayout.vue'
-import { getCampusSettlementPayoutBatchDetail } from '../api/campus-admin'
+import {
+  getCampusSettlementBatchOperations,
+  getCampusSettlementPayoutBatchDetail
+} from '../api/campus-admin'
 
 const route = useRoute()
 const router = useRouter()
 const loading = ref(false)
 const detail = ref(null)
+const operationLoading = ref(false)
+const operationRecords = ref([])
+const operationTotal = ref(0)
+const operationError = ref('')
 
 const formatAmount = (value) => `¥${Number(value || 0).toFixed(2)}`
 const formatDateTime = (value) => value || '暂无'
@@ -114,6 +189,30 @@ const payoutTagType = (status) => ({
   UNPAID: 'warning'
 }[status] || 'info')
 
+const operationTypeTag = (type) => ({
+  REVIEW: 'success',
+  WITHDRAW: 'warning'
+}[type] || 'info')
+
+const operationResultTag = (result) => ({
+  PASSED: 'success',
+  REJECTED: 'danger',
+  REQUESTED: 'warning',
+  RECORDED: 'info'
+}[result] || 'info')
+
+const formatOperationType = (type) => ({
+  REVIEW: '批次复核',
+  WITHDRAW: '撤回留痕'
+}[type] || type || '暂无')
+
+const formatOperationResult = (result) => ({
+  PASSED: '通过',
+  REJECTED: '驳回',
+  REQUESTED: '已发起',
+  RECORDED: '已记录'
+}[result] || result || '暂无')
+
 const loadDetail = async () => {
   loading.value = true
   try {
@@ -123,7 +222,29 @@ const loadDetail = async () => {
   }
 }
 
-onMounted(() => loadDetail())
+const loadOperations = async () => {
+  operationLoading.value = true
+  operationError.value = ''
+  try {
+    const data = await getCampusSettlementBatchOperations(route.params.batchNo, {
+      page: 1,
+      pageSize: 10
+    })
+    operationRecords.value = data?.records || []
+    operationTotal.value = data?.total || 0
+  } catch (error) {
+    operationError.value = error?.message || '批次操作历史加载失败'
+    operationRecords.value = []
+    operationTotal.value = 0
+  } finally {
+    operationLoading.value = false
+  }
+}
+
+onMounted(() => {
+  loadDetail()
+  loadOperations()
+})
 </script>
 
 <style scoped lang="scss">
@@ -208,9 +329,44 @@ onMounted(() => loadDetail())
   }
 }
 
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  h3 {
+    margin: 0 0 6px;
+    font-size: 18px;
+    color: #18181b;
+  }
+
+  p {
+    margin: 0;
+    color: #71717a;
+    font-size: 13px;
+  }
+}
+
+.section-alert {
+  margin-bottom: 14px;
+}
+
+.operation-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  color: #71717a;
+  font-size: 13px;
+}
+
 @media (max-width: 768px) {
   .page-header,
-  .summary-top {
+  .summary-top,
+  .section-heading,
+  .operation-footer {
     flex-direction: column;
     align-items: flex-start;
   }
