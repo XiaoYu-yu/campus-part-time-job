@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 62 最高优先级
+## Step 63 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -153,13 +153,21 @@
    - 证据文件：
      - `project-logs/campus-relay/runtime/step-61/settlement-batch-operation-ui-api-prep.json`
      - `project-logs/campus-relay/runtime/step-61/settlement-batch-operation-page-validation.json`
-27. Step 62 最高优先级建议：
-   - 进入 settlement 对账差异记录最小方案设计。
-   - 先判断是否需要独立差异记录表。
-   - 明确差异来源、处理状态、接口边界和与 `campus_settlement_record` payout 摘要的兼容策略。
-   - 本轮默认只做方案，不写 SQL、Java、Vue 或页面。
-   - 不接真实财务，不新增第五个 admin 页。
-28. Step 62 明确禁止：
+27. Step 62 已完成 settlement 对账差异记录最小方案设计：
+   - 建议后续新增独立 `campus_settlement_reconcile_difference_record` 作为审计主数据。
+   - 差异来源第一版只建议 `MANUAL_ADMIN / SIMULATED_RECONCILE`，不接真实银行流水或支付网关。
+   - 最小差异类型建议 `AMOUNT_MISMATCH / STATUS_MISMATCH / UNVERIFIED_PAID / FAILED_NEEDS_RETRY / MANUAL_NOTE`。
+   - 最小处理状态建议 `OPEN / RESOLVED`。
+   - 差异 resolve 只写差异记录处理字段，不改 `payout_status`、不清空 `payout_batch_no`、不改 settlement 金额、不触发真实财务动作。
+   - 现有 `campus_settlement_record` payout 摘要继续服务 settlement 单笔页、批次页和 `reconcile-summary` 兼容读取。
+   - 本轮没有写 SQL、Java、Vue、接口实现或页面。
+28. Step 63 最高优先级建议：
+   - 进入 settlement 对账差异记录实现 go / no-go。
+   - 先评估是否直接落 `campus_settlement_reconcile_difference_record` 最小后端闭环，还是继续补字段校验方案。
+   - 如果进入实现，只允许后端最小闭环：表、MySQL init、migration、H2 schema、admin 列表/详情/创建/resolve 接口。
+   - 不默认新增前端页面，不新增第五个 admin 页。
+   - 不接真实财务，不改 payout 摘要，不改订单主状态。
+29. Step 63 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -171,9 +179,9 @@
    - 不补完整财务系统
    - 不改 `payout_status`
    - 不清空 `payout_batch_no`
-   - 不并发实现对账差异记录
-29. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-30. 第五个 admin 页继续后置，不再以“补页数”为目标。
+   - 不并发实现前端页面
+30. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+31. 第五个 admin 页继续后置，不再以“补页数”为目标。
 
 ## 已完成但仍需继续扩展的部分
 

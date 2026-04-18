@@ -1041,3 +1041,13 @@
 - [project-logs/campus-relay/runtime/step-61/settlement-batch-operation-page-validation.json](runtime/step-61/settlement-batch-operation-page-validation.json)
 
 本轮是 settlement 批次操作审计前端运行态验证轮：H2/test 下准备固定批次 `PBSTEP61UI` 和两条操作审计记录，并通过 Playwright 验证现有批次详情页可以展示“批次操作历史”只读区；本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面，没有改 bridge、鉴权、路由、token 附着或旧外卖模块。
+
+## Step 62 - settlement 对账差异记录最小方案设计
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-61-settlement-batch-operation-frontend-runtime-validation.md](step-61-settlement-batch-operation-frontend-runtime-validation.md)
+- [project-logs/campus-relay/step-62-settlement-reconcile-difference-minimal-solution-design.md](step-62-settlement-reconcile-difference-minimal-solution-design.md)
+
+本轮是 settlement 对账差异记录最小方案设计轮：建议后续新增独立 `campus_settlement_reconcile_difference_record`，明确差异来源、差异类型、`OPEN / RESOLVED` 最小处理状态、admin 最小接口边界和与 `campus_settlement_record` payout 摘要的兼容策略；本轮没有修改 SQL、Java、Vue、接口实现、bridge、鉴权、路由、token 附着或旧外卖模块。

@@ -106,3 +106,11 @@ API 准备证据：
 3. 不默认新增第五个 admin 页。
 4. 不接真实支付、真实退款、真实打款。
 5. 不重开 bridge 主线。
+
+## Step 62 回填
+
+1. Step 62 已完成 settlement 对账差异记录最小方案设计。
+2. 结论建议后续新增独立 `campus_settlement_reconcile_difference_record`，只作为 admin 对账差异审计主数据。
+3. 方案明确继续保留 `campus_settlement_record` payout 摘要字段，现有 settlement 单笔页、批次页和 `reconcile-summary` 继续按原语义读取。
+4. 差异记录最小状态建议为 `OPEN / RESOLVED`，差异 resolve 不改 `payout_status`、不清空 `payout_batch_no`、不改 settlement 金额、不接真实财务。
+5. Step 63 建议先做实现 go / no-go，再决定是否进入最小后端实现。

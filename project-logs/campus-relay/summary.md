@@ -58,12 +58,27 @@
 - 当前已完成：`Step 47 - admin 异常前端承接 go / no-go`
 - 当前已完成：`Step 48 - admin 异常历史 / resolve 最小前端承接`
 - 当前已完成：`Step 49 - admin 异常处理页运行态验证`
-- 当前日期：`2026-04-13`
+- 当前已完成：`Step 50 - 售后执行历史表最小方案设计`
+- 当前已完成：`Step 51A - 售后执行历史最小实现`
+- 当前已完成：`Step 51B - 售后执行历史前端承接 go / no-go`
+- 当前已完成：`Step 52 - 售后执行历史前端最小承接`
+- 当前已完成：`Step 53 - 售后执行历史前端运行态验证`
+- 当前已完成：`Step 54 - settlement 批次复核、撤回和对账最小方案设计`
+- 当前已完成：`Step 55 - 旧外卖文档清理与目录归档`
+- 当前已完成：`Step 56 - settlement 批次操作审计 go / no-go`
+- 当前已完成：`Step 57 - settlement 批次操作审计最小实现`
+- 当前已完成：`Step 58 - settlement 批次操作审计运行态验证`
+- 当前已完成：`Step 59 - settlement 批次操作审计前端承接 go / no-go`
+- 当前已完成：`Step 60 - settlement 批次操作审计前端最小只读承接`
+- 当前已完成：`Step 61 - settlement 批次操作审计前端运行态验证`
+- 当前已完成：`Step 62 - settlement 对账差异记录最小方案设计`
+- 当前日期：`2026-04-18`
 - Step 46 补充：已新增 admin 异常 resolve 后端接口 `POST /api/campus/admin/exceptions/{id}/resolve`，只允许 `REPORTED -> RESOLVED`，重复处理返回明确业务错误；本轮未改订单主状态、settlement、latest exception 摘要、bridge、前端页面或路由。
 - Step 47 补充：本轮只做 admin 异常前端承接 go / no-go 评估，不写业务代码、不补页面；最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备，P2 售后执行历史表继续后置。
 - Step 48 补充：已新增 `/campus/exceptions` admin 异常处理页，接入异常历史列表、详情 drawer 和 `REPORTED -> RESOLVED` 最小 resolve 动作；本轮未改后端接口、bridge、鉴权、订单主状态、settlement 或 latest exception 摘要。
 - Step 49 补充：已在 H2/test 下对 `/campus/exceptions` 完成运行态验证，覆盖异常历史列表、详情 drawer、resolve 成功、重复 resolve 失败、latest exception 摘要兼容和 customer 订单详情兼容；本轮未修改业务代码、bridge、接口、鉴权、路由或订单主状态。
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 到 Step 39 已完成展示 polish 候选评估、5 个关键页面小范围 polish 和展示 polish 冻结判断；Step 40 到 Step 43 已完成交付整理、截图/录屏计划、真实媒体采集和非 bridge 后端方向评估；Step 44 到 Step 46 已完成异常历史表、异常上报写历史、admin 异常只读查询和最小 resolve 后端闭环；Step 47 到 Step 49 已完成 admin 异常前端承接 go/no-go、`/campus/exceptions` 页面实现和 H2/test 运行态验证；当前 bridge 完全保留、展示 polish 主线默认冻结、媒体线已收住、异常历史前端承接已验证通过、旧外卖模块仍保留可运行、旧前端主链路未被替换
+- Step 62 补充：已完成 settlement 对账差异记录最小方案设计，建议后续新增独立 `campus_settlement_reconcile_difference_record` 作为审计主数据；差异处理只记录 `OPEN / RESOLVED` 和处理结果，不改 settlement payout 摘要、不接真实财务、不新增前端页面。
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 到 Step 39 已完成展示 polish 候选评估、5 个关键页面小范围 polish 和展示 polish 冻结判断；Step 40 到 Step 43 已完成交付整理、截图/录屏计划、真实媒体采集和非 bridge 后端方向评估；Step 44 到 Step 49 已完成异常历史表、异常上报写历史、admin 异常只读/处理查询、最小 resolve 后端闭环、admin 异常前端承接和运行态验证；Step 50 到 Step 53 已完成售后执行历史表后端/前端承接与运行态验证；Step 54 到 Step 62 已完成 settlement 批次操作审计后端、前端、运行态验证，并完成 settlement 对账差异记录最小方案设计；当前 bridge 完全保留、展示 polish 主线默认冻结、媒体线已收住、旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
 
@@ -2044,6 +2059,28 @@
    - `project-logs/campus-relay/runtime/step-61/settlement-batch-operation-page-validation.json`
 8. 本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面，没有改 bridge、鉴权、token 附着、路由或旧外卖模块。
 
+## Step 62 实际完成事项
+
+1. 完成 settlement 对账差异记录最小方案设计。
+2. 明确建议后续新增独立表 `campus_settlement_reconcile_difference_record`。
+3. 明确差异记录只作为 admin 运营审计主数据，不直接改 settlement 金额、打款状态、批次号或订单主状态。
+4. 明确最小差异类型建议：
+   - `AMOUNT_MISMATCH`
+   - `STATUS_MISMATCH`
+   - `UNVERIFIED_PAID`
+   - `FAILED_NEEDS_RETRY`
+   - `MANUAL_NOTE`
+5. 明确最小处理状态建议：
+   - `OPEN`
+   - `RESOLVED`
+6. 明确现有 `campus_settlement_record` payout 摘要字段继续保留，并继续服务单笔页、批次页和 `reconcile-summary` 兼容读取。
+7. 明确后续最小接口建议：
+   - `GET /api/campus/admin/settlements/reconcile-differences`
+   - `GET /api/campus/admin/settlements/reconcile-differences/{id}`
+   - `POST /api/campus/admin/settlements/reconcile-differences`
+   - `POST /api/campus/admin/settlements/reconcile-differences/{id}/resolve`
+8. 本轮没有写 SQL、Java、Vue、接口实现或页面，没有改 bridge、鉴权、token 附着、路由或旧外卖模块。
+
 ## 日志索引
 
 - [领域模型重构规划](../../docs/campus-relay/domain-refactor-plan.md)
@@ -2118,6 +2155,7 @@
 - [Step 59 日志](step-59-settlement-batch-operation-frontend-go-no-go.md)
 - [Step 60 日志](step-60-settlement-batch-operation-frontend-minimal-handoff.md)
 - [Step 61 日志](step-61-settlement-batch-operation-frontend-runtime-validation.md)
+- [Step 62 日志](step-62-settlement-reconcile-difference-minimal-solution-design.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)
