@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 64 最高优先级
+## Step 65 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -167,29 +167,31 @@
    - 最终选择方向 A。
    - 选择原因：Step 62 已把数据模型、状态、接口和兼容策略收敛到足够小，且实现可独立于现有 settlement payout 摘要。
    - 本轮没有写 SQL、Java、Vue、接口实现或页面。
-29. Step 64 最高优先级建议：
-   - 进入 settlement 对账差异记录最小后端实现。
+29. Step 64 已完成 settlement 对账差异记录最小后端实现：
    - 新增 `campus_settlement_reconcile_difference_record`。
-   - 同步 MySQL init、migration、H2 schema。
+   - 同步 MySQL init、V12 migration、H2 schema。
    - 新增 admin 差异列表、详情、创建、resolve 四个最小接口。
-   - resolve 只允许 `OPEN -> RESOLVED`。
-   - 不新增前端页面，不新增第五个 admin 页。
-   - 不接真实财务，不改 payout 摘要，不改订单主状态。
-30. Step 64 明确禁止：
+   - resolve 只允许 `OPEN -> RESOLVED`，重复 resolve 返回明确业务错误。
+   - H2/test 下使用固定批次 `PBSTEP64RECON` 验证创建、查询、resolve、重复 resolve 失败和 settlement 摘要不变。
+   - 证据文件：`project-logs/campus-relay/runtime/step-64/settlement-reconcile-difference-validation.json`。
+   - 本轮没有新增前端页面，没有新增第五个 admin 页，没有接真实财务，没有改 payout 摘要、订单主状态或 bridge。
+30. Step 65 最高优先级建议：
+   - 先做 settlement 对账差异前端承接 go / no-go。
+   - 不默认新增第五个 admin 页。
+   - 优先评估是否在现有 settlement 只读运营页或批次详情页中做最小只读承接。
+   - 如果前端承接收益不足，可以收住 settlement 对账差异线，转入下一条非 bridge 后端能力。
+31. Step 65 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
    - 不改 token 附着逻辑
    - 不改路由
-   - 不默认新增 settlement 新页面
-   - 不改订单主状态机
    - 不接真实打款
    - 不补完整财务系统
-   - 不改 `payout_status`
-   - 不清空 `payout_batch_no`
-   - 不并发实现前端页面
-31. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-32. 第五个 admin 页继续后置，不再以“补页数”为目标。
+   - 不改订单主状态机
+   - 不为补页数机械新增 admin 页面
+32. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+33. 第五个 admin 页继续后置，不再以“补页数”为目标。
 
 ## 已完成但仍需继续扩展的部分
 

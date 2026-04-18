@@ -1061,3 +1061,29 @@
 - [project-logs/campus-relay/step-63-settlement-reconcile-difference-implementation-go-no-go.md](step-63-settlement-reconcile-difference-implementation-go-no-go.md)
 
 本轮是 settlement 对账差异记录实现 go / no-go 评估轮：最终选择 Step 64 进入 `campus_settlement_reconcile_difference_record` 最小后端实现，并明确只允许落表、数据库路径同步、admin 列表/详情/创建/resolve 四个最小接口；本轮没有修改 SQL、Java、Vue、接口实现、bridge、鉴权、路由、token 附着或旧外卖模块。
+
+## Step 64 - settlement 对账差异记录最小后端实现
+
+- [backend/db/init.sql](../../backend/db/init.sql)
+- [backend/db/migrations/README.md](../../backend/db/migrations/README.md)
+- [backend/db/migrations/V12__campus_settlement_reconcile_difference_record.sql](../../backend/db/migrations/V12__campus_settlement_reconcile_difference_record.sql)
+- [backend/src/main/resources/db/schema-h2.sql](../../backend/src/main/resources/db/schema-h2.sql)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/controller/CampusAdminSettlementReconcileDifferenceController.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/controller/CampusAdminSettlementReconcileDifferenceController.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/dto/CampusAdminSettlementReconcileDifferenceCreateDTO.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/dto/CampusAdminSettlementReconcileDifferenceCreateDTO.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/dto/CampusAdminSettlementReconcileDifferenceResolveDTO.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/dto/CampusAdminSettlementReconcileDifferenceResolveDTO.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/entity/CampusSettlementReconcileDifferenceRecord.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/entity/CampusSettlementReconcileDifferenceRecord.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/mapper/CampusSettlementReconcileDifferenceRecordMapper.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/mapper/CampusSettlementReconcileDifferenceRecordMapper.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/query/CampusSettlementReconcileDifferenceQuery.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/query/CampusSettlementReconcileDifferenceQuery.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/service/CampusSettlementReconcileDifferenceRecordService.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/service/CampusSettlementReconcileDifferenceRecordService.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusSettlementReconcileDifferenceRecordServiceImpl.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusSettlementReconcileDifferenceRecordServiceImpl.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/vo/CampusSettlementReconcileDifferenceRecordVO.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/vo/CampusSettlementReconcileDifferenceRecordVO.java)
+- [docs/api-overview.md](../../docs/api-overview.md)
+- [docs/db-overview.md](../../docs/db-overview.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-63-settlement-reconcile-difference-implementation-go-no-go.md](step-63-settlement-reconcile-difference-implementation-go-no-go.md)
+- [project-logs/campus-relay/step-64-settlement-reconcile-difference-minimal-implementation.md](step-64-settlement-reconcile-difference-minimal-implementation.md)
+- [project-logs/campus-relay/runtime/step-64/settlement-reconcile-difference-validation.json](runtime/step-64/settlement-reconcile-difference-validation.json)
+
+本轮是 settlement 对账差异记录最小后端实现轮：新增对账差异审计表、四个 admin 最小接口和 MySQL/H2 数据库路径同步；创建差异必须校验 settlement 存在且批次号匹配，resolve 只允许 `OPEN -> RESOLVED`，不改 settlement payout 摘要、不改 `reconcile-summary`、不接真实财务；本轮没有新增前端页面，没有改 bridge、鉴权、路由、token 附着或旧外卖模块。

@@ -57,15 +57,11 @@
 
 - `campus_settlement_record`
 - `campus_settlement_batch_operation_record`
+- `campus_settlement_reconcile_difference_record`
 
 当前单笔结算与打款摘要主表。批次由 `payout_batch_no` 逻辑聚合。
 批次操作审计表记录 admin 对逻辑打款批次的复核、撤回观察类操作，只做审计留痕，不改变单笔 payout 摘要。
-
-后续候选：
-
-- `campus_settlement_reconcile_difference_record`
-
-对账差异记录目前仍处于后续候选阶段，尚未落地。
+对账差异记录表记录 admin 或模拟对账发现的单笔 settlement 差异，作为审计主数据，不改变 settlement payout 摘要。
 
 ## 迁移脚本现状
 
@@ -80,6 +76,7 @@
 - `V9__campus_exception_record.sql`
 - `V10__campus_after_sale_execution_record.sql`
 - `V11__campus_settlement_batch_operation_record.sql`
+- `V12__campus_settlement_reconcile_difference_record.sql`
 
 ## 设计约束
 

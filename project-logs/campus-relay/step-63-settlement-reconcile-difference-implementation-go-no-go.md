@@ -156,6 +156,6 @@ Step 64 明确不做：
 
 ## 下一轮建议
 
-1. Step 64 进入 settlement 对账差异记录最小后端实现。
-2. 只落表和 admin 最小接口，不并发做前端承接。
-3. 实现完成后先做 H2/test 运行态验证，再决定是否前端承接。
+1. Step 64 已按本轮边界完成 settlement 对账差异记录最小后端实现。
+2. 已通过 H2/test 验证创建、列表、详情、resolve、重复 resolve 失败和 settlement 摘要不变。
+3. Step 65 建议先做 settlement 对账差异前端承接 go / no-go，不默认新增第五个 admin 页。

@@ -18,6 +18,7 @@
 - `V9__campus_exception_record.sql`：异常历史记录。
 - `V10__campus_after_sale_execution_record.sql`：售后执行历史记录。
 - `V11__campus_settlement_batch_operation_record.sql`：结算批次操作审计记录。
+- `V12__campus_settlement_reconcile_difference_record.sql`：结算对账差异记录。
 
 ## 维护规则
 

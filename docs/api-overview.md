@@ -63,6 +63,10 @@
 - `GET /api/campus/admin/settlements/payout-batches/{batchNo}/operations`
 - `POST /api/campus/admin/settlements/payout-batches/{batchNo}/review`
 - `POST /api/campus/admin/settlements/payout-batches/{batchNo}/withdraw`
+- `GET /api/campus/admin/settlements/reconcile-differences`
+- `GET /api/campus/admin/settlements/reconcile-differences/{id}`
+- `POST /api/campus/admin/settlements/reconcile-differences`
+- `POST /api/campus/admin/settlements/reconcile-differences/{id}/resolve`
 
 ## customer
 
