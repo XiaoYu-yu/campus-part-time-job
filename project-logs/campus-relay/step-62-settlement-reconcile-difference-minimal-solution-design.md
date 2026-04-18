@@ -332,3 +332,13 @@ resolve 时：
 1. Step 63 先做 settlement 对账差异记录实现 go / no-go。
 2. 如果确认实现，先落后端最小闭环，不并发做前端页面。
 3. 继续保持不接真实财务、不改 payout 摘要、不新增第五个 admin 页。
+
+## Step 63 回填
+
+1. Step 63 已完成 settlement 对账差异记录实现 go / no-go。
+2. 最终选择进入 `campus_settlement_reconcile_difference_record` 最小后端实现。
+3. Step 64 边界已收敛为：
+   - 表与数据库路径同步。
+   - admin 列表、详情、创建、resolve 四个最小接口。
+   - `OPEN -> RESOLVED` 状态保护。
+4. Step 64 仍不允许新增前端页面、不接真实财务、不改 settlement payout 摘要、不改 bridge。

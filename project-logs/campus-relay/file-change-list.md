@@ -1051,3 +1051,13 @@
 - [project-logs/campus-relay/step-62-settlement-reconcile-difference-minimal-solution-design.md](step-62-settlement-reconcile-difference-minimal-solution-design.md)
 
 本轮是 settlement 对账差异记录最小方案设计轮：建议后续新增独立 `campus_settlement_reconcile_difference_record`，明确差异来源、差异类型、`OPEN / RESOLVED` 最小处理状态、admin 最小接口边界和与 `campus_settlement_record` payout 摘要的兼容策略；本轮没有修改 SQL、Java、Vue、接口实现、bridge、鉴权、路由、token 附着或旧外卖模块。
+
+## Step 63 - settlement 对账差异记录实现 go / no-go
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-62-settlement-reconcile-difference-minimal-solution-design.md](step-62-settlement-reconcile-difference-minimal-solution-design.md)
+- [project-logs/campus-relay/step-63-settlement-reconcile-difference-implementation-go-no-go.md](step-63-settlement-reconcile-difference-implementation-go-no-go.md)
+
+本轮是 settlement 对账差异记录实现 go / no-go 评估轮：最终选择 Step 64 进入 `campus_settlement_reconcile_difference_record` 最小后端实现，并明确只允许落表、数据库路径同步、admin 列表/详情/创建/resolve 四个最小接口；本轮没有修改 SQL、Java、Vue、接口实现、bridge、鉴权、路由、token 附着或旧外卖模块。
