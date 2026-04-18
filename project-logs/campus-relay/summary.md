@@ -1980,15 +1980,29 @@
 
 ## 下一轮建议
 
-- 进入 `Step 59`
+- 进入 `Step 60`
 - 推荐顺序：
-  1. 基于 Step 58 已通过的运行态证据，先做 settlement 批次操作审计下一步 go / no-go。
-  2. 方向 A：在现有 settlement 批次详情前端中做操作审计只读承接。
-  3. 方向 B：进入 settlement 对账差异记录最小方案设计。
-  4. 默认不要新增独立第五个 admin 页。
-  5. 如果做前端承接，优先在现有批次详情页增加只读操作历史区，不新增写操作。
-  6. 如果进入对账差异设计，先做方案边界，不并发实现前端页面。
-  7. 不接真实打款，不改 bridge、不改鉴权、不改 token 附着。
+  1. 按 Step 59 结论进入 settlement 批次操作审计前端最小只读承接。
+  2. 优先只改 `frontend/src/api/campus-admin.js` 与 `frontend/src/views/CampusSettlementBatchDetail.vue`。
+  3. 新增 `getCampusSettlementBatchOperations(batchNo, params)` API 封装。
+  4. 在现有批次详情页增加“批次操作历史”只读区。
+  5. 只调用 `GET /api/campus/admin/settlements/payout-batches/{batchNo}/operations`。
+  6. 不调用 review / withdraw 写接口，不新增按钮动作。
+  7. 不新增第五个 admin 页，不实现对账差异记录，不接真实打款，不改 bridge、不改鉴权、不改 token 附着。
+
+## Step 59 实际完成事项
+
+1. 完成 settlement 批次操作审计前端承接 go / no-go。
+2. 评估方向 A：在现有 `CampusSettlementBatchDetail.vue` 中增加 operations 只读承接。
+3. 评估方向 B：进入 settlement 对账差异记录最小方案设计。
+4. 最终选择方向 A。
+5. 选择原因：
+   - Step 58 已证明后端 operations 可真实查询审计历史。
+   - 现有批次详情页天然具备 `batchNo` 上下文。
+   - 只读承接能补齐“批次汇总 -> 明细 -> 操作历史”的最小展示闭环。
+   - 改动范围可限制在一个 API 封装和一个现有页面。
+   - 不新增第五个 admin 页，不改后端、不改状态、不改 bridge。
+6. 本轮没有修改 Java、SQL、Vue 业务代码，没有新增前端页面，没有改 bridge、鉴权、token 附着、路由或旧外卖模块。
 
 ## 日志索引
 
@@ -2061,6 +2075,7 @@
 - [Step 56 日志](step-56-settlement-batch-operation-audit-go-no-go.md)
 - [Step 57 日志](step-57-settlement-batch-operation-audit-minimal-implementation.md)
 - [Step 58 日志](step-58-settlement-batch-operation-runtime-validation.md)
+- [Step 59 日志](step-59-settlement-batch-operation-frontend-go-no-go.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

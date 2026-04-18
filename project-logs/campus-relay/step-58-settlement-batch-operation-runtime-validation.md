@@ -104,3 +104,13 @@
 2. 默认不要新增独立第五个 admin 页。
 3. 如果做前端承接，优先在现有批次详情页增加只读操作历史区，不新增写操作。
 4. 如果进入对账差异设计，先做方案边界，不并发实现前端页面。
+
+## Step 59 go / no-go 回填
+
+Step 59 已完成 go / no-go 评估，并选择方向 A：
+
+1. 在现有 `CampusSettlementBatchDetail.vue` 中增加 operations 只读承接。
+2. 不新增独立第五个 admin 页。
+3. 不调用 review / withdraw 写接口。
+4. 不进入对账差异记录方案设计。
+5. Step 60 建议只改 `frontend/src/api/campus-admin.js` 与 `frontend/src/views/CampusSettlementBatchDetail.vue`。
