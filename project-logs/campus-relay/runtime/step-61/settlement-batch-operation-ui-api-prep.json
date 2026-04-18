@@ -1,0 +1,42 @@
+{
+  "generatedAt": "2026-04-18T09:48:55",
+  "environment": "local H2/test backend + Vite frontend prep",
+  "batchNo": "PBSTEP61UI",
+  "settlementId": 1,
+  "relayOrderId": "CR202604060001",
+  "operationsEndpoint": "GET /api/campus/admin/settlements/payout-batches/PBSTEP61UI/operations?page=1&pageSize=10",
+  "pagePath": "/campus/settlement-batches/PBSTEP61UI",
+  "checks": {
+    "operationTotal": 2,
+    "containsReviewPassed": true,
+    "containsWithdrawRequested": true,
+    "detailRecordCount": 1,
+    "detailPaidCount": 1,
+    "detailPayoutStatus": "PAID",
+    "passed": true
+  },
+  "operationRecords": [
+    {
+      "id": 2,
+      "payoutBatchNo": "PBSTEP61UI",
+      "operationType": "WITHDRAW",
+      "operationResult": "REQUESTED",
+      "operationRemark": "Step61 page withdraw audit only",
+      "operatedByEmployeeId": 1,
+      "operatedAt": "2026-04-18 09:48:55",
+      "createdAt": "2026-04-18 09:48:55",
+      "updatedAt": "2026-04-18 09:48:55"
+    },
+    {
+      "id": 1,
+      "payoutBatchNo": "PBSTEP61UI",
+      "operationType": "REVIEW",
+      "operationResult": "PASSED",
+      "operationRemark": "Step61 page review audit only",
+      "operatedByEmployeeId": 1,
+      "operatedAt": "2026-04-18 09:48:55",
+      "createdAt": "2026-04-18 09:48:55",
+      "updatedAt": "2026-04-18 09:48:55"
+    }
+  ]
+}

@@ -1029,3 +1029,15 @@
 - [project-logs/campus-relay/step-60-settlement-batch-operation-frontend-minimal-handoff.md](step-60-settlement-batch-operation-frontend-minimal-handoff.md)
 
 本轮是 settlement 批次操作审计前端最小只读承接实现轮：只在现有批次详情页增加“批次操作历史”只读区，并新增 admin API 封装；没有新增页面、路由、后端接口、写操作，也没有修改 bridge、鉴权、token 附着、订单主状态、settlement payout 摘要或旧外卖模块。
+
+## Step 61 - settlement 批次操作审计前端运行态验证
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-60-settlement-batch-operation-frontend-minimal-handoff.md](step-60-settlement-batch-operation-frontend-minimal-handoff.md)
+- [project-logs/campus-relay/step-61-settlement-batch-operation-frontend-runtime-validation.md](step-61-settlement-batch-operation-frontend-runtime-validation.md)
+- [project-logs/campus-relay/runtime/step-61/settlement-batch-operation-ui-api-prep.json](runtime/step-61/settlement-batch-operation-ui-api-prep.json)
+- [project-logs/campus-relay/runtime/step-61/settlement-batch-operation-page-validation.json](runtime/step-61/settlement-batch-operation-page-validation.json)
+
+本轮是 settlement 批次操作审计前端运行态验证轮：H2/test 下准备固定批次 `PBSTEP61UI` 和两条操作审计记录，并通过 Playwright 验证现有批次详情页可以展示“批次操作历史”只读区；本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面，没有改 bridge、鉴权、路由、token 附着或旧外卖模块。

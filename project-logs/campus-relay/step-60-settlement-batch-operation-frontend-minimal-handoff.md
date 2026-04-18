@@ -88,3 +88,17 @@
    - 验证“批次操作历史”区展示 2 条审计记录。
 3. 运行态验证通过后，再评估是否进入 settlement 对账差异记录方案设计。
 4. 不默认新增第五个 admin 页，不默认继续做页面 polish。
+
+## Step 61 运行态验证回填
+
+Step 61 已完成 H2/test + Vite + Playwright 运行态验证：
+
+1. 固定批次号：`PBSTEP61UI`。
+2. API 准备成功写入 `REVIEW / PASSED` 和 `WITHDRAW / REQUESTED`。
+3. 页面 `/campus/settlement-batches/PBSTEP61UI` 能展示批次汇总和 settlement 明细。
+4. 页面能展示“批次操作历史”只读区。
+5. 页面能展示 2 条操作审计记录。
+6. 浏览器上下文中 `/operations` 返回 `total = 2`。
+7. 证据文件：
+   - `project-logs/campus-relay/runtime/step-61/settlement-batch-operation-ui-api-prep.json`
+   - `project-logs/campus-relay/runtime/step-61/settlement-batch-operation-page-validation.json`

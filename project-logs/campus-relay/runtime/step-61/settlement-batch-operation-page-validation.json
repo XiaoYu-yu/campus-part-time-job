@@ -1,0 +1,24 @@
+{
+  "generatedAt": "2026-04-18T01:51:11Z",
+  "environment": "local H2/test backend + Vite frontend + Playwright browser",
+  "pageUrl": "http://127.0.0.1:5173/campus/settlement-batches/PBSTEP61UI",
+  "batchNo": "PBSTEP61UI",
+  "relayOrderId": "CR202604060001",
+  "domChecks": {
+    "hasBatchNo": true,
+    "hasSettlementOrder": true,
+    "hasOperationHistoryArea": true,
+    "hasTwoOperationTotal": true,
+    "hasReviewResult": true,
+    "hasWithdrawResult": true,
+    "hasNoOperationLoadError": true
+  },
+  "apiChecksFromBrowser": {
+    "code": 200,
+    "total": 2,
+    "containsReviewPassed": true,
+    "containsWithdrawRequested": true
+  },
+  "validationResult": "PASS",
+  "note": "Playwright validated the existing batch detail page renders the operation history area and operation records; direct browser fetch confirmed the operations endpoint returned REVIEW/PASSED and WITHDRAW/REQUESTED records."
+}

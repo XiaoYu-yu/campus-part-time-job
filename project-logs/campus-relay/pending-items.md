@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 61 最高优先级
+## Step 62 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -145,16 +145,21 @@
    - 没有调用 review / withdraw 写接口。
    - 没有新增页面、路由、后端接口或 bridge 改动。
    - `npm run build` 已通过。
-26. Step 61 最高优先级建议：
-   - 做 settlement 批次操作审计前端运行态验证。
-   - H2/test 下准备固定 `payout_batch_no`。
-   - 写入 review / withdraw 操作审计。
-   - 打开 `/campus/settlement-batches/{batchNo}`。
-   - 验证“批次操作历史”区能展示审计记录。
-   - 验证原 settlement 明细表仍正常展示。
-   - 若验证失败，下一轮先修前端承接，不要扩功能。
-   - 若验证通过，再评估是否进入 settlement 对账差异记录方案设计。
-27. Step 61 明确禁止：
+26. Step 61 已完成 settlement 批次操作审计前端运行态验证：
+   - H2/test 下准备固定批次 `PBSTEP61UI`。
+   - 成功写入 `REVIEW / PASSED` 和 `WITHDRAW / REQUESTED`。
+   - `/campus/settlement-batches/PBSTEP61UI` 能展示批次汇总、settlement 明细和 2 条操作审计记录。
+   - 浏览器上下文中 `/operations` 返回 `code = 200`、`total = 2`。
+   - 证据文件：
+     - `project-logs/campus-relay/runtime/step-61/settlement-batch-operation-ui-api-prep.json`
+     - `project-logs/campus-relay/runtime/step-61/settlement-batch-operation-page-validation.json`
+27. Step 62 最高优先级建议：
+   - 进入 settlement 对账差异记录最小方案设计。
+   - 先判断是否需要独立差异记录表。
+   - 明确差异来源、处理状态、接口边界和与 `campus_settlement_record` payout 摘要的兼容策略。
+   - 本轮默认只做方案，不写 SQL、Java、Vue 或页面。
+   - 不接真实财务，不新增第五个 admin 页。
+28. Step 62 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -167,8 +172,8 @@
    - 不改 `payout_status`
    - 不清空 `payout_batch_no`
    - 不并发实现对账差异记录
-28. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-29. 第五个 admin 页继续后置，不再以“补页数”为目标。
+29. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+30. 第五个 admin 页继续后置，不再以“补页数”为目标。
 
 ## 已完成但仍需继续扩展的部分
 

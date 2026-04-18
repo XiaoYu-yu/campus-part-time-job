@@ -1980,16 +1980,13 @@
 
 ## 下一轮建议
 
-- 进入 `Step 61`
+- 进入 `Step 62`
 - 推荐顺序：
-  1. 先做 settlement 批次操作审计前端运行态验证。
-  2. H2/test 下准备固定 `payout_batch_no`。
-  3. 写入 review / withdraw 操作审计。
-  4. 打开 `/campus/settlement-batches/{batchNo}`。
-  5. 验证“批次操作历史”只读区能展示操作审计记录。
-  6. 验证原 settlement 明细表仍正常展示。
-  7. 运行态验证通过后，再评估是否进入 settlement 对账差异记录方案设计。
-  8. 不新增第五个 admin 页，不接真实打款，不改 bridge、不改鉴权、不改 token 附着。
+  1. 进入 settlement 对账差异记录最小方案设计。
+  2. 先判断是否需要独立差异记录表。
+  3. 明确差异来源、处理状态、接口边界和与 `campus_settlement_record` payout 摘要的兼容策略。
+  4. 不默认写 SQL、Java、Vue 或页面。
+  5. 不新增第五个 admin 页，不接真实打款，不改 bridge、不改鉴权、不改 token 附着。
 
 ## Step 59 实际完成事项
 
@@ -2025,6 +2022,27 @@
 8. 本轮没有调用 review / withdraw 写接口，没有改 bridge、鉴权、token 附着、订单主状态或真实财务动作。
 9. 验证结果：
    - `npm run build` 通过。
+
+## Step 61 实际完成事项
+
+1. 完成 settlement 批次操作审计前端运行态验证。
+2. 使用 H2/test 后端和 Vite 前端准备固定批次 `PBSTEP61UI`。
+3. API 准备成功写入：
+   - `REVIEW / PASSED`
+   - `WITHDRAW / REQUESTED`
+4. 打开页面：
+   - `/campus/settlement-batches/PBSTEP61UI`
+5. 页面验证通过：
+   - 能展示批次号 `PBSTEP61UI`。
+   - 能展示 settlement 明细订单 `CR202604060001`。
+   - 能展示“批次操作历史”只读区。
+   - 能展示 2 条操作审计记录。
+   - 未出现操作历史加载失败。
+6. 浏览器上下文中 `/operations` 返回 `code = 200`、`total = 2`。
+7. 新增运行态证据文件：
+   - `project-logs/campus-relay/runtime/step-61/settlement-batch-operation-ui-api-prep.json`
+   - `project-logs/campus-relay/runtime/step-61/settlement-batch-operation-page-validation.json`
+8. 本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面，没有改 bridge、鉴权、token 附着、路由或旧外卖模块。
 
 ## 日志索引
 
@@ -2099,6 +2117,7 @@
 - [Step 58 日志](step-58-settlement-batch-operation-runtime-validation.md)
 - [Step 59 日志](step-59-settlement-batch-operation-frontend-go-no-go.md)
 - [Step 60 日志](step-60-settlement-batch-operation-frontend-minimal-handoff.md)
+- [Step 61 日志](step-61-settlement-batch-operation-frontend-runtime-validation.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)
