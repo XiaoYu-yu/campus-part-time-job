@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 65 最高优先级
+## Step 66 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -175,12 +175,20 @@
    - H2/test 下使用固定批次 `PBSTEP64RECON` 验证创建、查询、resolve、重复 resolve 失败和 settlement 摘要不变。
    - 证据文件：`project-logs/campus-relay/runtime/step-64/settlement-reconcile-difference-validation.json`。
    - 本轮没有新增前端页面，没有新增第五个 admin 页，没有接真实财务，没有改 payout 摘要、订单主状态或 bridge。
-30. Step 65 最高优先级建议：
-   - 先做 settlement 对账差异前端承接 go / no-go。
-   - 不默认新增第五个 admin 页。
-   - 优先评估是否在现有 settlement 只读运营页或批次详情页中做最小只读承接。
-   - 如果前端承接收益不足，可以收住 settlement 对账差异线，转入下一条非 bridge 后端能力。
-31. Step 65 明确禁止：
+30. Step 65 已完成 settlement 对账差异前端承接 go / no-go：
+   - 方向 A：在现有 `CampusSettlementOpsView.vue` 详情 drawer 内增加“对账差异记录”只读区。
+   - 方向 B：暂不做前端承接，收住 settlement 对账差异线。
+   - 方向 C：放到批次详情页。
+   - 最终选择方向 A。
+   - 选择原因：单笔 settlement 详情 drawer 最适合解释差异记录与 payout 摘要兼容关系，且不需要新增页面、路由或写操作。
+   - 本轮没有写前端页面、没有新增 API 封装、没有改 bridge。
+31. Step 66 最高优先级建议：
+   - `frontend/src/api/campus-admin.js` 新增 `getCampusSettlementReconcileDifferences(params)`。
+   - `frontend/src/views/CampusSettlementOpsView.vue` 详情 drawer 增加“对账差异记录”只读区。
+   - 打开 settlement 详情时按 `settlementRecordId` 加载差异记录。
+   - 只展示 `OPEN / RESOLVED`、差异类型、金额、来源、处理结果和时间字段。
+   - 空态提示“暂无对账差异记录”。
+32. Step 66 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -190,8 +198,10 @@
    - 不补完整财务系统
    - 不改订单主状态机
    - 不为补页数机械新增 admin 页面
-32. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-33. 第五个 admin 页继续后置，不再以“补页数”为目标。
+   - 不接入 create / resolve 写操作
+   - 不改后端接口
+33. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+34. 第五个 admin 页继续后置，不再以“补页数”为目标。
 
 ## 已完成但仍需继续扩展的部分
 

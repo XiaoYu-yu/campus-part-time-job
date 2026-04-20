@@ -143,7 +143,7 @@ H2/test 验证证据：
 
 ## 下一轮建议
 
-1. Step 65 先做 settlement 对账差异前端承接 go / no-go。
-2. 默认不直接新增第五个 admin 页。
-3. 优先评估是否在现有 settlement 只读运营页或批次详情页中做最小只读承接。
-4. 如果前端承接收益不足，也可以收住 settlement 对账差异线，转入下一条非 bridge 后端能力。
+1. Step 65 已完成 settlement 对账差异前端承接 go / no-go。
+2. 最终选择在现有 `CampusSettlementOpsView.vue` 详情 drawer 内做只读承接。
+3. Step 66 建议只新增 admin API 封装和 drawer 内“对账差异记录”只读区。
+4. 不新增第五个 admin 页，不接入 create / resolve 写操作。

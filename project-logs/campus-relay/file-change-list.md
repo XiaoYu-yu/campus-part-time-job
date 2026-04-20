@@ -1087,3 +1087,13 @@
 - [project-logs/campus-relay/runtime/step-64/settlement-reconcile-difference-validation.json](runtime/step-64/settlement-reconcile-difference-validation.json)
 
 本轮是 settlement 对账差异记录最小后端实现轮：新增对账差异审计表、四个 admin 最小接口和 MySQL/H2 数据库路径同步；创建差异必须校验 settlement 存在且批次号匹配，resolve 只允许 `OPEN -> RESOLVED`，不改 settlement payout 摘要、不改 `reconcile-summary`、不接真实财务；本轮没有新增前端页面，没有改 bridge、鉴权、路由、token 附着或旧外卖模块。
+
+## Step 65 - settlement 对账差异前端承接 go / no-go
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-64-settlement-reconcile-difference-minimal-implementation.md](step-64-settlement-reconcile-difference-minimal-implementation.md)
+- [project-logs/campus-relay/step-65-settlement-reconcile-difference-frontend-go-no-go.md](step-65-settlement-reconcile-difference-frontend-go-no-go.md)
+
+本轮是 settlement 对账差异前端承接 go / no-go 评估轮：最终选择方向 A，建议 Step 66 在现有 `CampusSettlementOpsView.vue` 详情 drawer 中增加对账差异只读区；本轮没有修改 Vue 页面、API 封装、后端接口、SQL、bridge、鉴权、路由、token 附着或旧外卖模块。
