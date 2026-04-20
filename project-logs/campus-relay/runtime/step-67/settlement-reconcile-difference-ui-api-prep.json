@@ -1,0 +1,158 @@
+{
+  "generatedAt": "2026-04-20T23:33:36",
+  "baseUrl": "http://127.0.0.1:18080",
+  "batchNo": "PBSTEP67UI",
+  "settlementRecordId": 1,
+  "checks": {
+    "employeeLoginCode": 200,
+    "confirmCode": 200,
+    "batchPayoutCode": 200,
+    "createDifferenceCode": 200,
+    "differenceListCode": 200,
+    "differenceTotal": 1,
+    "hasStep67Difference": true,
+    "settlementPayoutStatus": "FAILED",
+    "settlementPayoutBatchNo": "PBSTEP67UI",
+    "adminTokenRedacted": true
+  },
+  "responses": {
+    "login": {
+      "code": 200,
+      "msg": "success",
+      "data": {
+        "employee": {
+          "id": 1,
+          "name": "绠＄悊鍛�",
+          "phone": "13800138000",
+          "position": "绠＄悊鍛�",
+          "department": "鎶�鏈儴",
+          "entryDate": "2024-01-01",
+          "status": 1,
+          "createdAt": "2026-04-20 23:27:16",
+          "updatedAt": "2026-04-20 23:33:36"
+        },
+        "token": "[REDACTED]"
+      }
+    },
+    "beforeSettlement": {
+      "code": 200,
+      "msg": "success",
+      "data": {
+        "id": 1,
+        "relayOrderId": "CR202604060001",
+        "courierProfileId": 2,
+        "grossAmount": 6.0,
+        "platformCommission": 0.0,
+        "pendingAmount": 6.0,
+        "settlementStatus": "PENDING",
+        "payoutStatus": null,
+        "payoutBatchNo": null,
+        "payoutRemark": null,
+        "payoutReferenceNo": null,
+        "payoutRecordedByEmployeeId": null,
+        "payoutVerified": 0,
+        "payoutVerifiedByEmployeeId": null,
+        "payoutVerifyRemark": null,
+        "remark": "绗竴鐗堝緟缁撶畻绀轰緥",
+        "settledAt": null,
+        "payoutRecordedAt": null,
+        "payoutVerifiedAt": null,
+        "createdAt": "2026-04-20 23:27:16",
+        "updatedAt": "2026-04-20 23:27:16"
+      }
+    },
+    "confirm": {
+      "code": 200,
+      "msg": "success",
+      "data": null
+    },
+    "batchPayout": {
+      "code": 200,
+      "msg": "success",
+      "data": {
+        "totalRequested": 1,
+        "successCount": 1,
+        "skippedCount": 0,
+        "failedCount": 0,
+        "skippedIds": [],
+        "failedIds": []
+      }
+    },
+    "createDifference": {
+      "code": 200,
+      "msg": "success",
+      "data": null
+    },
+    "differenceList": {
+      "code": 200,
+      "msg": "success",
+      "data": {
+        "records": [
+          {
+            "id": 1,
+            "payoutBatchNo": "PBSTEP67UI",
+            "settlementRecordId": 1,
+            "relayOrderId": "CR202604060001",
+            "courierProfileId": 2,
+            "differenceType": "AMOUNT_MISMATCH",
+            "expectedAmount": 6.0,
+            "actualAmount": 4.5,
+            "differenceRemark": "Step67 UI drawer amount mismatch validation",
+            "processStatus": "OPEN",
+            "processResult": null,
+            "processRemark": null,
+            "reportedByEmployeeId": 1,
+            "reportedAt": "2026-04-20 23:33:37",
+            "processedByEmployeeId": null,
+            "processedAt": null,
+            "source": "SIMULATED_RECONCILE",
+            "settlementStatus": "SETTLED",
+            "payoutStatus": "FAILED",
+            "currentPayoutBatchNo": "PBSTEP67UI",
+            "payoutRemark": "Step67 failed payout for frontend drawer validation",
+            "payoutReferenceNo": "PBSTEP67UI",
+            "payoutVerified": 0,
+            "payoutVerifyRemark": null,
+            "pendingAmount": 6.0,
+            "payoutRecordedAt": "2026-04-20 23:33:37",
+            "payoutVerifiedAt": null,
+            "createdAt": "2026-04-20 23:33:37",
+            "updatedAt": "2026-04-20 23:33:37"
+          }
+        ],
+        "total": 1,
+        "size": 10,
+        "current": 1,
+        "pages": 1
+      }
+    },
+    "afterSettlement": {
+      "code": 200,
+      "msg": "success",
+      "data": {
+        "id": 1,
+        "relayOrderId": "CR202604060001",
+        "courierProfileId": 2,
+        "grossAmount": 6.0,
+        "platformCommission": 0.0,
+        "pendingAmount": 6.0,
+        "settlementStatus": "SETTLED",
+        "payoutStatus": "FAILED",
+        "payoutBatchNo": "PBSTEP67UI",
+        "payoutRemark": "Step67 failed payout for frontend drawer validation",
+        "payoutReferenceNo": "PBSTEP67UI",
+        "payoutRecordedByEmployeeId": 1,
+        "payoutVerified": 0,
+        "payoutVerifiedByEmployeeId": null,
+        "payoutVerifyRemark": null,
+        "remark": "绗竴鐗堝緟缁撶畻绀轰緥 | Step67 prepare settlement for reconcile difference drawer validation",
+        "settledAt": "2026-04-20 23:33:37",
+        "payoutRecordedAt": "2026-04-20 23:33:37",
+        "payoutVerifiedAt": null,
+        "createdAt": "2026-04-20 23:27:16",
+        "updatedAt": "2026-04-20 23:33:37"
+      }
+    }
+  },
+  "validationResult": "PASS"
+}

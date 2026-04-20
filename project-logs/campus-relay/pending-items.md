@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 67 最高优先级
+## Step 68 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -189,12 +189,20 @@
    - 只读展示 `OPEN / RESOLVED`、差异类型、金额、来源、处理结果和时间字段。
    - 空态提示“暂无对账差异记录，当前 settlement 仍按原 payout 摘要展示”。
    - 没有接入 create / resolve 写操作，没有新增页面或路由。
-32. Step 67 最高优先级建议：
-   - 做 settlement 对账差异前端运行态验证。
-   - 优先在 H2/test 下复用或重新生成 `PBSTEP64RECON` 类样本。
-   - 验证 `/campus/settlements` 打开 settlement 详情 drawer 后能看到对账差异记录。
-   - 验证空态、错误态和 settlement payout 摘要不变。
-33. Step 67 明确禁止：
+32. Step 67 已完成 settlement 对账差异前端运行态验证：
+   - H2/test 下准备固定批次 `PBSTEP67UI`、settlement `id=1` 和 `AMOUNT_MISMATCH` 差异记录。
+   - `/campus/settlements` 列表可显示 `CR202604060001`，详情 drawer 可展示“对账差异记录”只读区。
+   - 浏览器中验证 `GET /api/campus/admin/settlements/reconcile-differences?settlementRecordId=1&page=1&pageSize=10` 返回 `total = 1`。
+   - 对账差异只读展示不改变 settlement payout 摘要，当前摘要仍为 `FAILED / PBSTEP67UI`。
+   - 证据文件：
+     - `project-logs/campus-relay/runtime/step-67/settlement-reconcile-difference-ui-api-prep.json`
+     - `project-logs/campus-relay/runtime/step-67/settlement-reconcile-difference-page-validation.json`
+     - `project-logs/campus-relay/runtime/step-67/settlement-reconcile-difference-drawer.png`
+33. Step 68 最高优先级建议：
+   - 先评估 settlement 对账差异前端线是否收住。
+   - 若不收住，再做“是否接入对账差异 resolve 前端动作”的 go / no-go，不要默认直接写代码。
+   - 若收住，则把 P3 settlement 线进入阶段复盘或转入下一条非 bridge 后端能力评估。
+34. Step 68 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -206,8 +214,8 @@
    - 不为补页数机械新增 admin 页面
    - 不接入 create / resolve 写操作
    - 不改后端接口
-34. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-35. 第五个 admin 页继续后置，不再以“补页数”为目标。
+35. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+36. 第五个 admin 页继续后置，不再以“补页数”为目标。
 
 ## 已完成但仍需继续扩展的部分
 

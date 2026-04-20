@@ -72,6 +72,16 @@
 - `git diff --check`：通过。
 - 本轮未改后端代码，未运行后端 compile。
 
+## Step 67 运行态验证补充
+
+- H2/test 下已准备 `PBSTEP67UI` / settlement `id=1` 的对账差异样本。
+- `/campus/settlements` 列表可显示 `CR202604060001`，详情 drawer 可展示“对账差异记录”只读区。
+- 浏览器内验证 `GET /api/campus/admin/settlements/reconcile-differences?settlementRecordId=1&page=1&pageSize=10` 返回 `total = 1`。
+- 验证证据：
+  - `project-logs/campus-relay/runtime/step-67/settlement-reconcile-difference-ui-api-prep.json`
+  - `project-logs/campus-relay/runtime/step-67/settlement-reconcile-difference-page-validation.json`
+  - `project-logs/campus-relay/runtime/step-67/settlement-reconcile-difference-drawer.png`
+
 ## 当前 bridge 结论
 
 1. bridge 仍处于 `Phase A no-op` 冻结态。

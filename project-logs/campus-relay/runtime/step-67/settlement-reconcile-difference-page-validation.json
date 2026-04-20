@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-04-20T23:51:40",
+  "environment": "local H2 test profile, backend 127.0.0.1:18080, frontend 127.0.0.1:5173",
+  "pageUrl": "http://127.0.0.1:5173/campus/settlements",
+  "settlementRecordId": 1,
+  "relayOrderId": "CR202604060001",
+  "batchNo": "PBSTEP67UI",
+  "screenshot": "project-logs/campus-relay/runtime/step-67/settlement-reconcile-difference-drawer.png",
+  "domChecks": {
+    "hasSettlementPage": true,
+    "hasDetailDrawer": true,
+    "hasSettlementId": true,
+    "hasReconcileSection": true,
+    "hasBatchNo": true,
+    "hasDifferenceRemark": true,
+    "hasAmountMismatch": true,
+    "hasExpectedAmount": true,
+    "hasActualAmount": true,
+    "hasProcessStatusOpen": true,
+    "hasNoLoadError": true
+  },
+  "apiChecksFromBrowser": {
+    "endpoint": "GET /api/campus/admin/settlements/reconcile-differences?settlementRecordId=1&page=1&pageSize=10",
+    "code": 200,
+    "total": 1,
+    "containsStep67Difference": true,
+    "firstRecord": {
+      "id": 1,
+      "payoutBatchNo": "PBSTEP67UI",
+      "differenceType": "AMOUNT_MISMATCH",
+      "expectedAmount": 6.0,
+      "actualAmount": 4.5,
+      "processStatus": "OPEN",
+      "source": "SIMULATED_RECONCILE"
+    }
+  },
+  "validationResult": "PASS",
+  "note": "Browser opened /campus/settlements, clicked the settlement detail drawer, and confirmed the read-only reconcile difference table displays the Step67 sample without load error."
+}
