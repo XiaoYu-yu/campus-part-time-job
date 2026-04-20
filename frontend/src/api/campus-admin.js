@@ -78,6 +78,12 @@ export const getCampusSettlementDetail = (id) => request({
   method: 'get'
 })
 
+export const getCampusSettlementReconcileDifferences = (params) => request({
+  url: '/campus/admin/settlements/reconcile-differences',
+  method: 'get',
+  params: normalizePageParams(params)
+})
+
 export const getCampusExceptionRecords = (params) => request({
   url: '/campus/admin/exceptions',
   method: 'get',

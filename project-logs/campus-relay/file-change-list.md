@@ -1097,3 +1097,15 @@
 - [project-logs/campus-relay/step-65-settlement-reconcile-difference-frontend-go-no-go.md](step-65-settlement-reconcile-difference-frontend-go-no-go.md)
 
 本轮是 settlement 对账差异前端承接 go / no-go 评估轮：最终选择方向 A，建议 Step 66 在现有 `CampusSettlementOpsView.vue` 详情 drawer 中增加对账差异只读区；本轮没有修改 Vue 页面、API 封装、后端接口、SQL、bridge、鉴权、路由、token 附着或旧外卖模块。
+
+## Step 66 - settlement 对账差异前端最小只读承接
+
+- [frontend/src/api/campus-admin.js](../../frontend/src/api/campus-admin.js)
+- [frontend/src/views/CampusSettlementOpsView.vue](../../frontend/src/views/CampusSettlementOpsView.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-65-settlement-reconcile-difference-frontend-go-no-go.md](step-65-settlement-reconcile-difference-frontend-go-no-go.md)
+- [project-logs/campus-relay/step-66-settlement-reconcile-difference-frontend-minimal-handoff.md](step-66-settlement-reconcile-difference-frontend-minimal-handoff.md)
+
+本轮是 settlement 对账差异前端最小只读承接实现轮：只在现有 `CampusSettlementOpsView.vue` 详情 drawer 中增加“对账差异记录”只读区，并新增 admin API 封装；没有新增页面、路由、后端接口或写操作，也没有修改 bridge、鉴权、token 附着、settlement payout 摘要、`reconcile-summary` 或旧外卖模块。

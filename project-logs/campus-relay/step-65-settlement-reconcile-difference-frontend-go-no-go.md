@@ -135,6 +135,8 @@ Step 66 明确不做：
 
 ## 下一轮建议
 
-1. Step 66 进入 settlement 对账差异只读前端承接。
-2. 只在 `CampusSettlementOpsView.vue` 详情 drawer 内做最小只读展示。
-3. 实现后跑 `npm run build`，并尽量用 H2/test 验证 `PBSTEP64RECON` 或新生成样本在页面 drawer 中可见。
+1. Step 66 已按本轮边界完成 settlement 对账差异只读前端承接。
+2. 承接位置为 `CampusSettlementOpsView.vue` 详情 drawer。
+3. 已新增 `getCampusSettlementReconcileDifferences(params)` API 封装。
+4. 已明确没有接入 create / resolve 写操作。
+5. Step 67 建议继续做 H2/test 下的页面运行态验证，确认差异记录能在 drawer 中真实可见。

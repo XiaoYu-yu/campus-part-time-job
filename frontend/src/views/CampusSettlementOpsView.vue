@@ -236,6 +236,91 @@
               <el-descriptions-item label="创建时间">{{ formatDateTime(detail.createdAt) }}</el-descriptions-item>
               <el-descriptions-item label="更新时间">{{ formatDateTime(detail.updatedAt) }}</el-descriptions-item>
             </el-descriptions>
+
+            <div class="detail-section-title reconcile-title">
+              <div>
+                <h3>对账差异记录</h3>
+                <p>只读展示 `GET /api/campus/admin/settlements/reconcile-differences` 按当前结算ID返回的差异记录，不提供创建或处理操作。</p>
+              </div>
+              <el-tag type="info" effect="plain">只读差异</el-tag>
+            </div>
+
+            <el-alert
+              v-if="reconcileDifferenceError"
+              :title="reconcileDifferenceError"
+              type="error"
+              show-icon
+              :closable="false"
+              class="drawer-alert"
+            />
+
+            <el-table
+              v-loading="reconcileDifferenceLoading"
+              :data="reconcileDifferenceRecords"
+              border
+              empty-text="暂无对账差异记录，当前 settlement 仍按原 payout 摘要展示"
+            >
+              <el-table-column prop="id" label="差异ID" width="92" align="center" />
+              <el-table-column prop="payoutBatchNo" label="批次号" min-width="150">
+                <template #default="{ row }">
+                  {{ displayText(row.payoutBatchNo) }}
+                </template>
+              </el-table-column>
+              <el-table-column label="差异类型" min-width="150" align="center">
+                <template #default="{ row }">
+                  <el-tag :type="differenceTypeTag(row.differenceType)">
+                    {{ differenceTypeText(row.differenceType) }}
+                  </el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="期望金额" width="120" align="right">
+                <template #default="{ row }">
+                  {{ formatOptionalAmount(row.expectedAmount) }}
+                </template>
+              </el-table-column>
+              <el-table-column label="实际金额" width="120" align="right">
+                <template #default="{ row }">
+                  {{ formatOptionalAmount(row.actualAmount) }}
+                </template>
+              </el-table-column>
+              <el-table-column prop="differenceRemark" label="差异说明" min-width="200" show-overflow-tooltip>
+                <template #default="{ row }">
+                  {{ displayText(row.differenceRemark) }}
+                </template>
+              </el-table-column>
+              <el-table-column label="处理状态" width="110" align="center">
+                <template #default="{ row }">
+                  <el-tag :type="processStatusTag(row.processStatus)">
+                    {{ processStatusText(row.processStatus) }}
+                  </el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="处理结果" width="120" align="center">
+                <template #default="{ row }">
+                  {{ processResultText(row.processResult) }}
+                </template>
+              </el-table-column>
+              <el-table-column label="来源" width="130" align="center">
+                <template #default="{ row }">
+                  {{ sourceText(row.source) }}
+                </template>
+              </el-table-column>
+              <el-table-column label="登记时间" min-width="170">
+                <template #default="{ row }">
+                  {{ formatDateTime(row.reportedAt) }}
+                </template>
+              </el-table-column>
+              <el-table-column label="处理时间" min-width="170">
+                <template #default="{ row }">
+                  {{ formatDateTime(row.processedAt) }}
+                </template>
+              </el-table-column>
+            </el-table>
+
+            <div class="reconcile-footer">
+              <span>共 {{ reconcileDifferenceTotal }} 条差异记录</span>
+              <span>差异记录仅作审计展示，不改变当前 settlement payout 摘要。</span>
+            </div>
           </template>
         </div>
       </el-drawer>
@@ -248,6 +333,7 @@ import { onMounted, reactive, ref } from 'vue'
 import MainLayout from '../layout/MainLayout.vue'
 import {
   getCampusSettlementDetail,
+  getCampusSettlementReconcileDifferences,
   getCampusSettlementReconcileSummary,
   getCampusSettlements
 } from '../api/campus-admin'
@@ -259,6 +345,10 @@ const detailVisible = ref(false)
 const summary = ref({})
 const records = ref([])
 const detail = ref(null)
+const reconcileDifferenceLoading = ref(false)
+const reconcileDifferenceRecords = ref([])
+const reconcileDifferenceTotal = ref(0)
+const reconcileDifferenceError = ref('')
 
 const filters = reactive({
   settlementStatus: '',
@@ -274,6 +364,7 @@ const pagination = reactive({
 })
 
 const formatAmount = (value) => `¥${Number(value || 0).toFixed(2)}`
+const formatOptionalAmount = (value) => (value === null || value === undefined || value === '' ? '暂无' : formatAmount(value))
 const formatDateTime = (value) => value || '暂无'
 const displayText = (value) => (value === null || value === undefined || value === '' ? '暂无' : value)
 
@@ -298,6 +389,43 @@ const payoutStatusText = (status) => ({
   PAID: '已打款',
   FAILED: '打款失败'
 }[status] || '未打款')
+
+const differenceTypeTag = (type) => ({
+  AMOUNT_MISMATCH: 'danger',
+  STATUS_MISMATCH: 'warning',
+  UNVERIFIED_PAID: 'warning',
+  FAILED_NEEDS_RETRY: 'danger',
+  MANUAL_NOTE: 'info'
+}[type] || 'info')
+
+const differenceTypeText = (type) => ({
+  AMOUNT_MISMATCH: '金额不一致',
+  STATUS_MISMATCH: '状态不一致',
+  UNVERIFIED_PAID: '已打款未核对',
+  FAILED_NEEDS_RETRY: '失败待重试',
+  MANUAL_NOTE: '人工备注'
+}[type] || type || '暂无')
+
+const processStatusTag = (status) => ({
+  OPEN: 'warning',
+  RESOLVED: 'success'
+}[status] || 'info')
+
+const processStatusText = (status) => ({
+  OPEN: '待处理',
+  RESOLVED: '已处理'
+}[status] || status || '暂无')
+
+const processResultText = (result) => ({
+  CONFIRMED: '已确认',
+  MARKED_INVALID: '标记无效',
+  FOLLOWED_UP: '已跟进'
+}[result] || result || '暂无')
+
+const sourceText = (source) => ({
+  MANUAL_ADMIN: '人工登记',
+  SIMULATED_RECONCILE: '模拟对账'
+}[source] || source || '暂无')
 
 const buildQueryParams = () => ({
   settlementStatus: filters.settlementStatus || undefined,
@@ -334,10 +462,37 @@ const openDetail = async (id) => {
   detailVisible.value = true
   detailLoading.value = true
   detail.value = null
+  reconcileDifferenceRecords.value = []
+  reconcileDifferenceTotal.value = 0
+  reconcileDifferenceError.value = ''
   try {
-    detail.value = await getCampusSettlementDetail(id)
+    const [detailData] = await Promise.all([
+      getCampusSettlementDetail(id),
+      loadReconcileDifferences(id)
+    ])
+    detail.value = detailData
   } finally {
     detailLoading.value = false
+  }
+}
+
+const loadReconcileDifferences = async (settlementRecordId) => {
+  reconcileDifferenceLoading.value = true
+  reconcileDifferenceError.value = ''
+  try {
+    const data = await getCampusSettlementReconcileDifferences({
+      settlementRecordId,
+      page: 1,
+      pageSize: 10
+    })
+    reconcileDifferenceRecords.value = data?.records || []
+    reconcileDifferenceTotal.value = data?.total || 0
+  } catch (error) {
+    reconcileDifferenceRecords.value = []
+    reconcileDifferenceTotal.value = 0
+    reconcileDifferenceError.value = error?.message || '对账差异记录加载失败'
+  } finally {
+    reconcileDifferenceLoading.value = false
   }
 }
 
@@ -582,13 +737,37 @@ onMounted(() => loadPageData())
   }
 }
 
+.reconcile-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.drawer-alert {
+  margin-bottom: 12px;
+}
+
+.reconcile-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  color: #71717a;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 @media (max-width: 900px) {
   .ops-guide {
     grid-template-columns: 1fr;
   }
 
   .table-note,
-  .detail-status-card {
+  .detail-status-card,
+  .reconcile-title,
+  .reconcile-footer {
     flex-direction: column;
     align-items: flex-start;
   }
