@@ -1285,3 +1285,13 @@
 - [project-logs/campus-relay/step-81-frontend-bundle-freeze-and-no-op-review.md](step-81-frontend-bundle-freeze-and-no-op-review.md)
 
 本轮是前端打包线 freeze / no-op 复盘轮：基于 Step 80 已完成的 `echarts` 最小按需优化和 Vite warning 基线校准，确认当前剩余大包主要来自全局 `ElementPlus` vendor 基线，而不是新的误打包问题。由于继续推进全局按需拆分会显著扩大影响面且当前没有真实性能或交付压力，因此前端打包优化线正式冻结为 no-op，仅在出现明确性能信号、交付压力或全局组件装配重构时才重开。本轮没有业务代码改动。
+
+## Step 82 - 试运营 RC 下一阶段主线重排 / go-no-go 评估
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-81-frontend-bundle-freeze-and-no-op-review.md](step-81-frontend-bundle-freeze-and-no-op-review.md)
+- [project-logs/campus-relay/step-82-trial-operation-next-mainline-go-no-go.md](step-82-trial-operation-next-mainline-go-no-go.md)
+
+本轮是试运营 RC 下一阶段主线重排 / go-no-go 评估轮：基于 bridge、展示 polish、媒体、地图和前端打包优化五条主线都已冻结或收住的事实，对下一阶段候选方向做了重新排序。最终选择“试运营运维化最小能力”作为下一条真实主线，理由是它最能直接提升当前试运营版的可启动、可重置、可预检、可复跑能力，而不会把项目重新拉回 bridge、页面 polish 或复杂后端扩张。本轮没有业务代码改动。
