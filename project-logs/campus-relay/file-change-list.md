@@ -1178,3 +1178,13 @@
 - [project-logs/campus-relay/runtime/step-72/campus-courier-ops-map-panel.png](runtime/step-72/campus-courier-ops-map-panel.png)
 
 本轮是腾讯地图最小产品化试点轮：只在现有 `CampusCourierOpsView.vue` 中接入腾讯地图 JS SDK 最小地图预览，复用现有配送员位置上报数据展示真实点位；运行态验证确认 `/campus/courier-ops` 能展示地图比例尺与版权信息。当前没有新增页面、路由、后端接口或写操作，没有改 bridge、鉴权、token 附着、request.js、旧外卖模块，也没有提交真实地图 key 到仓库。
+
+## Step 73 - 腾讯地图产品化线 go / no-go 与试点收口
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-72-tencent-map-admin-ops-minimal-pilot.md](step-72-tencent-map-admin-ops-minimal-pilot.md)
+- [project-logs/campus-relay/step-73-tencent-map-productization-go-no-go.md](step-73-tencent-map-productization-go-no-go.md)
+
+本轮是腾讯地图产品化线 go / no-go 评估轮：基于 Step 72 已完成的真实地图试点，正式判断当前不继续扩到第二个既有页面；地图能力收住为 `CampusCourierOpsView.vue` 单页 admin 只读点位预览，保留 JS SDK 试点成果，但不做轨迹、路线、调度、导航、地图写操作或第二个地图页面。本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面、路由或后端接口，没有改 bridge、鉴权、token 附着、`request.js` 或旧外卖模块。

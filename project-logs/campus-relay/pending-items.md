@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 73 最高优先级
+## Step 74 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -9,26 +9,35 @@
    - 继续复用现有 courier 位置上报数据，不引入轨迹回放、实时调度或地图写操作。
    - 运行态验证确认 `CR202604060001` / 配送员 `id=2` 可在页面内看到地图比例尺和版权信息。
    - 当前 key 未开启 WebService API，静态图路线已明确放弃，后续如继续推进仍以 JS SDK 为主。
-4. Step 40 已完成交付整理与演示脚本固化：
+4. Step 73 已完成腾讯地图产品化线 go / no-go：
+   - 结论为不扩到第二个既有页面。
+   - 当前地图能力正式收住为 `CampusCourierOpsView.vue` 单页 admin 只读点位预览。
+   - 继续保留 `frontend/src/utils/tencentMap.js` 和现有地图试点成果。
+   - 不做轨迹回放、路线规划、实时调度、导航、地图写操作或第二个地图页面。
+5. Step 74 建议进入整体产品化下一阶段规划：
+   - 优先判断“试运营版”下一阶段最值得打开的真实产品化方向。
+   - 地图线默认保持单页试点冻结，除非出现真实触发条件。
+   - 不再机械追加地图页面、bridge 候选、展示 polish、媒体或 settlement 轮次。
+6. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。
    - 演示账号与样本数据索引。
    - 页面展示清单。
    - 风险与答辩口径。
-5. Step 41 已完成交付材料补完：
+7. Step 41 已完成交付材料补完：
    - 截图清单。
    - 录屏顺序。
    - 演示前检查 checklist。
-6. Step 42 已完成真实媒体采集与归档：
+8. Step 42 已完成真实媒体采集与归档：
    - 已采集 15 张真实截图，其中 13 张主交付截图、2 张异常后 confirm 失败留痕。
    - 已采集 5 段真实录屏，其中 4 段主交付录屏、1 段异常后 confirm 失败留痕。
    - 媒体目录：`project-logs/campus-relay/runtime/step-42-media/`。
-7. Step 43 已选择路径 B：
+9. Step 43 已选择路径 B：
    - 不补固定 after-sale 样本。
    - 不继续补媒体。
    - 正式收住媒体线。
    - 完成 3 个非 bridge 后端方向评估。
-8. Step 44 已完成异常历史与处理闭环最小方案设计：
+10. Step 44 已完成异常历史与处理闭环最小方案设计：
    - 建议新增 `campus_exception_record`。
    - 继续保留 `campus_relay_order.exception_type / exception_remark / exception_reported_at` 作为 latest exception 兼容摘要。
    - 复用现有 courier `exception-report` 入口。
@@ -376,7 +385,7 @@
 - 当前进展：Step 51B 已选择方向 A，售后执行历史值得做最小前端承接
 - 当前进展：Step 52 已在现有 `CampusAfterSaleExecutionList.vue` 详情 drawer 内增加只读历史区
 - 当前进展：Step 53 已通过 H2/test API 和 Playwright 页面验证
-- 默认处理：售后执行历史主线暂可收住，下一轮转向 P3 settlement 批次复核、撤回和对账方案设计
+- 默认处理：售后执行历史主线已在后端、前端承接和运行态验证后收住，不再默认继续扩展。
 
 ### 4. settlement 仍没有真实财务执行能力
 
@@ -391,5 +400,5 @@
 - 没有接真实支付、真实退款、真实打款
 - 没有做完整售后工单系统
 - 没有做完整异常工单系统；异常历史表和最小 resolve 已完成，但没有做 ACKNOWLEDGED、reopen、delete、通知或多角色审批
-- 没有做地图和轨迹大屏
+- 没有做轨迹回放、路线规划、实时调度或地图大屏；当前只保留 Step 72 的单页腾讯地图点位预览试点
 - 没有新增第二套返回体
