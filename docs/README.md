@@ -5,6 +5,7 @@
 ## 当前交付文档
 
 - [交付与启动说明](delivery-guide.md)
+- [试运营运行配置与 Preflight 手册](trial-operation-preflight.md)
 - [项目状态检查](project-status-review.md)
 - [API 总览](api-overview.md)
 - [数据库总览](db-overview.md)

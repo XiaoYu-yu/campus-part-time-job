@@ -117,6 +117,7 @@ npm run dev
 
 - [Step 40 交付整理](project-logs/campus-relay/step-40-delivery-packaging-and-demo-script.md)
 - [Step 42 媒体归档](project-logs/campus-relay/step-42-real-media-capture-and-archive.md)
+- [试运营运行配置与 Preflight 手册](docs/trial-operation-preflight.md)
 
 ## 关键页面
 
@@ -160,6 +161,7 @@ npm run build
 
 - [文档索引](docs/README.md)
 - [交付与启动说明](docs/delivery-guide.md)
+- [试运营运行配置与 Preflight 手册](docs/trial-operation-preflight.md)
 - [项目状态检查](docs/project-status-review.md)
 - [API 总览](docs/api-overview.md)
 - [数据库总览](docs/db-overview.md)

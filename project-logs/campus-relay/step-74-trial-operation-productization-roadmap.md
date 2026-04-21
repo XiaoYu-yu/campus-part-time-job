@@ -203,3 +203,16 @@ Step 75 建议进入“试运营运行配置与 preflight 手册”：
 1. 只做运行手册和检查清单。
 2. 明确本地 key、profile、账号、样本数据、模拟资金链路和关键页面检查。
 3. 不改业务代码、不改后端接口、不改前端路由、不新增页面。
+
+## Step 75 回填
+
+1. Step 75 已完成“试运营运行配置与 Preflight 手册”。
+2. 新增 `docs/trial-operation-preflight.md`，覆盖：
+   - backend / frontend 启动方式。
+   - H2/test 与 MySQL/dev 边界。
+   - 腾讯地图 key 本地配置方式。
+   - 演示账号和样本订单。
+   - 模拟支付、模拟退款、模拟打款与 settlement 口径。
+   - 关键页面和关键接口 preflight。
+3. 更新 `docs/delivery-guide.md`、`docs/README.md` 和根 `README.md` 文档入口。
+4. 下一轮建议评估是否需要独立整理“模拟资金链路产品化边界说明”，仍优先只做文档，不进入真实支付 / 退款 / 打款实现。

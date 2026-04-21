@@ -2,7 +2,7 @@
 
 ## 交付定位
 
-当前版本是“校园代送试运营版”，目标是本地可运行、可演示、可交接。真实支付、真实退款、真实打款、地图 SDK、消息推送等外部公司能力暂不接入，均以模拟数据、只读记录或后续候选方式保留。
+当前版本是“校园代送试运营版”，目标是本地可运行、可演示、可交接。真实支付、真实退款、真实打款、消息推送等外部公司能力暂不接入，均以模拟数据、只读记录或后续候选方式保留。腾讯地图已在 admin courier ops 单页完成 JS SDK 只读点位预览，不做轨迹、导航、路线规划或实时调度。
 
 ## 本地启动方式
 
@@ -68,6 +68,7 @@ npm run dev
 - [Step 40 交付整理与演示脚本](../project-logs/campus-relay/step-40-delivery-packaging-and-demo-script.md)
 - [Step 41 截图和录屏计划](../project-logs/campus-relay/step-41-delivery-assets-checklist-and-recording-plan.md)
 - [Step 42 媒体归档](../project-logs/campus-relay/step-42-real-media-capture-and-archive.md)
+- [试运营运行配置与 Preflight 手册](trial-operation-preflight.md)
 
 ## 验证命令
 
@@ -101,7 +102,7 @@ npm run test
 1. 真实支付。
 2. 真实退款。
 3. 真实打款。
-4. 地图 SDK 和轨迹回放。
+4. 轨迹回放、路线规划、实时调度和导航。
 5. 完整财务后台。
 6. 完整异常工单系统。
 7. 完整生产监控、告警、限流和安全风控。

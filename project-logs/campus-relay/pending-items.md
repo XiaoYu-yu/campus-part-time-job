@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 75 最高优先级
+## Step 76 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -18,33 +18,39 @@
    - 已评估地图扩展、模拟资金链路、试运营运行配置、admin 运营处理动作和真实部署等方向。
    - 结论是地图线继续冻结为单页 admin 只读点位预览。
    - 下一阶段最高优先级是试运营运行配置与 preflight 手册。
-6. Step 75 建议进入“试运营运行配置与 preflight 手册”：
+6. Step 75 已完成试运营运行配置与 preflight 手册：
+   - 新增 `docs/trial-operation-preflight.md`。
    - 明确 backend / frontend 启动方式。
-   - 明确 `test profile + H2` 与后续 MySQL/dev 的边界。
-   - 明确腾讯地图 key 等本地密钥配置方式，继续不提交真实 key。
+   - 明确 `test profile + H2` 与 MySQL/dev 的边界。
+   - 明确腾讯地图 key 本地配置方式，继续不提交真实 key。
    - 明确模拟支付、模拟退款、模拟打款和 settlement 的试运营口径。
    - 整理关键账号、样本订单、关键页面、关键接口的演示前检查清单。
+   - 更新 `docs/delivery-guide.md` 中地图能力口径。
+7. Step 76 建议评估“模拟资金链路产品化边界说明”是否需要独立成文：
+   - 若继续推进，优先只做文档和口径整理。
+   - 覆盖模拟支付、模拟退款、模拟打款、settlement、售后执行和对账差异的边界。
+   - 不接真实支付、真实退款、真实打款。
    - 不改业务代码、不改后端接口、不改路由、不新增页面。
-7. Step 40 已完成交付整理与演示脚本固化：
+8. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。
    - 演示账号与样本数据索引。
    - 页面展示清单。
    - 风险与答辩口径。
-8. Step 41 已完成交付材料补完：
+9. Step 41 已完成交付材料补完：
    - 截图清单。
    - 录屏顺序。
    - 演示前检查 checklist。
-9. Step 42 已完成真实媒体采集与归档：
+10. Step 42 已完成真实媒体采集与归档：
    - 已采集 15 张真实截图，其中 13 张主交付截图、2 张异常后 confirm 失败留痕。
    - 已采集 5 段真实录屏，其中 4 段主交付录屏、1 段异常后 confirm 失败留痕。
    - 媒体目录：`project-logs/campus-relay/runtime/step-42-media/`。
-10. Step 43 已选择路径 B：
+11. Step 43 已选择路径 B：
    - 不补固定 after-sale 样本。
    - 不继续补媒体。
    - 正式收住媒体线。
    - 完成 3 个非 bridge 后端方向评估。
-11. Step 44 已完成异常历史与处理闭环最小方案设计：
+12. Step 44 已完成异常历史与处理闭环最小方案设计：
    - 建议新增 `campus_exception_record`。
    - 继续保留 `campus_relay_order.exception_type / exception_remark / exception_reported_at` 作为 latest exception 兼容摘要。
    - 复用现有 courier `exception-report` 入口。

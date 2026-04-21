@@ -1198,3 +1198,17 @@
 - [project-logs/campus-relay/step-74-trial-operation-productization-roadmap.md](step-74-trial-operation-productization-roadmap.md)
 
 本轮是试运营版产品化下一阶段规划轮：评估地图扩展、模拟资金链路、运行配置 / 环境 / 密钥、admin 运营处理动作和真实部署上线等方向，最终选择 Step 75 优先进入“试运营运行配置与 preflight 手册”；本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面、路由或后端接口，没有改 bridge、鉴权、token 附着、`request.js`、地图代码或旧外卖模块。
+
+## Step 75 - 试运营运行配置与 Preflight 手册
+
+- [README.md](../../README.md)
+- [docs/README.md](../../docs/README.md)
+- [docs/delivery-guide.md](../../docs/delivery-guide.md)
+- [docs/trial-operation-preflight.md](../../docs/trial-operation-preflight.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-74-trial-operation-productization-roadmap.md](step-74-trial-operation-productization-roadmap.md)
+- [project-logs/campus-relay/step-75-trial-operation-preflight-handbook.md](step-75-trial-operation-preflight-handbook.md)
+
+本轮是试运营运行配置与 preflight 手册整理轮：新增 `docs/trial-operation-preflight.md`，明确 backend / frontend 启动方式、H2/test 与 MySQL/dev 边界、腾讯地图 key 本地配置、演示账号、样本订单、模拟资金链路口径、关键页面和关键接口检查；同步修正交付说明中的地图能力口径。本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面、路由或后端接口，没有改 bridge、鉴权、token 附着、`request.js`、地图代码或旧外卖模块，也没有提交真实地图 key。
