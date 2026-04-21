@@ -1295,3 +1295,15 @@
 - [project-logs/campus-relay/step-82-trial-operation-next-mainline-go-no-go.md](step-82-trial-operation-next-mainline-go-no-go.md)
 
 本轮是试运营 RC 下一阶段主线重排 / go-no-go 评估轮：基于 bridge、展示 polish、媒体、地图和前端打包优化五条主线都已冻结或收住的事实，对下一阶段候选方向做了重新排序。最终选择“试运营运维化最小能力”作为下一条真实主线，理由是它最能直接提升当前试运营版的可启动、可重置、可预检、可复跑能力，而不会把项目重新拉回 bridge、页面 polish 或复杂后端扩张。本轮没有业务代码改动。
+
+## Step 83 - 试运营运维化最小能力边界收敛 / preflight 脚本入口
+
+- [scripts/trial-operation/preflight.ps1](../../scripts/trial-operation/preflight.ps1)
+- [scripts/trial-operation/README.md](../../scripts/trial-operation/README.md)
+- [docs/trial-operation-preflight.md](../../docs/trial-operation-preflight.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-83-trial-operation-ops-entrypoint-boundary-and-preflight-script.md](step-83-trial-operation-ops-entrypoint-boundary-and-preflight-script.md)
+
+本轮是试运营运维化最小能力边界收敛轮：新增 `scripts/trial-operation/preflight.ps1` 作为本地试运营 preflight 脚本入口，并新增脚本说明文档；脚本只做关键文件、本地地图 key 变量、`.env.local` git 跟踪、可选端口、可选 backend compile 和 frontend build 检查，不自动重置 H2、不启动长驻进程、不打印真实地图 key。本轮没有改 bridge、接口、路由、鉴权、token 附着、前端页面或后端业务语义。

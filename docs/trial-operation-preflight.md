@@ -11,6 +11,35 @@
 
 ## 推荐运行方式
 
+### 本地 preflight 脚本入口
+
+Step 83 起新增了保守的本地试运营 preflight 脚本，用于把常见检查从纯文档操作收敛成可重复执行的入口。
+
+```powershell
+cd D:\20278\code\Campus part-time job
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\preflight.ps1
+```
+
+可选参数：
+
+1. `-CheckPorts`：检查 `8080 / 5173` 是否可访问；默认只作为提示，不把未启动服务视为硬失败。
+2. `-StrictPorts`：配合 `-CheckPorts` 使用，把端口不可访问视为硬失败。
+3. `-RunBackendCompile`：执行 backend `.\mvnw.cmd -DskipTests compile`。
+4. `-RunFrontendBuild`：执行 frontend `npm run build`。
+
+完整构建检查示例：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\preflight.ps1 -RunBackendCompile -RunFrontendBuild
+```
+
+脚本边界：
+
+1. 不自动重置 H2。
+2. 不启动长驻 backend / frontend 进程。
+3. 不打印腾讯地图真实 key。
+4. 不修改 bridge、鉴权、路由、接口或业务页面。
+
 ### 后端：test profile + H2
 
 推荐用于演示和回归。
