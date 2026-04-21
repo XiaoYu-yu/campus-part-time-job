@@ -1122,3 +1122,13 @@
 - [project-logs/campus-relay/runtime/step-67/settlement-reconcile-difference-drawer.png](runtime/step-67/settlement-reconcile-difference-drawer.png)
 
 本轮是 settlement 对账差异前端运行态验证轮：H2/test 下准备固定批次 `PBSTEP67UI`、settlement `id=1` 和一条 `AMOUNT_MISMATCH` 差异记录，并通过 Playwright 验证 `/campus/settlements` 详情 drawer 可展示“对账差异记录”只读区；本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面，没有改 bridge、鉴权、路由、token 附着、settlement payout 摘要或旧外卖模块。
+
+## Step 68 - settlement 对账差异前端线收口评估
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-67-settlement-reconcile-difference-frontend-runtime-validation.md](step-67-settlement-reconcile-difference-frontend-runtime-validation.md)
+- [project-logs/campus-relay/step-68-settlement-reconcile-difference-frontend-freeze-decision.md](step-68-settlement-reconcile-difference-frontend-freeze-decision.md)
+
+本轮是 settlement 对账差异前端线收口评估轮：基于 Step 64 到 Step 67 已完成的后端闭环、前端只读承接和运行态验证，正式判断当前不继续为 `CampusSettlementOpsView.vue` 接入 resolve 写操作；本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面、路由或后端接口，没有改 bridge、鉴权、路由、token 附着、settlement payout 摘要或旧外卖模块。

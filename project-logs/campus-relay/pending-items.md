@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 68 最高优先级
+## Step 69 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -198,11 +198,18 @@
      - `project-logs/campus-relay/runtime/step-67/settlement-reconcile-difference-ui-api-prep.json`
      - `project-logs/campus-relay/runtime/step-67/settlement-reconcile-difference-page-validation.json`
      - `project-logs/campus-relay/runtime/step-67/settlement-reconcile-difference-drawer.png`
-33. Step 68 最高优先级建议：
-   - 先评估 settlement 对账差异前端线是否收住。
-   - 若不收住，再做“是否接入对账差异 resolve 前端动作”的 go / no-go，不要默认直接写代码。
-   - 若收住，则把 P3 settlement 线进入阶段复盘或转入下一条非 bridge 后端能力评估。
-34. Step 68 明确禁止：
+33. Step 68 已完成 settlement 对账差异前端线收口评估：
+   - 最终结论为 no-go。
+   - 当前不继续为 `CampusSettlementOpsView.vue` 增加 resolve 写操作。
+   - settlement 对账差异前端线在“只读展示 + 运行态验证”后正式收住。
+   - `POST /api/campus/admin/settlements/reconcile-differences/{id}/resolve` 后端接口继续保留，但当前不在只读运营页暴露。
+34. Step 69 最高优先级建议：
+   - 做 settlement P3 主线阶段复盘，统一判断：
+     - 批次操作审计线是否收住
+     - 对账差异线是否收住
+     - settlement 线是否整体进入冻结/维护态
+   - 若 P3 已够用，再评估下一条非 bridge 后端方向，而不是继续在 settlement 只读页上机械加动作。
+35. Step 69 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -214,8 +221,8 @@
    - 不为补页数机械新增 admin 页面
    - 不接入 create / resolve 写操作
    - 不改后端接口
-35. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-36. 第五个 admin 页继续后置，不再以“补页数”为目标。
+36. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+37. 第五个 admin 页继续后置，不再以“补页数”为目标。
 
 ## 已完成但仍需继续扩展的部分
 

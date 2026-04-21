@@ -108,3 +108,10 @@ Playwright 验证步骤：
 1. Step 68 先评估 settlement 对账差异前端线是否收住。
 2. 若不收住，再做“是否接入对账差异 resolve 前端动作”的 go / no-go，不要默认直接写代码。
 3. 若收住，则进入 settlement P3 主线阶段复盘，或转入下一条非 bridge 后端能力评估。
+
+## Step 68 收口评估补充
+
+- Step 68 已完成前端线收口评估，最终结论为 no-go。
+- 当前不继续为 settlement 对账差异补前端 resolve 承接。
+- `CampusSettlementOpsView.vue` 继续保持“只读运营页”定位。
+- resolve 后端接口保留，但当前不在 settlement 只读页中暴露写操作入口。
