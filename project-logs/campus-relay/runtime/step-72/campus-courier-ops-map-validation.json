@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-04-21T11:53:00+08:00",
+  "page": "/campus/courier-ops",
+  "selectedCourier": {
+    "id": 2,
+    "phone": "13900139001",
+    "relayOrderId": "CR202604060001"
+  },
+  "locationPreview": {
+    "reportedAt": "2026-04-21 10:39:37",
+    "latitude": 29.56301,
+    "longitude": 106.55155,
+    "sdkScriptLoaded": true,
+    "mapCanvasChildren": 2,
+    "visibleTexts": [
+      "位置地图预览",
+      "CR202604060001",
+      "29.56301, 106.55155",
+      "100 米",
+      "©2026 Tencent - GS(2026)1190号"
+    ]
+  },
+  "screenshots": [
+    "project-logs/campus-relay/runtime/step-72/campus-courier-ops-tencent-map.png",
+    "project-logs/campus-relay/runtime/step-72/campus-courier-ops-map-panel.png"
+  ]
+}

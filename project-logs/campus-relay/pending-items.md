@@ -1,45 +1,50 @@
 # 校园代送待处理事项
 
-## Step 72 最高优先级
+## Step 73 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
-3. Step 40 已完成交付整理与演示脚本固化：
+3. Step 72 已完成腾讯地图最小产品化试点：
+   - 只在现有 `/campus/courier-ops` 接入腾讯地图 JS SDK 最小预览，不新增页面、不改后端接口。
+   - 继续复用现有 courier 位置上报数据，不引入轨迹回放、实时调度或地图写操作。
+   - 运行态验证确认 `CR202604060001` / 配送员 `id=2` 可在页面内看到地图比例尺和版权信息。
+   - 当前 key 未开启 WebService API，静态图路线已明确放弃，后续如继续推进仍以 JS SDK 为主。
+4. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。
    - 演示账号与样本数据索引。
    - 页面展示清单。
    - 风险与答辩口径。
-4. Step 41 已完成交付材料补完：
+5. Step 41 已完成交付材料补完：
    - 截图清单。
    - 录屏顺序。
    - 演示前检查 checklist。
-5. Step 42 已完成真实媒体采集与归档：
+6. Step 42 已完成真实媒体采集与归档：
    - 已采集 15 张真实截图，其中 13 张主交付截图、2 张异常后 confirm 失败留痕。
    - 已采集 5 段真实录屏，其中 4 段主交付录屏、1 段异常后 confirm 失败留痕。
    - 媒体目录：`project-logs/campus-relay/runtime/step-42-media/`。
-6. Step 43 已选择路径 B：
+7. Step 43 已选择路径 B：
    - 不补固定 after-sale 样本。
    - 不继续补媒体。
    - 正式收住媒体线。
    - 完成 3 个非 bridge 后端方向评估。
-7. Step 44 已完成异常历史与处理闭环最小方案设计：
+8. Step 44 已完成异常历史与处理闭环最小方案设计：
    - 建议新增 `campus_exception_record`。
    - 继续保留 `campus_relay_order.exception_type / exception_remark / exception_reported_at` 作为 latest exception 兼容摘要。
    - 复用现有 courier `exception-report` 入口。
    - 最小状态集建议为 `REPORTED / RESOLVED`。
    - admin 侧先做历史分页和详情只读，再评估最小 resolve。
-8. Step 45A 已完成异常历史最小实现：
+9. Step 45A 已完成异常历史最小实现：
    - 新增 `campus_exception_record`。
    - 现有 courier `POST /api/campus/courier/orders/{id}/exception-report` 同事务写入历史表并继续更新订单 latest exception 摘要。
    - 新增 admin 只读接口 `GET /api/campus/admin/exceptions` 与 `GET /api/campus/admin/exceptions/{id}`。
    - MySQL init、V9 migration、H2 schema 已同步；H2 未预置复杂样本，运行态通过真实异常上报生成历史。
-9. Step 45B 已完成 admin 异常最小处理动作设计：
+10. Step 45B 已完成 admin 异常最小处理动作设计：
    - 继续坚持最小状态集 `REPORTED / RESOLVED`。
    - 不引入 `ACKNOWLEDGED`。
    - 不把 `REJECTED` 做成主状态，后续如需标记无效可使用 `processResult = MARKED_INVALID`。
    - resolve 只更新 `campus_exception_record` 处理字段，不改订单主状态、不改 settlement、不清空 latest exception 摘要。
-10. Step 46 已完成异常 resolve 最小实现：
+11. Step 46 已完成异常 resolve 最小实现：
    - 新增 `POST /api/campus/admin/exceptions/{id}/resolve`。
    - 请求体最小字段为 `processResult` 与 `adminNote`。
    - 最小 `processResult` 固定为 `HANDLED`、`MARKED_INVALID`、`FOLLOWED_UP`。
@@ -47,12 +52,12 @@
    - 重复处理返回“异常记录已处理，不能重复处理”。
    - 不改订单主状态、不改 settlement、不清空 latest exception 摘要。
    - 没有补 admin 前端页面。
-11. Step 47 已完成 admin 异常前端承接 go / no-go：
+12. Step 47 已完成 admin 异常前端承接 go / no-go：
    - 方向 A：admin 异常历史 / resolve 最小前端承接，收益明确、风险可控、现有接口已足够。
    - 方向 B：P2 售后执行历史表，长期审计价值高，但需要新表、迁移和独立兼容策略设计，复杂度更高。
    - 最终选择方向 A。
    - 本轮没有写前端页面、没有新增后端接口、没有改 bridge。
-12. Step 48 已完成 admin 异常前端最小承接：
+13. Step 48 已完成 admin 异常前端最小承接：
    - 新增 `/campus/exceptions`。
    - 新增 `CampusExceptionOpsView.vue`。
    - 列表接入 `GET /api/campus/admin/exceptions`。
@@ -60,59 +65,59 @@
    - 最小 resolve 区接入 `POST /api/campus/admin/exceptions/{id}/resolve`。
    - resolve 区只在 `processStatus = REPORTED` 时展示。
    - 没有新增后端接口，没有改订单主状态、settlement、latest exception 摘要或 bridge。
-13. Step 49 已完成 admin 异常页运行态验证：
+14. Step 49 已完成 admin 异常页运行态验证：
    - H2/test 下使用 `CR202604070002` 真实完成接单、两次异常上报、异常历史列表、详情、resolve、重复 resolve 失败。
    - `campus_exception_record` 对该订单产生 2 条历史，1 条 `REPORTED`、1 条 `RESOLVED`。
    - latest exception 摘要仍保留最后一次上报内容，`/courier/workbench`、customer 订单详情和 admin 最近异常摘要语义未被破坏。
    - `/campus/exceptions` 已通过 Playwright 验证页面加载、列表展示、详情 drawer 和 resolve 区展示。
    - 证据文件位于 `project-logs/campus-relay/runtime/step-49/`。
-14. Step 50 已完成 P2 售后执行历史表最小方案设计：
+15. Step 50 已完成 P2 售后执行历史表最小方案设计：
    - 建议新增 `campus_after_sale_execution_record` 作为售后执行审计主表。
    - 每次 admin 成功记录售后执行结果时新增一条历史。
    - 同事务内继续更新 `campus_relay_order` 上的当前售后执行摘要。
    - 订单表现有 `after_sale_execution_*` 字段继续作为兼容摘要保留。
    - Step 51A 才允许评估进入最小后端实现。
-15. Step 51A 已完成售后执行历史最小实现：
+16. Step 51A 已完成售后执行历史最小实现：
    - 新增 `campus_after_sale_execution_record`，并同步 MySQL init、V10 migration、H2 schema。
    - 复用现有 `POST /api/campus/admin/orders/{id}/after-sale-execution`，在同事务内追加历史写入。
    - 新增 admin 只读分页接口 `GET /api/campus/admin/after-sale-execution-records`。
    - H2/test 下已验证 `PENDING -> FAILED -> SUCCESS` 产生 2 条历史，且当前售后执行摘要保持兼容。
    - 证据文件：`project-logs/campus-relay/runtime/step-51a/after-sale-execution-history-validation.json`。
-16. Step 51B 已完成售后执行历史前端承接 go / no-go：
+17. Step 51B 已完成售后执行历史前端承接 go / no-go：
    - 方向 A：在现有 `CampusAfterSaleExecutionList.vue` 详情 drawer 内增加售后执行历史只读区。
    - 方向 B：切到 P3 settlement 批次复核、撤回和对账方案设计。
    - 最终选择方向 A。
    - 本轮没有写前端页面、没有新增后端接口、没有改 bridge。
-17. Step 52 已完成售后执行历史前端最小承接：
+18. Step 52 已完成售后执行历史前端最小承接：
    - `frontend/src/api/campus-admin.js` 新增 `getCampusAfterSaleExecutionRecords`。
    - `frontend/src/views/CampusAfterSaleExecutionList.vue` 详情 drawer 新增“执行历史”只读区。
    - 打开详情时继续读取原 after-sale-result 当前摘要，同时按 `relayOrderId` 读取历史记录。
    - 未新增页面、未新增路由、未新增写接口。
-18. Step 53 已完成售后执行历史前端运行态验证：
+19. Step 53 已完成售后执行历史前端运行态验证：
    - H2/test 下重新生成 `CR202604060001` 的 `PENDING -> FAILED -> SUCCESS` 售后执行历史样本。
    - `GET /api/campus/admin/after-sale-execution-records` 返回 2 条历史。
    - `/campus/after-sale-executions` 详情 drawer 可展示当前摘要和执行历史区。
    - 证据文件位于 `project-logs/campus-relay/runtime/step-53/`。
-19. Step 54 已完成 P3 settlement 批次复核、撤回和对账最小方案设计：
+20. Step 54 已完成 P3 settlement 批次复核、撤回和对账最小方案设计：
    - 当前 settlement 批次仍由 `campus_settlement_record.payout_batch_no` 聚合产生，不是独立批次主表。
    - 建议后续新增 `campus_settlement_batch_operation_record`，先承接批次复核/撤回操作审计。
    - 建议后续新增 `campus_settlement_reconcile_difference_record`，承接对账差异和处理状态。
    - 现有 `campus_settlement_record` payout 摘要字段继续作为单笔、批次和 reconcile-summary 的兼容读取基础。
    - 本轮只写方案，没有写 SQL、Java、Vue、接口或页面。
-20. Step 55 已完成旧外卖文档清理与目录归档：
+21. Step 55 已完成旧外卖文档清理与目录归档：
    - 旧外卖 API/DB 设计归档到 `docs/legacy-takeaway/`。
    - 根 `project-logs/` 下旧外卖修复日志归档到 `project-logs/legacy-takeaway/`。
    - 当前 README、docs index、frontend README、交付说明、检查说明、部署说明等已改为校园代送试运营口径。
    - 新增 `docs/api-overview.md` 与 `docs/db-overview.md` 作为当前主线入口。
    - 本轮没有改 Java、SQL、Vue 业务代码、bridge、接口、鉴权或路由。
-21. Step 56 已完成 settlement 批次操作审计 go / no-go：
+22. Step 56 已完成 settlement 批次操作审计 go / no-go：
    - 确认下一步进入 `campus_settlement_batch_operation_record` 最小实现。
    - 确认批次操作审计只承接 `REVIEW / WITHDRAW` 操作留痕。
    - 确认 `operation_result` 最小使用 `PASSED / REJECTED / REQUESTED / RECORDED`。
    - 明确 review / withdraw 只写批次操作审计，不改 `payout_status`，不清空 `payout_batch_no`，不做真实财务撤回。
    - 对账差异记录继续后置，不和批次操作审计并发实现。
    - 本轮没有写 SQL、Java、Vue、接口实现或页面。
-22. Step 57 已完成 settlement 批次操作审计最小实现：
+23. Step 57 已完成 settlement 批次操作审计最小实现：
    - 新增 `campus_settlement_batch_operation_record`。
    - 同步 MySQL init、V11 migration、H2 schema。
    - 新增 admin 接口：

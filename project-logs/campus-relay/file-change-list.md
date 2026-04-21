@@ -1162,3 +1162,19 @@
 - [project-logs/campus-relay/step-71-overall-maintenance-and-delivery-readiness-review.md](step-71-overall-maintenance-and-delivery-readiness-review.md)
 
 本轮是整体维护 / 交付口径复盘轮：正式确认当前最小闭环已经达到“可试运营、可演示、可交接”的稳定状态，bridge 冻结态、展示 polish 冻结态、媒体线收住、非 bridge 后端三线收住四条主线当前都没有必须继续补的高优先级缺口；本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面、路由或后端接口，没有改 bridge、鉴权、路由、token 附着或旧外卖模块。
+
+## Step 72 - 腾讯地图最小产品化试点 / 园区要素运营地图预览
+
+- [frontend/src/views/CampusCourierOpsView.vue](../../frontend/src/views/CampusCourierOpsView.vue)
+- [frontend/src/utils/tencentMap.js](../../frontend/src/utils/tencentMap.js)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-71-overall-maintenance-and-delivery-readiness-review.md](step-71-overall-maintenance-and-delivery-readiness-review.md)
+- [project-logs/campus-relay/step-72-tencent-map-admin-ops-minimal-pilot.md](step-72-tencent-map-admin-ops-minimal-pilot.md)
+- [project-logs/campus-relay/runtime/step-72/tencent-map-sdk-probe.json](runtime/step-72/tencent-map-sdk-probe.json)
+- [project-logs/campus-relay/runtime/step-72/campus-courier-ops-map-validation.json](runtime/step-72/campus-courier-ops-map-validation.json)
+- [project-logs/campus-relay/runtime/step-72/campus-courier-ops-tencent-map.png](runtime/step-72/campus-courier-ops-tencent-map.png)
+- [project-logs/campus-relay/runtime/step-72/campus-courier-ops-map-panel.png](runtime/step-72/campus-courier-ops-map-panel.png)
+
+本轮是腾讯地图最小产品化试点轮：只在现有 `CampusCourierOpsView.vue` 中接入腾讯地图 JS SDK 最小地图预览，复用现有配送员位置上报数据展示真实点位；运行态验证确认 `/campus/courier-ops` 能展示地图比例尺与版权信息。当前没有新增页面、路由、后端接口或写操作，没有改 bridge、鉴权、token 附着、request.js、旧外卖模块，也没有提交真实地图 key 到仓库。

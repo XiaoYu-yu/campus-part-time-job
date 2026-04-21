@@ -4,12 +4,12 @@
       <div class="page-header">
         <div>
           <h2>校园配送运营</h2>
-          <p>只读演示页，联动查看配送员最近异常与低频位置记录，不接地图、不做实时刷新。</p>
+          <p>只读演示页，联动查看配送员最近异常、低频位置记录和腾讯地图预览，不做实时刷新。</p>
         </div>
       </div>
 
       <el-alert
-        title="该页聚焦配送员维度的异常与低频位置联动查看，只读展示后端当前最小运营模型。"
+        title="该页聚焦配送员维度的异常与低频位置联动查看，只读展示后端当前最小运营模型，并补最小腾讯地图预览承接。"
         type="info"
         :closable="false"
         show-icon
@@ -165,13 +165,79 @@
           <section class="panel-card">
             <div class="panel-header">
               <div>
-                <h3>低频位置记录</h3>
-                <p>调用 `GET /api/campus/admin/couriers/{courierProfileId}/location-reports`，默认按后端返回的 `reportedAt DESC` 只读展示。</p>
+                <h3>位置地图预览</h3>
+                <p>基于当前选中的低频位置记录加载腾讯地图，只读展示当前点位，不做轨迹回放或实时调度。</p>
               </div>
             </div>
 
             <template v-if="selectedCourier">
-              <el-table v-loading="locationLoading" :data="locationReports" border empty-text="当前配送员暂无位置记录">
+              <div v-if="selectedLocationReport" class="map-preview-layout">
+                <div class="map-summary">
+                  <div class="summary-item">
+                    <span>当前订单</span>
+                    <strong>{{ displayText(selectedLocationReport.relayOrderId) }}</strong>
+                  </div>
+                  <div class="summary-item">
+                    <span>上报时间</span>
+                    <strong>{{ formatDateTime(selectedLocationReport.reportedAt) }}</strong>
+                  </div>
+                  <div class="summary-item">
+                    <span>位置来源</span>
+                    <strong>{{ displayText(selectedLocationReport.source) }}</strong>
+                  </div>
+                  <div class="summary-item">
+                    <span>坐标</span>
+                    <strong>{{ coordinateText }}</strong>
+                  </div>
+                </div>
+
+                <el-alert
+                  v-if="!isTencentMapReady"
+                  title="当前未配置腾讯地图 key，仅展示坐标摘要。"
+                  type="warning"
+                  :closable="false"
+                  show-icon
+                  class="map-hint"
+                />
+                <el-alert
+                  v-else-if="mapErrorMessage"
+                  :title="mapErrorMessage"
+                  type="error"
+                  :closable="false"
+                  show-icon
+                  class="map-hint"
+                />
+                <div v-else v-loading="mapLoading" class="map-preview-shell">
+                  <div ref="mapContainerRef" class="map-preview-canvas" />
+                </div>
+
+                <p class="map-note">
+                  选中位置记录后会更新地图中心点。当前仍以后台返回的经纬度为准，不在前端重建轨迹或定位语义。
+                </p>
+              </div>
+              <el-empty v-else description="当前配送员暂无可预览的位置记录" />
+            </template>
+            <el-empty v-else description="请先选择配送员" />
+          </section>
+
+          <section class="panel-card">
+            <div class="panel-header">
+              <div>
+                <h3>低频位置记录</h3>
+                <p>调用 `GET /api/campus/admin/couriers/{courierProfileId}/location-reports`，默认按后端返回的 `reportedAt DESC` 只读展示，点击记录可同步更新上方地图预览。</p>
+              </div>
+            </div>
+
+            <template v-if="selectedCourier">
+              <el-table
+                ref="locationTableRef"
+                v-loading="locationLoading"
+                :data="locationReports"
+                border
+                highlight-current-row
+                empty-text="当前配送员暂无位置记录"
+                @current-change="handleLocationSelect"
+              >
                 <el-table-column prop="relayOrderId" label="订单号" min-width="180" />
                 <el-table-column label="上报时间" min-width="170">
                   <template #default="{ row }">
@@ -213,22 +279,29 @@
 </template>
 
 <script setup>
-import { nextTick, onMounted, reactive, ref } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import MainLayout from '../layout/MainLayout.vue'
 import {
   getCampusCourierLocationReports,
   getCampusCourierRecentExceptions,
   getCampusCouriers
 } from '../api/campus-admin'
+import { hasTencentMapKey, loadTencentMapSdk } from '../utils/tencentMap'
 
 const courierTableRef = ref(null)
+const locationTableRef = ref(null)
+const mapContainerRef = ref(null)
 const courierLoading = ref(false)
 const exceptionLoading = ref(false)
 const locationLoading = ref(false)
+const mapLoading = ref(false)
 const couriers = ref([])
 const exceptions = ref([])
 const locationReports = ref([])
 const selectedCourier = ref(null)
+const selectedLocationReport = ref(null)
+const mapErrorMessage = ref('')
+let mapInstance = null
 
 const courierFilters = reactive({
   realName: '',
@@ -250,6 +323,14 @@ const locationPagination = reactive({
 
 const formatDateTime = (value) => value || '暂无'
 const displayText = (value) => (value === null || value === undefined || value === '' ? '暂无' : value)
+const isTencentMapReady = hasTencentMapKey()
+
+const coordinateText = computed(() => {
+  if (!selectedLocationReport.value) {
+    return '暂无'
+  }
+  return `${displayText(selectedLocationReport.value.latitude)}, ${displayText(selectedLocationReport.value.longitude)}`
+})
 
 const reviewTagType = (status) => ({
   PENDING: 'warning',
@@ -293,6 +374,8 @@ const loadLocationReports = async () => {
   if (!selectedCourier.value) {
     locationReports.value = []
     locationPagination.total = 0
+    selectedLocationReport.value = null
+    mapErrorMessage.value = ''
     return
   }
   locationLoading.value = true
@@ -303,6 +386,7 @@ const loadLocationReports = async () => {
     })
     locationReports.value = response.records || []
     locationPagination.total = response.total || 0
+    await applySelectedLocationReport()
   } finally {
     locationLoading.value = false
   }
@@ -318,6 +402,8 @@ const applySelectedCourier = async () => {
     exceptions.value = []
     locationReports.value = []
     locationPagination.total = 0
+    selectedLocationReport.value = null
+    mapErrorMessage.value = ''
     return
   }
 
@@ -342,6 +428,33 @@ const handleCourierSelect = async (row) => {
   selectedCourier.value = row
   locationPagination.page = 1
   await loadCourierRelatedPanels()
+}
+
+const applySelectedLocationReport = async () => {
+  if (locationReports.value.length === 0) {
+    selectedLocationReport.value = null
+    mapErrorMessage.value = ''
+    return
+  }
+
+  const matchedRecord = locationReports.value.find(item => item.id === selectedLocationReport.value?.id)
+  const nextRecord = matchedRecord || locationReports.value[0]
+  selectedLocationReport.value = nextRecord
+  mapErrorMessage.value = ''
+
+  await nextTick()
+  locationTableRef.value?.setCurrentRow(nextRecord)
+  await renderMapPreview()
+}
+
+const handleLocationSelect = async (row) => {
+  if (!row || selectedLocationReport.value?.id === row.id) {
+    return
+  }
+  selectedLocationReport.value = row
+  mapErrorMessage.value = ''
+  await nextTick()
+  await renderMapPreview()
 }
 
 const handleCourierSearch = () => {
@@ -377,6 +490,53 @@ const handleLocationSizeChange = (size) => {
 const handleLocationPageChange = (page) => {
   locationPagination.page = page
   loadLocationReports()
+}
+
+const renderMapPreview = async () => {
+  if (!isTencentMapReady || !selectedLocationReport.value || !mapContainerRef.value) {
+    return
+  }
+
+  const latitude = Number(selectedLocationReport.value.latitude)
+  const longitude = Number(selectedLocationReport.value.longitude)
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+    mapErrorMessage.value = '当前记录缺少有效经纬度，无法加载地图预览。'
+    return
+  }
+
+  mapLoading.value = true
+  mapErrorMessage.value = ''
+  try {
+    const TMap = await loadTencentMapSdk()
+    const center = new TMap.LatLng(latitude, longitude)
+    mapContainerRef.value.innerHTML = ''
+    mapInstance = new TMap.Map(mapContainerRef.value, {
+      center,
+      zoom: 16,
+      pitch: 0,
+      rotation: 0
+    })
+
+    if (TMap.MultiMarker) {
+      try {
+        new TMap.MultiMarker({
+          map: mapInstance,
+          geometries: [
+            {
+              id: `location-${selectedLocationReport.value.id || selectedLocationReport.value.relayOrderId}`,
+              position: center
+            }
+          ]
+        })
+      } catch (markerError) {
+        console.warn('Tencent map marker init failed:', markerError)
+      }
+    }
+  } catch (error) {
+    mapErrorMessage.value = error?.message || '腾讯地图加载失败，请检查 key 配置或当前坐标。'
+  } finally {
+    mapLoading.value = false
+  }
 }
 
 onMounted(() => loadCourierList())
@@ -484,6 +644,41 @@ onMounted(() => loadCourierList())
   margin-top: 16px;
   display: flex;
   justify-content: flex-end;
+}
+
+.map-preview-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.map-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.map-preview-shell {
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid #e4e7ed;
+  background: #f8fafc;
+  min-height: 320px;
+}
+
+.map-preview-canvas {
+  width: 100%;
+  min-height: 320px;
+}
+
+.map-hint {
+  margin-bottom: 0;
+}
+
+.map-note {
+  margin: 0;
+  color: #71717a;
+  line-height: 1.6;
 }
 
 @media (max-width: 1280px) {

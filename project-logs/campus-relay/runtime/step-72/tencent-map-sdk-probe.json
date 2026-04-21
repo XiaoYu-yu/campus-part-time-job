@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-04-21T11:56:13",
+  "staticMapStatusCode": 200,
+  "staticMapContent": {
+    "status": 199,
+    "message": "此key未开启WebserviceAPI功能",
+    "request_id": "b617bd9fe7e341a9a81aa138d94fc61e"
+  },
+  "glJsStatusCode": 200,
+  "glJsContentType": "application/javascript; charset=\"utf-8\"",
+  "glJsSnippet": "\n                TMap = window.TMap || {};\n                if (!TMap.__load) {\n                    TMap.__load = functio"
+}
