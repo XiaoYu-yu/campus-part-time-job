@@ -15,6 +15,7 @@
 - 可使用 H2/test 数据完成主链路联调
 - 支付、地图、真实打款等外部公司能力暂用模拟数据或只读记录代替
 - bridge 主线处于 `Phase A no-op` 冻结态，不删除旧兼容接口
+- 模拟支付、模拟退款、模拟打款和 settlement 只作为试运营状态与审计记录，不代表真实资金流
 
 ## 当前核心能力
 
@@ -50,11 +51,15 @@
 - 真实支付
 - 真实退款
 - 真实打款
-- 地图 SDK / 轨迹回放
+- 轨迹回放、路线规划、实时调度和导航
 - 消息推送
 - 生产级风控、限流、审计平台
 
 这些能力如果需要上线，应作为独立阶段接入，不应混入当前试运营闭环。
+
+模拟资金链路的详细边界见：
+
+- [模拟资金链路产品化边界](docs/simulated-funds-boundary.md)
 
 ## 技术栈
 
@@ -162,6 +167,7 @@ npm run build
 - [文档索引](docs/README.md)
 - [交付与启动说明](docs/delivery-guide.md)
 - [试运营运行配置与 Preflight 手册](docs/trial-operation-preflight.md)
+- [模拟资金链路产品化边界](docs/simulated-funds-boundary.md)
 - [项目状态检查](docs/project-status-review.md)
 - [API 总览](docs/api-overview.md)
 - [数据库总览](docs/db-overview.md)

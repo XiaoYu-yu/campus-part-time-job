@@ -4,6 +4,10 @@
 
 当前版本是“校园代送试运营版”，目标是本地可运行、可演示、可交接。真实支付、真实退款、真实打款、消息推送等外部公司能力暂不接入，均以模拟数据、只读记录或后续候选方式保留。腾讯地图已在 admin courier ops 单页完成 JS SDK 只读点位预览，不做轨迹、导航、路线规划或实时调度。
 
+模拟支付、模拟退款、模拟打款、settlement 批次操作和对账差异的详细产品化边界见：
+
+- [模拟资金链路产品化边界](simulated-funds-boundary.md)
+
 ## 本地启动方式
 
 ### 后端 H2/test
@@ -69,6 +73,7 @@ npm run dev
 - [Step 41 截图和录屏计划](../project-logs/campus-relay/step-41-delivery-assets-checklist-and-recording-plan.md)
 - [Step 42 媒体归档](../project-logs/campus-relay/step-42-real-media-capture-and-archive.md)
 - [试运营运行配置与 Preflight 手册](trial-operation-preflight.md)
+- [模拟资金链路产品化边界](simulated-funds-boundary.md)
 
 ## 验证命令
 

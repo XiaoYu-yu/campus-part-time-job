@@ -1212,3 +1212,18 @@
 - [project-logs/campus-relay/step-75-trial-operation-preflight-handbook.md](step-75-trial-operation-preflight-handbook.md)
 
 本轮是试运营运行配置与 preflight 手册整理轮：新增 `docs/trial-operation-preflight.md`，明确 backend / frontend 启动方式、H2/test 与 MySQL/dev 边界、腾讯地图 key 本地配置、演示账号、样本订单、模拟资金链路口径、关键页面和关键接口检查；同步修正交付说明中的地图能力口径。本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面、路由或后端接口，没有改 bridge、鉴权、token 附着、`request.js`、地图代码或旧外卖模块，也没有提交真实地图 key。
+
+## Step 76 - 模拟资金链路产品化边界说明
+
+- [README.md](../../README.md)
+- [docs/README.md](../../docs/README.md)
+- [docs/delivery-guide.md](../../docs/delivery-guide.md)
+- [docs/trial-operation-preflight.md](../../docs/trial-operation-preflight.md)
+- [docs/simulated-funds-boundary.md](../../docs/simulated-funds-boundary.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-75-trial-operation-preflight-handbook.md](step-75-trial-operation-preflight-handbook.md)
+- [project-logs/campus-relay/step-76-simulated-funds-productization-boundary.md](step-76-simulated-funds-productization-boundary.md)
+
+本轮是模拟资金链路产品化边界说明轮：新增 `docs/simulated-funds-boundary.md`，明确 mock-pay、售后模拟退款 / 执行、settlement 模拟打款、批次操作审计和对账差异都只是试运营状态推进与运营审计，不代表真实支付、真实退款、真实打款、银行流水或第三方清结算；同步更新 README、docs index、交付说明、preflight 手册和 Step 75 回填口径。本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面、路由或后端接口，没有改 bridge、鉴权、token 附着、`request.js`、地图代码或旧外卖模块，也没有提交真实地图 key。

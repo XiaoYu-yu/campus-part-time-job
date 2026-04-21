@@ -115,6 +115,10 @@ VITE_TENCENT_MAP_KEY=your-local-key
 
 当前试运营版不接真实支付、真实退款、真实打款。
 
+更完整的产品化边界见：
+
+- [模拟资金链路产品化边界](simulated-funds-boundary.md)
+
 ### 模拟支付
 
 1. customer 下单后的支付状态由后端模拟推进。
