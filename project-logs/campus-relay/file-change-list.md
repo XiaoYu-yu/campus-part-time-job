@@ -1227,3 +1227,13 @@
 - [project-logs/campus-relay/step-76-simulated-funds-productization-boundary.md](step-76-simulated-funds-productization-boundary.md)
 
 本轮是模拟资金链路产品化边界说明轮：新增 `docs/simulated-funds-boundary.md`，明确 mock-pay、售后模拟退款 / 执行、settlement 模拟打款、批次操作审计和对账差异都只是试运营状态推进与运营审计，不代表真实支付、真实退款、真实打款、银行流水或第三方清结算；同步更新 README、docs index、交付说明、preflight 手册和 Step 75 回填口径。本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面、路由或后端接口，没有改 bridge、鉴权、token 附着、`request.js`、地图代码或旧外卖模块，也没有提交真实地图 key。
+
+## Step 77 - 试运营交付文档一致性复核 / 最小 preflight 验证
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-76-simulated-funds-productization-boundary.md](step-76-simulated-funds-productization-boundary.md)
+- [project-logs/campus-relay/step-77-delivery-doc-consistency-and-minimal-preflight.md](step-77-delivery-doc-consistency-and-minimal-preflight.md)
+
+本轮是试运营交付文档一致性复核 / 最小 preflight 验证轮：完成 README、delivery-guide、trial-operation-preflight、simulated-funds-boundary 和 summary 的口径复核，并确认 docs 范围内没有“地图 SDK 未接入 / 真实支付已接入 / 真实退款已接入 / 真实打款已接入 / bridge 已可删除”等过期表述；同时完成 backend compile、frontend build，以及 customer / courier / admin 关键页面最小 preflight 验证。本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面、路由或后端接口，没有改 bridge、鉴权、token 附着、`request.js`、地图代码或旧外卖模块。

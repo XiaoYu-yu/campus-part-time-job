@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 77 最高优先级
+## Step 78 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -33,47 +33,52 @@
    - 明确 settlement payout、批次操作审计和对账差异只表达模拟打款与运营审计，不代表真实财务执行。
    - 同步更新 `README.md`、`docs/README.md`、`docs/delivery-guide.md` 与 `docs/trial-operation-preflight.md`。
    - 本轮没有改业务代码、后端接口、路由、鉴权、bridge 或前端页面。
-8. Step 77 建议进入“试运营交付文档一致性复核 / preflight 跑通验证”二选一：
-   - 若继续文档线，优先检查 `README.md`、`docs/delivery-guide.md`、`docs/trial-operation-preflight.md`、`docs/simulated-funds-boundary.md` 和 `summary.md` 的口径是否一致。
-   - 若继续验证线，按 `docs/trial-operation-preflight.md` 跑一轮关键页面和关键接口 preflight。
-   - 仍不接真实支付、真实退款、真实打款。
-   - 仍不重开 bridge、展示 polish、媒体线或地图第二页。
-9. Step 40 已完成交付整理与演示脚本固化：
+8. Step 77 已完成“试运营交付文档一致性复核 / 最小 preflight 验证”：
+   - 已复核 `README.md`、`docs/delivery-guide.md`、`docs/trial-operation-preflight.md`、`docs/simulated-funds-boundary.md` 与 `summary.md` 的交付口径，docs 范围内未发现“地图 SDK 未接入 / 真实支付已接入 / 真实退款已接入 / 真实打款已接入 / bridge 已可删除”等过期表述。
+   - 已通过 backend `.\mvnw.cmd -DskipTests compile`。
+   - 已通过 frontend `npm run build`，仅保留既有 Sass `@import` 弃用告警和 Vite chunk size 告警。
+   - 已在本地完成最小 preflight：customer 登录后可访问 `/user/campus/courier-onboarding` 与 `/user/campus/order-result?orderId=CR202604060001`；`/courier/workbench` 能稳定展示无 `courier_token` 提示；admin `/campus/settlements`、`/campus/after-sale-executions`、`/campus/courier-ops`、`/campus/exceptions` 页面可正常打开。
+   - 本轮没有改业务代码、后端接口、路由、鉴权、bridge 或前端页面。
+9. Step 78 建议进入“试运营交付包 RC 收口复盘 / 最小 smoke 复核”：
+   - 以当前 preflight 手册和 Step 77 结果为基线，确认交付包是否已经达到可冻结、可移交、可答辩的 RC 状态。
+   - 若无新问题，不默认新增功能、不重开 bridge、不重开启展示 polish，也不扩地图第二页。
+   - 若仍有残缺，只补交付材料或 smoke 留痕，不转入真实支付、真实退款、真实打款。
+10. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。
    - 演示账号与样本数据索引。
    - 页面展示清单。
    - 风险与答辩口径。
-10. Step 41 已完成交付材料补完：
+11. Step 41 已完成交付材料补完：
    - 截图清单。
    - 录屏顺序。
    - 演示前检查 checklist。
-11. Step 42 已完成真实媒体采集与归档：
+12. Step 42 已完成真实媒体采集与归档：
    - 已采集 15 张真实截图，其中 13 张主交付截图、2 张异常后 confirm 失败留痕。
    - 已采集 5 段真实录屏，其中 4 段主交付录屏、1 段异常后 confirm 失败留痕。
    - 媒体目录：`project-logs/campus-relay/runtime/step-42-media/`。
-12. Step 43 已选择路径 B：
+13. Step 43 已选择路径 B：
    - 不补固定 after-sale 样本。
    - 不继续补媒体。
    - 正式收住媒体线。
    - 完成 3 个非 bridge 后端方向评估。
-13. Step 44 已完成异常历史与处理闭环最小方案设计：
+14. Step 44 已完成异常历史与处理闭环最小方案设计：
    - 建议新增 `campus_exception_record`。
    - 继续保留 `campus_relay_order.exception_type / exception_remark / exception_reported_at` 作为 latest exception 兼容摘要。
    - 复用现有 courier `exception-report` 入口。
    - 最小状态集建议为 `REPORTED / RESOLVED`。
    - admin 侧先做历史分页和详情只读，再评估最小 resolve。
-9. Step 45A 已完成异常历史最小实现：
+15. Step 45A 已完成异常历史最小实现：
    - 新增 `campus_exception_record`。
    - 现有 courier `POST /api/campus/courier/orders/{id}/exception-report` 同事务写入历史表并继续更新订单 latest exception 摘要。
    - 新增 admin 只读接口 `GET /api/campus/admin/exceptions` 与 `GET /api/campus/admin/exceptions/{id}`。
    - MySQL init、V9 migration、H2 schema 已同步；H2 未预置复杂样本，运行态通过真实异常上报生成历史。
-10. Step 45B 已完成 admin 异常最小处理动作设计：
+16. Step 45B 已完成 admin 异常最小处理动作设计：
    - 继续坚持最小状态集 `REPORTED / RESOLVED`。
    - 不引入 `ACKNOWLEDGED`。
    - 不把 `REJECTED` 做成主状态，后续如需标记无效可使用 `processResult = MARKED_INVALID`。
    - resolve 只更新 `campus_exception_record` 处理字段，不改订单主状态、不改 settlement、不清空 latest exception 摘要。
-11. Step 46 已完成异常 resolve 最小实现：
+17. Step 46 已完成异常 resolve 最小实现：
    - 新增 `POST /api/campus/admin/exceptions/{id}/resolve`。
    - 请求体最小字段为 `processResult` 与 `adminNote`。
    - 最小 `processResult` 固定为 `HANDLED`、`MARKED_INVALID`、`FOLLOWED_UP`。
