@@ -72,7 +72,7 @@
 import MainLayout from '../layout/MainLayout.vue'
 import { useUserStore } from '../stores/user'
 import { onMounted, ref, watch } from 'vue'
-import * as echarts from 'echarts'
+import { echarts } from '../utils/echarts'
 import { getDashboardData } from '../api/statistics'
 import { getOrderList } from '../api/order'
 

@@ -60,7 +60,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import * as echarts from 'echarts'
+import { echarts } from '../utils/echarts'
 import { getDashboardData, getSalesTrend, getPopularDishes } from '../api/statistics'
 
 // 统计数据

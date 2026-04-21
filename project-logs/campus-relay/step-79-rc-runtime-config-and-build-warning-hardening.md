@@ -110,3 +110,12 @@ Step 80 建议进入“前端打包告警与分包 go / no-go 评估”：
 1. 只评估当前 Vite chunk size 告警是否值得处理。
 2. 若收益明确，可选择最小分包或 lazy load 收敛方案。
 3. 若收益不足，也允许正式记为 no-op，继续保持试运营 RC 状态。
+
+## Step 80 回填
+
+1. 已完成前端打包告警与分包 go / no-go 评估。
+2. 已确认当前 chunk 告警的主要来源是 `Dashboard.vue` 与 `Statistics.vue` 对 `echarts` 的整包引用，以及当前全局 `ElementPlus` vendor 基线。
+3. 已新增 `frontend/src/utils/echarts.js` 作为共享按需注册入口，并让 `Dashboard.vue` 与 `Statistics.vue` 改为复用该入口。
+4. 图表共享 chunk 已从约 `1.11 MB` 收敛到约 `545 KB`。
+5. 因全局 `ElementPlus` 按需改造会超出试运营 RC 的最小边界，本轮未继续拆分该 vendor，只将 `frontend/vite.config.js` 的 `build.chunkSizeWarningLimit` 调整为 `1100`，使构建告警与当前接受的基线一致。
+6. `npm run build` 现已不再输出 Vite chunk size 告警。

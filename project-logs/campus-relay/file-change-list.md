@@ -1261,3 +1261,17 @@
 - [project-logs/campus-relay/step-79-rc-runtime-config-and-build-warning-hardening.md](step-79-rc-runtime-config-and-build-warning-hardening.md)
 
 本轮是试运营 RC 运行配置与构建告警减噪轮：将 `application-test.properties` 默认端口调整为 `SERVER_PORT:8080`，使 `test profile + H2` 可直接用于浏览器联调；同时把前端两个样式入口从 Sass `@import` 迁移到 `@use`，消除 build 中的弃用告警，并同步更新 preflight 手册。本轮没有修改 bridge、鉴权、接口、路由、token 附着、地图代码或业务页面语义。
+
+## Step 80 - 前端打包告警与分包 go / no-go 评估
+
+- [frontend/src/utils/echarts.js](../../frontend/src/utils/echarts.js)
+- [frontend/src/views/Dashboard.vue](../../frontend/src/views/Dashboard.vue)
+- [frontend/src/views/Statistics.vue](../../frontend/src/views/Statistics.vue)
+- [frontend/vite.config.js](../../frontend/vite.config.js)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-79-rc-runtime-config-and-build-warning-hardening.md](step-79-rc-runtime-config-and-build-warning-hardening.md)
+- [project-logs/campus-relay/step-80-frontend-bundle-warning-go-no-go.md](step-80-frontend-bundle-warning-go-no-go.md)
+
+本轮先完成前端打包告警与分包 go / no-go 评估，再执行一个低风险最小动作：把 `Dashboard.vue` 与 `Statistics.vue` 从整包 `echarts` 引用切到共享按需注册入口，图表共享 chunk 从约 `1.11 MB` 收敛到约 `545 KB`。剩余大包主要来自当前全局 `ElementPlus` vendor 基线，不适合在试运营 RC 阶段做高风险全量按需改造，因此只在 `frontend/vite.config.js` 中把 `build.chunkSizeWarningLimit` 调整到 `1100`，以匹配当前接受的基线并消除无效 build 噪音。本轮没有修改 bridge、鉴权、接口、路由、token 附着或业务页面语义。

@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 80 最高优先级
+## Step 81 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -54,10 +54,16 @@
    - `docs/trial-operation-preflight.md` 已同步更新 test profile 默认端口与 `SERVER_PORT` 覆盖说明。
    - backend compile、frontend build、H2/test 启动和最小运行验证已完成；frontend build 不再出现 Sass `@import` 弃用告警，仅保留 Vite chunk size 告警。
    - 本轮没有改 bridge、接口、路由、鉴权、token 附着、地图代码或业务页面语义。
-11. Step 80 建议进入“前端打包告警与分包 go / no-go 评估”：
-   - 当前剩余的显性工程噪音主要是 Vite chunk size 告警。
-   - 下一轮先评估是否值得通过分包、懒加载或 warning 阈值策略处理，而不是直接大改前端结构。
-   - 若评估收益不足，也允许正式记为 no-op，继续保持试运营 RC 状态。
+11. Step 80 已完成“前端打包告警与分包 go / no-go 评估”：
+   - 已确认 chunk 告警的主要来源不是路由未懒加载，而是 `Dashboard.vue` 与 `Statistics.vue` 两处整包引入 `echarts`，以及当前全局 `ElementPlus` 运行时 vendor 包体。
+   - 已新增 `frontend/src/utils/echarts.js`，将图表依赖收口为按需注册的 `Line / Bar / Pie + Tooltip / Legend / Grid + CanvasRenderer` 最小集合。
+   - `frontend/src/views/Dashboard.vue` 与 `frontend/src/views/Statistics.vue` 已切到共享按需 `echarts` 入口，图表共享 chunk 从约 `1.11 MB` 收敛到约 `545 KB`。
+   - 已在 `frontend/vite.config.js` 中将 `build.chunkSizeWarningLimit` 调整到 `1100`，与当前试运营 RC 接受的 `ElementPlus` 全局 vendor 基线对齐；`npm run build` 不再输出 Vite chunk size 告警。
+   - 本轮没有改 bridge、接口、路由、鉴权、token 附着或业务语义。
+12. Step 81 建议进入“前端打包线 freeze / no-op 复盘”：
+   - 当前显性工程噪音已经从 Sass `@import` 和 Vite chunk warning 收敛到可接受范围。
+   - 下一轮应判断是否还有必要继续为 `ElementPlus` 全量引入做高风险拆分，还是正式把前端打包优化线收成冻结 / no-op。
+   - 若无明确性能或交付压力，不再默认继续做前端分包改造。
 12. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。
