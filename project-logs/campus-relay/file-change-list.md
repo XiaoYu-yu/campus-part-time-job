@@ -1237,3 +1237,13 @@
 - [project-logs/campus-relay/step-77-delivery-doc-consistency-and-minimal-preflight.md](step-77-delivery-doc-consistency-and-minimal-preflight.md)
 
 本轮是试运营交付文档一致性复核 / 最小 preflight 验证轮：完成 README、delivery-guide、trial-operation-preflight、simulated-funds-boundary 和 summary 的口径复核，并确认 docs 范围内没有“地图 SDK 未接入 / 真实支付已接入 / 真实退款已接入 / 真实打款已接入 / bridge 已可删除”等过期表述；同时完成 backend compile、frontend build，以及 customer / courier / admin 关键页面最小 preflight 验证。本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面、路由或后端接口，没有改 bridge、鉴权、token 附着、`request.js`、地图代码或旧外卖模块。
+
+## Step 78 - 试运营交付包 RC 收口复盘 / 最小 smoke 复核
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-77-delivery-doc-consistency-and-minimal-preflight.md](step-77-delivery-doc-consistency-and-minimal-preflight.md)
+- [project-logs/campus-relay/step-78-trial-operation-rc-review-and-minimal-smoke.md](step-78-trial-operation-rc-review-and-minimal-smoke.md)
+
+本轮是试运营交付包 RC 收口复盘 / 最小 smoke 复核轮：基于 Step 40 到 Step 42 的交付文档、样本索引、截图与录屏，以及 Step 77 的文档一致性复核和最小 preflight 结果，确认当前交付包已经达到“可演示、可移交、可答辩、可复盘”的试运营 RC 状态；同时额外确认媒体目录、截图/录屏数量和本地 frontend/backend 端口可访问。本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面、路由或后端接口，没有改 bridge、鉴权、token 附着、`request.js`、地图代码或旧外卖模块。
