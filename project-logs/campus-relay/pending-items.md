@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 69 最高优先级
+## Step 70 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -203,13 +203,18 @@
    - 当前不继续为 `CampusSettlementOpsView.vue` 增加 resolve 写操作。
    - settlement 对账差异前端线在“只读展示 + 运行态验证”后正式收住。
    - `POST /api/campus/admin/settlements/reconcile-differences/{id}/resolve` 后端接口继续保留，但当前不在只读运营页暴露。
-34. Step 69 最高优先级建议：
-   - 做 settlement P3 主线阶段复盘，统一判断：
-     - 批次操作审计线是否收住
-     - 对账差异线是否收住
-     - settlement 线是否整体进入冻结/维护态
-   - 若 P3 已够用，再评估下一条非 bridge 后端方向，而不是继续在 settlement 只读页上机械加动作。
-35. Step 69 明确禁止：
+34. Step 69 已完成 settlement P3 主线阶段复盘：
+   - 批次操作审计线已在“后端实现 + 前端只读承接 + 运行态验证”后收住。
+   - 对账差异线已在“后端实现 + 前端只读承接 + 运行态验证 + 前端线收口评估”后收住。
+   - settlement P3 主线整体进入冻结/维护态。
+   - 当前不继续为现有 settlement 只读页补 review / withdraw / resolve 前端写动作。
+35. Step 70 最高优先级建议：
+   - 先做非 bridge 后端方向整体复盘，统一判断：
+     - 异常历史与最小 resolve 线是否已够用
+     - 售后执行历史线是否已够用
+     - settlement P3 线冻结后，下一条主线是否还需要继续扩单点能力
+   - 若当前三条后端线都已达到“最小闭环 + 前端承接/验证”目标，则优先转入整体维护/交付口径复盘，而不是继续机械追加新表、新接口或新页面。
+36. Step 70 明确禁止：
    - 不改 bridge
    - 不改 `request.js`
    - 不改 `campus-courier.js` bridge 行为
@@ -221,8 +226,8 @@
    - 不为补页数机械新增 admin 页面
    - 不接入 create / resolve 写操作
    - 不改后端接口
-36. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
-37. 第五个 admin 页继续后置，不再以“补页数”为目标。
+37. admin 剩余只读运营页和 Profile 页仍属于后续展示级优化候选，但默认不再继续机械 polish。
+38. 第五个 admin 页继续后置，不再以“补页数”为目标。
 
 ## 已完成但仍需继续扩展的部分
 

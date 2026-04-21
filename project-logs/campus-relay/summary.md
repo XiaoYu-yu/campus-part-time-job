@@ -78,6 +78,7 @@
 - 当前已完成：`Step 66 - settlement 对账差异前端最小只读承接`
 - 当前已完成：`Step 67 - settlement 对账差异前端运行态验证`
 - 当前已完成：`Step 68 - settlement 对账差异前端线收口评估`
+- 当前已完成：`Step 69 - settlement P3 主线阶段复盘`
 - 当前日期：`2026-04-21`
 - Step 46 补充：已新增 admin 异常 resolve 后端接口 `POST /api/campus/admin/exceptions/{id}/resolve`，只允许 `REPORTED -> RESOLVED`，重复处理返回明确业务错误；本轮未改订单主状态、settlement、latest exception 摘要、bridge、前端页面或路由。
 - Step 47 补充：本轮只做 admin 异常前端承接 go / no-go 评估，不写业务代码、不补页面；最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备，P2 售后执行历史表继续后置。
@@ -90,7 +91,8 @@
 - Step 66 补充：已在 `CampusSettlementOpsView.vue` 详情 drawer 内新增“对账差异记录”只读区，并在 `campus-admin.js` 新增 `getCampusSettlementReconcileDifferences`；打开 settlement 详情时按 `settlementRecordId` 读取差异记录，只展示只读列表、空态和错误态，不接入 create / resolve 写操作。
 - Step 67 补充：已在 H2/test + Vite 下准备 `PBSTEP67UI` / settlement `id=1` 的对账差异样本，并通过浏览器验证 `/campus/settlements` 详情 drawer 能展示“对账差异记录”只读区；页面中可见 `AMOUNT_MISMATCH`、`¥6.00 / ¥4.50`、`OPEN / 待处理`、`SIMULATED_RECONCILE` 和 `Step67 UI drawer amount mismatch validation`，且 settlement payout 摘要仍为 `FAILED / PBSTEP67UI`。
 - Step 68 补充：已完成 settlement 对账差异前端线收口评估，结论为 no-go；当前不继续为 `CampusSettlementOpsView.vue` 增加 resolve 写操作，settlement 对账差异前端线在“只读展示 + 运行态验证”后正式收住，后端 resolve 接口继续保留但不在当前只读运营页暴露。
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 到 Step 39 已完成展示 polish 候选评估、5 个关键页面小范围 polish 和展示 polish 冻结判断；Step 40 到 Step 43 已完成交付整理、截图/录屏计划、真实媒体采集和非 bridge 后端方向评估；Step 44 到 Step 49 已完成异常历史表、异常上报写历史、admin 异常只读/处理查询、最小 resolve 后端闭环、admin 异常前端承接和运行态验证；Step 50 到 Step 53 已完成售后执行历史表后端/前端承接与运行态验证；Step 54 到 Step 68 已完成 settlement 批次操作审计后端、前端、运行态验证、对账差异后端实现、对账差异前端最小只读承接、运行态验证和前端线收口评估；当前 bridge 完全保留、展示 polish 主线默认冻结、媒体线已收住、旧外卖模块仍保留可运行、旧前端主链路未被替换
+- Step 69 补充：已完成 settlement P3 主线阶段复盘，确认“批次操作审计线”和“对账差异线”都已在最小实现、前端只读承接和运行态验证后收住；当前 settlement P3 主线整体进入冻结/维护态，不继续为现有只读页补 review / withdraw / resolve 前端写动作。
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 到 Step 39 已完成展示 polish 候选评估、5 个关键页面小范围 polish 和展示 polish 冻结判断；Step 40 到 Step 43 已完成交付整理、截图/录屏计划、真实媒体采集和非 bridge 后端方向评估；Step 44 到 Step 49 已完成异常历史表、异常上报写历史、admin 异常只读/处理查询、最小 resolve 后端闭环、admin 异常前端承接和运行态验证；Step 50 到 Step 53 已完成售后执行历史表后端/前端承接与运行态验证；Step 54 到 Step 69 已完成 settlement 批次操作审计后端、前端、运行态验证、对账差异后端实现、对账差异前端最小只读承接、运行态验证、前端线收口评估和 settlement P3 主线阶段复盘；当前 bridge 完全保留、展示 polish 主线默认冻结、媒体线已收住、旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
 
@@ -2189,6 +2191,7 @@
 - [Step 66 日志](step-66-settlement-reconcile-difference-frontend-minimal-handoff.md)
 - [Step 67 日志](step-67-settlement-reconcile-difference-frontend-runtime-validation.md)
 - [Step 68 日志](step-68-settlement-reconcile-difference-frontend-freeze-decision.md)
+- [Step 69 日志](step-69-settlement-p3-freeze-review-and-maintenance-decision.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)
