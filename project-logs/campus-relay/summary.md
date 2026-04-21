@@ -90,6 +90,7 @@
 - 当前已完成：`Step 78 - 试运营交付包 RC 收口复盘 / 最小 smoke 复核`
 - 当前已完成：`Step 79 - 试运营 RC 运行配置与构建告警减噪`
 - 当前已完成：`Step 80 - 前端打包告警与分包 go / no-go 评估`
+- 当前已完成：`Step 81 - 前端打包线 freeze / no-op 复盘`
 - 当前日期：`2026-04-21`
 - Step 46 补充：已新增 admin 异常 resolve 后端接口 `POST /api/campus/admin/exceptions/{id}/resolve`，只允许 `REPORTED -> RESOLVED`，重复处理返回明确业务错误；本轮未改订单主状态、settlement、latest exception 摘要、bridge、前端页面或路由。
 - Step 47 补充：本轮只做 admin 异常前端承接 go / no-go 评估，不写业务代码、不补页面；最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备，P2 售后执行历史表继续后置。
@@ -114,7 +115,8 @@
 - Step 78 补充：已基于 Step 40 到 Step 42 的交付文档、样本索引、截图、录屏和 Step 77 的 preflight 结果完成试运营交付包 RC 收口复盘；本轮额外确认 `project-logs/campus-relay/runtime/step-42-media/screenshots`、`videos`、`logs` 目录均存在，截图 15 张、录屏 5 段、frontend `5173` 与 backend `8080` 端口在本地 smoke 复核时可访问。结论是当前项目已经达到“可演示、可移交、可答辩、可复盘”的试运营 RC 状态，但仍保留非阻塞遗留项：`application-test.properties` 默认 `server.port=0`、frontend build 仍有 Sass `@import` 和 chunk size 告警、after-sale 固定真实样本仍非必须项。本轮未修改业务代码、接口、路由、鉴权、bridge、地图代码或前端页面。
 - Step 79 补充：已将 `application-test.properties` 默认端口从随机端口收口为 `SERVER_PORT:8080`，使 `test profile + H2` 可直接用于浏览器联调，同时保留环境变量覆盖能力；前端 `global.scss` 与 `element-plus.scss` 已从 Sass `@import` 迁移到 `@use`，`npm run build` 不再出现 Sass `@import` 弃用告警。本轮未修改 bridge、接口、路由、鉴权、token 附着、地图代码或业务页面语义。
 - Step 80 补充：已将 `Dashboard.vue` 与 `Statistics.vue` 从整包 `echarts` 引用切到共享按需注册入口 `frontend/src/utils/echarts.js`，图表共享 chunk 从约 `1.11 MB` 收敛到约 `545 KB`；同时在 `frontend/vite.config.js` 中把 `build.chunkSizeWarningLimit` 调整为 `1100`，与当前全局 `ElementPlus` vendor 基线对齐，`npm run build` 不再输出 Vite chunk size 告警。本轮未修改 bridge、接口、路由、鉴权、token 附着或业务页面语义。
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 到 Step 39 已完成展示 polish 候选评估、5 个关键页面小范围 polish 和展示 polish 冻结判断；Step 40 到 Step 43 已完成交付整理、截图/录屏计划、真实媒体采集和非 bridge 后端方向评估；Step 44 到 Step 49 已完成异常历史表、异常上报写历史、admin 异常只读/处理查询、最小 resolve 后端闭环、admin 异常前端承接和运行态验证；Step 50 到 Step 53 已完成售后执行历史表后端/前端承接与运行态验证；Step 54 到 Step 80 已完成 settlement 批次操作审计后端、前端、运行态验证、对账差异后端实现、对账差异前端最小只读承接、运行态验证、前端线收口评估、settlement P3 主线阶段复盘、非 bridge 后端三线整体复盘、整体维护 / 交付口径复盘、腾讯地图单页产品化试点、地图线收口判断、试运营版产品化下一阶段规划、试运营运行配置与 preflight 手册、模拟资金链路产品化边界说明、试运营交付文档一致性复核与最小 preflight 验证、试运营交付包 RC 收口复盘 / 最小 smoke 复核、试运营 RC 运行配置与构建告警减噪，以及前端打包告警与分包 go / no-go 评估；当前 bridge 完全保留、展示 polish 主线默认冻结、媒体线已收住、地图线收住为单页 admin 只读点位预览，模拟资金链路仍不接真实支付 / 退款 / 打款，旧外卖模块仍保留可运行、旧前端主链路未被替换
+- Step 81 补充：已完成前端打包线 freeze / no-op 复盘，确认 Step 80 后剩余大包主要来自当前全局 `ElementPlus` vendor 基线，而不是新的误打包问题；在没有真实性能压力或全局组件装配重构前，不再继续推进高风险按需拆分，前端打包优化线正式进入冻结 / no-op。本轮未修改业务代码、bridge、接口、路由、鉴权或页面行为。
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 到 Step 39 已完成展示 polish 候选评估、5 个关键页面小范围 polish 和展示 polish 冻结判断；Step 40 到 Step 43 已完成交付整理、截图/录屏计划、真实媒体采集和非 bridge 后端方向评估；Step 44 到 Step 49 已完成异常历史表、异常上报写历史、admin 异常只读/处理查询、最小 resolve 后端闭环、admin 异常前端承接和运行态验证；Step 50 到 Step 53 已完成售后执行历史表后端/前端承接与运行态验证；Step 54 到 Step 81 已完成 settlement 批次操作审计后端、前端、运行态验证、对账差异后端实现、对账差异前端最小只读承接、运行态验证、前端线收口评估、settlement P3 主线阶段复盘、非 bridge 后端三线整体复盘、整体维护 / 交付口径复盘、腾讯地图单页产品化试点、地图线收口判断、试运营版产品化下一阶段规划、试运营运行配置与 preflight 手册、模拟资金链路产品化边界说明、试运营交付文档一致性复核与最小 preflight 验证、试运营交付包 RC 收口复盘 / 最小 smoke 复核、试运营 RC 运行配置与构建告警减噪、前端打包告警与分包 go / no-go 评估，以及前端打包线 freeze / no-op 复盘；当前 bridge 完全保留、展示 polish 主线默认冻结、媒体线已收住、地图线收住为单页 admin 只读点位预览、前端打包优化线已冻结为 no-op，模拟资金链路仍不接真实支付 / 退款 / 打款，旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
 
@@ -2228,6 +2230,7 @@
 - [Step 78 日志](step-78-trial-operation-rc-review-and-minimal-smoke.md)
 - [Step 79 日志](step-79-rc-runtime-config-and-build-warning-hardening.md)
 - [Step 80 日志](step-80-frontend-bundle-warning-go-no-go.md)
+- [Step 81 日志](step-81-frontend-bundle-freeze-and-no-op-review.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)

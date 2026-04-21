@@ -137,3 +137,11 @@ Step 81 建议进入“前端打包线 freeze / no-op 复盘”：
 1. 评估是否还有必要继续处理当前全局 `ElementPlus` vendor 基线。
 2. 若没有明确性能或交付压力，则正式将前端打包优化线收成冻结 / no-op。
 3. 不再默认继续做前端分包改造。
+
+## Step 81 回填
+
+1. 已完成前端打包线 freeze / no-op 复盘。
+2. 已确认 Step 80 后的剩余大包主要来自当前全局 `ElementPlus` vendor 基线，而不是路由懒加载缺失或 `echarts` 误打包。
+3. 当前 `npm run build` 已无 Sass `@import` 告警，也无 Vite chunk size warning。
+4. 在没有真实性能压力、移动端体验问题、交付阻塞或全局组件装配重构的前提下，不再继续推进高风险全局按需拆分。
+5. 前端打包优化线正式进入冻结 / no-op，仅在触发条件出现时重开。

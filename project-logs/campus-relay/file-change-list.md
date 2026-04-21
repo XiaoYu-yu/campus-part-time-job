@@ -1275,3 +1275,13 @@
 - [project-logs/campus-relay/step-80-frontend-bundle-warning-go-no-go.md](step-80-frontend-bundle-warning-go-no-go.md)
 
 本轮先完成前端打包告警与分包 go / no-go 评估，再执行一个低风险最小动作：把 `Dashboard.vue` 与 `Statistics.vue` 从整包 `echarts` 引用切到共享按需注册入口，图表共享 chunk 从约 `1.11 MB` 收敛到约 `545 KB`。剩余大包主要来自当前全局 `ElementPlus` vendor 基线，不适合在试运营 RC 阶段做高风险全量按需改造，因此只在 `frontend/vite.config.js` 中把 `build.chunkSizeWarningLimit` 调整到 `1100`，以匹配当前接受的基线并消除无效 build 噪音。本轮没有修改 bridge、鉴权、接口、路由、token 附着或业务页面语义。
+
+## Step 81 - 前端打包线 freeze / no-op 复盘
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-80-frontend-bundle-warning-go-no-go.md](step-80-frontend-bundle-warning-go-no-go.md)
+- [project-logs/campus-relay/step-81-frontend-bundle-freeze-and-no-op-review.md](step-81-frontend-bundle-freeze-and-no-op-review.md)
+
+本轮是前端打包线 freeze / no-op 复盘轮：基于 Step 80 已完成的 `echarts` 最小按需优化和 Vite warning 基线校准，确认当前剩余大包主要来自全局 `ElementPlus` vendor 基线，而不是新的误打包问题。由于继续推进全局按需拆分会显著扩大影响面且当前没有真实性能或交付压力，因此前端打包优化线正式冻结为 no-op，仅在出现明确性能信号、交付压力或全局组件装配重构时才重开。本轮没有业务代码改动。

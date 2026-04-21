@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 81 最高优先级
+## Step 82 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -60,10 +60,15 @@
    - `frontend/src/views/Dashboard.vue` 与 `frontend/src/views/Statistics.vue` 已切到共享按需 `echarts` 入口，图表共享 chunk 从约 `1.11 MB` 收敛到约 `545 KB`。
    - 已在 `frontend/vite.config.js` 中将 `build.chunkSizeWarningLimit` 调整到 `1100`，与当前试运营 RC 接受的 `ElementPlus` 全局 vendor 基线对齐；`npm run build` 不再输出 Vite chunk size 告警。
    - 本轮没有改 bridge、接口、路由、鉴权、token 附着或业务语义。
-12. Step 81 建议进入“前端打包线 freeze / no-op 复盘”：
-   - 当前显性工程噪音已经从 Sass `@import` 和 Vite chunk warning 收敛到可接受范围。
-   - 下一轮应判断是否还有必要继续为 `ElementPlus` 全量引入做高风险拆分，还是正式把前端打包优化线收成冻结 / no-op。
-   - 若无明确性能或交付压力，不再默认继续做前端分包改造。
+12. Step 81 已完成“前端打包线 freeze / no-op 复盘”：
+   - 已确认 Step 80 后当前显性工程噪音已收敛：Sass `@import` 告警已清除，Vite chunk warning 已清除。
+   - 已确认剩余大包主要来自当前全局 `ElementPlus` vendor 基线，而不是路由未懒加载或图表整包误用。
+   - 已判断当前不值得继续做高风险全局 `ElementPlus` 按需拆分；前端打包优化线正式进入冻结 / no-op。
+   - 仅在出现真实性能信号、交付压力或全局组件装配重构时，才重新打开该主线。
+13. Step 82 建议进入“试运营 RC 下一阶段主线重排 / go-no-go 评估”：
+   - 当前 bridge 线、展示 polish 线、媒体线、地图线和前端打包优化线都已进入冻结或收住状态。
+   - 下一轮更高价值的工作不是继续局部优化，而是重新判断试运营 RC 之后是否要打开新的真实功能主线。
+   - 可评估方向建议只保留 2 到 3 个：例如 P2/P3 后端能力继续深化、试运营运维化能力、或交付归档压缩；不要再机械找小修小补。
 12. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。
