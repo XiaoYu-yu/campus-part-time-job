@@ -24,11 +24,13 @@ cd D:\20278\code\Campus part-time job\backend
 说明：
 
 1. `application-test.properties` 使用内存 H2：`jdbc:h2:mem:takeaway_test`。
-2. H2 启动时会加载：
+2. test profile 现在默认监听 `http://localhost:8080`，便于直接浏览器联调。
+3. 如需临时改端口，可通过环境变量覆盖，例如 `SERVER_PORT=8090`。
+4. H2 启动时会加载：
    - `backend/src/main/resources/db/schema-h2.sql`
    - `backend/src/main/resources/db/data-h2.sql`
-3. 适合演示固定账号、固定样本订单和本地完整链路。
-4. 进程重启后 H2 内存库会重置到 seed 数据。
+5. 适合演示固定账号、固定样本订单和本地完整链路。
+6. 进程重启后 H2 内存库会重置到 seed 数据。
 
 ### 后端：dev profile + MySQL / MariaDB
 

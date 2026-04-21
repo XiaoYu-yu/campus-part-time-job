@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 79 最高优先级
+## Step 80 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -48,46 +48,52 @@
      - `application-test.properties` 默认 `server.port=0`
      - frontend build 仍有 Sass `@import` 与 Vite chunk size 告警
      - after-sale 固定真实样本仍不是交付必需项
-10. Step 79 建议进入“试运营 RC 归档 / 后续主线分层评估”：
-   - 若目标是收口交付，优先把当前 RC 状态、冻结线和非阻塞遗留项再整理成更短的 release note / handoff 口径。
-   - 若目标是继续开发，下一步不默认重开 bridge、展示 polish、媒体线或地图线，而是先重新分层评估后续 backlog，再决定是否开启新的非 bridge 主线。
-   - 仍不接真实支付、真实退款、真实打款。
-11. Step 40 已完成交付整理与演示脚本固化：
+10. Step 79 已完成“试运营 RC 运行配置与构建告警减噪”：
+   - `backend/src/main/resources/application-test.properties` 默认端口已改为 `SERVER_PORT:8080`，`test profile + H2` 现在可以直接用于浏览器联调，同时保留环境变量覆盖能力。
+   - `frontend/src/styles/global.scss` 与 `frontend/src/styles/element-plus.scss` 已从 Sass `@import` 迁移到 `@use`。
+   - `docs/trial-operation-preflight.md` 已同步更新 test profile 默认端口与 `SERVER_PORT` 覆盖说明。
+   - backend compile、frontend build、H2/test 启动和最小运行验证已完成；frontend build 不再出现 Sass `@import` 弃用告警，仅保留 Vite chunk size 告警。
+   - 本轮没有改 bridge、接口、路由、鉴权、token 附着、地图代码或业务页面语义。
+11. Step 80 建议进入“前端打包告警与分包 go / no-go 评估”：
+   - 当前剩余的显性工程噪音主要是 Vite chunk size 告警。
+   - 下一轮先评估是否值得通过分包、懒加载或 warning 阈值策略处理，而不是直接大改前端结构。
+   - 若评估收益不足，也允许正式记为 no-op，继续保持试运营 RC 状态。
+12. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。
    - 演示账号与样本数据索引。
    - 页面展示清单。
    - 风险与答辩口径。
-12. Step 41 已完成交付材料补完：
+13. Step 41 已完成交付材料补完：
    - 截图清单。
    - 录屏顺序。
    - 演示前检查 checklist。
-13. Step 42 已完成真实媒体采集与归档：
+14. Step 42 已完成真实媒体采集与归档：
    - 已采集 15 张真实截图，其中 13 张主交付截图、2 张异常后 confirm 失败留痕。
    - 已采集 5 段真实录屏，其中 4 段主交付录屏、1 段异常后 confirm 失败留痕。
    - 媒体目录：`project-logs/campus-relay/runtime/step-42-media/`。
-14. Step 43 已选择路径 B：
+15. Step 43 已选择路径 B：
    - 不补固定 after-sale 样本。
    - 不继续补媒体。
    - 正式收住媒体线。
    - 完成 3 个非 bridge 后端方向评估。
-15. Step 44 已完成异常历史与处理闭环最小方案设计：
+16. Step 44 已完成异常历史与处理闭环最小方案设计：
    - 建议新增 `campus_exception_record`。
    - 继续保留 `campus_relay_order.exception_type / exception_remark / exception_reported_at` 作为 latest exception 兼容摘要。
    - 复用现有 courier `exception-report` 入口。
    - 最小状态集建议为 `REPORTED / RESOLVED`。
    - admin 侧先做历史分页和详情只读，再评估最小 resolve。
-16. Step 45A 已完成异常历史最小实现：
+17. Step 45A 已完成异常历史最小实现：
    - 新增 `campus_exception_record`。
    - 现有 courier `POST /api/campus/courier/orders/{id}/exception-report` 同事务写入历史表并继续更新订单 latest exception 摘要。
    - 新增 admin 只读接口 `GET /api/campus/admin/exceptions` 与 `GET /api/campus/admin/exceptions/{id}`。
    - MySQL init、V9 migration、H2 schema 已同步；H2 未预置复杂样本，运行态通过真实异常上报生成历史。
-17. Step 45B 已完成 admin 异常最小处理动作设计：
+18. Step 45B 已完成 admin 异常最小处理动作设计：
    - 继续坚持最小状态集 `REPORTED / RESOLVED`。
    - 不引入 `ACKNOWLEDGED`。
    - 不把 `REJECTED` 做成主状态，后续如需标记无效可使用 `processResult = MARKED_INVALID`。
    - resolve 只更新 `campus_exception_record` 处理字段，不改订单主状态、不改 settlement、不清空 latest exception 摘要。
-18. Step 46 已完成异常 resolve 最小实现：
+19. Step 46 已完成异常 resolve 最小实现：
    - 新增 `POST /api/campus/admin/exceptions/{id}/resolve`。
    - 请求体最小字段为 `processResult` 与 `adminNote`。
    - 最小 `processResult` 固定为 `HANDLED`、`MARKED_INVALID`、`FOLLOWED_UP`。

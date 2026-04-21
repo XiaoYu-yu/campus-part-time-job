@@ -123,3 +123,10 @@ Step 79 建议进入“试运营 RC 归档 / 后续主线分层评估”：
 1. 如果目标是收口交付，优先把当前 RC 状态、冻结线和非阻塞遗留项整理成更短的 release note / handoff 口径。
 2. 如果目标是继续开发，不默认重开 bridge、展示 polish、媒体线或地图线，而是先重新分层评估 backlog，再决定是否开启新的非 bridge 主线。
 3. 当前不建议直接进入真实支付、真实退款、真实打款或地图扩张。
+
+## Step 79 回填
+
+1. 已将 `application-test.properties` 默认端口从随机端口收口为 `SERVER_PORT:8080`，不再需要为了浏览器联调临时覆盖端口。
+2. 已将 `frontend/src/styles/global.scss` 与 `frontend/src/styles/element-plus.scss` 从 Sass `@import` 迁移到 `@use`。
+3. 已同步更新 `docs/trial-operation-preflight.md` 的 test profile 启动说明，补充默认端口和 `SERVER_PORT` 覆盖方式。
+4. backend compile、frontend build 和 H2/test 启动验证已完成，frontend build 不再出现 Sass `@import` 弃用告警。

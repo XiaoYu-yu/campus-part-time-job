@@ -1247,3 +1247,17 @@
 - [project-logs/campus-relay/step-78-trial-operation-rc-review-and-minimal-smoke.md](step-78-trial-operation-rc-review-and-minimal-smoke.md)
 
 本轮是试运营交付包 RC 收口复盘 / 最小 smoke 复核轮：基于 Step 40 到 Step 42 的交付文档、样本索引、截图与录屏，以及 Step 77 的文档一致性复核和最小 preflight 结果，确认当前交付包已经达到“可演示、可移交、可答辩、可复盘”的试运营 RC 状态；同时额外确认媒体目录、截图/录屏数量和本地 frontend/backend 端口可访问。本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面、路由或后端接口，没有改 bridge、鉴权、token 附着、`request.js`、地图代码或旧外卖模块。
+
+## Step 79 - 试运营 RC 运行配置与构建告警减噪
+
+- [backend/src/main/resources/application-test.properties](../../backend/src/main/resources/application-test.properties)
+- [frontend/src/styles/global.scss](../../frontend/src/styles/global.scss)
+- [frontend/src/styles/element-plus.scss](../../frontend/src/styles/element-plus.scss)
+- [docs/trial-operation-preflight.md](../../docs/trial-operation-preflight.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-78-trial-operation-rc-review-and-minimal-smoke.md](step-78-trial-operation-rc-review-and-minimal-smoke.md)
+- [project-logs/campus-relay/step-79-rc-runtime-config-and-build-warning-hardening.md](step-79-rc-runtime-config-and-build-warning-hardening.md)
+
+本轮是试运营 RC 运行配置与构建告警减噪轮：将 `application-test.properties` 默认端口调整为 `SERVER_PORT:8080`，使 `test profile + H2` 可直接用于浏览器联调；同时把前端两个样式入口从 Sass `@import` 迁移到 `@use`，消除 build 中的弃用告警，并同步更新 preflight 手册。本轮没有修改 bridge、鉴权、接口、路由、token 附着、地图代码或业务页面语义。
