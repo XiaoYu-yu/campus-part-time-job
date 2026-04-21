@@ -1188,3 +1188,13 @@
 - [project-logs/campus-relay/step-73-tencent-map-productization-go-no-go.md](step-73-tencent-map-productization-go-no-go.md)
 
 本轮是腾讯地图产品化线 go / no-go 评估轮：基于 Step 72 已完成的真实地图试点，正式判断当前不继续扩到第二个既有页面；地图能力收住为 `CampusCourierOpsView.vue` 单页 admin 只读点位预览，保留 JS SDK 试点成果，但不做轨迹、路线、调度、导航、地图写操作或第二个地图页面。本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面、路由或后端接口，没有改 bridge、鉴权、token 附着、`request.js` 或旧外卖模块。
+
+## Step 74 - 试运营版产品化下一阶段规划
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-73-tencent-map-productization-go-no-go.md](step-73-tencent-map-productization-go-no-go.md)
+- [project-logs/campus-relay/step-74-trial-operation-productization-roadmap.md](step-74-trial-operation-productization-roadmap.md)
+
+本轮是试运营版产品化下一阶段规划轮：评估地图扩展、模拟资金链路、运行配置 / 环境 / 密钥、admin 运营处理动作和真实部署上线等方向，最终选择 Step 75 优先进入“试运营运行配置与 preflight 手册”；本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面、路由或后端接口，没有改 bridge、鉴权、token 附着、`request.js`、地图代码或旧外卖模块。

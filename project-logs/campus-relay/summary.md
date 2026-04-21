@@ -83,6 +83,7 @@
 - 当前已完成：`Step 71 - 整体维护 / 交付口径复盘`
 - 当前已完成：`Step 72 - 腾讯地图最小产品化试点 / 园区要素运营地图预览`
 - 当前已完成：`Step 73 - 腾讯地图产品化线 go / no-go 与试点收口`
+- 当前已完成：`Step 74 - 试运营版产品化下一阶段规划`
 - 当前日期：`2026-04-21`
 - Step 46 补充：已新增 admin 异常 resolve 后端接口 `POST /api/campus/admin/exceptions/{id}/resolve`，只允许 `REPORTED -> RESOLVED`，重复处理返回明确业务错误；本轮未改订单主状态、settlement、latest exception 摘要、bridge、前端页面或路由。
 - Step 47 补充：本轮只做 admin 异常前端承接 go / no-go 评估，不写业务代码、不补页面；最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备，P2 售后执行历史表继续后置。
@@ -100,7 +101,8 @@
 - Step 71 补充：已完成整体维护 / 交付口径复盘，确认当前最小闭环已经达到“可试运营、可演示、可交接”的稳定状态；bridge 冻结态、展示 polish 冻结态、媒体线收住、非 bridge 后端三线收住四条主线当前都没有必须继续补的高优先级缺口，后续如继续推进应进入真正产品化方向规划。
 - Step 72 补充：已在 `CampusCourierOpsView.vue` 接入腾讯地图 JS SDK 最小预览能力，使用现有配送员位置记录在 admin 只读运营页中展示真实地图点位；当前不改后端接口、不改 bridge、不改鉴权和路由。运行态验证确认 `CR202604060001` / 配送员 `id=2` 可在 `/campus/courier-ops` 看到腾讯地图比例尺与版权信息；同时确认当前 key 未开启 WebService API，因此本轮放弃静态图方案，改走 JS SDK 方案。
 - Step 73 补充：已完成腾讯地图产品化线 go / no-go 评估，结论是不扩到第二个既有页面；当前地图能力正式收住为 `CampusCourierOpsView.vue` 的单页 admin 只读点位预览，继续保留 JS SDK 试点成果，但不做轨迹、路线、调度、导航或地图写操作。下一轮建议转入整体产品化下一阶段规划，而不是继续扩地图页面。
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 到 Step 39 已完成展示 polish 候选评估、5 个关键页面小范围 polish 和展示 polish 冻结判断；Step 40 到 Step 43 已完成交付整理、截图/录屏计划、真实媒体采集和非 bridge 后端方向评估；Step 44 到 Step 49 已完成异常历史表、异常上报写历史、admin 异常只读/处理查询、最小 resolve 后端闭环、admin 异常前端承接和运行态验证；Step 50 到 Step 53 已完成售后执行历史表后端/前端承接与运行态验证；Step 54 到 Step 73 已完成 settlement 批次操作审计后端、前端、运行态验证、对账差异后端实现、对账差异前端最小只读承接、运行态验证、前端线收口评估、settlement P3 主线阶段复盘、非 bridge 后端三线整体复盘、整体维护 / 交付口径复盘、腾讯地图单页产品化试点与地图线收口判断；当前 bridge 完全保留、展示 polish 主线默认冻结、媒体线已收住、地图线收住为单页 admin 只读点位预览，旧外卖模块仍保留可运行、旧前端主链路未被替换
+- Step 74 补充：已完成试运营版产品化下一阶段规划，评估地图扩展、模拟资金链路、试运营运行配置、admin 运营处理动作和真实部署等候选方向；最终结论是下一阶段优先做“试运营运行配置与 preflight 手册”，先固化 profile、启动方式、腾讯地图 key 本地配置、样本数据、模拟资金口径和关键页面 / 接口检查，不进入真实部署、不扩地图第二页、不新增页面。
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 到 Step 39 已完成展示 polish 候选评估、5 个关键页面小范围 polish 和展示 polish 冻结判断；Step 40 到 Step 43 已完成交付整理、截图/录屏计划、真实媒体采集和非 bridge 后端方向评估；Step 44 到 Step 49 已完成异常历史表、异常上报写历史、admin 异常只读/处理查询、最小 resolve 后端闭环、admin 异常前端承接和运行态验证；Step 50 到 Step 53 已完成售后执行历史表后端/前端承接与运行态验证；Step 54 到 Step 74 已完成 settlement 批次操作审计后端、前端、运行态验证、对账差异后端实现、对账差异前端最小只读承接、运行态验证、前端线收口评估、settlement P3 主线阶段复盘、非 bridge 后端三线整体复盘、整体维护 / 交付口径复盘、腾讯地图单页产品化试点、地图线收口判断，以及试运营版产品化下一阶段规划；当前 bridge 完全保留、展示 polish 主线默认冻结、媒体线已收住、地图线收住为单页 admin 只读点位预览，下一阶段优先补试运营运行配置与 preflight 手册，旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
 
@@ -2205,6 +2207,7 @@
 - [Step 71 日志](step-71-overall-maintenance-and-delivery-readiness-review.md)
 - [Step 72 日志](step-72-tencent-map-admin-ops-minimal-pilot.md)
 - [Step 73 日志](step-73-tencent-map-productization-go-no-go.md)
+- [Step 74 日志](step-74-trial-operation-productization-roadmap.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)
 - [bridge 联调/回归模板](bridge-regression-template.md)
