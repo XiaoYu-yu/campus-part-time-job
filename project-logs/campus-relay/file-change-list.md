@@ -1152,3 +1152,13 @@
 - [project-logs/campus-relay/step-70-non-bridge-backend-lines-overall-review.md](step-70-non-bridge-backend-lines-overall-review.md)
 
 本轮是非 bridge 后端三线整体复盘轮：统一确认异常历史与最小 resolve 线、售后执行历史线、settlement P3 线都已达到“最小闭环 + 前端承接/验证”状态，当前不再默认继续扩单点能力，主线转入整体维护/交付口径复盘；本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面、路由或后端接口，没有改 bridge、鉴权、路由、token 附着或旧外卖模块。
+
+## Step 71 - 整体维护 / 交付口径复盘
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-70-non-bridge-backend-lines-overall-review.md](step-70-non-bridge-backend-lines-overall-review.md)
+- [project-logs/campus-relay/step-71-overall-maintenance-and-delivery-readiness-review.md](step-71-overall-maintenance-and-delivery-readiness-review.md)
+
+本轮是整体维护 / 交付口径复盘轮：正式确认当前最小闭环已经达到“可试运营、可演示、可交接”的稳定状态，bridge 冻结态、展示 polish 冻结态、媒体线收住、非 bridge 后端三线收住四条主线当前都没有必须继续补的高优先级缺口；本轮没有修改 Java、SQL、Vue 业务代码，没有新增页面、路由或后端接口，没有改 bridge、鉴权、路由、token 附着或旧外卖模块。
