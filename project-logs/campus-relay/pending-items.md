@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 85 最高优先级
+## Step 86 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -83,10 +83,14 @@
    - `validate-samples.ps1` 只读校验 `schema-h2.sql` 与 `data-h2.sql` 中的关键演示锚点，不连接数据库、不写入样本、不重置 H2。
    - `preflight.ps1` 新增 `-RunSampleValidation` 参数，并把样本校验的 warning 识别为 warning 而非硬失败。
    - 当前必需样本锚点通过；after-sale / exception / reconcile difference 固定样本未预置，按运行态样本 warning 如实保留。
-16. Step 85 建议继续沿着“试运营运维化最小能力”推进：
-   - 优先评估“启动命令索引”或“手动 H2 reset 指南”，不要直接做自动数据库重置。
-   - 如需继续脚本化，优先做只读 runtime smoke 或命令聚合，不做自动造数 / 自动重置。
-   - 仍不重开 bridge、不继续页面 polish、不默认继续扩非 bridge 业务功能。
+16. Step 85 已完成“试运营命令索引与手动 H2 reset 指南”：
+   - 新增 `scripts/trial-operation/commands.ps1`。
+   - 该脚本只输出常用命令和页面入口，不启动长驻进程、不 kill 进程、不自动 reset H2。
+   - H2 reset 口径固定为停止 backend test-profile 进程后重新启动，由 `schema-h2.sql` 与 `data-h2.sql` 重新加载。
+17. Step 86 建议继续做试运营脚本线 go / no-go：
+   - 如果 preflight、样本校验、命令索引已经足够，评估是否冻结试运营脚本线。
+   - 如果仍需增强，只考虑只读 runtime smoke，不做自动造数、自动 reset 或长驻进程管理。
+   - bridge、展示 polish、地图、媒体、前端打包和非 bridge 业务线继续保持冻结 / 收住口径。
 12. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。

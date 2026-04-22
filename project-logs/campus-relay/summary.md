@@ -94,6 +94,7 @@
 - 当前已完成：`Step 82 - 试运营 RC 下一阶段主线重排 / go-no-go 评估`
 - 当前已完成：`Step 83 - 试运营运维化最小能力边界收敛 / preflight 脚本入口`
 - 当前已完成：`Step 84 - 试运营样本状态校验脚本`
+- 当前已完成：`Step 85 - 试运营命令索引与手动 H2 reset 指南`
 - 当前日期：`2026-04-21`
 - Step 46 补充：已新增 admin 异常 resolve 后端接口 `POST /api/campus/admin/exceptions/{id}/resolve`，只允许 `REPORTED -> RESOLVED`，重复处理返回明确业务错误；本轮未改订单主状态、settlement、latest exception 摘要、bridge、前端页面或路由。
 - Step 47 补充：本轮只做 admin 异常前端承接 go / no-go 评估，不写业务代码、不补页面；最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备，P2 售后执行历史表继续后置。
@@ -122,6 +123,7 @@
 - Step 82 补充：已完成试运营 RC 下一阶段主线重排 / go-no-go 评估。当前 bridge、展示 polish、媒体、地图和前端打包优化五条主线都已冻结或收住，因此下一阶段不再优先继续做局部功能或局部 polish；最终选择“试运营运维化最小能力”作为下一条真实主线，优先把启动、preflight、H2/reset、样本校验等日常试运营动作从文档步骤收敛成更可执行的本地操作层。非 bridge 后端继续深化与产品级上线前方案设计当前都不作为下一条主线。本轮未修改业务代码、bridge、接口、路由、鉴权或页面行为。
 - Step 83 补充：已完成试运营运维化最小能力边界收敛并新增 `scripts/trial-operation/preflight.ps1` 与 `scripts/trial-operation/README.md`；该脚本检查关键文件、地图本地 key 变量、`.env.local` git 跟踪状态，可选检查 8080 / 5173 端口并可选执行 backend compile / frontend build。本轮未自动重置 H2、未启动长驻进程、未打印真实地图 key，且未修改 bridge、接口、路由、鉴权、前端页面或后端业务语义。
 - Step 84 补充：已新增 `scripts/trial-operation/validate-samples.ps1`，用于只读校验 H2 seed / schema 中的试运营样本锚点；`preflight.ps1` 已新增 `-RunSampleValidation` 参数并能把样本校验 warning 识别为 warning 而非硬失败。本轮未连接数据库、未重置 H2、未写入样本、未改 bridge、接口、路由、鉴权、前端页面或后端业务语义。
+- Step 85 补充：已新增 `scripts/trial-operation/commands.ps1`，用于输出本地试运营命令索引、浏览器入口和手动 H2 reset 说明；该脚本只打印命令，不启动长驻进程、不 kill 进程、不自动 reset H2。本轮未改 bridge、接口、路由、鉴权、前端页面或后端业务语义。
 - 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 到 Step 39 已完成展示 polish 候选评估、5 个关键页面小范围 polish 和展示 polish 冻结判断；Step 40 到 Step 43 已完成交付整理、截图/录屏计划、真实媒体采集和非 bridge 后端方向评估；Step 44 到 Step 49 已完成异常历史表、异常上报写历史、admin 异常只读/处理查询、最小 resolve 后端闭环、admin 异常前端承接和运行态验证；Step 50 到 Step 53 已完成售后执行历史表后端/前端承接与运行态验证；Step 54 到 Step 84 已完成 settlement 批次操作审计后端、前端、运行态验证、对账差异后端实现、对账差异前端最小只读承接、运行态验证、前端线收口评估、settlement P3 主线阶段复盘、非 bridge 后端三线整体复盘、整体维护 / 交付口径复盘、腾讯地图单页产品化试点、地图线收口判断、试运营版产品化下一阶段规划、试运营运行配置与 preflight 手册、模拟资金链路产品化边界说明、试运营交付文档一致性复核与最小 preflight 验证、试运营交付包 RC 收口复盘 / 最小 smoke 复核、试运营 RC 运行配置与构建告警减噪、前端打包告警与分包 go / no-go 评估、前端打包线 freeze / no-op 复盘、试运营 RC 下一阶段主线重排 / go-no-go 评估、试运营本地 preflight 脚本入口，以及试运营样本状态校验脚本；当前 bridge 完全保留、展示 polish 主线默认冻结、媒体线已收住、地图线收住为单页 admin 只读点位预览、前端打包优化线已冻结为 no-op，模拟资金链路仍不接真实支付 / 退款 / 打款，旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
@@ -2240,6 +2242,7 @@
 - [Step 82 日志](step-82-trial-operation-next-mainline-go-no-go.md)
 - [Step 83 日志](step-83-trial-operation-ops-entrypoint-boundary-and-preflight-script.md)
 - [Step 84 日志](step-84-trial-operation-sample-validation-script.md)
+- [Step 85 日志](step-85-trial-operation-command-index-and-manual-h2-reset-guide.md)
 - [试运营脚本入口说明](../../scripts/trial-operation/README.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)

@@ -48,6 +48,22 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\preflight.ps1 -
 
 Use `docs/trial-operation-preflight.md` for the full manual runbook. This script is only a small executable entrypoint for repeatable local checks.
 
+## Command Index
+
+Print the local trial-operation command index:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\commands.ps1
+```
+
+Print browser entrypoints too:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\commands.ps1 -Full
+```
+
+The command index does not start backend/frontend processes and does not reset H2 automatically. It only prints the approved local commands and reset boundary.
+
 ## Sample Validation
 
 `validate-samples.ps1` reads only `backend/src/main/resources/db/schema-h2.sql` and `backend/src/main/resources/db/data-h2.sql`.

@@ -1320,3 +1320,16 @@
 - [project-logs/campus-relay/step-84-trial-operation-sample-validation-script.md](step-84-trial-operation-sample-validation-script.md)
 
 本轮是试运营样本状态校验脚本轮：新增 `validate-samples.ps1`，只读校验 H2 seed / schema 中的账号、订单、位置、settlement 与历史表 schema 锚点；`preflight.ps1` 新增 `-RunSampleValidation` 参数并能把样本校验 warning 作为 warning 处理。本轮没有连接数据库、没有写入样本、没有自动重置 H2、没有改 bridge、接口、路由、鉴权、token 附着、前端页面或后端业务语义。
+
+## Step 85 - 试运营命令索引与手动 H2 reset 指南
+
+- [scripts/trial-operation/commands.ps1](../../scripts/trial-operation/commands.ps1)
+- [scripts/trial-operation/README.md](../../scripts/trial-operation/README.md)
+- [docs/trial-operation-preflight.md](../../docs/trial-operation-preflight.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-84-trial-operation-sample-validation-script.md](step-84-trial-operation-sample-validation-script.md)
+- [project-logs/campus-relay/step-85-trial-operation-command-index-and-manual-h2-reset-guide.md](step-85-trial-operation-command-index-and-manual-h2-reset-guide.md)
+
+本轮是试运营命令索引与手动 H2 reset 指南轮：新增 `commands.ps1`，只打印本地试运营常用命令、浏览器入口和手动 H2 reset 说明，不启动长驻进程、不 kill 进程、不自动重置 H2。本轮没有改 bridge、接口、路由、鉴权、token 附着、前端页面或后端业务语义。

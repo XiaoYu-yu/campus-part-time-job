@@ -140,8 +140,14 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\preflight.ps1 -
 
 ## 下一轮建议
 
-Step 85 建议继续保持“试运营运维化最小能力”方向，但仍不做隐式副作用脚本：
+Step 85 已按建议继续保持“试运营运维化最小能力”方向，并落地为无副作用命令索引与手动 H2 reset 指南：
 
-1. 评估是否需要“启动命令索引”或“手动 H2 reset 指南”。
-2. 若要继续脚本化，优先做只读 runtime smoke 或命令聚合，不直接写自动造数 / 自动重置。
+1. 新增 `scripts/trial-operation/commands.ps1`。
+2. 只打印命令，不启动长驻进程、不 kill 进程、不 reset H2。
+3. 将 H2 reset 口径固定为“停止 backend test-profile 进程后重新启动”。
+
+Step 86 建议继续做 go / no-go：
+
+1. 若命令索引与样本校验已足够，评估是否冻结试运营脚本线。
+2. 若仍需增强，只考虑只读 runtime smoke。
 3. bridge、展示 polish、地图、媒体、前端打包和非 bridge 业务扩展线继续保持冻结 / 收住口径。

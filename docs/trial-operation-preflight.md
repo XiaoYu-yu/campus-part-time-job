@@ -48,6 +48,21 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\validate-sample
 4. 不修改 bridge、鉴权、路由、接口或业务页面。
 5. 样本校验只读取 `schema-h2.sql` 与 `data-h2.sql`，不连接数据库、不写入数据。
 
+### 本地命令索引与手动 H2 reset
+
+Step 85 起新增只读命令索引，用于快速查看试运营常用命令：
+
+```powershell
+cd D:\20278\code\Campus part-time job
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\commands.ps1 -Full
+```
+
+H2 reset 口径：
+
+1. 当前 `test profile` 使用内存 H2：`jdbc:h2:mem:takeaway_test`。
+2. 若演示过程中样本状态被操作污染，停止 backend test-profile 进程并重新启动即可重新加载 `schema-h2.sql` 和 `data-h2.sql`。
+3. 当前不提供自动 kill 进程 / 自动 reset 数据脚本，避免误伤正在演示的运行态。
+
 ### 后端：test profile + H2
 
 推荐用于演示和回归。
