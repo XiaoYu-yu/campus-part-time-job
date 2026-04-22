@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 92 最高优先级
+## Step 93 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -139,6 +139,16 @@
    - 若 push 成功，观察 GitHub Actions 首次运行。
    - 若 CI 失败，只修 workflow 或环境差异，不扩业务功能。
    - 若 push 仍失败，先解决 GitHub 443 网络或远端同步问题，不继续堆积 CI 相关提交。
+29. Step 92 已完成“CI 首轮运行结果跟踪 / 本地与远端一致性复核”：
+   - `Trial Operation CI #1` 已由 `450e823ec35f22dba9463c71e1b85b854b1aa6e5` 的 push 触发。
+   - `Backend compile`、`Frontend build`、`Trial sample validation` 三个 job 均成功。
+   - 本地等价验证与远端 CI 结果一致。
+   - 当前仅观察到 GitHub Actions Node.js runtime deprecation warning，不影响 CI 绿色结果。
+30. Step 93 建议做“GitHub Actions runtime warning 处理 go / no-go”：
+   - 先核查 `actions/checkout`、`actions/setup-java`、`actions/setup-node` 当前官方推荐版本。
+   - 如果存在明确的新 runtime 兼容版本，再做只改 action 版本的最小变更。
+   - 如果 warning 短期不阻塞试运营，可记录为非阻塞观察项，不扩业务功能。
+   - bridge、展示 polish、地图、媒体、前端打包、真实支付和部署自动化线继续冻结 / 收住。
 12. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。

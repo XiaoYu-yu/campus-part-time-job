@@ -1406,3 +1406,13 @@
 - [project-logs/campus-relay/step-91-minimal-github-actions-ci.md](step-91-minimal-github-actions-ci.md)
 
 本轮是最小 GitHub Actions CI 实现轮：新增 `trial-operation-ci.yml`，只覆盖 backend compile、frontend build 和 trial sample validation；sample validation 的 warning exit code `2` 在 CI 中按 warning 处理，不使 CI 失败。本轮没有做部署、没有注入真实密钥、没有跑 E2E、没有改业务代码、bridge、接口、路由、鉴权、token 附着或前端页面。
+
+## Step 92 - CI 首轮运行结果跟踪 / 本地与远端一致性复核
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-91-minimal-github-actions-ci.md](step-91-minimal-github-actions-ci.md)
+- [project-logs/campus-relay/step-92-ci-first-run-followup.md](step-92-ci-first-run-followup.md)
+
+本轮是 CI 首轮运行结果跟踪 / 本地与远端一致性复核轮：确认 GitHub Actions `Trial Operation CI #1` 已由 `450e823ec35f22dba9463c71e1b85b854b1aa6e5` 的 push 触发，`Backend compile`、`Frontend build`、`Trial sample validation` 三个 job 均成功；sample validation warning exit code `2` 在远端按 warning 处理。本轮没有改 workflow、业务代码、bridge、接口、路由、鉴权、token 附着或前端页面。

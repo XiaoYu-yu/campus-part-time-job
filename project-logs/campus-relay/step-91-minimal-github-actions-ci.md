@@ -129,3 +129,12 @@ Step 92 建议先做“CI 首轮运行结果跟踪 / 本地与远端一致性复
 1. 如果 GitHub push 成功，观察 Actions 首次运行结果。
 2. 如果 CI 失败，只修 workflow 或环境差异，不扩业务功能。
 3. 不重开 bridge、页面 polish、地图扩展或真实支付接入。
+
+## Step 92 回填
+
+Step 92 已完成该建议：
+
+1. GitHub Actions `Trial Operation CI #1` 已由 `450e823ec35f22dba9463c71e1b85b854b1aa6e5` 的 push 触发。
+2. `Backend compile`、`Frontend build`、`Trial sample validation` 三个 job 均成功。
+3. sample validation 的 warning exit code `2` 已在远端 CI 中按 warning 处理，未导致失败。
+4. 本轮仅记录到 GitHub Actions Node.js runtime deprecation warning，建议 Step 93 单独评估 action 版本升级，不在 Step 92 混入 workflow 变更。
