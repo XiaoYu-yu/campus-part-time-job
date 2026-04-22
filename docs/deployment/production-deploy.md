@@ -91,3 +91,7 @@ java -jar target/takeaway-0.0.1-SNAPSHOT.jar
 8. 真实支付、地图、消息、打款若未接入，应在页面和交付说明中明确为模拟或试运营能力。
 9. `frontend/.env.local`、真实数据库密码和真实地图 key 没有被提交到仓库。
 10. `.env.example` 文件只包含占位值。
+
+部署完成后继续执行：
+
+- [部署后 Smoke Checklist](post-deploy-smoke-checklist.md)

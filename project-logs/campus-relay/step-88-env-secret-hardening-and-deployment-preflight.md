@@ -102,3 +102,11 @@ Step 89 建议继续沿产品级试运营准备线推进：
 1. 若继续偏部署准备，补一份部署后 smoke checklist 或 `deployment-preflight` 文档。
 2. 若转向 CI 准备，设计最小 CI 检查边界：backend compile、frontend build、sample validation。
 3. 不要重开 bridge、页面 polish、地图扩展或真实支付接入。
+
+## Step 89 回填
+
+Step 89 已完成该建议中的部署准备方向：
+
+1. 已新增 `docs/deployment/post-deploy-smoke-checklist.md`。
+2. 已覆盖部署产物、基础访问、customer / courier / admin smoke、模拟资金口径、bridge 冻结口径和回滚触发。
+3. 下一轮建议评估最小 CI 检查边界，而不是继续补部署文档。

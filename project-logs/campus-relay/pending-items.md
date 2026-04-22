@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 89 最高优先级
+## Step 90 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -113,6 +113,14 @@
    - 若偏部署准备，补一份部署后 smoke checklist 或 deployment preflight 文档。
    - 若偏 CI 准备，设计最小 CI 检查边界：backend compile、frontend build、sample validation。
    - 不重开 bridge、页面 polish、地图扩展或真实支付接入。
+23. Step 89 已完成“部署后 smoke checklist / deployment preflight 文档”：
+   - 新增 `docs/deployment/post-deploy-smoke-checklist.md`。
+   - 覆盖部署产物、基础访问、customer / courier / admin smoke、模拟资金口径、bridge 冻结口径和回滚触发。
+   - 本轮没有新增脚本、没有改业务代码、bridge、接口、路由、鉴权或前端页面。
+24. Step 90 建议进入“最小 CI 检查边界设计 / go-no-go”：
+   - 只评估 CI 是否值得做。
+   - 最小 CI 候选只覆盖 backend compile、frontend build、sample validation。
+   - 不接真实部署流水线，不重开 bridge、页面 polish、地图扩展或真实支付接入。
 12. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。
