@@ -1416,3 +1416,14 @@
 - [project-logs/campus-relay/step-92-ci-first-run-followup.md](step-92-ci-first-run-followup.md)
 
 本轮是 CI 首轮运行结果跟踪 / 本地与远端一致性复核轮：确认 GitHub Actions `Trial Operation CI #1` 已由 `450e823ec35f22dba9463c71e1b85b854b1aa6e5` 的 push 触发，`Backend compile`、`Frontend build`、`Trial sample validation` 三个 job 均成功；sample validation warning exit code `2` 在远端按 warning 处理。本轮没有改 workflow、业务代码、bridge、接口、路由、鉴权、token 附着或前端页面。
+
+## Step 93 - GitHub Actions runtime warning 处理 go / no-go
+
+- [.github/workflows/trial-operation-ci.yml](../../.github/workflows/trial-operation-ci.yml)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-92-ci-first-run-followup.md](step-92-ci-first-run-followup.md)
+- [project-logs/campus-relay/step-93-github-actions-runtime-warning-go-no-go.md](step-93-github-actions-runtime-warning-go-no-go.md)
+
+本轮是 GitHub Actions runtime warning 处理 go / no-go 轮：基于官方 README 核查，将 `actions/checkout` 升级到 `v6`、`actions/setup-java` 升级到 `v5`、`actions/setup-node` 升级到 `v6`；CI job、触发条件、命令、Java 17 / Node 20 构建版本、sample validation warning-only 策略均保持不变。本轮没有改业务代码、bridge、接口、路由、鉴权、token 附着或前端页面。

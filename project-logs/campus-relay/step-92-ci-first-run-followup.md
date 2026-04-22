@@ -83,3 +83,12 @@ Step 93 建议进入“GitHub Actions runtime warning 处理 go / no-go”：
 2. 如果存在明确的 Node.js 24 runtime 兼容版本，则做一个只改 action 版本的最小 PR / commit。
 3. 如果当前仓库继续保持绿色且 warning 不阻塞短期试运营，也可以记录为非阻塞观察项，不扩业务功能。
 4. 不重开 bridge、展示 polish、地图扩展、真实支付或部署自动化。
+
+## Step 93 回填
+
+Step 93 已完成该建议：
+
+1. 已核查官方 action README。
+2. 已确认 `actions/checkout@v6`、`actions/setup-node@v6`、`actions/setup-java@v5` 是当前官方 README 示例版本。
+3. 已执行一个只改官方 action 版本的最小 workflow 变更。
+4. CI 边界、项目 Java 17 / Node 20 构建版本、sample validation warning-only 策略均保持不变。
