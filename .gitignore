@@ -14,6 +14,9 @@ Thumbs.db
 
 .env
 .env.*
+!.env.example
+!backend/.env.example
+!frontend/.env.example
 
 uploads/
 project-logs/*.tmp

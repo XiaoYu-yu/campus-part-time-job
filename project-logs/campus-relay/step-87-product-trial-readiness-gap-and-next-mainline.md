@@ -184,6 +184,15 @@ Step 88 建议进入：
 5. 不提交真实 key。
 6. 不做真实部署、不改业务代码。
 
+## Step 88 回填
+
+Step 88 已完成该建议：
+
+1. 已新增 `.env.example`、`backend/.env.example`、`frontend/.env.example`。
+2. 已新增 `docs/deployment/env-and-secret-checklist.md`。
+3. 已更新部署说明、preflight 文档和 docs 索引。
+4. 未提交真实腾讯地图 key、数据库密码或生产 JWT secret。
+
 ## 当前 bridge 结论
 
 1. bridge 继续处于 `Phase A no-op` 冻结态。

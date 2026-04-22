@@ -1352,3 +1352,20 @@
 - [project-logs/campus-relay/step-87-product-trial-readiness-gap-and-next-mainline.md](step-87-product-trial-readiness-gap-and-next-mainline.md)
 
 本轮是产品级试运营前剩余差距清单 / go-no-go 评估轮：确认当前本地答辩 / 交付 RC 已足够，但产品级试运营仍缺环境变量样例、密钥注入边界、部署前 preflight、CI、监控、备份和外部服务降级策略；下一主线建议进入试运营环境与密钥配置硬化。本轮没有改业务代码、bridge、接口、路由、鉴权、token 附着、前端页面或后端业务语义。
+
+## Step 88 - 试运营环境与密钥配置硬化 / deployment preflight 准备
+
+- [.gitignore](../../.gitignore)
+- [.env.example](../../.env.example)
+- [backend/.env.example](../../backend/.env.example)
+- [frontend/.env.example](../../frontend/.env.example)
+- [docs/deployment/env-and-secret-checklist.md](../../docs/deployment/env-and-secret-checklist.md)
+- [docs/deployment/production-deploy.md](../../docs/deployment/production-deploy.md)
+- [docs/trial-operation-preflight.md](../../docs/trial-operation-preflight.md)
+- [docs/README.md](../../docs/README.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-88-env-secret-hardening-and-deployment-preflight.md](step-88-env-secret-hardening-and-deployment-preflight.md)
+
+本轮是试运营环境与密钥配置硬化 / deployment preflight 准备轮：新增安全占位 env 样例，明确后端 / 前端环境变量、腾讯地图 key、数据库密码、JWT secret、CORS 和上传目录的配置边界，并更新部署说明和 preflight 文档。本轮没有提交真实 key、没有改运行时默认值、没有改业务代码、bridge、接口、路由、鉴权、token 附着或前端页面。

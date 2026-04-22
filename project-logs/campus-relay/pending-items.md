@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 88 最高优先级
+## Step 89 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -104,6 +104,15 @@
    - 明确 backend / frontend 试运营环境变量清单。
    - 明确腾讯地图 key 的本地与部署注入边界，继续不提交真实 key。
    - 补部署前配置核对清单，不做真实部署、不改业务代码。
+21. Step 88 已完成“试运营环境与密钥配置硬化 / deployment preflight 准备”：
+   - 新增 `.env.example`、`backend/.env.example`、`frontend/.env.example`。
+   - 新增 `docs/deployment/env-and-secret-checklist.md`。
+   - `.gitignore` 已继续忽略真实 `.env` / `.env.*`，但允许提交 example 文件。
+   - 本轮没有提交真实腾讯地图 key、数据库密码或 JWT secret。
+22. Step 89 建议继续沿产品级试运营准备线推进：
+   - 若偏部署准备，补一份部署后 smoke checklist 或 deployment preflight 文档。
+   - 若偏 CI 准备，设计最小 CI 检查边界：backend compile、frontend build、sample validation。
+   - 不重开 bridge、页面 polish、地图扩展或真实支付接入。
 12. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。

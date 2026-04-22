@@ -22,6 +22,16 @@
   - `DB_PASSWORD`
   - 可选：`APP_UPLOAD_STORAGE_PATH`
 
+环境变量样例与密钥边界见：
+
+- [环境变量与密钥配置清单](env-and-secret-checklist.md)
+
+仓库已提供以下占位样例，复制后在本地或部署环境中填真实值，不要把真实值提交到仓库：
+
+- 根目录 `.env.example`
+- `backend/.env.example`
+- `frontend/.env.example`
+
 ## 数据库准备
 
 1. 创建生产数据库。
@@ -38,6 +48,15 @@ npm run build
 ```
 
 将 `frontend/dist/` 部署到 Nginx、静态资源服务器或对象存储静态站点。
+
+如果需要腾讯地图预览，构建前必须通过环境变量注入：
+
+```powershell
+set VITE_TENCENT_MAP_KEY=replace-with-real-key
+npm run build
+```
+
+不要把真实腾讯地图 key 写入 `frontend/.env.example`、README、日志或源码。
 
 ## 后端构建
 
@@ -70,3 +89,5 @@ java -jar target/takeaway-0.0.1-SNAPSHOT.jar
 6. customer / courier / admin 关键链路已完成回归。
 7. bridge 当前仍保留，不应在上线前临时删除。
 8. 真实支付、地图、消息、打款若未接入，应在页面和交付说明中明确为模拟或试运营能力。
+9. `frontend/.env.local`、真实数据库密码和真实地图 key 没有被提交到仓库。
+10. `.env.example` 文件只包含占位值。

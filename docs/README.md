@@ -19,6 +19,7 @@
 ## 部署与运维
 
 - [生产部署说明](deployment/production-deploy.md)
+- [环境变量与密钥配置清单](deployment/env-and-secret-checklist.md)
 - [备份与回滚说明](deployment/backup-and-rollback.md)
 - [数据库迁移说明](../backend/db/migrations/README.md)
 

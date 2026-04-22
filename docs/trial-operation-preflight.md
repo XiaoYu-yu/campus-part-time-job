@@ -142,6 +142,12 @@ VITE_TENCENT_MAP_KEY=your-local-key
 4. 当前腾讯地图 WebService API 未开启，静态图不可用。
 5. 当前只使用腾讯地图 JS SDK，在 `/campus/courier-ops` 做只读点位预览。
 
+仓库提供 `frontend/.env.example` 作为占位模板。真实 key 只能写入 `frontend/.env.local` 或部署构建环境，不能写入模板文件。
+
+后端和前端的 prod-like 环境变量边界见：
+
+- [环境变量与密钥配置清单](deployment/env-and-secret-checklist.md)
+
 ## 演示账号
 
 | 角色 | 手机号 | 密码 | 用途 |
