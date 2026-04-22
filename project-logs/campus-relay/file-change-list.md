@@ -1343,3 +1343,12 @@
 - [project-logs/campus-relay/step-86-trial-operation-ops-line-freeze-and-next-mainline.md](step-86-trial-operation-ops-line-freeze-and-next-mainline.md)
 
 本轮是试运营脚本线收口 / no-op 冻结判断轮：基于 Step 83 到 Step 85 已完成的 preflight、样本校验和命令索引，确认当前脚本线已经足够支撑本地试运营前检查、样本锚点校验、命令索引和手动 H2 reset 说明；继续扩到 runtime smoke、自动 reset 或长驻进程管理的收益低于环境耦合风险，因此脚本线进入维护态。本轮没有改业务代码、bridge、接口、路由、鉴权、token 附着、前端页面或后端业务语义。
+
+## Step 87 - 产品级试运营前剩余差距清单 / go-no-go 评估
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-87-product-trial-readiness-gap-and-next-mainline.md](step-87-product-trial-readiness-gap-and-next-mainline.md)
+
+本轮是产品级试运营前剩余差距清单 / go-no-go 评估轮：确认当前本地答辩 / 交付 RC 已足够，但产品级试运营仍缺环境变量样例、密钥注入边界、部署前 preflight、CI、监控、备份和外部服务降级策略；下一主线建议进入试运营环境与密钥配置硬化。本轮没有改业务代码、bridge、接口、路由、鉴权、token 附着、前端页面或后端业务语义。
