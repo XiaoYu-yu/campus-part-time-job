@@ -1469,3 +1469,13 @@
 - [project-logs/campus-relay/step-96-single-server-internal-trial-deploy-and-smoke.md](step-96-single-server-internal-trial-deploy-and-smoke.md)
 
 本轮是单机服务器首轮内测部署与 smoke 验证轮：在公网单机服务器上真实拉起 MySQL + backend(prod) + frontend(Nginx) Compose 栈，并修正两个部署层阻塞：一是移除 MySQL 8.4 不兼容的 `mysql_native_password` 启动参数，二是修正 `backend/db/init.sql` 中 `campus_relay_order` 种子列清单与值数漂移。当前远端三容器均正常运行，首页 `HTTP 200`，且 admin / customer / courier 三类最小 smoke 已通过公网验证。本轮没有改业务语义、bridge、鉴权、接口、路由或前端页面。
+
+## Step 97 - 全局工作记忆日志建立
+
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-97-global-working-memory-bootstrap.md](step-97-global-working-memory-bootstrap.md)
+
+本轮是全局工作记忆日志建立轮：新增 `global-working-memory.md`，把 bridge 冻结态、展示 polish 冻结态、媒体线收住、单机服务器部署现状和当前下一主线从 `summary.md` 的全量历史里抽离出来，作为后续上下文压缩后的快速恢复入口。本轮没有改业务代码、部署逻辑、bridge、鉴权、接口、路由或前端页面。

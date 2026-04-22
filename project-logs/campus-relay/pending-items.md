@@ -1,12 +1,16 @@
 # 校园代送待处理事项
 
-## Step 97 最高优先级
+## Step 98 最高优先级
 
 1. Step 96 已完成单机服务器首轮内测部署与 smoke 验证，当前项目已达到“单机服务器可启动、可访问、可进行内测型试运营 smoke”的状态。
-2. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
-3. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
-4. 当前最高优先级不再是“把服务起起来”，而是“把单机服务器内测部署进一步收敛成可回滚、可备份、可重复部署的最小运维入口”。
-5. Step 97 建议优先进入“单机服务器内测运维加固 / 最小回滚与备份准备”：
+2. Step 97 已完成全局工作记忆日志建立，后续上下文恢复优先读取：
+   - `project-logs/campus-relay/global-working-memory.md`
+   - `project-logs/campus-relay/pending-items.md`
+   - 当前最新 step 日志
+3. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
+4. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
+5. 当前最高优先级不再是“把服务起起来”，而是“把单机服务器内测部署进一步收敛成可回滚、可备份、可重复部署的最小运维入口”。
+6. Step 98 建议优先进入“单机服务器内测运维加固 / 最小回滚与备份准备”：
    - 固化当前 compose 部署的最小回滚步骤。
    - 补齐 `.env`、数据卷、上传目录的最小备份说明。
    - 视服务器条件决定是否进入 HTTPS / 域名 / 反向代理正式入口准备。
@@ -177,6 +181,10 @@
    - 已完成 compose 启动并修正 MySQL 8.4 参数兼容问题与 `backend/db/init.sql` 种子漂移问题。
    - 已通过公网验证 admin / customer / courier 三类最小 smoke。
    - 下一轮不再重复首轮部署，转入最小运维加固与回滚 / 备份准备。
+35. Step 97 已完成“全局工作记忆日志建立”：
+   - 已新增 `project-logs/campus-relay/global-working-memory.md`。
+   - 已把当前仍生效的冻结主线、部署状态、下一主线和恢复工作入口从 `summary.md` 中抽离。
+   - 后续如遇上下文压缩，优先先读 global working memory，再读 pending 与最新 step 日志。
 12. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。
