@@ -1479,3 +1479,18 @@
 - [project-logs/campus-relay/step-97-global-working-memory-bootstrap.md](step-97-global-working-memory-bootstrap.md)
 
 本轮是全局工作记忆日志建立轮：新增 `global-working-memory.md`，把 bridge 冻结态、展示 polish 冻结态、媒体线收住、单机服务器部署现状和当前下一主线从 `summary.md` 的全量历史里抽离出来，作为后续上下文压缩后的快速恢复入口。本轮没有改业务代码、部署逻辑、bridge、鉴权、接口、路由或前端页面。
+
+## Step 98 - 单机服务器内测运维加固 / 最小回滚与备份准备
+
+- [.gitignore](../../.gitignore)
+- [.dockerignore](../../.dockerignore)
+- [deploy/internal-trial/backup-stack.sh](../../deploy/internal-trial/backup-stack.sh)
+- [docs/deployment/backup-and-rollback.md](../../docs/deployment/backup-and-rollback.md)
+- [docs/deployment/internal-trial-compose.md](../../docs/deployment/internal-trial-compose.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-98-internal-trial-ops-hardening-and-backup-prep.md](step-98-internal-trial-ops-hardening-and-backup-prep.md)
+
+本轮是单机服务器内测运维加固 / 最小回滚与备份准备轮：新增 `backup-stack.sh`，补齐单机服务器 Compose 部署的最小备份入口，并同步更新备份/回滚文档与 compose 说明；随后已在真实服务器上成功执行一轮备份，真实产出 MySQL dump、uploads 归档、`.env` 备份和 manifest。本轮没有改业务代码、bridge、接口、路由、鉴权或前端页面。

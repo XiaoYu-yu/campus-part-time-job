@@ -94,6 +94,26 @@ docker compose \
 5. 打开前端首页
 6. 按 [部署后 Smoke Checklist](post-deploy-smoke-checklist.md) 做最小 smoke
 
+## 备份与回滚
+
+当前单机内测部署的最小备份入口：
+
+```bash
+cd /opt/campus-part-time-job
+bash deploy/internal-trial/backup-stack.sh
+```
+
+该脚本会同时备份：
+
+1. MySQL 数据
+2. uploads volume
+3. 当前 `.env`
+4. manifest
+
+详细口径见：
+
+- [备份与回滚说明](backup-and-rollback.md)
+
 ## 访问入口
 
 默认端口映射：

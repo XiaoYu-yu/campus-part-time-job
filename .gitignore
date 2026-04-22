@@ -19,5 +19,6 @@ Thumbs.db
 !frontend/.env.example
 
 uploads/
+deploy/internal-trial/backups/
 project-logs/*.tmp
 .playwright-mcp/

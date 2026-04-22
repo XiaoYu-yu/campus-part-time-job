@@ -16,3 +16,4 @@ project-logs/legacy-takeaway
 .env
 .env.local
 .env.*.local
+deploy/internal-trial/backups
