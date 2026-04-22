@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 86 最高优先级
+## Step 87 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -87,10 +87,14 @@
    - 新增 `scripts/trial-operation/commands.ps1`。
    - 该脚本只输出常用命令和页面入口，不启动长驻进程、不 kill 进程、不自动 reset H2。
    - H2 reset 口径固定为停止 backend test-profile 进程后重新启动，由 `schema-h2.sql` 与 `data-h2.sql` 重新加载。
-17. Step 86 建议继续做试运营脚本线 go / no-go：
-   - 如果 preflight、样本校验、命令索引已经足够，评估是否冻结试运营脚本线。
-   - 如果仍需增强，只考虑只读 runtime smoke，不做自动造数、自动 reset 或长驻进程管理。
-   - bridge、展示 polish、地图、媒体、前端打包和非 bridge 业务线继续保持冻结 / 收住口径。
+17. Step 86 已完成“试运营脚本线收口 / no-op 冻结判断”：
+   - `preflight.ps1`、`validate-samples.ps1` 和 `commands.ps1` 已覆盖当前本地试运营最小运维化入口。
+   - 当前不继续补 runtime smoke、自动 H2 reset 或长驻进程管理。
+   - 试运营脚本线进入 no-op 冻结 / 维护态，只有出现 CI 化、部署 smoke、多人试运营或真实重复手工失误时才重开。
+18. Step 87 建议转入“产品级试运营前剩余差距清单 / go-no-go 评估”：
+   - 不再默认继续补脚本、页面 polish、地图、媒体、前端打包或 bridge。
+   - 从产品级试运营角度梳理仍缺的安全、配置、部署、监控、备份、模拟资金边界和真实公司能力替代项。
+   - 若目标仍是本地答辩交付，可保持当前 RC + 脚本线 no-op 状态，不进入重开发。
 12. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。

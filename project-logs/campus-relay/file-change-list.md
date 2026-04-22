@@ -1333,3 +1333,13 @@
 - [project-logs/campus-relay/step-85-trial-operation-command-index-and-manual-h2-reset-guide.md](step-85-trial-operation-command-index-and-manual-h2-reset-guide.md)
 
 本轮是试运营命令索引与手动 H2 reset 指南轮：新增 `commands.ps1`，只打印本地试运营常用命令、浏览器入口和手动 H2 reset 说明，不启动长驻进程、不 kill 进程、不自动重置 H2。本轮没有改 bridge、接口、路由、鉴权、token 附着、前端页面或后端业务语义。
+
+## Step 86 - 试运营脚本线收口 / no-op 冻结判断
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-85-trial-operation-command-index-and-manual-h2-reset-guide.md](step-85-trial-operation-command-index-and-manual-h2-reset-guide.md)
+- [project-logs/campus-relay/step-86-trial-operation-ops-line-freeze-and-next-mainline.md](step-86-trial-operation-ops-line-freeze-and-next-mainline.md)
+
+本轮是试运营脚本线收口 / no-op 冻结判断轮：基于 Step 83 到 Step 85 已完成的 preflight、样本校验和命令索引，确认当前脚本线已经足够支撑本地试运营前检查、样本锚点校验、命令索引和手动 H2 reset 说明；继续扩到 runtime smoke、自动 reset 或长驻进程管理的收益低于环境耦合风险，因此脚本线进入维护态。本轮没有改业务代码、bridge、接口、路由、鉴权、token 附着、前端页面或后端业务语义。
