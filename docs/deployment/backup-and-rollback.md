@@ -67,6 +67,42 @@ deploy/internal-trial/backups/
 2. `uploads/` 保存上传目录 `.tar.gz`
 3. `meta/` 保存 `.env` 备份和 manifest
 
+## 非破坏性恢复演练入口
+
+当前推荐使用：
+
+- [restore-drill.sh](../../deploy/internal-trial/restore-drill.sh)
+
+该脚本不会动正在运行的 compose 栈，而是：
+
+1. 读取最新或指定的 backup manifest
+2. 启一个临时 MySQL 8.4 容器
+3. 将 `.sql.gz` 恢复到临时数据库
+4. 校验关键样本订单是否存在
+5. 解压 uploads 归档并统计恢复出的文件数量
+6. 演练结束后自动清理临时容器和临时目录
+
+推荐命令：
+
+```bash
+cd /opt/campus-part-time-job
+bash deploy/internal-trial/restore-drill.sh
+```
+
+如需指定 `.env` 与 manifest：
+
+```bash
+bash deploy/internal-trial/restore-drill.sh \
+  deploy/internal-trial/.env \
+  deploy/internal-trial/backups/meta/campus-trial-backup-YYYYMMDD-HHMMSS.txt
+```
+
+它的意义是：
+
+1. 证明当前备份不是“看起来有文件”
+2. 而是“至少能恢复到一个临时验证环境”
+3. 同时不影响正在运行的内测试运营 compose 栈
+
 ## 备份后需要确认
 
 至少确认：

@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 99 最高优先级
+## Step 100 最高优先级
 
 1. Step 96 已完成单机服务器首轮内测部署与 smoke 验证，当前项目已达到“单机服务器可启动、可访问、可进行内测型试运营 smoke”的状态。
 2. Step 97 已完成全局工作记忆日志建立，后续上下文恢复优先读取：
@@ -11,14 +11,18 @@
    - 已新增 `deploy/internal-trial/backup-stack.sh`。
    - 已补齐 `docs/deployment/backup-and-rollback.md` 与 compose 部署文档中的备份/回滚入口。
    - 已在真实服务器执行一轮备份，成功产出 MySQL dump、uploads 归档、`.env` 备份和 manifest。
-4. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
-5. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
-6. 当前最高优先级不再是“能否备份”，而是“是否需要进入单机服务器最小恢复演练 / 运维交付加固”。
-7. Step 99 建议优先进入“单机服务器最小恢复演练 / 运维交付加固 go-no-go”：
-   - 评估是否需要做一次保守 restore drill。
-   - 固化 `.env`、MySQL dump、uploads 归档三类恢复入口的优先级。
-   - 若当前不适合做真实恢复演练，至少把回滚触发条件与运维交接边界写清楚。
-   - 继续不扩业务功能，不改 bridge、鉴权、接口、路由或页面。
+4. Step 99 已完成单机服务器最小恢复演练 / 运维交付加固：
+   - 已新增 `deploy/internal-trial/restore-drill.sh`。
+   - 已在真实服务器跑通非破坏性 restore drill。
+   - 已验证 dump 可恢复、关键样本订单可回读、uploads 归档可解压，且现有 compose 栈不受影响。
+5. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
+6. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
+7. 当前最高优先级不再是“备份是否可恢复”，而是“单机服务器运维交接是否已经足够收口”。
+8. Step 100 建议优先进入“单机服务器运维交接与正式入口 go-no-go”：
+   - 固化启动、停机、备份、restore drill、smoke 的日常操作入口。
+   - 判断当前是否需要进入 HTTPS / 域名 / 反向代理正式入口准备。
+   - 若当前目标仍是内测型试运营，则优先把运维交接边界写清楚，而不是继续扩业务。
+   - 继续不改 bridge、鉴权、接口、路由或页面。
 3. Step 72 已完成腾讯地图最小产品化试点：
    - 只在现有 `/campus/courier-ops` 接入腾讯地图 JS SDK 最小预览，不新增页面、不改后端接口。
    - 继续复用现有 courier 位置上报数据，不引入轨迹回放、实时调度或地图写操作。

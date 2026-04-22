@@ -1494,3 +1494,16 @@
 - [project-logs/campus-relay/step-98-internal-trial-ops-hardening-and-backup-prep.md](step-98-internal-trial-ops-hardening-and-backup-prep.md)
 
 本轮是单机服务器内测运维加固 / 最小回滚与备份准备轮：新增 `backup-stack.sh`，补齐单机服务器 Compose 部署的最小备份入口，并同步更新备份/回滚文档与 compose 说明；随后已在真实服务器上成功执行一轮备份，真实产出 MySQL dump、uploads 归档、`.env` 备份和 manifest。本轮没有改业务代码、bridge、接口、路由、鉴权或前端页面。
+
+## Step 99 - 单机服务器最小恢复演练 / 运维交付加固
+
+- [deploy/internal-trial/restore-drill.sh](../../deploy/internal-trial/restore-drill.sh)
+- [docs/deployment/backup-and-rollback.md](../../docs/deployment/backup-and-rollback.md)
+- [docs/deployment/internal-trial-compose.md](../../docs/deployment/internal-trial-compose.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-99-minimal-restore-drill-and-ops-handover.md](step-99-minimal-restore-drill-and-ops-handover.md)
+
+本轮是单机服务器最小恢复演练 / 运维交付加固轮：新增 `restore-drill.sh`，并在真实服务器上完成一轮非破坏性 restore drill，确认最新 dump 可恢复到临时 MySQL 容器、关键样本订单可回读、uploads 归档可解压，且现有 compose 栈不受影响。本轮没有改业务代码、bridge、接口、路由、鉴权或前端页面。

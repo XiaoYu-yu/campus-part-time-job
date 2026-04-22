@@ -110,6 +110,15 @@ bash deploy/internal-trial/backup-stack.sh
 3. 当前 `.env`
 4. manifest
 
+当前推荐的非破坏性恢复演练入口：
+
+```bash
+cd /opt/campus-part-time-job
+bash deploy/internal-trial/restore-drill.sh
+```
+
+它会把最近一次备份恢复到临时 MySQL 容器和临时目录，用于验证 dump 与 uploads 归档是否可恢复，不会改动正在运行的 compose 栈。
+
 详细口径见：
 
 - [备份与回滚说明](backup-and-rollback.md)
