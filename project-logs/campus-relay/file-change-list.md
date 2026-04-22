@@ -1383,3 +1383,15 @@
 - [project-logs/campus-relay/step-89-post-deploy-smoke-checklist.md](step-89-post-deploy-smoke-checklist.md)
 
 本轮是部署后 smoke checklist / deployment preflight 文档轮：新增 `docs/deployment/post-deploy-smoke-checklist.md`，明确 prod-like 试运营部署后的最小验证范围、角色 smoke、模拟资金口径、bridge 冻结口径和回滚触发。本轮没有新增脚本、没有改业务代码、bridge、接口、路由、鉴权、token 附着或前端页面。
+
+## Step 90 - 最小 CI 检查边界设计 / go-no-go
+
+- [docs/deployment/ci-check-boundary.md](../../docs/deployment/ci-check-boundary.md)
+- [docs/deployment/post-deploy-smoke-checklist.md](../../docs/deployment/post-deploy-smoke-checklist.md)
+- [docs/README.md](../../docs/README.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-90-minimal-ci-check-boundary-go-no-go.md](step-90-minimal-ci-check-boundary-go-no-go.md)
+
+本轮是最小 CI 检查边界设计 / go-no-go 轮：确认当前仓库已有 GitHub issue/PR 模板但没有 workflow，新增 `docs/deployment/ci-check-boundary.md` 定义最小 CI 只覆盖 backend compile、frontend build 和 sample validation；建议 Step 91 再新增 workflow。本轮没有写 CI、没有改业务代码、bridge、接口、路由、鉴权、token 附着或前端页面。

@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 90 最高优先级
+## Step 91 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -121,6 +121,15 @@
    - 只评估 CI 是否值得做。
    - 最小 CI 候选只覆盖 backend compile、frontend build、sample validation。
    - 不接真实部署流水线，不重开 bridge、页面 polish、地图扩展或真实支付接入。
+25. Step 90 已完成“最小 CI 检查边界设计 / go-no-go”：
+   - 已确认当前仓库有 GitHub issue/PR 模板，但尚无 `.github/workflows`。
+   - 已新增 `docs/deployment/ci-check-boundary.md`。
+   - 结论是建议 Step 91 进入最小 GitHub Actions CI 实现。
+26. Step 91 建议进入“最小 GitHub Actions CI 实现”：
+   - 新增 `.github/workflows/trial-operation-ci.yml`。
+   - 只覆盖 backend compile、frontend build、sample validation。
+   - 不做部署、不跑浏览器 E2E、不注入真实密钥。
+   - bridge、展示 polish、地图、媒体、前端打包和真实支付线继续冻结 / 收住。
 12. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。

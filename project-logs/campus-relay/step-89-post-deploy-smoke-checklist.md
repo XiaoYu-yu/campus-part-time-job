@@ -86,3 +86,11 @@ Step 90 建议进入“最小 CI 检查边界设计 / go-no-go”：
 3. 不接真实部署流水线。
 4. 不改业务代码。
 5. 不重开 bridge、页面 polish、地图扩展或真实支付接入。
+
+## Step 90 回填
+
+Step 90 已完成该建议：
+
+1. 已确认仓库当前没有 `.github/workflows`。
+2. 已新增 `docs/deployment/ci-check-boundary.md`。
+3. 已建议 Step 91 进入最小 GitHub Actions CI 实现，范围只覆盖 backend compile、frontend build 和 sample validation。
