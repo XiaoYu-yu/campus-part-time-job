@@ -24,6 +24,7 @@
 - [部署后 Smoke Checklist](deployment/post-deploy-smoke-checklist.md)
 - [最小 CI 检查边界](deployment/ci-check-boundary.md)
 - [备份与回滚说明](deployment/backup-and-rollback.md)
+- [单机内测试运营运维 Runbook](deployment/internal-trial-ops-runbook.md)
 - [数据库迁移说明](../backend/db/migrations/README.md)
 
 ## 当前主线日志

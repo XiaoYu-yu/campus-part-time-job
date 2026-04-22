@@ -15,6 +15,10 @@
 3. 上传目录备份
 4. 基于 Git commit 的最小回滚
 
+日常启动、停止、日志、更新和 smoke 的统一入口见：
+
+- [单机内测试运营运维 Runbook](internal-trial-ops-runbook.md)
+
 ## 当前备份入口
 
 优先使用：

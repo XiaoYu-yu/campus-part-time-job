@@ -1507,3 +1507,18 @@
 - [project-logs/campus-relay/step-99-minimal-restore-drill-and-ops-handover.md](step-99-minimal-restore-drill-and-ops-handover.md)
 
 本轮是单机服务器最小恢复演练 / 运维交付加固轮：新增 `restore-drill.sh`，并在真实服务器上完成一轮非破坏性 restore drill，确认最新 dump 可恢复到临时 MySQL 容器、关键样本订单可回读、uploads 归档可解压，且现有 compose 栈不受影响。本轮没有改业务代码、bridge、接口、路由、鉴权或前端页面。
+
+## Step 100 - 单机服务器运维交接与正式入口 go/no-go
+
+- [README.md](../../README.md)
+- [docs/README.md](../../docs/README.md)
+- [docs/deployment/internal-trial-ops-runbook.md](../../docs/deployment/internal-trial-ops-runbook.md)
+- [docs/deployment/internal-trial-compose.md](../../docs/deployment/internal-trial-compose.md)
+- [docs/deployment/backup-and-rollback.md](../../docs/deployment/backup-and-rollback.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-100-internal-trial-ops-runbook-and-entry-go-no-go.md](step-100-internal-trial-ops-runbook-and-entry-go-no-go.md)
+
+本轮是单机服务器运维交接与正式入口 go/no-go 轮：新增 `internal-trial-ops-runbook.md`，把启动、停机、日志、更新、备份、restore drill、smoke、回滚触发和 HTTPS / 域名 go/no-go 统一到一份可交接文档；本轮复核服务器 compose 仍为 `Up`、HTTP 返回 `200`、最新 backup manifest 存在。结论是当前内测阶段暂不强制进入 HTTPS / 域名 / 正式反向代理准备。本轮没有改业务代码、bridge、接口、路由、鉴权或前端页面。

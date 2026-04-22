@@ -117,6 +117,7 @@ npm run dev
 - [内测型试运营 Compose 部署说明](docs/deployment/internal-trial-compose.md)
 - [环境变量与密钥配置清单](docs/deployment/env-and-secret-checklist.md)
 - [部署后 Smoke Checklist](docs/deployment/post-deploy-smoke-checklist.md)
+- [单机内测试运营运维 Runbook](docs/deployment/internal-trial-ops-runbook.md)
 
 ## 常用演示账号
 

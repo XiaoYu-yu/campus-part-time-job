@@ -94,6 +94,10 @@ docker compose \
 5. 打开前端首页
 6. 按 [部署后 Smoke Checklist](post-deploy-smoke-checklist.md) 做最小 smoke
 
+日常启动、停止、备份、恢复演练、smoke 和正式入口 go/no-go 统一见：
+
+- [单机内测试运营运维 Runbook](internal-trial-ops-runbook.md)
+
 ## 备份与回滚
 
 当前单机内测部署的最小备份入口：
