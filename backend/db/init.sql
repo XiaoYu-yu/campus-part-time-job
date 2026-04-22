@@ -505,15 +505,17 @@ INSERT INTO campus_relay_order (
     id, customer_user_id, courier_profile_id, pickup_point_id, delivery_target_type, delivery_building,
     delivery_detail, delivery_contact_name, delivery_contact_phone, food_description, external_platform_name,
     external_order_ref, pickup_code, base_fee, priority_fee, tip_fee, total_amount, payment_status,
-    order_status, priority_dormitory_building, priority_window_deadline, accepted_at, cancel_locked_until,
-    picked_up_at, delivered_at, auto_complete_at, after_sale_handled_at, pickup_proof_image_url, customer_remark, courier_remark,
+    order_status, priority_dormitory_building, paid_at, priority_window_deadline, accepted_at, cancel_locked_until,
+    picked_up_at, delivered_at, auto_complete_at, cancelled_at, after_sale_applied_at, after_sale_handled_at,
+    pickup_proof_image_url, cancel_reason, customer_remark, courier_remark,
     after_sale_reason, after_sale_handle_action, after_sale_handle_remark, after_sale_handled_by_employee_id,
     after_sale_decision_type, after_sale_decision_amount, after_sale_decision_remark, after_sale_decided_by_employee_id, after_sale_decided_at,
     after_sale_execution_status, after_sale_execution_remark, after_sale_execution_reference_no, after_sale_executed_by_employee_id, after_sale_executed_at,
     exception_type, exception_remark, exception_reported_at, created_at, updated_at
 ) VALUES
-('CR202604070001', 1, NULL, 1, 'DORMITORY', '竹园', '竹园2栋门口', '张三', '13900139000', '美团订单：汉堡套餐 + 奶茶', '美团', 'MT-20260407-001', 'A18', 3.00, 3.00, 2.00, 8.00, 'PAID', 'BUILDING_PRIORITY_PENDING', '竹园', DATE_ADD(NOW(), INTERVAL 5 MINUTE), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '放在门厅即可', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NOW(), NOW()),
-('CR202604060001', 1, 2, 2, 'LIBRARY', '图书馆', '二楼门口', '张三', '13900139000', '饿了么订单：咖啡 + 面包', '饿了么', 'ELE-20260406-008', 'B09', 3.00, 0.00, 3.00, 6.00, 'PAID', 'COMPLETED', NULL, NULL, DATE_SUB(NOW(), INTERVAL 2 HOUR), DATE_SUB(NOW(), INTERVAL 115 MINUTE), DATE_SUB(NOW(), INTERVAL 100 MINUTE), DATE_SUB(NOW(), INTERVAL 70 MINUTE), DATE_SUB(NOW(), INTERVAL 60 MINUTE), NULL, NULL, NULL, '/api/files/campus-pickup-proof-001.jpg', NULL, '送到图书馆二楼门口', '已按要求送达', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, DATE_SUB(NOW(), INTERVAL 3 HOUR), DATE_SUB(NOW(), INTERVAL 60 MINUTE));
+('CR202604070001', 1, NULL, 1, 'DORMITORY', '竹园', '竹园2栋门口', '张三', '13900139000', '美团订单：汉堡套餐 + 奶茶', '美团', 'MT-20260407-001', 'A18', 3.00, 3.00, 2.00, 8.00, 'PAID', 'BUILDING_PRIORITY_PENDING', '竹园', NOW(), DATE_ADD(NOW(), INTERVAL 5 MINUTE), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '放在门厅即可', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NOW(), NOW()),
+('CR202604070002', 2, NULL, 2, 'DORMITORY', '梅园', '梅园1栋楼下', '李四', '13900139001', '饿了么订单：轻食沙拉 + 冰美式', '饿了么', 'ELE-20260407-009', 'C12', 3.00, 0.00, 1.00, 4.00, 'PAID', 'WAITING_ACCEPT', NULL, NOW(), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '送到梅园1栋楼下即可', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NOW(), NOW()),
+('CR202604060001', 1, 2, 2, 'LIBRARY', '图书馆', '二楼门口', '张三', '13900139000', '饿了么订单：咖啡 + 面包', '饿了么', 'ELE-20260406-008', 'B09', 3.00, 0.00, 3.00, 6.00, 'PAID', 'COMPLETED', NULL, DATE_SUB(NOW(), INTERVAL 170 MINUTE), NULL, DATE_SUB(NOW(), INTERVAL 2 HOUR), DATE_SUB(NOW(), INTERVAL 115 MINUTE), DATE_SUB(NOW(), INTERVAL 100 MINUTE), DATE_SUB(NOW(), INTERVAL 70 MINUTE), DATE_SUB(NOW(), INTERVAL 60 MINUTE), NULL, NULL, NULL, '/api/files/campus-pickup-proof-001.jpg', NULL, '送到图书馆二楼门口', '已按要求送达', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, DATE_SUB(NOW(), INTERVAL 3 HOUR), DATE_SUB(NOW(), INTERVAL 60 MINUTE));
 
 INSERT INTO campus_location_report (
     relay_order_id, courier_profile_id, latitude, longitude, source, note, reported_at

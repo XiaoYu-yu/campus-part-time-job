@@ -1458,3 +1458,14 @@
 - [project-logs/campus-relay/step-95-internal-trial-compose-package.md](step-95-internal-trial-compose-package.md)
 
 本轮是内测型试运营 Compose 部署包最小实现轮：新增单机服务器内测部署所需的 MySQL + backend(prod) + frontend(Nginx) compose 工件、环境变量样例和部署说明，并把当前 README / 交付文档统一到这套部署入口。验证上已通过 backend package、frontend build、sample validation 和 `git diff --check`；当前机器未安装 Docker，因此容器级启动验证后置到服务器首轮部署。本轮没有改业务代码、bridge、接口、路由、鉴权或前端页面。
+
+## Step 96 - 单机服务器首轮内测部署与 smoke 验证
+
+- [deploy/internal-trial/docker-compose.yml](../../deploy/internal-trial/docker-compose.yml)
+- [backend/db/init.sql](../../backend/db/init.sql)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-96-single-server-internal-trial-deploy-and-smoke.md](step-96-single-server-internal-trial-deploy-and-smoke.md)
+
+本轮是单机服务器首轮内测部署与 smoke 验证轮：在公网单机服务器上真实拉起 MySQL + backend(prod) + frontend(Nginx) Compose 栈，并修正两个部署层阻塞：一是移除 MySQL 8.4 不兼容的 `mysql_native_password` 启动参数，二是修正 `backend/db/init.sql` 中 `campus_relay_order` 种子列清单与值数漂移。当前远端三容器均正常运行，首页 `HTTP 200`，且 admin / customer / courier 三类最小 smoke 已通过公网验证。本轮没有改业务语义、bridge、鉴权、接口、路由或前端页面。

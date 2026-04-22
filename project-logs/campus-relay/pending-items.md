@@ -1,9 +1,16 @@
 # 校园代送待处理事项
 
-## Step 96 最高优先级
+## Step 97 最高优先级
 
-1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
-2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
+1. Step 96 已完成单机服务器首轮内测部署与 smoke 验证，当前项目已达到“单机服务器可启动、可访问、可进行内测型试运营 smoke”的状态。
+2. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
+3. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
+4. 当前最高优先级不再是“把服务起起来”，而是“把单机服务器内测部署进一步收敛成可回滚、可备份、可重复部署的最小运维入口”。
+5. Step 97 建议优先进入“单机服务器内测运维加固 / 最小回滚与备份准备”：
+   - 固化当前 compose 部署的最小回滚步骤。
+   - 补齐 `.env`、数据卷、上传目录的最小备份说明。
+   - 视服务器条件决定是否进入 HTTPS / 域名 / 反向代理正式入口准备。
+   - 不扩业务功能，不改 bridge、鉴权、接口、路由或页面。
 3. Step 72 已完成腾讯地图最小产品化试点：
    - 只在现有 `/campus/courier-ops` 接入腾讯地图 JS SDK 最小预览，不新增页面、不改后端接口。
    - 继续复用现有 courier 位置上报数据，不引入轨迹回放、实时调度或地图写操作。
@@ -164,12 +171,12 @@
    - 已新增前后端 Dockerfile、Nginx 代理配置、compose `.env.example` 和部署说明。
    - 已通过 backend package、frontend build、sample validation 和 `git diff --check`。
    - 当前机器未安装 Docker，因此容器级运行验证后置到服务器首轮部署。
-34. Step 96 建议做“单机服务器首轮内测部署与 smoke 验证”：
-   - 在服务器安装 Docker / Docker Compose。
-   - 复制 `deploy/internal-trial/.env.example` 为真实 `.env`。
-   - 执行 compose 启动。
-   - 按 `docs/deployment/post-deploy-smoke-checklist.md` 跑一轮最小 smoke。
-   - 若容器级启动成功，再决定是否补日志、备份或回滚最小自动化。
+34. Step 96 已完成“单机服务器首轮内测部署与 smoke 验证”：
+   - 已在服务器安装 Docker / Docker Compose。
+   - 已按 `deploy/internal-trial/.env.example` 生成真实 `.env`。
+   - 已完成 compose 启动并修正 MySQL 8.4 参数兼容问题与 `backend/db/init.sql` 种子漂移问题。
+   - 已通过公网验证 admin / customer / courier 三类最小 smoke。
+   - 下一轮不再重复首轮部署，转入最小运维加固与回滚 / 备份准备。
 12. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。
