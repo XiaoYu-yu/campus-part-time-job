@@ -1307,3 +1307,16 @@
 - [project-logs/campus-relay/step-83-trial-operation-ops-entrypoint-boundary-and-preflight-script.md](step-83-trial-operation-ops-entrypoint-boundary-and-preflight-script.md)
 
 本轮是试运营运维化最小能力边界收敛轮：新增 `scripts/trial-operation/preflight.ps1` 作为本地试运营 preflight 脚本入口，并新增脚本说明文档；脚本只做关键文件、本地地图 key 变量、`.env.local` git 跟踪、可选端口、可选 backend compile 和 frontend build 检查，不自动重置 H2、不启动长驻进程、不打印真实地图 key。本轮没有改 bridge、接口、路由、鉴权、token 附着、前端页面或后端业务语义。
+
+## Step 84 - 试运营样本状态校验脚本
+
+- [scripts/trial-operation/validate-samples.ps1](../../scripts/trial-operation/validate-samples.ps1)
+- [scripts/trial-operation/preflight.ps1](../../scripts/trial-operation/preflight.ps1)
+- [scripts/trial-operation/README.md](../../scripts/trial-operation/README.md)
+- [docs/trial-operation-preflight.md](../../docs/trial-operation-preflight.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-84-trial-operation-sample-validation-script.md](step-84-trial-operation-sample-validation-script.md)
+
+本轮是试运营样本状态校验脚本轮：新增 `validate-samples.ps1`，只读校验 H2 seed / schema 中的账号、订单、位置、settlement 与历史表 schema 锚点；`preflight.ps1` 新增 `-RunSampleValidation` 参数并能把样本校验 warning 作为 warning 处理。本轮没有连接数据库、没有写入样本、没有自动重置 H2、没有改 bridge、接口、路由、鉴权、token 附着、前端页面或后端业务语义。

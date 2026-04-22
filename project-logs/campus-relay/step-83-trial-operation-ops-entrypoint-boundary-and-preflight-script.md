@@ -79,8 +79,14 @@
 
 ## 下一轮建议
 
-Step 84 建议继续沿着“试运营运维化最小能力”推进，但仍保持克制：
+Step 84 已按建议继续沿着“试运营运维化最小能力”推进，并落地为只读样本状态校验脚本：
+
+1. 新增 `scripts/trial-operation/validate-samples.ps1`。
+2. `preflight.ps1` 新增 `-RunSampleValidation` 参数。
+3. 样本校验只读取 H2 schema / seed，不连接数据库、不写入数据、不重置 H2。
+
+Step 85 建议继续保持克制：
 
 1. 先评估是否需要一个显式的“启动命令索引”或“手动 H2 reset 说明”，而不是直接自动化重置数据库。
-2. 若 preflight 脚本已足够，可转入“样本状态校验脚本”评估。
+2. 若继续脚本化，优先做只读 runtime smoke 或命令聚合。
 3. 仍不重开 bridge、页面 polish、地图、媒体或复杂业务功能线。

@@ -2,7 +2,8 @@ param(
     [switch]$CheckPorts,
     [switch]$StrictPorts,
     [switch]$RunBackendCompile,
-    [switch]$RunFrontendBuild
+    [switch]$RunFrontendBuild,
+    [switch]$RunSampleValidation
 )
 
 $ErrorActionPreference = "Stop"
@@ -65,7 +66,8 @@ function Invoke-Step {
         [string]$Name,
         [string]$WorkingDirectory,
         [string]$Command,
-        [string[]]$Arguments
+        [string[]]$Arguments,
+        [int[]]$WarningExitCodes = @()
     )
 
     Push-Location $WorkingDirectory
@@ -73,6 +75,8 @@ function Invoke-Step {
         & $Command @Arguments
         if ($LASTEXITCODE -eq 0) {
             Write-Check $Name "OK" "command completed"
+        } elseif ($WarningExitCodes -contains $LASTEXITCODE) {
+            Write-Check $Name "WARN" "command completed with warnings, exit code $LASTEXITCODE"
         } else {
             Write-Check $Name "FAIL" "command exited with code $LASTEXITCODE" $true
         }
@@ -139,6 +143,10 @@ if ($RunBackendCompile) {
 
 if ($RunFrontendBuild) {
     Invoke-Step "frontend build" (Join-Path $RepoRoot "frontend") "npm" @("run", "build")
+}
+
+if ($RunSampleValidation) {
+    Invoke-Step "sample validation" $RepoRoot "powershell" @("-ExecutionPolicy", "Bypass", "-File", (Join-Path $RepoRoot "scripts\trial-operation\validate-samples.ps1")) @(2)
 }
 
 Write-Host "Preflight completed with $script:HardFailures hard failure(s) and $script:Warnings warning(s)."

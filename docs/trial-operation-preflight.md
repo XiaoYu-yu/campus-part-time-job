@@ -26,11 +26,18 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\preflight.ps1
 2. `-StrictPorts`：配合 `-CheckPorts` 使用，把端口不可访问视为硬失败。
 3. `-RunBackendCompile`：执行 backend `.\mvnw.cmd -DskipTests compile`。
 4. `-RunFrontendBuild`：执行 frontend `npm run build`。
+5. `-RunSampleValidation`：执行 H2 seed / schema 样本锚点校验。
 
 完整构建检查示例：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\trial-operation\preflight.ps1 -RunBackendCompile -RunFrontendBuild
+```
+
+样本锚点校验示例：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\validate-samples.ps1
 ```
 
 脚本边界：
@@ -39,6 +46,7 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\preflight.ps1 -
 2. 不启动长驻 backend / frontend 进程。
 3. 不打印腾讯地图真实 key。
 4. 不修改 bridge、鉴权、路由、接口或业务页面。
+5. 样本校验只读取 `schema-h2.sql` 与 `data-h2.sql`，不连接数据库、不写入数据。
 
 ### 后端：test profile + H2
 
@@ -232,6 +240,7 @@ VITE_TENCENT_MAP_KEY=your-local-key
 - [ ] `CR202604060001` 可用于 completed 回读、settlement 和地图点位演示。
 - [ ] 如需售后执行历史，确认已准备对应售后样本。
 - [ ] 如需对账差异，确认已准备或使用已有运行态验证样本。
+- [ ] 如需静态检查样本锚点，执行 `scripts\trial-operation\validate-samples.ps1`。
 
 ### 页面
 
