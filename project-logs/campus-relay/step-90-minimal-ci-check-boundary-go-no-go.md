@@ -135,3 +135,12 @@ Step 91 建议进入“最小 GitHub Actions CI 实现”：
 2. 覆盖 backend compile、frontend build、sample validation。
 3. 不做部署、不跑 E2E、不接真实密钥。
 4. 验证 workflow YAML 语法和本地等价命令。
+
+## Step 91 回填
+
+Step 91 已完成该建议：
+
+1. 已新增 `.github/workflows/trial-operation-ci.yml`。
+2. workflow 覆盖 backend compile、frontend build、sample validation。
+3. sample validation warning exit code `2` 已按 warning 处理，不使 CI 失败。
+4. 下一轮建议观察 GitHub Actions 首次运行结果。

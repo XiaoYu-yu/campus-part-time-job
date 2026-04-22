@@ -122,6 +122,20 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\validate-sample
 
 - `.github/workflows/trial-operation-ci.yml`
 
+## Step 91 落地结果
+
+已新增：
+
+- `.github/workflows/trial-operation-ci.yml`
+
+该 workflow 按本文件边界实现：
+
+1. backend compile。
+2. frontend build。
+3. sample validation。
+4. sample validation 的 warning exit code `2` 不使 CI 失败。
+5. 不部署、不注入真实密钥、不运行 E2E。
+
 ## 验收口径
 
 最小 CI 首轮只要求：

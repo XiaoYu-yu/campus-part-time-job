@@ -1395,3 +1395,14 @@
 - [project-logs/campus-relay/step-90-minimal-ci-check-boundary-go-no-go.md](step-90-minimal-ci-check-boundary-go-no-go.md)
 
 本轮是最小 CI 检查边界设计 / go-no-go 轮：确认当前仓库已有 GitHub issue/PR 模板但没有 workflow，新增 `docs/deployment/ci-check-boundary.md` 定义最小 CI 只覆盖 backend compile、frontend build 和 sample validation；建议 Step 91 再新增 workflow。本轮没有写 CI、没有改业务代码、bridge、接口、路由、鉴权、token 附着或前端页面。
+
+## Step 91 - 最小 GitHub Actions CI 实现
+
+- [.github/workflows/trial-operation-ci.yml](../../.github/workflows/trial-operation-ci.yml)
+- [docs/deployment/ci-check-boundary.md](../../docs/deployment/ci-check-boundary.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-91-minimal-github-actions-ci.md](step-91-minimal-github-actions-ci.md)
+
+本轮是最小 GitHub Actions CI 实现轮：新增 `trial-operation-ci.yml`，只覆盖 backend compile、frontend build 和 trial sample validation；sample validation 的 warning exit code `2` 在 CI 中按 warning 处理，不使 CI 失败。本轮没有做部署、没有注入真实密钥、没有跑 E2E、没有改业务代码、bridge、接口、路由、鉴权、token 附着或前端页面。

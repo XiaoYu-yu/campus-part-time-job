@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 91 最高优先级
+## Step 92 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -130,6 +130,15 @@
    - 只覆盖 backend compile、frontend build、sample validation。
    - 不做部署、不跑浏览器 E2E、不注入真实密钥。
    - bridge、展示 polish、地图、媒体、前端打包和真实支付线继续冻结 / 收住。
+27. Step 91 已完成“最小 GitHub Actions CI 实现”：
+   - 新增 `.github/workflows/trial-operation-ci.yml`。
+   - 包含 backend compile、frontend build、trial sample validation 三个 job。
+   - sample validation 的 warning exit code `2` 按 warning 处理，不使 CI 失败。
+   - 本轮没有做部署、没有注入真实密钥、没有跑 E2E。
+28. Step 92 建议做“CI 首轮运行结果跟踪 / 本地与远端一致性复核”：
+   - 若 push 成功，观察 GitHub Actions 首次运行。
+   - 若 CI 失败，只修 workflow 或环境差异，不扩业务功能。
+   - 若 push 仍失败，先解决 GitHub 443 网络或远端同步问题，不继续堆积 CI 相关提交。
 12. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。
