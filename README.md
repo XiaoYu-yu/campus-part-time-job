@@ -110,6 +110,14 @@ npm run dev
 
 - `http://localhost:5173`
 
+## 内测型试运营部署
+
+如果你准备把当前试运营版部署到单机服务器做内测，而不是正式生产上线，优先看：
+
+- [内测型试运营 Compose 部署说明](docs/deployment/internal-trial-compose.md)
+- [环境变量与密钥配置清单](docs/deployment/env-and-secret-checklist.md)
+- [部署后 Smoke Checklist](docs/deployment/post-deploy-smoke-checklist.md)
+
 ## 常用演示账号
 
 | 角色 | 手机号 | 密码 | 说明 |

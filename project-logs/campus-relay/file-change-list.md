@@ -1427,3 +1427,34 @@
 - [project-logs/campus-relay/step-93-github-actions-runtime-warning-go-no-go.md](step-93-github-actions-runtime-warning-go-no-go.md)
 
 本轮是 GitHub Actions runtime warning 处理 go / no-go 轮：基于官方 README 核查，将 `actions/checkout` 升级到 `v6`、`actions/setup-java` 升级到 `v5`、`actions/setup-node` 升级到 `v6`；CI job、触发条件、命令、Java 17 / Node 20 构建版本、sample validation warning-only 策略均保持不变。本轮没有改业务代码、bridge、接口、路由、鉴权、token 附着或前端页面。
+
+## Step 94 - CI action 版本升级后远端运行结果跟踪
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-93-github-actions-runtime-warning-go-no-go.md](step-93-github-actions-runtime-warning-go-no-go.md)
+- [project-logs/campus-relay/step-94-ci-runtime-upgrade-followup.md](step-94-ci-runtime-upgrade-followup.md)
+
+本轮是 CI action 版本升级后远端运行结果跟踪轮：已确认 `2406c1b2586996a1e0fdea1946394022894b3b0e` 对应的 `Trial Operation CI #2` 远端成功，三个 job 继续全绿，且最新 run 摘要页未再观察到显性 runtime deprecation warning 文本。本轮没有改业务代码、bridge、接口、路由、鉴权、token 附着或前端页面。
+
+## Step 95 - 内测型试运营 Compose 部署包最小实现
+
+- [.dockerignore](../../.dockerignore)
+- [deploy/internal-trial/.env.example](../../deploy/internal-trial/.env.example)
+- [deploy/internal-trial/backend.Dockerfile](../../deploy/internal-trial/backend.Dockerfile)
+- [deploy/internal-trial/frontend.Dockerfile](../../deploy/internal-trial/frontend.Dockerfile)
+- [deploy/internal-trial/nginx.conf](../../deploy/internal-trial/nginx.conf)
+- [deploy/internal-trial/docker-compose.yml](../../deploy/internal-trial/docker-compose.yml)
+- [docs/deployment/internal-trial-compose.md](../../docs/deployment/internal-trial-compose.md)
+- [README.md](../../README.md)
+- [docs/README.md](../../docs/README.md)
+- [docs/delivery-guide.md](../../docs/delivery-guide.md)
+- [docs/deployment/production-deploy.md](../../docs/deployment/production-deploy.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-94-ci-runtime-upgrade-followup.md](step-94-ci-runtime-upgrade-followup.md)
+- [project-logs/campus-relay/step-95-internal-trial-compose-package.md](step-95-internal-trial-compose-package.md)
+
+本轮是内测型试运营 Compose 部署包最小实现轮：新增单机服务器内测部署所需的 MySQL + backend(prod) + frontend(Nginx) compose 工件、环境变量样例和部署说明，并把当前 README / 交付文档统一到这套部署入口。验证上已通过 backend package、frontend build、sample validation 和 `git diff --check`；当前机器未安装 Docker，因此容器级启动验证后置到服务器首轮部署。本轮没有改业务代码、bridge、接口、路由、鉴权或前端页面。

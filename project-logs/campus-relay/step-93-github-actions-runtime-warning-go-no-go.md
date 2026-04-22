@@ -103,3 +103,12 @@ Step 94 建议做“CI action 版本升级后远端运行结果跟踪”：
 2. 确认三个 job 是否仍全部通过。
 3. 确认 Node.js runtime deprecation warning 是否消除或减少。
 4. 若 CI 失败，只回滚或修正 action 版本，不扩业务功能。
+
+## Step 94 回填
+
+Step 94 已完成该跟踪：
+
+1. `Trial Operation CI #2` 已由 `2406c1b2586996a1e0fdea1946394022894b3b0e` 的 push 触发。
+2. `Backend compile`、`Frontend build`、`Trial sample validation` 三个 job 均成功。
+3. 最新 run 摘要页中未再观察到显性 runtime deprecation warning 文本。
+4. 因此 CI runtime warning 处理线可收住，不再构成当前试运营阻塞。

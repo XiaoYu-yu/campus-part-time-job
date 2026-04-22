@@ -103,6 +103,8 @@
 - 当前已完成：`Step 91 - 最小 GitHub Actions CI 实现`
 - 当前已完成：`Step 92 - CI 首轮运行结果跟踪 / 本地与远端一致性复核`
 - 当前已完成：`Step 93 - GitHub Actions runtime warning 处理 go / no-go`
+- 当前已完成：`Step 94 - CI action 版本升级后远端运行结果跟踪`
+- 当前已完成：`Step 95 - 内测型试运营 Compose 部署包最小实现`
 - 当前日期：`2026-04-22`
 - Step 46 补充：已新增 admin 异常 resolve 后端接口 `POST /api/campus/admin/exceptions/{id}/resolve`，只允许 `REPORTED -> RESOLVED`，重复处理返回明确业务错误；本轮未改订单主状态、settlement、latest exception 摘要、bridge、前端页面或路由。
 - Step 47 补充：本轮只做 admin 异常前端承接 go / no-go 评估，不写业务代码、不补页面；最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备，P2 售后执行历史表继续后置。
@@ -140,7 +142,9 @@
 - Step 91 补充：已新增 `.github/workflows/trial-operation-ci.yml`，包含 backend compile、frontend build 和 sample validation 三个 job；sample validation 的 warning exit code `2` 在 CI 中按 warning 处理，不使 CI 失败。本轮没有做部署、没有注入真实密钥、没有跑 E2E、没有改业务代码、bridge、接口、路由或鉴权。
 - Step 92 补充：已确认 GitHub Actions `Trial Operation CI #1` 由 `450e823ec35f22dba9463c71e1b85b854b1aa6e5` 的 push 触发，`Backend compile`、`Frontend build`、`Trial sample validation` 三个 job 均成功；本地等价验证与远端 CI 结果一致。当前仅观察到 GitHub Actions Node.js runtime deprecation warning，建议下一轮单独评估 action 版本升级，不在 Step 92 混入 workflow 变更。
 - Step 93 补充：已基于官方 action README 对 GitHub Actions runtime warning 做 go / no-go 评估，并执行最小 workflow 版本升级：`actions/checkout@v6`、`actions/setup-java@v5`、`actions/setup-node@v6`；CI job、触发条件、命令、Java 17 / Node 20 构建版本、sample validation warning-only 策略均保持不变。本轮没有改业务代码、bridge、接口、路由、鉴权或前端页面。
-- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 到 Step 39 已完成展示 polish 候选评估、5 个关键页面小范围 polish 和展示 polish 冻结判断；Step 40 到 Step 43 已完成交付整理、截图/录屏计划、真实媒体采集和非 bridge 后端方向评估；Step 44 到 Step 49 已完成异常历史表、异常上报写历史、admin 异常只读/处理查询、最小 resolve 后端闭环、admin 异常前端承接和运行态验证；Step 50 到 Step 53 已完成售后执行历史表后端/前端承接与运行态验证；Step 54 到 Step 93 已完成 settlement 批次操作审计后端、前端、运行态验证、对账差异后端实现、对账差异前端最小只读承接、运行态验证、前端线收口评估、settlement P3 主线阶段复盘、非 bridge 后端三线整体复盘、整体维护 / 交付口径复盘、腾讯地图单页产品化试点、地图线收口判断、试运营版产品化下一阶段规划、试运营运行配置与 preflight 手册、模拟资金链路产品化边界说明、试运营交付文档一致性复核与最小 preflight 验证、试运营交付包 RC 收口复盘 / 最小 smoke 复核、试运营 RC 运行配置与构建告警减噪、前端打包告警与分包 go / no-go 评估、前端打包线 freeze / no-op 复盘、试运营 RC 下一阶段主线重排 / go-no-go 评估、试运营本地 preflight 脚本入口、试运营样本状态校验脚本、试运营命令索引、试运营脚本线 no-op 冻结判断、产品级试运营前剩余差距评估、环境变量与密钥配置硬化、部署后 smoke checklist、最小 CI 检查边界设计、最小 GitHub Actions CI 实现、CI 首轮运行结果跟踪和 GitHub Actions runtime warning 最小处理；当前 bridge 完全保留、展示 polish 主线默认冻结、媒体线已收住、地图线收住为单页 admin 只读点位预览、前端打包优化线已冻结为 no-op，模拟资金链路仍不接真实支付 / 退款 / 打款，旧外卖模块仍保留可运行、旧前端主链路未被替换
+- Step 94 补充：已确认 `2406c1b2586996a1e0fdea1946394022894b3b0e` 对应的 GitHub Actions `Trial Operation CI #2` 远端运行成功，`Backend compile`、`Frontend build`、`Trial sample validation` 三个 job 均继续通过，最新 run 摘要页中未再观察到显性 runtime deprecation warning 文本。
+- Step 95 补充：已新增内测型试运营 Compose 部署包，包括 `deploy/internal-trial/docker-compose.yml`、前后端 Dockerfile、Nginx 代理配置、compose `.env.example` 和部署说明文档；本轮没有改业务代码、bridge、鉴权、接口、路由或前端页面。
+- 当前范围：后端最小闭环已扩展到 customer onboarding 替代链路、customer 侧 courier token 申请衔接、customer completed 结果回看页、courier workbench 最小承接页、最小接单动作、订单详情承接、最小取餐承接、最小 deliver 承接、最小异常上报承接、confirm 前可视化、completed 后最小只读承接与按订单号结果回读，并已在本地 `test profile + H2 + frontend vite` 下真实跑通 `onboarding -> 审核 -> token 申请 -> workbench -> 接单 -> 取餐 -> deliver -> 异常上报 -> customer confirm -> completed 回读` 一轮链路，且已整理成可共享回归留痕；Step 29 基于项目 owner 的明确确认关闭了 repo 外阻塞项，Step 30 则已把 `Phase A` 的执行边界、bridge 保留范围、回滚策略和最小回归清单正式固化，Step 31 已真实复核了一轮最小回归清单并评估最小候选动作，Step 32 在此基础上进一步扩大候选池并完成 go / no-go 决策，Step 33 则正式将 bridge 主线收成 `Phase A no-op` 冻结态；Step 34 到 Step 39 已完成展示 polish 候选评估、5 个关键页面小范围 polish 和展示 polish 冻结判断；Step 40 到 Step 43 已完成交付整理、截图/录屏计划、真实媒体采集和非 bridge 后端方向评估；Step 44 到 Step 49 已完成异常历史表、异常上报写历史、admin 异常只读/处理查询、最小 resolve 后端闭环、admin 异常前端承接和运行态验证；Step 50 到 Step 53 已完成售后执行历史表后端/前端承接与运行态验证；Step 54 到 Step 95 已完成 settlement 批次操作审计后端、前端、运行态验证、对账差异后端实现、对账差异前端最小只读承接、运行态验证、前端线收口评估、settlement P3 主线阶段复盘、非 bridge 后端三线整体复盘、整体维护 / 交付口径复盘、腾讯地图单页产品化试点、地图线收口判断、试运营版产品化下一阶段规划、试运营运行配置与 preflight 手册、模拟资金链路产品化边界说明、试运营交付文档一致性复核与最小 preflight 验证、试运营交付包 RC 收口复盘 / 最小 smoke 复核、试运营 RC 运行配置与构建告警减噪、前端打包告警与分包 go / no-go 评估、前端打包线 freeze / no-op 复盘、试运营 RC 下一阶段主线重排 / go-no-go 评估、试运营本地 preflight 脚本入口、试运营样本状态校验脚本、试运营命令索引、试运营脚本线 no-op 冻结判断、产品级试运营前剩余差距评估、环境变量与密钥配置硬化、部署后 smoke checklist、最小 CI 检查边界设计、最小 GitHub Actions CI 实现、CI 首轮运行结果跟踪、GitHub Actions runtime warning 最小处理、CI runtime 升级后远端验证和内测型试运营 Compose 部署包最小实现；当前 bridge 完全保留、展示 polish 主线默认冻结、媒体线已收住、地图线收住为单页 admin 只读点位预览、前端打包优化线已冻结为 no-op，模拟资金链路仍不接真实支付 / 退款 / 打款，旧外卖模块仍保留可运行、旧前端主链路未被替换
 
 ## 当前状态
 
@@ -2270,6 +2274,8 @@
 - [Step 91 日志](step-91-minimal-github-actions-ci.md)
 - [Step 92 日志](step-92-ci-first-run-followup.md)
 - [Step 93 日志](step-93-github-actions-runtime-warning-go-no-go.md)
+- [Step 94 日志](step-94-ci-runtime-upgrade-followup.md)
+- [Step 95 日志](step-95-internal-trial-compose-package.md)
 - [试运营脚本入口说明](../../scripts/trial-operation/README.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)
 - [bridge 执行准备 checklist](bridge-execution-readiness-checklist.md)

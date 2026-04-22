@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 94 最高优先级
+## Step 96 最高优先级
 
 1. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
 2. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
@@ -155,11 +155,21 @@
    - 已将 `actions/setup-java@v4` 升级到 `actions/setup-java@v5`。
    - 已将 `actions/setup-node@v4` 升级到 `actions/setup-node@v6`。
    - CI job、触发条件、命令、Java 17 / Node 20 构建版本、sample validation warning-only 策略均保持不变。
-32. Step 94 建议做“CI action 版本升级后远端运行结果跟踪”：
-   - 如果本次提交成功 push，观察新一轮 `Trial Operation CI`。
-   - 确认三个 job 是否仍全部通过。
-   - 确认 Node.js runtime deprecation warning 是否消除或减少。
-   - 若 CI 失败，只回滚或修正 action 版本，不扩业务功能。
+32. Step 94 已完成“CI action 版本升级后远端运行结果跟踪”：
+   - `2406c1b2586996a1e0fdea1946394022894b3b0e` 对应的 `Trial Operation CI #2` 已远端成功。
+   - `Backend compile`、`Frontend build`、`Trial sample validation` 三个 job 均继续通过。
+   - 最新 run 摘要页未再观察到显性 runtime deprecation warning 文本。
+33. Step 95 已完成“内测型试运营 Compose 部署包最小实现”：
+   - 已新增 `deploy/internal-trial/docker-compose.yml`。
+   - 已新增前后端 Dockerfile、Nginx 代理配置、compose `.env.example` 和部署说明。
+   - 已通过 backend package、frontend build、sample validation 和 `git diff --check`。
+   - 当前机器未安装 Docker，因此容器级运行验证后置到服务器首轮部署。
+34. Step 96 建议做“单机服务器首轮内测部署与 smoke 验证”：
+   - 在服务器安装 Docker / Docker Compose。
+   - 复制 `deploy/internal-trial/.env.example` 为真实 `.env`。
+   - 执行 compose 启动。
+   - 按 `docs/deployment/post-deploy-smoke-checklist.md` 跑一轮最小 smoke。
+   - 若容器级启动成功，再决定是否补日志、备份或回滚最小自动化。
 12. Step 40 已完成交付整理与演示脚本固化：
    - 当前交付边界。
    - 主演示脚本。

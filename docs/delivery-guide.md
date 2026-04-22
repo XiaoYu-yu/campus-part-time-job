@@ -72,6 +72,7 @@ npm run dev
 - [Step 40 交付整理与演示脚本](../project-logs/campus-relay/step-40-delivery-packaging-and-demo-script.md)
 - [Step 41 截图和录屏计划](../project-logs/campus-relay/step-41-delivery-assets-checklist-and-recording-plan.md)
 - [Step 42 媒体归档](../project-logs/campus-relay/step-42-real-media-capture-and-archive.md)
+- [内测型试运营 Compose 部署说明](deployment/internal-trial-compose.md)
 - [试运营运行配置与 Preflight 手册](trial-operation-preflight.md)
 - [模拟资金链路产品化边界](simulated-funds-boundary.md)
 
