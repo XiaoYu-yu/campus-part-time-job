@@ -8,19 +8,19 @@
             <path d="M5 26L20 35L35 26" stroke="url(#logoGrad2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             <defs>
               <linearGradient id="logoGrad1" x1="5" y1="3" x2="35" y2="35" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#ff6b35"/>
-                <stop offset="1" stop-color="#ec4f1a"/>
+                <stop stop-color="#042f2e"/>
+                <stop offset="1" stop-color="#0f766e"/>
               </linearGradient>
               <linearGradient id="logoGrad2" x1="5" y1="26" x2="35" y2="26" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#ff6b35"/>
-                <stop offset="1" stop-color="#ec4f1a"/>
+                <stop stop-color="#042f2e"/>
+                <stop offset="1" stop-color="#0f766e"/>
               </linearGradient>
             </defs>
           </svg>
         </div>
         <div class="logo-text">
-          <h1>智慧餐饮</h1>
-          <p>管理系统</p>
+          <h1>校内兼职</h1>
+          <p>Campus Ops</p>
         </div>
       </div>
 
@@ -30,33 +30,18 @@
         router
         :collapse="isCollapse"
       >
+        <div class="menu-section-label">校园运营</div>
         <el-menu-item index="/dashboard">
           <el-icon><HomeFilled /></el-icon>
-          <template #title>仪表盘</template>
+          <template #title>运营总览</template>
         </el-menu-item>
         <el-menu-item index="/employee">
           <el-icon><User /></el-icon>
-          <template #title>员工管理</template>
-        </el-menu-item>
-        <el-menu-item index="/category">
-          <el-icon><Grid /></el-icon>
-          <template #title>分类管理</template>
-        </el-menu-item>
-        <el-menu-item index="/dish">
-          <el-icon><Mug /></el-icon>
-          <template #title>菜品管理</template>
-        </el-menu-item>
-        <el-menu-item index="/setmeal">
-          <el-icon><Sugar /></el-icon>
-          <template #title>套餐管理</template>
-        </el-menu-item>
-        <el-menu-item index="/order">
-          <el-icon><ShoppingCart /></el-icon>
-          <template #title>订单管理</template>
+          <template #title>运营人员</template>
         </el-menu-item>
         <el-menu-item index="/statistics">
           <el-icon><DataAnalysis /></el-icon>
-          <template #title>数据统计</template>
+          <template #title>数据看板</template>
         </el-menu-item>
         <el-menu-item index="/campus/settlement-batches">
           <el-icon><Tickets /></el-icon>
@@ -78,9 +63,27 @@
           <el-icon><Document /></el-icon>
           <template #title>校园异常处理</template>
         </el-menu-item>
+
+        <div class="menu-section-label">旧模块兼容</div>
+        <el-menu-item index="/category">
+          <el-icon><Grid /></el-icon>
+          <template #title>分类兼容</template>
+        </el-menu-item>
+        <el-menu-item index="/dish">
+          <el-icon><Mug /></el-icon>
+          <template #title>商品兼容</template>
+        </el-menu-item>
+        <el-menu-item index="/setmeal">
+          <el-icon><Sugar /></el-icon>
+          <template #title>套餐兼容</template>
+        </el-menu-item>
+        <el-menu-item index="/order">
+          <el-icon><ShoppingCart /></el-icon>
+          <template #title>订单兼容</template>
+        </el-menu-item>
         <el-menu-item index="/shop-status">
           <el-icon><Position /></el-icon>
-          <template #title>店铺营业状态</template>
+          <template #title>旧店铺状态</template>
         </el-menu-item>
       </el-menu>
 
@@ -126,7 +129,7 @@
                 </el-avatar>
                 <div class="user-details">
                   <span class="user-name">{{ userStore.currentUserInfo?.name || '管理员' }}</span>
-                  <span class="user-role">{{ userStore.currentUserInfo?.role || 'admin' }}</span>
+                  <span class="user-role">{{ userStore.currentUserInfo?.role || '校园运营' }}</span>
                 </div>
                 <el-icon class="dropdown-icon"><ArrowDown /></el-icon>
               </div>
@@ -197,13 +200,13 @@ const breadcrumb = computed(() => {
     return '校园结算批次详情'
   }
   const pathMap = {
-    '/dashboard': '仪表盘',
-    '/employee': '员工管理',
-    '/category': '分类管理',
-    '/dish': '菜品管理',
-    '/setmeal': '套餐管理',
-    '/order': '订单管理',
-    '/statistics': '数据统计',
+    '/dashboard': '运营总览',
+    '/employee': '运营人员',
+    '/category': '分类兼容',
+    '/dish': '商品兼容',
+    '/setmeal': '套餐兼容',
+    '/order': '订单兼容',
+    '/statistics': '数据看板',
     '/campus/settlement-batches': '校园结算批次',
     '/campus/after-sale-executions': '校园售后执行',
     '/campus/courier-ops': '校园配送运营',
@@ -242,16 +245,22 @@ const logout = () => {
   display: flex;
   height: 100vh;
   overflow: hidden;
-  background-color: #f4f4f5;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(45, 212, 191, 0.22), transparent 30%),
+    radial-gradient(circle at 78% 6%, rgba(56, 189, 248, 0.16), transparent 28%),
+    linear-gradient(135deg, #f7fffb 0%, #eef7ff 45%, #f8fafc 100%);
+  color: #0f172a;
 }
 
 .sidebar {
-  width: 256px;
-  background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
-  border-right: 1px solid #e4e4e7;
+  width: 268px;
+  background:
+    linear-gradient(180deg, rgba(7, 42, 48, 0.96) 0%, rgba(12, 74, 80, 0.94) 54%, rgba(15, 118, 110, 0.92) 100%);
+  border-right: 1px solid rgba(15, 118, 110, 0.2);
   display: flex;
   flex-direction: column;
   transition: width 0.3s ease;
+  box-shadow: 18px 0 45px rgba(15, 23, 42, 0.14);
 
   &.is-collapsed {
     width: 64px;
@@ -262,30 +271,37 @@ const logout = () => {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 20px 16px;
-  border-bottom: 1px solid #f4f4f5;
+  padding: 22px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .logo-icon {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   flex-shrink: 0;
+  padding: 7px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #d9f99d 0%, #2dd4bf 52%, #0f766e 100%);
+  box-shadow: 0 16px 35px rgba(45, 212, 191, 0.26);
 }
 
 .logo-text {
   h1 {
-    font-size: 16px;
-    font-weight: 700;
-    color: #18181b;
+    font-size: 17px;
+    font-weight: 800;
+    color: #f8fafc;
     margin: 0;
     line-height: 1.2;
+    letter-spacing: 0.04em;
   }
 
   p {
-    font-size: 12px;
-    color: #71717a;
+    font-size: 11px;
+    color: rgba(204, 251, 241, 0.78);
     margin: 0;
     line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
   }
 }
 
@@ -293,7 +309,7 @@ const logout = () => {
   flex: 1;
   border-right: none;
   background: transparent;
-  padding: 12px 8px;
+  padding: 14px 10px;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -301,35 +317,50 @@ const logout = () => {
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #e4e4e7;
+    background: rgba(204, 251, 241, 0.34);
     border-radius: 2px;
   }
 
+  .menu-section-label {
+    padding: 16px 12px 8px;
+    color: rgba(204, 251, 241, 0.56);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
   .el-menu-item {
-    height: 44px;
-    line-height: 44px;
+    height: 42px;
+    line-height: 42px;
     margin: 4px 0;
-    border-radius: 10px;
-    font-weight: 500;
-    color: #52525b;
+    border-radius: 14px;
+    font-weight: 650;
+    color: rgba(241, 245, 249, 0.82);
     transition: all 0.2s ease;
+    letter-spacing: 0.01em;
 
     .el-icon {
       font-size: 18px;
+      color: rgba(153, 246, 228, 0.82);
     }
 
     &:hover {
-      background-color: rgba(255, 107, 53, 0.08);
-      color: #ff6b35;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
     }
 
     &.is-active {
-      background: linear-gradient(135deg, #ff6b35 0%, #ec4f1a 100%);
-      color: white;
-      box-shadow: 0 4px 14px rgba(255, 107, 53, 0.35);
+      background: linear-gradient(135deg, #ccfbf1 0%, #a7f3d0 48%, #d9f99d 100%);
+      color: #064e3b;
+      box-shadow: 0 16px 34px rgba(15, 118, 110, 0.28);
 
       &::before {
         display: none;
+      }
+
+      .el-icon {
+        color: #0f766e;
       }
     }
   }
@@ -337,7 +368,7 @@ const logout = () => {
 
 .sidebar-footer {
   padding: 12px;
-  border-top: 1px solid #f4f4f5;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .collapse-btn {
@@ -347,12 +378,12 @@ const logout = () => {
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  color: #71717a;
+  color: rgba(204, 251, 241, 0.76);
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: #f4f4f5;
-    color: #ff6b35;
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
   }
 
   .el-icon {
@@ -364,19 +395,20 @@ const logout = () => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: #f4f4f5;
+  background: transparent;
   min-width: 0;
 }
 
 .top-nav {
-  height: 64px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e4e4e7;
+  height: 70px;
+  background-color: rgba(255, 255, 255, 0.76);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(15, 118, 110, 0.12);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
 }
 
 .nav-left {
@@ -423,7 +455,7 @@ const logout = () => {
   align-items: center;
   gap: 8px;
   padding-right: 16px;
-  border-right: 1px solid #e4e4e7;
+  border-right: 1px solid rgba(15, 118, 110, 0.12);
 }
 
 .icon-btn {
@@ -433,13 +465,13 @@ const logout = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #71717a;
+  color: #64748b;
   transition: all 0.2s ease;
   position: relative;
 
   &:hover {
-    background-color: #f4f4f5;
-    color: #ff6b35;
+    background-color: rgba(15, 159, 143, 0.1);
+    color: #0f766e;
   }
 
   .el-icon {
@@ -454,7 +486,7 @@ const logout = () => {
     right: 6px;
     width: 8px;
     height: 8px;
-    background: #ef4444;
+    background: #f97316;
     border-radius: 50%;
     border: 2px solid #ffffff;
   }
@@ -469,16 +501,18 @@ const logout = () => {
     padding: 6px 12px;
     border-radius: 12px;
     transition: all 0.2s ease;
+    border: 1px solid rgba(15, 118, 110, 0.12);
+    background: rgba(255, 255, 255, 0.72);
 
     &:hover {
-      background-color: #f4f4f5;
+      background-color: #ffffff;
     }
   }
 
   .user-avatar {
-    background: linear-gradient(135deg, #ff6b35 0%, #ec4f1a 100%);
+    background: linear-gradient(135deg, #0f9f8f 0%, #38bdf8 100%);
     font-weight: 600;
-    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+    box-shadow: 0 12px 24px rgba(15, 118, 110, 0.22);
   }
 
   .user-details {
@@ -490,12 +524,12 @@ const logout = () => {
   .user-name {
     font-size: 14px;
     font-weight: 600;
-    color: #18181b;
+    color: #0f172a;
   }
 
   .user-role {
     font-size: 12px;
-    color: #a1a1aa;
+    color: #0f766e;
   }
 
   .dropdown-icon {
@@ -507,7 +541,7 @@ const logout = () => {
 
 .content {
   flex: 1;
-  padding: 24px;
+  padding: 28px;
   overflow-y: auto;
   overflow-x: hidden;
 }

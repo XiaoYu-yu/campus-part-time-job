@@ -1,12 +1,17 @@
 <template>
   <MainLayout>
-    <!-- 欢迎区 -->
-    <div class="welcome-section">
-      <h2>欢迎回来，{{ userStore.currentUserInfo.name || '管理员' }}</h2>
-      <p>这里是您的仪表盘，展示了系统的关键数据</p>
+    <div class="ops-hero">
+      <div>
+        <span class="eyebrow">Campus Part-time Ops</span>
+        <h2>欢迎回来，{{ userStore.currentUserInfo.name || '校园运营员' }}</h2>
+        <p>这里是校内兼职平台的运营总览，用于查看订单、人员、异常和演示链路状态。</p>
+      </div>
+      <div class="hero-badge">
+        <span>试运营</span>
+        <strong>本地联调 / H2</strong>
+      </div>
     </div>
     
-    <!-- 数据卡片 -->
     <div class="stats-cards">
       <div
         v-for="stat in statsData"
@@ -23,24 +28,29 @@
       </div>
     </div>
     
-    <!-- 图表区域 -->
     <div class="charts-section">
-      <!-- 订单趋势图 -->
       <div class="chart-card">
-        <h3>订单趋势</h3>
+        <div class="section-title">
+          <span>趋势观察</span>
+          <small>兼容旧统计接口</small>
+        </div>
         <div ref="trendChartRef" class="chart-container"></div>
       </div>
       
-      <!-- 热门菜品排行 -->
       <div class="chart-card">
-        <h3>热门菜品排行</h3>
+        <div class="section-title">
+          <span>服务热度</span>
+          <small>示例排行</small>
+        </div>
         <div ref="popularChartRef" class="chart-container"></div>
       </div>
     </div>
     
-    <!-- 最近订单 -->
     <div class="recent-orders">
-      <h3>最近订单</h3>
+      <div class="section-title">
+        <span>最近订单快照</span>
+        <small>只读预览，不改变旧订单语义</small>
+      </div>
       <el-table v-loading="loading" :data="recentOrders" style="width: 100%">
         <el-table-column prop="id" label="订单号" width="120" />
         <el-table-column prop="customerName" label="客户" />
@@ -81,10 +91,10 @@ const loading = ref(false)
 
 // 统计数据
 const statsData = ref([
-  { title: '销售额', value: '¥0', icon: 'el-icon-s-data', color: '#ff7d00' },
-  { title: '订单数', value: '0', icon: 'el-icon-s-order', color: '#409eff' },
-  { title: '用户数', value: '0', icon: 'el-icon-user', color: '#67c23a' },
-  { title: '客单价', value: '¥0', icon: 'el-icon-money', color: '#e6a23c' }
+  { title: '模拟流水', value: '¥0', icon: 'el-icon-s-data', color: '#0f9f8f' },
+  { title: '订单快照', value: '0', icon: 'el-icon-s-order', color: '#0284c7' },
+  { title: '用户规模', value: '0', icon: 'el-icon-user', color: '#16a34a' },
+  { title: '平均单值', value: '¥0', icon: 'el-icon-money', color: '#f59e0b' }
 ])
 
 // 最近订单
@@ -153,10 +163,10 @@ const loadDashboardData = async () => {
     if (res) {
       // 更新统计数据
       statsData.value = [
-        { title: '销售额', value: res.totalSales || '¥0', icon: 'el-icon-s-data', color: '#ff7d00' },
-        { title: '订单数', value: String(res.totalOrders || 0), icon: 'el-icon-s-order', color: '#409eff' },
-        { title: '用户数', value: String(res.totalUsers || 0), icon: 'el-icon-user', color: '#67c23a' },
-        { title: '客单价', value: res.avgOrderValue || '¥0', icon: 'el-icon-money', color: '#e6a23c' }
+        { title: '模拟流水', value: res.totalSales || '¥0', icon: 'el-icon-s-data', color: '#0f9f8f' },
+        { title: '订单快照', value: String(res.totalOrders || 0), icon: 'el-icon-s-order', color: '#0284c7' },
+        { title: '用户规模', value: String(res.totalUsers || 0), icon: 'el-icon-user', color: '#16a34a' },
+        { title: '平均单值', value: res.avgOrderValue || '¥0', icon: 'el-icon-money', color: '#f59e0b' }
       ]
       
       // 更新图表数据
@@ -200,7 +210,7 @@ const initTrendChart = () => {
         }
       },
       legend: {
-        data: ['销售额', '订单数'],
+        data: ['模拟流水', '订单数'],
         top: 0
       },
       grid: {
@@ -219,7 +229,7 @@ const initTrendChart = () => {
       yAxis: [
         {
           type: 'value',
-          name: '销售额',
+          name: '模拟流水',
           position: 'left',
           axisLabel: {
             formatter: '¥{value}'
@@ -236,7 +246,7 @@ const initTrendChart = () => {
       ],
       series: [
         {
-          name: '销售额',
+          name: '模拟流水',
           type: 'line',
           stack: 'Total',
           areaStyle: {
@@ -296,8 +306,8 @@ const initPopularChart = () => {
           data: popularDishes.value.map(dish => dish.sales),
           itemStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-              { offset: 0, color: '#ff7d00' },
-              { offset: 1, color: '#ffb800' }
+              { offset: 0, color: '#0f9f8f' },
+              { offset: 1, color: '#38bdf8' }
             ])
           }
         }
@@ -354,24 +364,82 @@ watch([orderTrend, popularDishes], () => {
 </script>
 
 <style lang="scss" scoped>
-.welcome-section {
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 30px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+.ops-hero {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(4, 47, 46, 0.95) 0%, rgba(15, 118, 110, 0.9) 48%, rgba(14, 165, 233, 0.78) 100%),
+    radial-gradient(circle at 80% 20%, rgba(217, 249, 157, 0.35), transparent 30%);
+  border-radius: 28px;
+  padding: 34px 40px;
+  margin-bottom: 22px;
+  box-shadow: 0 28px 70px rgba(15, 23, 42, 0.18);
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: -50px;
+    bottom: -70px;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 42px solid rgba(204, 251, 241, 0.16);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    margin-bottom: 12px;
+    color: #bef264;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
   
   h2 {
-    font-size: 24px;
-    font-weight: 600;
-    color: #303133;
-    margin: 0 0 10px 0;
+    position: relative;
+    z-index: 1;
+    font-size: 30px;
+    font-weight: 850;
+    color: #ffffff;
+    margin: 0 0 12px 0;
+    letter-spacing: -0.02em;
   }
   
   p {
-    font-size: 16px;
-    color: #606266;
+    position: relative;
+    z-index: 1;
+    max-width: 620px;
+    font-size: 15px;
+    color: rgba(240, 253, 250, 0.84);
     margin: 0;
+  }
+
+  .hero-badge {
+    position: relative;
+    z-index: 1;
+    align-self: flex-start;
+    min-width: 150px;
+    padding: 16px 18px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    color: #ffffff;
+    backdrop-filter: blur(14px);
+
+    span {
+      display: block;
+      margin-bottom: 4px;
+      color: #ccfbf1;
+      font-size: 12px;
+    }
+
+    strong {
+      font-size: 16px;
+    }
   }
 }
 
@@ -382,24 +450,26 @@ watch([orderTrend, popularDishes], () => {
   margin-bottom: 20px;
   
   .stat-card {
-    background-color: #fff;
-    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px solid rgba(15, 118, 110, 0.1);
+    border-radius: 22px;
     padding: 20px;
     display: flex;
     align-items: center;
     gap: 15px;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.07);
+    backdrop-filter: blur(10px);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     
     &:hover {
       transform: translateY(-5px);
-      box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
+      box-shadow: 0 24px 48px rgba(15, 23, 42, 0.12);
     }
     
     .stat-icon {
       width: 50px;
       height: 50px;
-      border-radius: 12px;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -436,17 +506,11 @@ watch([orderTrend, popularDishes], () => {
   }
   
   .chart-card {
-    background-color: #fff;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
-    
-    h3 {
-      font-size: 18px;
-      font-weight: 600;
-      color: #303133;
-      margin: 0 0 20px 0;
-    }
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(15, 118, 110, 0.1);
+    border-radius: 24px;
+    padding: 22px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.07);
     
     .chart-container {
       height: 300px;
@@ -456,17 +520,11 @@ watch([orderTrend, popularDishes], () => {
 }
 
 .recent-orders {
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
-  
-  h3 {
-    font-size: 18px;
-    font-weight: 600;
-    color: #303133;
-    margin: 0 0 20px 0;
-  }
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(15, 118, 110, 0.1);
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.07);
   
   .el-table {
     border-radius: 8px;
@@ -483,6 +541,26 @@ watch([orderTrend, popularDishes], () => {
         background-color: #f5f7fa;
       }
     }
+  }
+}
+
+.section-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+
+  span {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0f172a;
+  }
+
+  small {
+    color: #0f766e;
+    font-size: 12px;
+    font-weight: 700;
   }
 }
 </style>

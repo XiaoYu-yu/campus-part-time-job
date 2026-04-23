@@ -1,69 +1,106 @@
 <!--
-  员工管理页面组件
-  @description 提供员工信息的增删改查功能，包含搜索、分页、状态管理等功能
+  运营人员页面组件
+  @description 提供后台运营人员信息的增删改查功能，包含搜索、分页、状态管理等功能
 -->
 <template>
   <div class="employee-management">
-    <h2>员工管理</h2>
+    <section class="employee-hero">
+      <div>
+        <span class="eyebrow">Campus Staff</span>
+        <h2>运营人员</h2>
+        <p>复用 employee 账号体系，管理校内兼职平台后台运营与审核人员。</p>
+      </div>
+      <div class="hero-notes">
+        <span>后台账号</span>
+        <strong>employee</strong>
+      </div>
+    </section>
+
     <div class="content">
       <!-- 搜索区 -->
-      <div class="search-section">
-        <el-input
-          v-model="searchQuery"
-          placeholder="请输入员工姓名或手机号"
-          style="width: 300px; margin-right: 10px;"
-          @keyup.enter="handleSearch"
-        >
-          <template #append>
-            <el-button @click="handleSearch">
-              <el-icon><Search /></el-icon>
-              搜索
-            </el-button>
-          </template>
-        </el-input>
-        <el-button type="primary" @click="handleAddEmployee">
-          <el-icon><Plus /></el-icon>
-          新增员工
-        </el-button>
+      <div class="toolbar-card">
+        <div class="toolbar-copy">
+          <span class="section-kicker">筛选与维护</span>
+          <h3>按姓名或手机号定位运营人员</h3>
+          <p>这里只维护后台 employee 账号，不改变旧订单、地址或外卖兼容模块。</p>
+        </div>
+        <div class="search-section">
+          <el-input
+            v-model="searchQuery"
+            class="staff-search"
+            placeholder="输入姓名或手机号"
+            clearable
+            @keyup.enter="handleSearch"
+          >
+            <template #append>
+              <el-button @click="handleSearch">
+                <el-icon><Search /></el-icon>
+                搜索
+              </el-button>
+            </template>
+          </el-input>
+          <el-button type="primary" class="add-button" @click="handleAddEmployee">
+            <el-icon><Plus /></el-icon>
+            新增运营人员
+          </el-button>
+        </div>
       </div>
-      
+
       <!-- 表格区 -->
-      <el-table
-        v-loading="loading"
-        :data="employeeList"
-        style="width: 100%; margin-top: 20px;"
-        border
-      >
-        <el-table-column prop="id" label="员工ID" width="80" />
-        <el-table-column prop="name" label="姓名" width="120" />
-        <el-table-column prop="phone" label="手机号" width="150" />
-        <el-table-column prop="position" label="职位" width="120" />
-        <el-table-column prop="department" label="部门" width="120" />
-        <el-table-column prop="entryDate" label="入职日期" width="150" />
-        <el-table-column label="状态" width="100">
-          <template #default="scope">
-            <el-switch
-              v-model="scope.row.status"
-              :active-value="1"
-              :inactive-value="0"
-              @change="handleStatusChange(scope.row.id, scope.row.status)"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="150" fixed="right">
-          <template #default="scope">
-            <el-button size="small" @click="handleEditEmployee(scope.row)">
-              <el-icon><Edit /></el-icon>
-              编辑
-            </el-button>
-            <el-button size="small" type="danger" @click="handleDeleteEmployee(scope.row.id)">
-              <el-icon><Delete /></el-icon>
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      
+      <div class="table-card">
+        <div class="table-heading">
+          <div>
+            <span class="section-kicker">人员列表</span>
+            <h3>后台运营账号</h3>
+          </div>
+          <el-tag type="info" effect="plain">共 {{ total }} 人</el-tag>
+        </div>
+
+        <el-table
+          v-loading="loading"
+          :data="employeeList"
+          class="campus-table"
+          style="width: 100%;"
+          empty-text="暂无运营人员，可先新增一个后台账号"
+        >
+          <el-table-column prop="id" label="员工ID" width="90" />
+          <el-table-column prop="name" label="姓名" min-width="130" show-overflow-tooltip />
+          <el-table-column prop="phone" label="手机号" min-width="150" />
+          <el-table-column prop="position" label="职位" min-width="130" show-overflow-tooltip />
+          <el-table-column prop="department" label="部门" min-width="140" show-overflow-tooltip />
+          <el-table-column prop="entryDate" label="入职日期" width="150" />
+          <el-table-column label="状态" width="150">
+            <template #default="scope">
+              <div class="status-cell">
+                <el-switch
+                  v-model="scope.row.status"
+                  :active-value="1"
+                  :inactive-value="0"
+                  @change="handleStatusChange(scope.row.id, scope.row.status)"
+                />
+                <span :class="['status-text', scope.row.status === 1 ? 'is-active' : 'is-disabled']">
+                  {{ scope.row.status === 1 ? '启用' : '禁用' }}
+                </span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="190" fixed="right">
+            <template #default="scope">
+              <div class="action-cell">
+                <el-button size="small" @click="handleEditEmployee(scope.row)">
+                  <el-icon><Edit /></el-icon>
+                  编辑
+                </el-button>
+                <el-button size="small" type="danger" plain @click="handleDeleteEmployee(scope.row.id)">
+                  <el-icon><Delete /></el-icon>
+                  删除
+                </el-button>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+
       <!-- 分页区 -->
       <div class="pagination-section">
         <el-pagination
@@ -82,6 +119,7 @@
         v-model="dialogVisible"
         :title="dialogTitle"
         width="500px"
+        class="employee-dialog"
       >
         <el-form :model="form" label-width="80px" :rules="formRules" ref="formRef">
           <el-form-item label="姓名" prop="name">
@@ -119,7 +157,7 @@
 
 <script setup>
 /**
- * 员工管理页面逻辑
+ * 运营人员页面逻辑
  * @module Employee
  */
 import { ref, onMounted } from 'vue'
@@ -389,35 +427,237 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .employee-management {
-  h2 {
-    margin-bottom: 20px;
-    color: #303133;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+
+  .employee-hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    min-height: 170px;
+    padding: 34px 40px;
+    border: 1px solid rgba(15, 118, 110, 0.12);
+    border-radius: 28px;
+    background:
+      radial-gradient(circle at 86% 18%, rgba(132, 204, 22, 0.28), transparent 28%),
+      radial-gradient(circle at 16% 20%, rgba(14, 165, 233, 0.2), transparent 32%),
+      linear-gradient(135deg, #0f172a 0%, #115e59 54%, #0e7490 100%);
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+    color: #f8fafc;
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: -80px;
+      bottom: -110px;
+      width: 270px;
+      height: 270px;
+      border-radius: 50%;
+      border: 38px solid rgba(255, 255, 255, 0.08);
+    }
+
+    h2 {
+      position: relative;
+      margin: 8px 0 10px;
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    p {
+      position: relative;
+      max-width: 560px;
+      margin: 0;
+      color: rgba(241, 245, 249, 0.82);
+      font-size: 15px;
+      line-height: 1.8;
+    }
   }
-  
+
+  .eyebrow,
+  .section-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #67e8f9;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .hero-notes {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 4px;
+    min-width: 142px;
+    padding: 18px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 22px;
+    background: rgba(15, 23, 42, 0.22);
+    backdrop-filter: blur(14px);
+
+    span {
+      color: rgba(241, 245, 249, 0.72);
+      font-size: 12px;
+    }
+
+    strong {
+      color: #f8fafc;
+      font-size: 20px;
+      letter-spacing: 0.02em;
+    }
+  }
+
   .content {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
   }
-  
+
+  .toolbar-card,
+  .table-card {
+    border: 1px solid rgba(15, 118, 110, 0.1);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+  }
+
+  .toolbar-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 24px;
+
+    h3 {
+      margin: 6px 0 6px;
+      color: #0f172a;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    p {
+      margin: 0;
+      color: #64748b;
+      font-size: 13px;
+    }
+  }
+
   .search-section {
     display: flex;
     align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+
+    .staff-search {
+      width: 320px;
+    }
+
+    .add-button {
+      min-width: 142px;
+      border: none;
+      background: linear-gradient(135deg, #0f766e, #0ea5e9);
+      box-shadow: 0 12px 24px rgba(14, 165, 233, 0.22);
+    }
   }
-  
+
+  .table-card {
+    padding: 22px 24px 16px;
+  }
+
+  .table-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+
+    h3 {
+      margin: 6px 0 0;
+      color: #0f172a;
+      font-size: 20px;
+      font-weight: 900;
+    }
+  }
+
+  .campus-table {
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+
+    :deep(.el-table__header-wrapper th) {
+      background: #f8fafc;
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    :deep(.el-table__row) {
+      color: #334155;
+    }
+
+    :deep(.el-table__cell) {
+      border-bottom-color: #edf2f7;
+    }
+  }
+
+  .status-cell,
+  .action-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .status-text {
+    font-size: 12px;
+    font-weight: 800;
+
+    &.is-active {
+      color: #0f766e;
+    }
+
+    &.is-disabled {
+      color: #94a3b8;
+    }
+  }
+
   .pagination-section {
-    margin-top: 20px;
+    padding: 4px 2px 0;
     display: flex;
     justify-content: flex-end;
   }
-  
+
   .dialog-footer {
     width: 100%;
     display: flex;
     justify-content: flex-end;
+  }
+}
+
+@media (max-width: 900px) {
+  .employee-management {
+    .employee-hero,
+    .toolbar-card {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .search-section {
+      justify-content: flex-start;
+      width: 100%;
+
+      .staff-search {
+        width: 100%;
+      }
+    }
   }
 }
 </style>

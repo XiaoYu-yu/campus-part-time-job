@@ -1538,3 +1538,17 @@
 - [project-logs/campus-relay/step-101-admin-text-mojibake-fix-and-frontend-readability.md](step-101-admin-text-mojibake-fix-and-frontend-readability.md)
 
 本轮是 admin 文本乱码修复与前端可读性加固轮：先在 `test profile + H2` SQL 初始化中显式声明 UTF-8，从源头修复本地 seed 数据乱码；再新增前端文本规范化工具，兜底修复接口数据或 `localStorage` 中 UTF-8 中文被错误解码为 Latin-1 / Windows-1252 后的 mojibake；成功响应和 admin 用户 store 已接入该规范化逻辑，并新增单测覆盖典型乱码样例。本轮没有改 bridge、接口路径、token 附着、路由或业务语义。
+
+## Step 102 - 校园兼职视觉体系与 admin 外壳刷新
+
+- [frontend/src/styles/variables.scss](../../frontend/src/styles/variables.scss)
+- [frontend/src/layout/MainLayout.vue](../../frontend/src/layout/MainLayout.vue)
+- [frontend/src/views/Dashboard.vue](../../frontend/src/views/Dashboard.vue)
+- [frontend/src/views/Employee.vue](../../frontend/src/views/Employee.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-102-campus-visual-system-admin-shell-refresh.md](step-102-campus-visual-system-admin-shell-refresh.md)
+
+本轮是校园兼职视觉体系与 admin 外壳刷新轮：将全局主题色、admin 主框架、仪表盘和运营人员页从旧外卖后台视觉调整为校园兼职运营风格；旧外卖模块仍保留，但在菜单中明确作为兼容模块呈现。本轮只改展示层，没有改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
