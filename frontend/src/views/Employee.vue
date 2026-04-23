@@ -621,6 +621,16 @@ onMounted(() => {
     gap: 10px;
   }
 
+  .action-cell {
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+
+    :deep(.el-button) {
+      margin-left: 0;
+      flex: 0 0 auto;
+    }
+  }
+
   .status-text {
     font-size: 12px;
     font-weight: 800;

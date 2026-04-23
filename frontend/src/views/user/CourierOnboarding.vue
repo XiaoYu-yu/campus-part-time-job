@@ -4,10 +4,10 @@
       <section class="card status-card">
         <div>
           <div class="title-row">
-            <h2>配送员入驻</h2>
+            <h2>兼职配送入驻</h2>
             <span class="entry-badge">customer 前置入口</span>
           </div>
-          <p>通过 customer 侧 onboarding 新入口提交资料，不影响现有 courier token 链路。</p>
+          <p>通过用户端 onboarding 新入口提交资料，不影响现有兼职端登录链路。</p>
         </div>
         <div class="status-pill" :class="statusClass(reviewStatus.reviewStatus)">
           {{ reviewStatus.reviewStatus || '未提交资料' }}
@@ -28,7 +28,7 @@
         <div class="flow-step">
           <span>3</span>
           <strong>申请 token</strong>
-          <p>审核通过且启用后，沿用现有 courier token 接口。</p>
+          <p>审核通过且启用后，沿用现有 token 接口进入兼职端。</p>
         </div>
       </section>
 
@@ -62,7 +62,7 @@
       <section class="card">
         <div class="section-heading">
           <div>
-            <h3>courier token 申请</h3>
+            <h3>兼职端 token 申请</h3>
             <p>沿用现有 `/api/campus/courier/auth/token`。仅在审核通过且启用后开放，仍使用当前登录账号手机号 + 密码申请。</p>
           </div>
           <div class="status-pill" :class="eligibility.eligible ? 'approved' : 'pending'">
@@ -71,7 +71,7 @@
         </div>
 
         <el-alert
-          :title="eligibility.eligible ? '已满足 courier token 申请条件' : '当前还不满足 courier token 申请条件'"
+          :title="eligibility.eligible ? '已满足兼职端 token 申请条件' : '当前还不满足兼职端 token 申请条件'"
           :description="eligibility.message || '暂无提示'"
           :type="eligibility.eligible ? 'success' : 'info'"
           :closable="false"
@@ -89,7 +89,7 @@
           </div>
           <div class="guide-item">
             <span>成功后承接</span>
-            <strong>写入 courier_token 并跳转 workbench</strong>
+            <strong>写入 courier_token 并跳转兼职工作台</strong>
           </div>
         </div>
 
@@ -126,7 +126,7 @@
           <div class="summary-grid">
             <div class="summary-item">
               <span>申请结果</span>
-              <strong>已成功获取 courier token</strong>
+              <strong>已成功获取兼职端 token</strong>
             </div>
             <div class="summary-item">
               <span>配送员资料ID</span>
@@ -137,8 +137,8 @@
               <strong>{{ tokenResult.courierProfile?.reviewStatus || '暂无' }}</strong>
             </div>
             <div class="summary-item">
-              <span>本地存储</span>
-              <strong>courier_token / courier_profile 已更新</strong>
+      <span>本地存储</span>
+      <strong>courier_token / courier_profile 已更新</strong>
             </div>
           </div>
           <el-form label-position="top" class="token-form">
@@ -147,7 +147,7 @@
             </el-form-item>
           </el-form>
           <div class="form-actions">
-            <el-button type="primary" @click="goToCourierWorkbench">前往 courier 工作台</el-button>
+            <el-button type="primary" @click="goToCourierWorkbench">前往兼职工作台</el-button>
           </div>
         </div>
       </section>
@@ -234,11 +234,13 @@ import {
   submitCourierOnboardingProfile
 } from '../../api/campus-customer'
 import { useCustomerStore } from '../../stores/customer'
+import { useCourierStore } from '../../stores/courier'
 
 const campusZones = ['渝中校区']
 const dormBuildings = ['竹园', '杏园', '李园', '桃园', '梅园', '馨园']
 const router = useRouter()
 const customerStore = useCustomerStore()
+const courierStore = useCourierStore()
 
 const reviewStatus = ref({
   reviewStatus: null,
@@ -309,7 +311,7 @@ const goToCourierWorkbench = () => {
 
 const applyToken = async () => {
   if (!eligibility.value.eligible) {
-    ElMessage.warning(eligibility.value.message || '当前暂不具备申请 courier token 的资格')
+    ElMessage.warning(eligibility.value.message || '当前暂不具备申请兼职端 token 的资格')
     return
   }
   const password = courierAuth.password.trim()
@@ -318,7 +320,7 @@ const applyToken = async () => {
     return
   }
   if (!currentLoginPhone.value) {
-    ElMessage.error('当前登录手机号缺失，无法申请 courier token')
+    ElMessage.error('当前登录手机号缺失，无法申请兼职端 token')
     return
   }
 
@@ -330,10 +332,9 @@ const applyToken = async () => {
     })
     tokenResult.token = result.token || ''
     tokenResult.courierProfile = result.courierProfile || null
-    localStorage.setItem('courier_token', tokenResult.token)
-    localStorage.setItem('courier_profile', JSON.stringify(tokenResult.courierProfile || {}))
+    courierStore.login(tokenResult.token, tokenResult.courierProfile || {})
     courierAuth.password = ''
-    ElMessage.success('courier token 申请成功')
+    ElMessage.success('兼职端 token 申请成功')
   } finally {
     tokenApplying.value = false
   }
@@ -353,7 +354,7 @@ const submitProfile = async () => {
     emergencyContactPhone: form.emergencyContactPhone
   }
   await submitCourierOnboardingProfile(payload)
-  ElMessage.success('配送员入驻资料已提交')
+  ElMessage.success('兼职配送入驻资料已提交')
   await loadAll()
 }
 

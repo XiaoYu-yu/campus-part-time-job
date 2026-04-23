@@ -103,19 +103,23 @@ request.interceptors.response.use(
             localStorage.removeItem('customer_user_info')
             router.push('/user/login')
           } else if (courierBridgeRequest) {
-            if (localStorage.getItem('courier_token')) {
-              localStorage.removeItem('courier_token')
-              localStorage.removeItem('courier_profile')
-              router.push('/user/campus/courier-onboarding')
-            } else {
-              localStorage.removeItem('customer_token')
-              localStorage.removeItem('customer_user_info')
-              router.push('/user/login')
-            }
+            localStorage.removeItem('courier_token')
+            localStorage.removeItem('courier_profile')
+            router.push({
+              path: '/parttime/login',
+              query: {
+                redirect: '/courier/workbench'
+              }
+            })
           } else if (courierRequest) {
             localStorage.removeItem('courier_token')
             localStorage.removeItem('courier_profile')
-            router.push('/user/campus/courier-onboarding')
+            router.push({
+              path: '/parttime/login',
+              query: {
+                redirect: '/courier/workbench'
+              }
+            })
           } else {
             localStorage.removeItem('admin_token')
             localStorage.removeItem('admin_user_info')

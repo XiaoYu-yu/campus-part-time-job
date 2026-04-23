@@ -169,6 +169,7 @@
 10. admin 主框架、仪表盘、登录页和运营人员页已完成一轮校园兼职视觉刷新，旧外卖模块仍保留为兼容模块
 11. Step 104 已将登录页、admin 外壳、dashboard 和 employee 高曝光区域统一回浅色玻璃风格
 12. Step 105 已将 `Employee.vue` 与 `Statistics.vue` 接回 `MainLayout`，修复后台公共导航丢失问题，并把数据看板重整到当前浅色校园后台视觉层级，同时清掉统计页真实 smoke 中暴露的 ECharts 重复初始化 warning
+13. Step 108 已新增 `/parttime/login` 作为兼职端独立登录入口，并把 `/courier/workbench` 调整为 `courier_token` 受保护路由；当前产品边界已从“用户端借道兼职工作台”前进到“用户端负责报名，兼职端负责日常登录”
 
 当前已确认的部署层修正：
 
@@ -190,10 +191,10 @@
 
 优先级建议：
 
-1. 如果近期仍是 owner 自测，优先看 `/employee`、`/statistics`、`/login`、`/dashboard`、`/campus/courier-ops` 和 admin 主框架是否已脱离旧外卖观感
-2. 如果准备邀请外部用户长期访问，再进入 HTTPS / 域名 / 正式反向代理准备
-3. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断
-4. 若无新触发条件，不重开 bridge 或第五个 admin 页；视觉继续采用高曝光页面小步收敛
+1. 如果近期仍是 owner 自测，优先验证兼职端账号 `13900139001 / 123456` 是否可直接完成“登录 -> 工作台”
+2. 如果兼职端独立登录稳定，再评估哪些兼职端页面仍缺最小承接，而不是继续抠 admin 样式
+3. 如果准备邀请外部用户长期访问，再进入 HTTPS / 域名 / 正式反向代理准备
+4. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断
 
 当前默认不进入：
 

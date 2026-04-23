@@ -1608,3 +1608,29 @@
 - [project-logs/campus-relay/step-106-after-sale-table-resize-handle-fix.md](step-106-after-sale-table-resize-handle-fix.md)
 
 本轮是售后执行页表格交互噪音修复轮：针对 `CampusAfterSaleExecutionList.vue` 主列表和详情 drawer 执行历史表中默认出现的列宽拖拽条，为所有 `el-table-column` 显式增加 `:resizable="false"`，消除 Element Plus 默认列拖拽行为。验证已覆盖 frontend build、frontend lint 和 `git diff --check`；本轮没有改 bridge、接口、鉴权、路由、分页语义、筛选语义、后端业务或新增页面。
+
+## Step 107 - 全局按钮 plain 语义修正与员工页操作列样式清理
+
+- [frontend/src/styles/element-plus.scss](../../frontend/src/styles/element-plus.scss)
+- [frontend/src/views/Employee.vue](../../frontend/src/views/Employee.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-107-global-button-plain-fix-and-employee-action-cell-cleanup.md](step-107-global-button-plain-fix-and-employee-action-cell-cleanup.md)
+
+## Step 108 - 兼职端独立登录与前台入口拆分
+
+- [frontend/src/stores/courier.js](../../frontend/src/stores/courier.js)
+- [frontend/src/views/courier/Login.vue](../../frontend/src/views/courier/Login.vue)
+- [frontend/src/router/index.js](../../frontend/src/router/index.js)
+- [frontend/src/utils/request.js](../../frontend/src/utils/request.js)
+- [frontend/src/views/courier/CourierWorkbench.vue](../../frontend/src/views/courier/CourierWorkbench.vue)
+- [frontend/src/views/user/CourierOnboarding.vue](../../frontend/src/views/user/CourierOnboarding.vue)
+- [frontend/src/views/user/Profile.vue](../../frontend/src/views/user/Profile.vue)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-108-parttime-login-and-independent-entry.md](step-108-parttime-login-and-independent-entry.md)
+
+本轮是前端样式语义修正轮：针对全局 `Element Plus` 按钮主题覆盖误伤 `plain / link / text` 语义的问题，收紧了 `el-button` 的渐变样式作用范围，并补齐 `primary / success / warning / danger / info` 的 `is-plain` 视觉规则；同时在 `Employee.vue` 中移除操作列按钮间距叠加问题，避免 `删除` 按钮出现红色背景覆盖和布局噪音。验证已覆盖 frontend build、frontend lint、frontend test、backend compile 和 `git diff --check`；本轮没有改 bridge、接口、鉴权、路由、后端业务或新增页面。

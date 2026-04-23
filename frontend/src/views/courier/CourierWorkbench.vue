@@ -4,19 +4,19 @@
       <section class="card hero-card">
         <div>
           <div class="title-row">
-            <h2>配送员工作台</h2>
+            <h2>兼职工作台</h2>
             <span class="readonly-badge">最小承接</span>
           </div>
-          <p>这是 courier token 获取后的最小承接页。当前已补到接单、详情、取餐、送达和异常上报的最小闭环，但仍不扩完整 courier 主工作流。</p>
+          <p>这是兼职端独立登录后的最小承接页。当前已补到接单、详情、取餐、送达和异常上报的最小闭环，但仍不扩完整兼职主工作流。</p>
         </div>
         <div class="token-pill" :class="hasCourierToken ? 'active' : 'inactive'">
-          {{ hasCourierToken ? 'courier token 已就绪' : 'courier token 缺失' }}
+          {{ hasCourierToken ? '兼职 token 已就绪' : '兼职 token 缺失' }}
         </div>
       </section>
 
       <el-alert
-        :title="hasCourierToken ? '当前浏览器已检测到 courier token，可继续查看 courier 侧只读承接信息。' : '当前浏览器未检测到 courier token，请先返回 onboarding 页面申请。'"
-        :description="hasCourierToken ? '页面会自动读取 courier 资料、审核状态和可接单预览。' : '没有 courier token 时，本页不会调用 courier 业务接口，只展示回退入口。'"
+        :title="hasCourierToken ? '当前浏览器已检测到兼职 token，可继续查看兼职侧只读承接信息。' : '当前浏览器未检测到兼职 token，请先登录兼职端或返回入驻入口申请。'"
+        :description="hasCourierToken ? '页面会自动读取兼职资料、审核状态和可接单预览。' : '没有兼职 token 时，本页不会调用 courier 业务接口，只展示回退入口。'"
         :type="hasCourierToken ? 'success' : 'warning'"
         :closable="false"
         show-icon
@@ -150,7 +150,7 @@
           </div>
           <div class="action-group">
             <el-button type="primary" @click="loadWorkbench">刷新工作台</el-button>
-            <el-button @click="goToOnboarding">回到 onboarding 页面</el-button>
+            <el-button @click="goToOnboarding">回到入驻页面</el-button>
             <el-button @click="goToProfile">回到个人中心</el-button>
           </div>
         </section>
@@ -449,8 +449,9 @@
       </template>
 
       <section v-else class="card">
-        <el-empty description="当前浏览器还没有 courier_token，暂时无法进入 courier 工作台。">
-          <el-button type="primary" @click="goToOnboarding">返回 onboarding 页面</el-button>
+        <el-empty description="当前浏览器还没有兼职 token，暂时无法进入兼职工作台。">
+          <el-button type="primary" @click="goToParttimeLogin">前往兼职端登录</el-button>
+          <el-button @click="goToOnboarding">返回入驻页面</el-button>
           <el-button @click="goToProfile">回到个人中心</el-button>
         </el-empty>
       </section>
@@ -652,7 +653,7 @@ const loadWorkbench = async () => {
 
 const openOrderDetail = async (orderId) => {
   if (!hasCourierToken.value) {
-    ElMessage.warning('当前没有 courier token，请先返回 onboarding 页面申请')
+    ElMessage.warning('当前没有兼职 token，请先登录兼职端或返回入驻页面申请')
     return
   }
 
@@ -688,7 +689,7 @@ const openOrderDetail = async (orderId) => {
 
 const acceptOrder = async (orderId) => {
   if (!hasCourierToken.value) {
-    ElMessage.warning('当前没有 courier token，请先返回 onboarding 页面申请')
+    ElMessage.warning('当前没有兼职 token，请先登录兼职端或返回入驻页面申请')
     return
   }
 
@@ -707,7 +708,7 @@ const acceptOrder = async (orderId) => {
 
 const pickupOrder = async () => {
   if (!hasCourierToken.value) {
-    ElMessage.warning('当前没有 courier token，请先返回 onboarding 页面申请')
+    ElMessage.warning('当前没有兼职 token，请先登录兼职端或返回入驻页面申请')
     return
   }
 
@@ -734,7 +735,7 @@ const pickupOrder = async () => {
 
 const deliverOrder = async () => {
   if (!hasCourierToken.value) {
-    ElMessage.warning('当前没有 courier token，请先返回 onboarding 页面申请')
+    ElMessage.warning('当前没有兼职 token，请先登录兼职端或返回入驻页面申请')
     return
   }
 
@@ -760,7 +761,7 @@ const deliverOrder = async () => {
 
 const reportException = async () => {
   if (!hasCourierToken.value) {
-    ElMessage.warning('当前没有 courier token，请先返回 onboarding 页面申请')
+    ElMessage.warning('当前没有兼职 token，请先登录兼职端或返回入驻页面申请')
     return
   }
 
@@ -787,6 +788,10 @@ const reportException = async () => {
 
 const goToOnboarding = () => {
   router.push('/user/campus/courier-onboarding')
+}
+
+const goToParttimeLogin = () => {
+  router.push('/parttime/login')
 }
 
 const goToProfile = () => {

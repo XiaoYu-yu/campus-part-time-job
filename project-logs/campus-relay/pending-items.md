@@ -1,20 +1,23 @@
 # 校园代送待处理事项
 
-## Step 106 最高优先级
+## Step 108 最高优先级
 
-1. Step 106 已关闭 `CampusAfterSaleExecutionList.vue` 主表和执行历史表中的列宽拖拽条：
-   - 主列表所有 `el-table-column` 已显式增加 `:resizable="false"`。
-   - 详情 drawer 内执行历史表所有 `el-table-column` 已显式增加 `:resizable="false"`。
-   - 页面读取逻辑、分页、筛选、详情 drawer 和只读语义保持不变。
-2. 当前最高优先级是 owner 本地复核高曝光后台页的交互噪音是否还有残留，而不是继续扩功能。
+1. Step 108 已完成兼职端独立登录入口：
+   - 新增 `/parttime/login`
+   - 兼容 `/courier/login`
+   - `/courier/workbench` 已改为需要 `courier_token` 的受保护路由
+   - token 失效时统一回到兼职端登录页
+2. 当前最高优先级是 owner 本地复核“用户端报名 / 兼职端日常登录”这条拆分后的真实使用路径，而不是继续抠后台样式。
 3. 建议优先复核：
-   - `/campus/after-sale-executions` 是否已无列拖拽条
-   - `/employee` 与 `/statistics` 是否仍保持统一后台壳层
-   - 其它高曝光表格页是否还有同类 Element Plus 默认交互噪音
-4. 若 owner 继续发现高曝光样式或布局问题，下一轮仍按“单页、小范围、只改展示层”修，不重开全站改版。
+   - `/parttime/login` 是否能用 `13900139001 / 123456` 直接换取 token
+   - `/user/campus/courier-onboarding` 申请 token 后是否仍可直达工作台
+   - `/courier/workbench` 无 token 时是否会正确回到兼职端登录
+4. 若这条路径验证通过，下一轮主线应切到：
+   - 兼职端最小页面群补齐
+   - 用户端 / 兼职端双 Android 壳路线评估
 5. bridge 主线继续保持 `Phase A no-op` 冻结态，不默认重开。
-6. 展示 polish 主线继续保持冻结/维护态；当前只处理 owner 明确指出的后台一致性缺口。
-7. 本轮仍不改 bridge、鉴权、接口、路由、API 调用顺序或后端业务。
+6. 展示 polish 主线继续保持冻结/维护态；当前不再默认继续做后台样式微调。
+7. 本轮仍不改 bridge、鉴权、后端 token 接口、订单状态机或 settlement 逻辑。
 3. Step 72 已完成腾讯地图最小产品化试点：
    - 只在现有 `/campus/courier-ops` 接入腾讯地图 JS SDK 最小预览，不新增页面、不改后端接口。
    - 继续复用现有 courier 位置上报数据，不引入轨迹回放、实时调度或地图写操作。

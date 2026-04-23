@@ -173,9 +173,16 @@ const router = createRouter({
       component: () => import('../views/user/CourierOnboarding.vue')
     },
     {
+      path: '/parttime/login',
+      alias: '/courier/login',
+      name: 'ParttimeLogin',
+      meta: { public: true },
+      component: () => import('../views/courier/Login.vue')
+    },
+    {
       path: '/courier/workbench',
       name: 'CourierWorkbench',
-      meta: { public: true },
+      meta: { requiresCourierAuth: true },
       component: () => import('../views/courier/CourierWorkbench.vue')
     }
   ]
@@ -184,6 +191,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
   const customerStore = useCustomerStore()
+  const hasCourierToken = Boolean(localStorage.getItem('courier_token'))
 
   if (to.meta.requiresAdminAuth && !userStore.isLoggedIn) {
     next('/login')
@@ -195,6 +203,16 @@ router.beforeEach((to, from, next) => {
     return
   }
 
+  if (to.meta.requiresCourierAuth && !hasCourierToken) {
+    next({
+      path: '/parttime/login',
+      query: {
+        redirect: to.fullPath
+      }
+    })
+    return
+  }
+
   if (to.path === '/login' && userStore.isLoggedIn) {
     next('/dashboard')
     return
@@ -202,6 +220,11 @@ router.beforeEach((to, from, next) => {
 
   if (to.path === '/user/login' && customerStore.isLoggedIn) {
     next('/user')
+    return
+  }
+
+  if ((to.path === '/parttime/login' || to.path === '/courier/login') && hasCourierToken) {
+    next('/courier/workbench')
     return
   }
 
