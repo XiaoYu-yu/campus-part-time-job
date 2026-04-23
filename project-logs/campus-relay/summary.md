@@ -115,10 +115,13 @@
 - 当前已完成：`Step 103 - admin 玻璃拟态视觉重基线与残留乱码兜底`
 - 当前已完成：`Step 104 - 浅色校园视觉回调与 courier ops 窄屏裁切修复`
 - 当前已完成：`Step 105 - admin 公共壳层一致性修复与数据看板展示重整`
+- 当前已完成：`Step 106 - 售后执行页表格列拖拽关闭修复`
 - 当前日期：`2026-04-23`
 - Step 102 补充：已把 admin 主框架、仪表盘和运营人员页从旧外卖后台视觉收敛到校园兼职运营风格；本轮只改展示层和全局主题变量，未改 bridge、接口、鉴权、路由、API 调用顺序或后端业务。已通过 `npm run build`、`npm run test -- text.spec.js` 和 `git diff --check`；本地 admin seed 登录与员工列表复核返回 `管理员 / 技术部`。
 - Step 103 补充：已把登录页改为 `校内兼职运营台`，并将 admin 外壳 / dashboard 进一步按深色玻璃拟态方向重基线；同时补齐旧 session / localStorage / in-memory 场景的 admin 文本归一化兜底，覆盖顶部用户名、dashboard 欢迎语和 Employee 页姓名 / 职位 / 部门显示。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
 - Step 104 补充：根据 owner 反馈，已把 Step 103 的深色玻璃方向回调为浅色校园兼职运营风格；登录页、admin 主框架、dashboard 和 Employee 高曝光区域均切回浅色玻璃，同时修正 Element Plus `light-*` 主题变量映射，并修复 `/campus/courier-ops` 窄屏下配送员列表表格裁切导致“审核状态”列显示一半的问题。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
+- Step 105 补充：已将 `Employee.vue` 与 `Statistics.vue` 重新接回 `MainLayout`，恢复统一侧边栏、breadcrumb 和首页返回入口；同时重整 `Statistics.vue` 展示层级，并补上 ECharts 页面卸载清理、实例复用和 `LegacyGridContainLabel` 注册，消除统计页真实 smoke 中的控制台 warning。本轮未改 bridge、接口、鉴权、路由、token 附着、后端业务或新增页面。
+- Step 106 补充：已在 `frontend/src/views/CampusAfterSaleExecutionList.vue` 的主列表和详情 drawer 执行历史表中显式关闭列宽拖拽，为所有 `el-table-column` 增加 `:resizable="false"`；本轮只消除 Element Plus 默认列拖拽交互噪音，未改接口、分页、筛选语义、drawer 行为、bridge、鉴权、路由或后端业务。
 - Step 46 补充：已新增 admin 异常 resolve 后端接口 `POST /api/campus/admin/exceptions/{id}/resolve`，只允许 `REPORTED -> RESOLVED`，重复处理返回明确业务错误；本轮未改订单主状态、settlement、latest exception 摘要、bridge、前端页面或路由。
 - Step 47 补充：本轮只做 admin 异常前端承接 go / no-go 评估，不写业务代码、不补页面；最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备，P2 售后执行历史表继续后置。
 - Step 48 补充：已新增 `/campus/exceptions` admin 异常处理页，接入异常历史列表、详情 drawer 和 `REPORTED -> RESOLVED` 最小 resolve 动作；本轮未改后端接口、bridge、鉴权、订单主状态、settlement 或 latest exception 摘要。
@@ -2304,6 +2307,7 @@
 - [Step 103 日志](step-103-admin-glass-visual-rebaseline-and-text-hardening.md)
 - [Step 104 日志](step-104-light-admin-visual-and-courier-ops-mobile-fix.md)
 - [Step 105 日志](step-105-admin-shell-consistency-and-statistics-rebaseline.md)
+- [Step 106 日志](step-106-after-sale-table-resize-handle-fix.md)
 - [全局工作记忆](global-working-memory.md)
 - [试运营脚本入口说明](../../scripts/trial-operation/README.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)

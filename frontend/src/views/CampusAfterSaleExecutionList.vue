@@ -84,52 +84,52 @@
         </div>
 
         <el-table v-loading="loading" :data="records" border empty-text="当前筛选条件下暂无售后执行记录，可调整执行状态、决策类型或纠正条件后重新查询">
-          <el-table-column prop="relayOrderId" label="订单号" min-width="200" />
-          <el-table-column prop="orderStatus" label="订单状态" width="150" />
-          <el-table-column prop="customerUserId" label="用户ID" width="100" align="center" />
-          <el-table-column prop="courierProfileId" label="配送员ID" width="110" align="center" />
-          <el-table-column label="决策类型" width="130" align="center">
+          <el-table-column prop="relayOrderId" label="订单号" min-width="200" :resizable="false" />
+          <el-table-column prop="orderStatus" label="订单状态" width="150" :resizable="false" />
+          <el-table-column prop="customerUserId" label="用户ID" width="100" align="center" :resizable="false" />
+          <el-table-column prop="courierProfileId" label="配送员ID" width="110" align="center" :resizable="false" />
+          <el-table-column label="决策类型" width="130" align="center" :resizable="false">
             <template #default="{ row }">
               <el-tag :type="decisionTagType(row.decisionType)">
                 {{ decisionTypeText(row.decisionType) }}
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="决策金额" width="130" align="right">
+          <el-table-column label="决策金额" width="130" align="right" :resizable="false">
             <template #default="{ row }">
               {{ formatAmount(row.decisionAmount) }}
             </template>
           </el-table-column>
-          <el-table-column label="执行状态" width="130" align="center">
+          <el-table-column label="执行状态" width="130" align="center" :resizable="false">
             <template #default="{ row }">
               <el-tag :type="executionTagType(row.afterSaleExecutionStatus)">
                 {{ executionStatusText(row.afterSaleExecutionStatus) }}
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="执行备注" min-width="220" show-overflow-tooltip>
+          <el-table-column label="执行备注" min-width="220" show-overflow-tooltip :resizable="false">
             <template #default="{ row }">
               {{ displayText(row.afterSaleExecutionRemark) }}
             </template>
           </el-table-column>
-          <el-table-column label="人工纠正" width="110" align="center">
+          <el-table-column label="人工纠正" width="110" align="center" :resizable="false">
             <template #default="{ row }">
               <el-tag :type="Number(row.afterSaleExecutionCorrected) === 1 ? 'warning' : 'info'">
                 {{ correctionText(row.afterSaleExecutionCorrected) }}
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="执行时间" min-width="170">
+          <el-table-column label="执行时间" min-width="170" :resizable="false">
             <template #default="{ row }">
               {{ formatDateTime(row.afterSaleExecutedAt) }}
             </template>
           </el-table-column>
-          <el-table-column label="纠正时间" min-width="170">
+          <el-table-column label="纠正时间" min-width="170" :resizable="false">
             <template #default="{ row }">
               {{ formatDateTime(row.afterSaleExecutionCorrectedAt) }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="120" fixed="right">
+          <el-table-column label="操作" width="120" fixed="right" :resizable="false">
             <template #default="{ row }">
               <el-button type="primary" link @click="openDetail(row.relayOrderId)">查看详情</el-button>
             </template>
@@ -249,44 +249,44 @@
                 size="small"
                 empty-text="当前订单暂无售后执行历史，可能尚未发生执行动作"
               >
-                <el-table-column prop="id" label="记录ID" width="90" align="center" />
-                <el-table-column label="上次状态" width="110" align="center">
+                <el-table-column prop="id" label="记录ID" width="90" align="center" :resizable="false" />
+                <el-table-column label="上次状态" width="110" align="center" :resizable="false">
                   <template #default="{ row }">
                     <el-tag :type="executionTagType(row.previousExecutionStatus)">
                       {{ executionStatusText(row.previousExecutionStatus) }}
                     </el-tag>
                   </template>
                 </el-table-column>
-                <el-table-column label="本次状态" width="110" align="center">
+                <el-table-column label="本次状态" width="110" align="center" :resizable="false">
                   <template #default="{ row }">
                     <el-tag :type="executionTagType(row.executionStatus)">
                       {{ executionStatusText(row.executionStatus) }}
                     </el-tag>
                   </template>
                 </el-table-column>
-                <el-table-column label="纠正" width="90" align="center">
+                <el-table-column label="纠正" width="90" align="center" :resizable="false">
                   <template #default="{ row }">
                     <el-tag :type="Number(row.corrected) === 1 ? 'warning' : 'info'">
                       {{ correctionText(row.corrected) }}
                     </el-tag>
                   </template>
                 </el-table-column>
-                <el-table-column label="执行备注" min-width="180" show-overflow-tooltip>
+                <el-table-column label="执行备注" min-width="180" show-overflow-tooltip :resizable="false">
                   <template #default="{ row }">
                     {{ displayText(row.executionRemark) }}
                   </template>
                 </el-table-column>
-                <el-table-column label="参考号" min-width="150" show-overflow-tooltip>
+                <el-table-column label="参考号" min-width="150" show-overflow-tooltip :resizable="false">
                   <template #default="{ row }">
                     {{ displayText(row.executionReferenceNo) }}
                   </template>
                 </el-table-column>
-                <el-table-column label="执行人" width="100" align="center">
+                <el-table-column label="执行人" width="100" align="center" :resizable="false">
                   <template #default="{ row }">
                     {{ displayText(row.executedByEmployeeId) }}
                   </template>
                 </el-table-column>
-                <el-table-column label="执行时间" min-width="160">
+                <el-table-column label="执行时间" min-width="160" :resizable="false">
                   <template #default="{ row }">
                     {{ formatDateTime(row.executedAt) }}
                   </template>

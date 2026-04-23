@@ -2,18 +2,15 @@
 
 ## Step 106 最高优先级
 
-1. Step 105 已完成 admin 公共壳层一致性修复：
-   - `frontend/src/views/Employee.vue` 已接回 `MainLayout`，恢复统一侧边栏、breadcrumb 和首页返回入口。
-   - `frontend/src/views/Statistics.vue` 已接回 `MainLayout`，并按当前浅色校园后台风格重整 hero、指标卡和图表区层级。
-   - `Statistics.vue` 已补 `onBeforeUnmount` 的 ECharts 清理，避免页面切换残留监听。
-   - `frontend/src/utils/echarts.js` 已注册 `LegacyGridContainLabel`，并通过实例复用消除统计页真实 smoke 中的控制台 warning。
-2. 当前最高优先级是 owner 本地验收 `运营人员` 和 `数据看板` 两页是否已经和其他后台页一致，而不是继续扩功能。
+1. Step 106 已关闭 `CampusAfterSaleExecutionList.vue` 主表和执行历史表中的列宽拖拽条：
+   - 主列表所有 `el-table-column` 已显式增加 `:resizable="false"`。
+   - 详情 drawer 内执行历史表所有 `el-table-column` 已显式增加 `:resizable="false"`。
+   - 页面读取逻辑、分页、筛选、详情 drawer 和只读语义保持不变。
+2. 当前最高优先级是 owner 本地复核高曝光后台页的交互噪音是否还有残留，而不是继续扩功能。
 3. 建议优先复核：
-   - `/employee`
-   - `/statistics`
-   - breadcrumb 返回首页
-   - 左侧菜单高亮和页面切换
-   - 统计页图表是否仍有视觉或交互异常
+   - `/campus/after-sale-executions` 是否已无列拖拽条
+   - `/employee` 与 `/statistics` 是否仍保持统一后台壳层
+   - 其它高曝光表格页是否还有同类 Element Plus 默认交互噪音
 4. 若 owner 继续发现高曝光样式或布局问题，下一轮仍按“单页、小范围、只改展示层”修，不重开全站改版。
 5. bridge 主线继续保持 `Phase A no-op` 冻结态，不默认重开。
 6. 展示 polish 主线继续保持冻结/维护态；当前只处理 owner 明确指出的后台一致性缺口。
