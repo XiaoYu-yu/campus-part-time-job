@@ -80,9 +80,10 @@
 
 当前状态：
 
-1. Step 101 已新增前端文本规范化工具。
-2. axios 成功响应和 admin 用户 store 会修复 UTF-8 中文被按 Latin-1 / Windows-1252 误解码后的 mojibake。
-3. 该修复只影响展示文本，不改 bridge、token 附着、接口路径、后端或业务语义。
+1. Step 101 已在 H2/test SQL 初始化中显式声明 `spring.sql.init.encoding=UTF-8`，从源头修复本地 seed 中文乱码。
+2. Step 101 已新增前端文本规范化工具。
+3. axios 成功响应和 admin 用户 store 会修复 UTF-8 中文被按 Latin-1 / Windows-1252 误解码后的 mojibake。
+4. 该修复不改 bridge、token 附着、接口路径、数据库表结构或业务语义。
 
 复核重点：
 

@@ -23,10 +23,12 @@
    - 已复核服务器 compose 仍为 `Up`，本机 HTTP 返回 `200`，最新 backup manifest 存在。
    - 结论是当前内测阶段暂不强制进入 HTTPS / 域名 / 正式反向代理准备。
 8. Step 101 已完成 admin 文本乱码修复与前端可读性加固：
+   - 已在 `application-test.properties` 显式声明 `spring.sql.init.encoding=UTF-8`，从源头修复 H2 seed 中文乱码。
    - 新增前端文本规范化工具，修复接口数据或 `localStorage` 中的 UTF-8 / Windows-1252 mojibake。
    - 已接入 axios 成功响应和 admin 用户 store。
    - 已覆盖 `管理员`、`技术部` 等截图中出现的典型乱码样例。
-   - 已通过 `npm run test -- text.spec.js` 与 `npm run build`。
+   - 已通过 `.\mvnw.cmd -DskipTests compile`、`npm run test -- text.spec.js` 与 `npm run build`。
+   - 本地 H2 重启后，admin 登录接口和员工列表接口已真实返回 `管理员 / 技术部`。
 9. 当前最高优先级不再是“运维入口是否足够”，而是“内测运行观察与 HTTPS / 域名触发条件跟踪”。如果近期先修展示问题，则优先复核 admin 仪表盘、顶部用户信息和员工管理页中文显示。
 10. Step 102 建议：
    - 如果近期仍是 owner 自测，先按 runbook 做日常内测，不继续扩功能。

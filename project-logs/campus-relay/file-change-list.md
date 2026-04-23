@@ -1526,6 +1526,7 @@
 
 ## Step 101 - admin 文本乱码修复与前端可读性加固
 
+- [backend/src/main/resources/application-test.properties](../../backend/src/main/resources/application-test.properties)
 - [frontend/src/utils/text.js](../../frontend/src/utils/text.js)
 - [frontend/src/utils/text.spec.js](../../frontend/src/utils/text.spec.js)
 - [frontend/src/utils/request.js](../../frontend/src/utils/request.js)
@@ -1536,4 +1537,4 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 - [project-logs/campus-relay/step-101-admin-text-mojibake-fix-and-frontend-readability.md](step-101-admin-text-mojibake-fix-and-frontend-readability.md)
 
-本轮是 admin 文本乱码修复与前端可读性加固轮：新增前端文本规范化工具，修复接口数据或 `localStorage` 中 UTF-8 中文被错误解码为 Latin-1 / Windows-1252 后的 mojibake；成功响应和 admin 用户 store 已接入该规范化逻辑，并新增单测覆盖典型乱码样例。本轮没有改 bridge、接口路径、token 附着、后端、路由或业务语义。
+本轮是 admin 文本乱码修复与前端可读性加固轮：先在 `test profile + H2` SQL 初始化中显式声明 UTF-8，从源头修复本地 seed 数据乱码；再新增前端文本规范化工具，兜底修复接口数据或 `localStorage` 中 UTF-8 中文被错误解码为 Latin-1 / Windows-1252 后的 mojibake；成功响应和 admin 用户 store 已接入该规范化逻辑，并新增单测覆盖典型乱码样例。本轮没有改 bridge、接口路径、token 附着、路由或业务语义。
