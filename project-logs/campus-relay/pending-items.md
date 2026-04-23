@@ -1,20 +1,22 @@
 # 校园代送待处理事项
 
-## Step 105 最高优先级
+## Step 106 最高优先级
 
-1. Step 104 已完成 admin 浅色视觉回调：
-   - 登录页、主框架、dashboard、employee 高曝光区域已切回浅色玻璃风格。
-   - Element Plus `light-*` 变量已修正为真正浅色档，避免 tag / switch / select 在浅色主题下反常发深。
-   - `/campus/courier-ops` 左侧配送员表格已增加横向滚动和最小宽度，窄屏下“审核状态”列不再只显示一半。
-2. 当前最高优先级是 owner 本地复核浅色基线是否符合“校园兼职项目”定位，而不是继续追加业务开发。
+1. Step 105 已完成 admin 公共壳层一致性修复：
+   - `frontend/src/views/Employee.vue` 已接回 `MainLayout`，恢复统一侧边栏、breadcrumb 和首页返回入口。
+   - `frontend/src/views/Statistics.vue` 已接回 `MainLayout`，并按当前浅色校园后台风格重整 hero、指标卡和图表区层级。
+   - `Statistics.vue` 已补 `onBeforeUnmount` 的 ECharts 清理，避免页面切换残留监听。
+   - `frontend/src/utils/echarts.js` 已注册 `LegacyGridContainLabel`，并通过实例复用消除统计页真实 smoke 中的控制台 warning。
+2. 当前最高优先级是 owner 本地验收 `运营人员` 和 `数据看板` 两页是否已经和其他后台页一致，而不是继续扩功能。
 3. 建议优先复核：
-   - `/login`
-   - `/dashboard`
    - `/employee`
-   - `/campus/courier-ops`
-4. 若本地复核通过，下一轮再决定是否继续按同一浅色基线收敛其它高曝光 admin 页面；若仍有问题，只按单页修复，不重开全站重做。
+   - `/statistics`
+   - breadcrumb 返回首页
+   - 左侧菜单高亮和页面切换
+   - 统计页图表是否仍有视觉或交互异常
+4. 若 owner 继续发现高曝光样式或布局问题，下一轮仍按“单页、小范围、只改展示层”修，不重开全站改版。
 5. bridge 主线继续保持 `Phase A no-op` 冻结态，不默认重开。
-6. 展示 polish 主线继续保持冻结/维护态；当前只处理 owner 明确指出的高曝光样式问题，不机械扩散到所有页面。
+6. 展示 polish 主线继续保持冻结/维护态；当前只处理 owner 明确指出的后台一致性缺口。
 7. 本轮仍不改 bridge、鉴权、接口、路由、API 调用顺序或后端业务。
 3. Step 72 已完成腾讯地图最小产品化试点：
    - 只在现有 `/campus/courier-ops` 接入腾讯地图 JS SDK 最小预览，不新增页面、不改后端接口。

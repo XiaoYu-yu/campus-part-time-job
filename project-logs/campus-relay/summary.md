@@ -114,6 +114,7 @@
 - 当前已完成：`Step 102 - 校园兼职视觉体系与 admin 外壳刷新`
 - 当前已完成：`Step 103 - admin 玻璃拟态视觉重基线与残留乱码兜底`
 - 当前已完成：`Step 104 - 浅色校园视觉回调与 courier ops 窄屏裁切修复`
+- 当前已完成：`Step 105 - admin 公共壳层一致性修复与数据看板展示重整`
 - 当前日期：`2026-04-23`
 - Step 102 补充：已把 admin 主框架、仪表盘和运营人员页从旧外卖后台视觉收敛到校园兼职运营风格；本轮只改展示层和全局主题变量，未改 bridge、接口、鉴权、路由、API 调用顺序或后端业务。已通过 `npm run build`、`npm run test -- text.spec.js` 和 `git diff --check`；本地 admin seed 登录与员工列表复核返回 `管理员 / 技术部`。
 - Step 103 补充：已把登录页改为 `校内兼职运营台`，并将 admin 外壳 / dashboard 进一步按深色玻璃拟态方向重基线；同时补齐旧 session / localStorage / in-memory 场景的 admin 文本归一化兜底，覆盖顶部用户名、dashboard 欢迎语和 Employee 页姓名 / 职位 / 部门显示。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
@@ -2302,6 +2303,7 @@
 - [Step 102 日志](step-102-campus-visual-system-admin-shell-refresh.md)
 - [Step 103 日志](step-103-admin-glass-visual-rebaseline-and-text-hardening.md)
 - [Step 104 日志](step-104-light-admin-visual-and-courier-ops-mobile-fix.md)
+- [Step 105 日志](step-105-admin-shell-consistency-and-statistics-rebaseline.md)
 - [全局工作记忆](global-working-memory.md)
 - [试运营脚本入口说明](../../scripts/trial-operation/README.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)

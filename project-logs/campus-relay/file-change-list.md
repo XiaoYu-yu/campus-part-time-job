@@ -1585,3 +1585,16 @@
 - [project-logs/campus-relay/step-104-light-admin-visual-and-courier-ops-mobile-fix.md](step-104-light-admin-visual-and-courier-ops-mobile-fix.md)
 
 本轮是浅色校园视觉回调与 courier ops 窄屏裁切修复轮：将 Step 103 的深色玻璃方向回调为浅色校园玻璃风格，并修正 Element Plus `light-*` 变量映射；同时为 `/campus/courier-ops` 左侧配送员列表增加横向滚动容器和最小宽度，解决窄屏下“审核状态”列被裁切的问题。本轮没有改 bridge、接口、鉴权、路由、token 附着、后端业务或新增页面。
+
+## Step 105 - admin 公共壳层一致性修复与数据看板展示重整
+
+- [frontend/src/views/Employee.vue](../../frontend/src/views/Employee.vue)
+- [frontend/src/views/Statistics.vue](../../frontend/src/views/Statistics.vue)
+- [frontend/src/utils/echarts.js](../../frontend/src/utils/echarts.js)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/step-105-admin-shell-consistency-and-statistics-rebaseline.md](step-105-admin-shell-consistency-and-statistics-rebaseline.md)
+
+本轮是 admin 公共壳层一致性修复与数据看板展示重整轮：将 `Employee.vue` 与 `Statistics.vue` 统一接回 `MainLayout`，修复进入页面后丢失后台菜单、breadcrumb 和首页返回入口的问题；同时把 `Statistics.vue` 重整为当前浅色校园后台视觉层级，并补上 ECharts 页面卸载清理、实例复用和 `LegacyGridContainLabel` 注册，消除统计页真实 smoke 中暴露的控制台 warning。验证已覆盖 frontend build、frontend test、frontend lint、backend compile、`git diff --check` 和 Playwright 页面 smoke。本轮没有改 bridge、接口、鉴权、路由、token 附着、后端业务或新增页面。

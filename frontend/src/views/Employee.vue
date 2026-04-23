@@ -3,156 +3,158 @@
   @description 提供后台运营人员信息的增删改查功能，包含搜索、分页、状态管理等功能
 -->
 <template>
-  <div class="employee-management">
-    <section class="employee-hero">
-      <div>
-        <span class="eyebrow">Campus Staff</span>
-        <h2>运营人员</h2>
-        <p>复用 employee 账号体系，管理校内兼职平台后台运营与审核人员。</p>
-      </div>
-      <div class="hero-notes">
-        <span>后台账号</span>
-        <strong>employee</strong>
-      </div>
-    </section>
-
-    <div class="content">
-      <!-- 搜索区 -->
-      <div class="toolbar-card">
-        <div class="toolbar-copy">
-          <span class="section-kicker">筛选与维护</span>
-          <h3>按姓名或手机号定位运营人员</h3>
-          <p>这里只维护后台 employee 账号，不改变旧订单、地址或外卖兼容模块。</p>
+  <MainLayout>
+    <div class="employee-management">
+      <section class="employee-hero">
+        <div>
+          <span class="eyebrow">Campus Staff</span>
+          <h2>运营人员</h2>
+          <p>复用 employee 账号体系，管理校内兼职平台后台运营与审核人员。</p>
         </div>
-        <div class="search-section">
-          <el-input
-            v-model="searchQuery"
-            class="staff-search"
-            placeholder="输入姓名或手机号"
-            clearable
-            @keyup.enter="handleSearch"
-          >
-            <template #append>
-              <el-button @click="handleSearch">
-                <el-icon><Search /></el-icon>
-                搜索
-              </el-button>
-            </template>
-          </el-input>
-          <el-button type="primary" class="add-button" @click="handleAddEmployee">
-            <el-icon><Plus /></el-icon>
-            新增运营人员
-          </el-button>
+        <div class="hero-notes">
+          <span>后台账号</span>
+          <strong>employee</strong>
         </div>
-      </div>
+      </section>
 
-      <!-- 表格区 -->
-      <div class="table-card">
-        <div class="table-heading">
-          <div>
-            <span class="section-kicker">人员列表</span>
-            <h3>后台运营账号</h3>
+      <div class="content">
+        <!-- 搜索区 -->
+        <div class="toolbar-card">
+          <div class="toolbar-copy">
+            <span class="section-kicker">筛选与维护</span>
+            <h3>按姓名或手机号定位运营人员</h3>
+            <p>这里只维护后台 employee 账号，不改变旧订单、地址或外卖兼容模块。</p>
           </div>
-          <el-tag type="info" effect="plain">共 {{ total }} 人</el-tag>
+          <div class="search-section">
+            <el-input
+              v-model="searchQuery"
+              class="staff-search"
+              placeholder="输入姓名或手机号"
+              clearable
+              @keyup.enter="handleSearch"
+            >
+              <template #append>
+                <el-button @click="handleSearch">
+                  <el-icon><Search /></el-icon>
+                  搜索
+                </el-button>
+              </template>
+            </el-input>
+            <el-button type="primary" class="add-button" @click="handleAddEmployee">
+              <el-icon><Plus /></el-icon>
+              新增运营人员
+            </el-button>
+          </div>
         </div>
 
-        <el-table
-          v-loading="loading"
-          :data="employeeList"
-          class="campus-table"
-          style="width: 100%;"
-          empty-text="暂无运营人员，可先新增一个后台账号"
-        >
-          <el-table-column prop="id" label="员工ID" width="90" />
-          <el-table-column prop="name" label="姓名" min-width="130" show-overflow-tooltip />
-          <el-table-column prop="phone" label="手机号" min-width="150" />
-          <el-table-column prop="position" label="职位" min-width="130" show-overflow-tooltip />
-          <el-table-column prop="department" label="部门" min-width="140" show-overflow-tooltip />
-          <el-table-column prop="entryDate" label="入职日期" width="150" />
-          <el-table-column label="状态" width="150">
-            <template #default="scope">
-              <div class="status-cell">
-                <el-switch
-                  v-model="scope.row.status"
-                  :active-value="1"
-                  :inactive-value="0"
-                  @change="handleStatusChange(scope.row.id, scope.row.status)"
-                />
-                <span :class="['status-text', scope.row.status === 1 ? 'is-active' : 'is-disabled']">
-                  {{ scope.row.status === 1 ? '启用' : '禁用' }}
-                </span>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" width="190" fixed="right">
-            <template #default="scope">
-              <div class="action-cell">
-                <el-button size="small" @click="handleEditEmployee(scope.row)">
-                  <el-icon><Edit /></el-icon>
-                  编辑
-                </el-button>
-                <el-button size="small" type="danger" plain @click="handleDeleteEmployee(scope.row.id)">
-                  <el-icon><Delete /></el-icon>
-                  删除
-                </el-button>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
+        <!-- 表格区 -->
+        <div class="table-card">
+          <div class="table-heading">
+            <div>
+              <span class="section-kicker">人员列表</span>
+              <h3>后台运营账号</h3>
+            </div>
+            <el-tag type="info" effect="plain">共 {{ total }} 人</el-tag>
+          </div>
 
-      <!-- 分页区 -->
-      <div class="pagination-section">
-        <el-pagination
-          v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :page-sizes="[10, 20, 50, 100]"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+          <el-table
+            v-loading="loading"
+            :data="employeeList"
+            class="campus-table"
+            style="width: 100%;"
+            empty-text="暂无运营人员，可先新增一个后台账号"
+          >
+            <el-table-column prop="id" label="员工ID" width="90" />
+            <el-table-column prop="name" label="姓名" min-width="130" show-overflow-tooltip />
+            <el-table-column prop="phone" label="手机号" min-width="150" />
+            <el-table-column prop="position" label="职位" min-width="130" show-overflow-tooltip />
+            <el-table-column prop="department" label="部门" min-width="140" show-overflow-tooltip />
+            <el-table-column prop="entryDate" label="入职日期" width="150" />
+            <el-table-column label="状态" width="150">
+              <template #default="scope">
+                <div class="status-cell">
+                  <el-switch
+                    v-model="scope.row.status"
+                    :active-value="1"
+                    :inactive-value="0"
+                    @change="handleStatusChange(scope.row.id, scope.row.status)"
+                  />
+                  <span :class="['status-text', scope.row.status === 1 ? 'is-active' : 'is-disabled']">
+                    {{ scope.row.status === 1 ? '启用' : '禁用' }}
+                  </span>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="190" fixed="right">
+              <template #default="scope">
+                <div class="action-cell">
+                  <el-button size="small" @click="handleEditEmployee(scope.row)">
+                    <el-icon><Edit /></el-icon>
+                    编辑
+                  </el-button>
+                  <el-button size="small" type="danger" plain @click="handleDeleteEmployee(scope.row.id)">
+                    <el-icon><Delete /></el-icon>
+                    删除
+                  </el-button>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+
+        <!-- 分页区 -->
+        <div class="pagination-section">
+          <el-pagination
+            v-model:current-page="currentPage"
+            v-model:page-size="pageSize"
+            :page-sizes="[10, 20, 50, 100]"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
+        </div>
+
+        <!-- 新增/编辑员工弹窗 -->
+        <el-dialog
+          v-model="dialogVisible"
+          :title="dialogTitle"
+          width="500px"
+          class="employee-dialog"
+        >
+          <el-form :model="form" label-width="80px" :rules="formRules" ref="formRef">
+            <el-form-item label="姓名" prop="name">
+              <el-input v-model="form.name" placeholder="请输入姓名" />
+            </el-form-item>
+            <el-form-item label="手机号" prop="phone">
+              <el-input v-model="form.phone" placeholder="请输入手机号" />
+            </el-form-item>
+            <el-form-item label="职位" prop="position">
+              <el-input v-model="form.position" placeholder="请输入职位" />
+            </el-form-item>
+            <el-form-item label="部门" prop="department">
+              <el-input v-model="form.department" placeholder="请输入部门" />
+            </el-form-item>
+            <el-form-item label="入职日期" prop="entryDate">
+              <el-date-picker
+                v-model="form.entryDate"
+                type="date"
+                placeholder="选择入职日期"
+                style="width: 100%;"
+                value-format="YYYY-MM-DD"
+              />
+            </el-form-item>
+          </el-form>
+          <template #footer>
+            <span class="dialog-footer">
+              <el-button @click="dialogVisible = false">取消</el-button>
+              <el-button type="primary" @click="handleSave" :loading="saveLoading">保存</el-button>
+            </span>
+          </template>
+        </el-dialog>
       </div>
-      
-      <!-- 新增/编辑员工弹窗 -->
-      <el-dialog
-        v-model="dialogVisible"
-        :title="dialogTitle"
-        width="500px"
-        class="employee-dialog"
-      >
-        <el-form :model="form" label-width="80px" :rules="formRules" ref="formRef">
-          <el-form-item label="姓名" prop="name">
-            <el-input v-model="form.name" placeholder="请输入姓名" />
-          </el-form-item>
-          <el-form-item label="手机号" prop="phone">
-            <el-input v-model="form.phone" placeholder="请输入手机号" />
-          </el-form-item>
-          <el-form-item label="职位" prop="position">
-            <el-input v-model="form.position" placeholder="请输入职位" />
-          </el-form-item>
-          <el-form-item label="部门" prop="department">
-            <el-input v-model="form.department" placeholder="请输入部门" />
-          </el-form-item>
-          <el-form-item label="入职日期" prop="entryDate">
-            <el-date-picker
-              v-model="form.entryDate"
-              type="date"
-              placeholder="选择入职日期"
-              style="width: 100%;"
-              value-format="YYYY-MM-DD"
-            />
-          </el-form-item>
-        </el-form>
-        <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="handleSave" :loading="saveLoading">保存</el-button>
-          </span>
-        </template>
-      </el-dialog>
     </div>
-  </div>
+  </MainLayout>
 </template>
 
 <script setup>
@@ -163,6 +165,7 @@
 import { ref, onMounted } from 'vue'
 import { Search, Plus, Edit, Delete } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import MainLayout from '../layout/MainLayout.vue'
 import { normalizeTextFields } from '../utils/text'
 import {
   getEmployeeList,
