@@ -9,7 +9,13 @@ import { normalizeTextFields } from '../utils/text'
 
 const parseStoredUserInfo = () => {
   try {
-    return normalizeTextFields(JSON.parse(localStorage.getItem('admin_user_info') || '{"name":"","avatar":"","role":""}'))
+    const rawValue = localStorage.getItem('admin_user_info') || '{"name":"","avatar":"","role":""}'
+    const normalizedValue = normalizeTextFields(JSON.parse(rawValue))
+    const normalizedRawValue = JSON.stringify(normalizedValue)
+    if (rawValue !== normalizedRawValue) {
+      localStorage.setItem('admin_user_info', normalizedRawValue)
+    }
+    return normalizedValue
   } catch {
     return { name: '', avatar: '', role: '' }
   }
@@ -50,7 +56,7 @@ export const useUserStore = defineStore('user', {
   }),
   getters: {
     currentUserInfo(state) {
-      return state.userInfo.name ? state.userInfo : state.storedUserInfo
+      return normalizeTextFields(state.userInfo.name ? state.userInfo : state.storedUserInfo)
     }
   },
   

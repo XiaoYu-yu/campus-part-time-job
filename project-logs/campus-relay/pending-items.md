@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 103 最高优先级
+## Step 104 最高优先级
 
 1. Step 96 已完成单机服务器首轮内测部署与 smoke 验证，当前项目已达到“单机服务器可启动、可访问、可进行内测型试运营 smoke”的状态。
 2. Step 97 已完成全局工作记忆日志建立，后续上下文恢复优先读取：
@@ -36,12 +36,18 @@
    - 已将 `Employee.vue` 调整为运营人员页，并优化空态、表格、状态和筛选区展示。
    - 本轮只改展示层，未改 bridge、鉴权、接口、路由、API 调用顺序或后端业务。
    - 已通过 `npm run build`、`npm run test -- text.spec.js` 和 `git diff --check`。
-10. 当前最高优先级是 owner 本地复核新版 admin 视觉是否满足“校园兼职平台”方向；如方向确认，再评估登录页和旧模块兼容页是否需要小范围视觉统一。
-11. Step 103 建议：
-   - 先由 owner 在本地 `http://127.0.0.1:5173` 复核 `/dashboard`、`/employee` 和 admin 主框架。
-   - 若仍有明显旧外卖风格，下一轮只选一个高曝光页面继续视觉统一。
-   - 若 admin 外壳方向已确认，再恢复内测运行观察与 HTTPS / 域名触发条件跟踪。
-   - 继续不改 bridge、鉴权、接口、路由或后端业务。
+10. Step 103 已完成 admin 玻璃拟态视觉重基线与残留乱码兜底：
+   - 登录页已从旧餐饮后台切换为 `校内兼职运营台 / Campus Part-time Console`。
+   - admin 主框架和 dashboard 已进一步向用户选定的深色玻璃拟态参考靠拢。
+   - 已复核后端 login / employee list 原始响应为正常中文。
+   - 已对 `admin_user_info` localStorage、in-memory user store、MainLayout、Dashboard、Employee 列表和编辑弹窗增加文本归一化兜底。
+   - 已通过 `npm run test -- text.spec.js`、`npm run build` 和 `git diff --check`。
+11. 当前最高优先级是 owner 本地复核新版登录页、dashboard、employee 是否已经解决“旧外卖观感”和残留乱码问题。
+12. Step 104 建议：
+   - 先由 owner 在本地 `http://127.0.0.1:5173/login` 使用 `13800138000 / 123456` 登录复核。
+   - 优先查看 `/dashboard` 顶部欢迎语、顶部用户信息和 `/employee` 姓名 / 职位 / 部门是否正常中文。
+   - 若方向确认，再决定是否继续小范围统一旧模块兼容页；若仍不满意，先收敛视觉参考与信息架构，不要继续零散改组件。
+   - 继续不改 bridge、鉴权、接口、路由、API 调用顺序或后端业务。
 3. Step 72 已完成腾讯地图最小产品化试点：
    - 只在现有 `/campus/courier-ops` 接入腾讯地图 JS SDK 最小预览，不新增页面、不改后端接口。
    - 继续复用现有 courier 位置上报数据，不引入轨迹回放、实时调度或地图写操作。

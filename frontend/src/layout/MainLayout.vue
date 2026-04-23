@@ -128,8 +128,8 @@
                   {{ userInitial }}
                 </el-avatar>
                 <div class="user-details">
-                  <span class="user-name">{{ userStore.currentUserInfo?.name || '管理员' }}</span>
-                  <span class="user-role">{{ userStore.currentUserInfo?.role || '校园运营' }}</span>
+                  <span class="user-name">{{ currentUserName }}</span>
+                  <span class="user-role">{{ currentUserRole }}</span>
                 </div>
                 <el-icon class="dropdown-icon"><ArrowDown /></el-icon>
               </div>
@@ -165,6 +165,7 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/user'
+import { normalizeDisplayText } from '../utils/text'
 import { 
   HomeFilled, User, Grid, Mug, Sugar, ShoppingCart, DataAnalysis, Position, Tickets, Document, LocationInformation, Coin,
   DArrowLeft, DArrowRight, House, FullScreen, Bell, ArrowDown, Setting, SwitchButton
@@ -217,8 +218,11 @@ const breadcrumb = computed(() => {
   return pathMap[path] || ''
 })
 
+const currentUserName = computed(() => normalizeDisplayText(userStore.currentUserInfo?.name || '管理员'))
+const currentUserRole = computed(() => normalizeDisplayText(userStore.currentUserInfo?.role || '校园运营'))
+
 const userInitial = computed(() => {
-  const name = userStore.currentUserInfo?.name || '管理员'
+  const name = currentUserName.value || '管理员'
   return name.charAt(0)
 })
 
@@ -246,21 +250,24 @@ const logout = () => {
   height: 100vh;
   overflow: hidden;
   background:
-    radial-gradient(circle at 18% 12%, rgba(45, 212, 191, 0.22), transparent 30%),
-    radial-gradient(circle at 78% 6%, rgba(56, 189, 248, 0.16), transparent 28%),
-    linear-gradient(135deg, #f7fffb 0%, #eef7ff 45%, #f8fafc 100%);
-  color: #0f172a;
+    radial-gradient(circle at 16% 12%, rgba(45, 212, 191, 0.2), transparent 28%),
+    radial-gradient(circle at 82% 8%, rgba(190, 242, 100, 0.13), transparent 30%),
+    linear-gradient(135deg, #0c1117 0%, #151d24 48%, #0f2024 100%);
+  color: #e5eef7;
 }
 
 .sidebar {
-  width: 268px;
+  width: 250px;
+  margin: 16px 0 16px 16px;
   background:
-    linear-gradient(180deg, rgba(7, 42, 48, 0.96) 0%, rgba(12, 74, 80, 0.94) 54%, rgba(15, 118, 110, 0.92) 100%);
-  border-right: 1px solid rgba(15, 118, 110, 0.2);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 28px;
   display: flex;
   flex-direction: column;
   transition: width 0.3s ease;
-  box-shadow: 18px 0 45px rgba(15, 23, 42, 0.14);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(24px);
 
   &.is-collapsed {
     width: 64px;
@@ -272,7 +279,7 @@ const logout = () => {
   align-items: center;
   gap: 12px;
   padding: 22px 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .logo-icon {
@@ -281,8 +288,8 @@ const logout = () => {
   flex-shrink: 0;
   padding: 7px;
   border-radius: 16px;
-  background: linear-gradient(135deg, #d9f99d 0%, #2dd4bf 52%, #0f766e 100%);
-  box-shadow: 0 16px 35px rgba(45, 212, 191, 0.26);
+  background: linear-gradient(135deg, #e0f2fe 0%, #67e8f9 48%, #a7f3d0 100%);
+  box-shadow: 0 16px 35px rgba(45, 212, 191, 0.18);
 }
 
 .logo-text {
@@ -331,10 +338,10 @@ const logout = () => {
   }
 
   .el-menu-item {
-    height: 42px;
-    line-height: 42px;
+    height: 40px;
+    line-height: 40px;
     margin: 4px 0;
-    border-radius: 14px;
+    border-radius: 12px;
     font-weight: 650;
     color: rgba(241, 245, 249, 0.82);
     transition: all 0.2s ease;
@@ -351,16 +358,16 @@ const logout = () => {
     }
 
     &.is-active {
-      background: linear-gradient(135deg, #ccfbf1 0%, #a7f3d0 48%, #d9f99d 100%);
-      color: #064e3b;
-      box-shadow: 0 16px 34px rgba(15, 118, 110, 0.28);
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22), 0 14px 34px rgba(0, 0, 0, 0.18);
 
       &::before {
         display: none;
       }
 
       .el-icon {
-        color: #0f766e;
+        color: #9bffb8;
       }
     }
   }
@@ -395,20 +402,25 @@ const logout = () => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: transparent;
+  background:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 52px 52px;
   min-width: 0;
 }
 
 .top-nav {
-  height: 70px;
-  background-color: rgba(255, 255, 255, 0.76);
-  backdrop-filter: blur(18px);
-  border-bottom: 1px solid rgba(15, 118, 110, 0.12);
+  height: 68px;
+  margin: 16px 16px 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 20px 54px rgba(0, 0, 0, 0.18);
 }
 
 .nav-left {
@@ -425,7 +437,7 @@ const logout = () => {
 
         &.is-link {
           &:hover {
-            color: #ff6b35;
+            color: #8debff;
           }
         }
 
@@ -436,7 +448,7 @@ const logout = () => {
 
       &:last-child {
         .el-breadcrumb__inner {
-          color: #18181b;
+          color: #f8fafc;
           font-weight: 600;
         }
       }
@@ -455,7 +467,7 @@ const logout = () => {
   align-items: center;
   gap: 8px;
   padding-right: 16px;
-  border-right: 1px solid rgba(15, 118, 110, 0.12);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .icon-btn {
@@ -465,13 +477,13 @@ const logout = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #64748b;
+  color: rgba(226, 232, 240, 0.74);
   transition: all 0.2s ease;
   position: relative;
 
   &:hover {
-    background-color: rgba(15, 159, 143, 0.1);
-    color: #0f766e;
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #9bffb8;
   }
 
   .el-icon {
@@ -502,10 +514,11 @@ const logout = () => {
     border-radius: 12px;
     transition: all 0.2s ease;
     border: 1px solid rgba(15, 118, 110, 0.12);
-    background: rgba(255, 255, 255, 0.72);
+    background: rgba(255, 255, 255, 0.12);
+    color: #f8fafc;
 
     &:hover {
-      background-color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.18);
     }
   }
 
@@ -524,12 +537,12 @@ const logout = () => {
   .user-name {
     font-size: 14px;
     font-weight: 600;
-    color: #0f172a;
+    color: #f8fafc;
   }
 
   .user-role {
     font-size: 12px;
-    color: #0f766e;
+    color: #a7f3d0;
   }
 
   .dropdown-icon {
@@ -541,7 +554,7 @@ const logout = () => {
 
 .content {
   flex: 1;
-  padding: 28px;
+  padding: 24px 16px 16px;
   overflow-y: auto;
   overflow-x: hidden;
 }

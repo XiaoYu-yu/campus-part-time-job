@@ -163,6 +163,7 @@
 import { ref, onMounted } from 'vue'
 import { Search, Plus, Edit, Delete } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { normalizeTextFields } from '../utils/text'
 import {
   getEmployeeList,
   addEmployee,
@@ -268,8 +269,8 @@ const loadEmployeeList = async () => {
       }
     }
     
-    const res = await getEmployeeList(params)
-    employeeList.value = res.records || []
+    const res = normalizeTextFields(await getEmployeeList(params))
+    employeeList.value = normalizeTextFields(res.records || [])
     total.value = res.total || 0
   } catch (error) {
     console.error('加载员工列表失败:', error)
@@ -315,14 +316,15 @@ const handleAddEmployee = () => {
  * @param {string} row.entryDate - 入职日期
  */
 const handleEditEmployee = (row) => {
+  const normalizedRow = normalizeTextFields(row)
   dialogTitle.value = '编辑员工'
   form.value = { 
-    id: row.id,
-    name: row.name,
-    phone: row.phone,
-    position: row.position,
-    department: row.department,
-    entryDate: row.entryDate
+    id: normalizedRow.id,
+    name: normalizedRow.name,
+    phone: normalizedRow.phone,
+    position: normalizedRow.position,
+    department: normalizedRow.department,
+    entryDate: normalizedRow.entryDate
   }
   dialogVisible.value = true
 }

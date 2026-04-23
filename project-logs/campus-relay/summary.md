@@ -112,8 +112,10 @@
 - 当前已完成：`Step 100 - 单机服务器运维交接与正式入口 go/no-go`
 - 当前已完成：`Step 101 - admin 文本乱码修复与前端可读性加固`
 - 当前已完成：`Step 102 - 校园兼职视觉体系与 admin 外壳刷新`
+- 当前已完成：`Step 103 - admin 玻璃拟态视觉重基线与残留乱码兜底`
 - 当前日期：`2026-04-23`
 - Step 102 补充：已把 admin 主框架、仪表盘和运营人员页从旧外卖后台视觉收敛到校园兼职运营风格；本轮只改展示层和全局主题变量，未改 bridge、接口、鉴权、路由、API 调用顺序或后端业务。已通过 `npm run build`、`npm run test -- text.spec.js` 和 `git diff --check`；本地 admin seed 登录与员工列表复核返回 `管理员 / 技术部`。
+- Step 103 补充：已把登录页改为 `校内兼职运营台`，并将 admin 外壳 / dashboard 进一步按深色玻璃拟态方向重基线；同时补齐旧 session / localStorage / in-memory 场景的 admin 文本归一化兜底，覆盖顶部用户名、dashboard 欢迎语和 Employee 页姓名 / 职位 / 部门显示。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
 - Step 46 补充：已新增 admin 异常 resolve 后端接口 `POST /api/campus/admin/exceptions/{id}/resolve`，只允许 `REPORTED -> RESOLVED`，重复处理返回明确业务错误；本轮未改订单主状态、settlement、latest exception 摘要、bridge、前端页面或路由。
 - Step 47 补充：本轮只做 admin 异常前端承接 go / no-go 评估，不写业务代码、不补页面；最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备，P2 售后执行历史表继续后置。
 - Step 48 补充：已新增 `/campus/exceptions` admin 异常处理页，接入异常历史列表、详情 drawer 和 `REPORTED -> RESOLVED` 最小 resolve 动作；本轮未改后端接口、bridge、鉴权、订单主状态、settlement 或 latest exception 摘要。
@@ -2296,6 +2298,7 @@
 - [Step 100 日志](step-100-internal-trial-ops-runbook-and-entry-go-no-go.md)
 - [Step 101 日志](step-101-admin-text-mojibake-fix-and-frontend-readability.md)
 - [Step 102 日志](step-102-campus-visual-system-admin-shell-refresh.md)
+- [Step 103 日志](step-103-admin-glass-visual-rebaseline-and-text-hardening.md)
 - [全局工作记忆](global-working-memory.md)
 - [试运营脚本入口说明](../../scripts/trial-operation/README.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)

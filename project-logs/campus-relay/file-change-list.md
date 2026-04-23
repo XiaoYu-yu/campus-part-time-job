@@ -1552,3 +1552,20 @@
 - [project-logs/campus-relay/step-102-campus-visual-system-admin-shell-refresh.md](step-102-campus-visual-system-admin-shell-refresh.md)
 
 本轮是校园兼职视觉体系与 admin 外壳刷新轮：将全局主题色、admin 主框架、仪表盘和运营人员页从旧外卖后台视觉调整为校园兼职运营风格；旧外卖模块仍保留，但在菜单中明确作为兼容模块呈现。本轮只改展示层，没有改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
+
+## Step 103 - admin 玻璃拟态视觉重基线与残留乱码兜底
+
+- [frontend/src/views/Login.vue](../../frontend/src/views/Login.vue)
+- [frontend/src/layout/MainLayout.vue](../../frontend/src/layout/MainLayout.vue)
+- [frontend/src/views/Dashboard.vue](../../frontend/src/views/Dashboard.vue)
+- [frontend/src/views/Employee.vue](../../frontend/src/views/Employee.vue)
+- [frontend/src/stores/user.js](../../frontend/src/stores/user.js)
+- [frontend/src/styles/variables.scss](../../frontend/src/styles/variables.scss)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-102-campus-visual-system-admin-shell-refresh.md](step-102-campus-visual-system-admin-shell-refresh.md)
+- [project-logs/campus-relay/step-103-admin-glass-visual-rebaseline-and-text-hardening.md](step-103-admin-glass-visual-rebaseline-and-text-hardening.md)
+
+本轮是 admin 玻璃拟态视觉重基线与残留乱码兜底轮：登录页、admin 主框架和 dashboard 继续按用户选择的深色玻璃拟态参考方向调整；同时对 admin localStorage / in-memory 用户信息和 employee 列表高曝光字段增加文本归一化兜底。后端接口原始响应已复核为正常中文。本轮没有改 bridge、接口、鉴权、路由、后端业务、数据库或新增页面。
