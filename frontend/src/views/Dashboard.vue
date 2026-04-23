@@ -218,7 +218,7 @@ const initTrendChart = () => {
         data: ['模拟流水', '订单数'],
         top: 0,
         textStyle: {
-          color: 'rgba(226, 232, 240, 0.72)'
+          color: '#475569'
         }
       },
       grid: {
@@ -233,10 +233,10 @@ const initTrendChart = () => {
           boundaryGap: false,
           data: orderTrend.value.dates,
           axisLine: {
-            lineStyle: { color: 'rgba(226, 232, 240, 0.2)' }
+            lineStyle: { color: 'rgba(15, 23, 42, 0.14)' }
           },
           axisLabel: {
-            color: 'rgba(226, 232, 240, 0.58)'
+            color: '#64748b'
           }
         }
       ],
@@ -247,10 +247,10 @@ const initTrendChart = () => {
           position: 'left',
           axisLabel: {
             formatter: '¥{value}',
-            color: 'rgba(226, 232, 240, 0.58)'
+            color: '#64748b'
           },
           splitLine: {
-            lineStyle: { color: 'rgba(226, 232, 240, 0.08)' }
+            lineStyle: { color: 'rgba(15, 23, 42, 0.08)' }
           }
         },
         {
@@ -259,7 +259,7 @@ const initTrendChart = () => {
           position: 'right',
           axisLabel: {
             formatter: '{value}单',
-            color: 'rgba(226, 232, 240, 0.58)'
+            color: '#64748b'
           }
         }
       ],
@@ -314,17 +314,17 @@ const initPopularChart = () => {
         type: 'value',
         axisLabel: {
           formatter: '{value}份',
-          color: 'rgba(226, 232, 240, 0.58)'
+          color: '#64748b'
         },
         splitLine: {
-          lineStyle: { color: 'rgba(226, 232, 240, 0.08)' }
+          lineStyle: { color: 'rgba(15, 23, 42, 0.08)' }
         }
       },
       yAxis: {
         type: 'category',
         data: popularDishes.value.map(dish => dish.name),
         axisLabel: {
-          color: 'rgba(226, 232, 240, 0.68)'
+          color: '#475569'
         }
       },
       series: [
@@ -402,9 +402,9 @@ watch([orderTrend, popularDishes], () => {
 .stat-card,
 .chart-card,
 .recent-orders {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(15, 118, 110, 0.1);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.08);
   backdrop-filter: blur(22px);
 }
 
@@ -423,8 +423,8 @@ watch([orderTrend, popularDishes], () => {
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(circle at 78% 20%, rgba(190, 242, 100, 0.22), transparent 28%),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03));
+      radial-gradient(circle at 78% 20%, rgba(190, 242, 100, 0.34), transparent 28%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(236, 253, 245, 0.76));
   }
 
   &::after {
@@ -435,7 +435,7 @@ watch([orderTrend, popularDishes], () => {
     width: 260px;
     height: 260px;
     border-radius: 50%;
-    border: 42px solid rgba(255, 255, 255, 0.06);
+    border: 42px solid rgba(15, 118, 110, 0.06);
   }
 
   .eyebrow {
@@ -443,7 +443,7 @@ watch([orderTrend, popularDishes], () => {
     z-index: 1;
     display: inline-flex;
     margin-bottom: 12px;
-    color: #bef264;
+    color: #0f766e;
     font-size: 12px;
     font-weight: 900;
     letter-spacing: 0.18em;
@@ -454,7 +454,7 @@ watch([orderTrend, popularDishes], () => {
     position: relative;
     z-index: 1;
     margin: 0 0 12px 0;
-    color: #ffffff;
+    color: #0f172a;
     font-size: 34px;
     font-weight: 950;
     letter-spacing: -0.05em;
@@ -465,7 +465,7 @@ watch([orderTrend, popularDishes], () => {
     z-index: 1;
     max-width: 620px;
     margin: 0;
-    color: rgba(226, 232, 240, 0.78);
+    color: #475569;
     font-size: 15px;
     line-height: 1.8;
   }
@@ -476,16 +476,16 @@ watch([orderTrend, popularDishes], () => {
     align-self: flex-start;
     min-width: 162px;
     padding: 16px 18px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(15, 118, 110, 0.12);
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.12);
-    color: #ffffff;
+    background: rgba(255, 255, 255, 0.72);
+    color: #0f172a;
     backdrop-filter: blur(14px);
 
     span {
       display: block;
       margin-bottom: 4px;
-      color: rgba(204, 251, 241, 0.8);
+      color: #0f766e;
       font-size: 12px;
     }
 
@@ -510,7 +510,7 @@ watch([orderTrend, popularDishes], () => {
 
     &:hover {
       transform: translateY(-4px);
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.95);
     }
 
     .stat-icon {
@@ -520,10 +520,10 @@ watch([orderTrend, popularDishes], () => {
       width: 48px;
       height: 48px;
       border-radius: 16px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(15, 159, 143, 0.08);
       color: var(--accent);
       font-size: 20px;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+      box-shadow: inset 0 0 0 1px rgba(15, 118, 110, 0.1);
     }
 
     .stat-content {
@@ -531,14 +531,14 @@ watch([orderTrend, popularDishes], () => {
 
       .stat-title {
         margin: 0 0 6px 0;
-        color: rgba(226, 232, 240, 0.62);
+        color: #64748b;
         font-size: 13px;
         font-weight: 700;
       }
 
       .stat-value {
         margin: 0;
-        color: #ffffff;
+        color: #0f172a;
         font-size: 26px;
         font-weight: 900;
         letter-spacing: -0.03em;
@@ -582,24 +582,24 @@ watch([orderTrend, popularDishes], () => {
     }
 
     :deep(.el-table__header-wrapper th) {
-      background: rgba(255, 255, 255, 0.12);
-      color: rgba(248, 250, 252, 0.88);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(240, 253, 250, 0.86);
+      color: #0f172a;
+      border-bottom: 1px solid rgba(15, 118, 110, 0.1);
       font-weight: 800;
     }
 
     :deep(.el-table__body-wrapper tr) {
-      background: rgba(255, 255, 255, 0.04);
-      color: rgba(226, 232, 240, 0.82);
+      background: rgba(255, 255, 255, 0.64);
+      color: #334155;
       transition: background 0.2s ease;
 
       &:hover > td.el-table__cell {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(15, 159, 143, 0.06);
       }
     }
 
     :deep(.el-table__cell) {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(15, 118, 110, 0.08);
     }
   }
 }
@@ -612,13 +612,13 @@ watch([orderTrend, popularDishes], () => {
   margin-bottom: 18px;
 
   span {
-    color: #f8fafc;
+    color: #0f172a;
     font-size: 18px;
     font-weight: 900;
   }
 
   small {
-    color: #9bffb8;
+    color: #0f766e;
     font-size: 12px;
     font-weight: 800;
   }

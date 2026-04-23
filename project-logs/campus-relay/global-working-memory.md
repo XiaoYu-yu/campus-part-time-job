@@ -85,12 +85,16 @@
 3. axios 成功响应和 admin 用户 store 会修复 UTF-8 中文被按 Latin-1 / Windows-1252 误解码后的 mojibake。
 4. 该修复不改 bridge、token 附着、接口路径、数据库表结构或业务语义。
 5. Step 103 已进一步修复旧 session / localStorage / in-memory 场景：`admin_user_info` 读取时会归一化并写回，`currentUserInfo` getter、MainLayout、Dashboard 和 Employee 高曝光字段都有显示兜底。
+6. Step 104 已将 admin 深色玻璃方向回调为浅色校园玻璃方向。
+7. Step 104 已修正 Element Plus `light-*` 主题变量映射错误，避免浅色主题下 tag / switch / select 出现反常深色表现。
+8. Step 104 已修复 `/campus/courier-ops` 窄屏表格裁切，左侧配送员列表在小窗口下允许横向滚动，不再截断“审核状态”等列。
 
 复核重点：
 
 1. admin 仪表盘欢迎语。
 2. 顶部用户姓名。
 3. 员工管理页姓名、职位、部门。
+4. `/campus/courier-ops` 左侧配送员列表在窄屏下是否完整显示。
 
 ### 3. 媒体与交付线
 
@@ -162,8 +166,8 @@
 7. dump 已恢复到临时 MySQL 容器并验证关键样本订单可回读
 8. 单机服务器运维 runbook 已建立，启动、停机、日志、更新、备份、restore drill、smoke 与正式入口 go/no-go 已集中到一处
 9. admin 文本乱码已从 H2/test seed UTF-8 初始化根因修复，并在前端保留历史 mojibake 兜底规范化
-10. admin 主框架、仪表盘和运营人员页已完成第一轮校园兼职视觉刷新，旧外卖模块仍保留为兼容模块
-11. Step 103 已将登录页改为校内兼职运营台，并把 admin 外壳 / dashboard 进一步向深色玻璃拟态方向重基线
+10. admin 主框架、仪表盘、登录页和运营人员页已完成一轮校园兼职视觉刷新，旧外卖模块仍保留为兼容模块
+11. Step 104 已将登录页、admin 外壳、dashboard 和 employee 高曝光区域统一回浅色玻璃风格
 
 当前已确认的部署层修正：
 
@@ -179,13 +183,13 @@
 
 默认下一主线：
 
-1. 先由 owner 本地复核新版登录页、dashboard、employee 是否已经满足“校园兼职平台”定位并解决残留乱码
+1. 先由 owner 本地复核新版浅色登录页、dashboard、employee、courier ops 是否已经满足“校园兼职平台”定位并解决残留乱码与窄屏裁切
 2. 若视觉方向确认，再恢复内测运行观察与 HTTPS / 域名触发条件跟踪
 3. 如仍发现旧外卖视觉残留，下一轮只选一个高曝光页面继续小范围统一，不做全站重写
 
 优先级建议：
 
-1. 如果近期仍是 owner 自测，优先看 `/login`、`/dashboard`、`/employee` 和 admin 主框架是否已脱离旧外卖观感
+1. 如果近期仍是 owner 自测，优先看 `/login`、`/dashboard`、`/employee`、`/campus/courier-ops` 和 admin 主框架是否已脱离旧外卖观感
 2. 如果准备邀请外部用户长期访问，再进入 HTTPS / 域名 / 正式反向代理准备
 3. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断
 4. 若无新触发条件，不重开 bridge 或第五个 admin 页；视觉继续采用高曝光页面小步收敛

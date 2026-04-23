@@ -448,10 +448,10 @@ onMounted(() => {
     border-radius: 28px;
     background:
       radial-gradient(circle at 86% 18%, rgba(132, 204, 22, 0.28), transparent 28%),
-      radial-gradient(circle at 16% 20%, rgba(14, 165, 233, 0.2), transparent 32%),
-      linear-gradient(135deg, #0f172a 0%, #115e59 54%, #0e7490 100%);
-    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
-    color: #f8fafc;
+      radial-gradient(circle at 16% 20%, rgba(14, 165, 233, 0.16), transparent 32%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(236, 253, 245, 0.86) 54%, rgba(224, 242, 254, 0.86) 100%);
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.09);
+    color: #0f172a;
 
     &::after {
       content: '';
@@ -461,7 +461,7 @@ onMounted(() => {
       width: 270px;
       height: 270px;
       border-radius: 50%;
-      border: 38px solid rgba(255, 255, 255, 0.08);
+      border: 38px solid rgba(15, 118, 110, 0.07);
     }
 
     h2 {
@@ -476,7 +476,7 @@ onMounted(() => {
       position: relative;
       max-width: 560px;
       margin: 0;
-      color: rgba(241, 245, 249, 0.82);
+      color: #475569;
       font-size: 15px;
       line-height: 1.8;
     }
@@ -487,7 +487,7 @@ onMounted(() => {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: #67e8f9;
+    color: #0f766e;
     font-size: 12px;
     font-weight: 900;
     letter-spacing: 0.14em;
@@ -501,18 +501,18 @@ onMounted(() => {
     gap: 4px;
     min-width: 142px;
     padding: 18px 20px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(15, 118, 110, 0.12);
     border-radius: 22px;
-    background: rgba(15, 23, 42, 0.22);
+    background: rgba(255, 255, 255, 0.72);
     backdrop-filter: blur(14px);
 
     span {
-      color: rgba(241, 245, 249, 0.72);
+      color: #64748b;
       font-size: 12px;
     }
 
     strong {
-      color: #f8fafc;
+      color: #0f172a;
       font-size: 20px;
       letter-spacing: 0.02em;
     }

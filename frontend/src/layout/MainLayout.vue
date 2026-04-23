@@ -250,23 +250,23 @@ const logout = () => {
   height: 100vh;
   overflow: hidden;
   background:
-    radial-gradient(circle at 16% 12%, rgba(45, 212, 191, 0.2), transparent 28%),
-    radial-gradient(circle at 82% 8%, rgba(190, 242, 100, 0.13), transparent 30%),
-    linear-gradient(135deg, #0c1117 0%, #151d24 48%, #0f2024 100%);
-  color: #e5eef7;
+    radial-gradient(circle at 14% 12%, rgba(20, 184, 166, 0.14), transparent 30%),
+    radial-gradient(circle at 82% 6%, rgba(56, 189, 248, 0.14), transparent 32%),
+    linear-gradient(135deg, #f8fffb 0%, #eef7ff 50%, #f8fafc 100%);
+  color: #0f172a;
 }
 
 .sidebar {
   width: 250px;
   margin: 16px 0 16px 16px;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.62) 100%);
+  border: 1px solid rgba(15, 118, 110, 0.12);
   border-radius: 28px;
   display: flex;
   flex-direction: column;
   transition: width 0.3s ease;
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.1);
   backdrop-filter: blur(24px);
 
   &.is-collapsed {
@@ -279,7 +279,7 @@ const logout = () => {
   align-items: center;
   gap: 12px;
   padding: 22px 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(15, 118, 110, 0.1);
 }
 
 .logo-icon {
@@ -296,7 +296,7 @@ const logout = () => {
   h1 {
     font-size: 17px;
     font-weight: 800;
-    color: #f8fafc;
+    color: #0f172a;
     margin: 0;
     line-height: 1.2;
     letter-spacing: 0.04em;
@@ -304,7 +304,7 @@ const logout = () => {
 
   p {
     font-size: 11px;
-    color: rgba(204, 251, 241, 0.78);
+    color: #0f766e;
     margin: 0;
     line-height: 1.2;
     text-transform: uppercase;
@@ -324,13 +324,13 @@ const logout = () => {
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(204, 251, 241, 0.34);
+    background: rgba(15, 118, 110, 0.24);
     border-radius: 2px;
   }
 
   .menu-section-label {
     padding: 16px 12px 8px;
-    color: rgba(204, 251, 241, 0.56);
+    color: #64748b;
     font-size: 11px;
     font-weight: 800;
     letter-spacing: 0.16em;
@@ -343,31 +343,31 @@ const logout = () => {
     margin: 4px 0;
     border-radius: 12px;
     font-weight: 650;
-    color: rgba(241, 245, 249, 0.82);
+    color: #334155;
     transition: all 0.2s ease;
     letter-spacing: 0.01em;
 
     .el-icon {
       font-size: 18px;
-      color: rgba(153, 246, 228, 0.82);
+      color: #0f766e;
     }
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
+      background-color: rgba(15, 159, 143, 0.08);
+      color: #0f766e;
     }
 
     &.is-active {
-      background: rgba(255, 255, 255, 0.2);
+      background: linear-gradient(135deg, #0f766e 0%, #0ea5e9 100%);
       color: #ffffff;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22), 0 14px 34px rgba(0, 0, 0, 0.18);
+      box-shadow: 0 14px 34px rgba(15, 118, 110, 0.22);
 
       &::before {
         display: none;
       }
 
       .el-icon {
-        color: #9bffb8;
+        color: #ffffff;
       }
     }
   }
@@ -375,7 +375,7 @@ const logout = () => {
 
 .sidebar-footer {
   padding: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(15, 118, 110, 0.1);
 }
 
 .collapse-btn {
@@ -385,12 +385,12 @@ const logout = () => {
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  color: rgba(204, 251, 241, 0.76);
+  color: #0f766e;
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.12);
-    color: #ffffff;
+    background-color: rgba(15, 159, 143, 0.08);
+    color: #0f172a;
   }
 
   .el-icon {
@@ -403,8 +403,8 @@ const logout = () => {
   display: flex;
   flex-direction: column;
   background:
-    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    linear-gradient(rgba(15, 118, 110, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 118, 110, 0.035) 1px, transparent 1px);
   background-size: 52px 52px;
   min-width: 0;
 }
@@ -412,15 +412,15 @@ const logout = () => {
 .top-nav {
   height: 68px;
   margin: 16px 16px 0;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(22px);
-  border: 1px solid rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(15, 118, 110, 0.12);
   border-radius: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  box-shadow: 0 20px 54px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 20px 54px rgba(15, 23, 42, 0.08);
 }
 
 .nav-left {
@@ -437,7 +437,7 @@ const logout = () => {
 
         &.is-link {
           &:hover {
-            color: #8debff;
+            color: #0f766e;
           }
         }
 
@@ -448,7 +448,7 @@ const logout = () => {
 
       &:last-child {
         .el-breadcrumb__inner {
-          color: #f8fafc;
+          color: #0f172a;
           font-weight: 600;
         }
       }
@@ -467,7 +467,7 @@ const logout = () => {
   align-items: center;
   gap: 8px;
   padding-right: 16px;
-  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: 1px solid rgba(15, 118, 110, 0.12);
 }
 
 .icon-btn {
@@ -477,13 +477,13 @@ const logout = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(226, 232, 240, 0.74);
+  color: #475569;
   transition: all 0.2s ease;
   position: relative;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.12);
-    color: #9bffb8;
+    background-color: rgba(15, 159, 143, 0.08);
+    color: #0f766e;
   }
 
   .el-icon {
@@ -514,11 +514,11 @@ const logout = () => {
     border-radius: 12px;
     transition: all 0.2s ease;
     border: 1px solid rgba(15, 118, 110, 0.12);
-    background: rgba(255, 255, 255, 0.12);
-    color: #f8fafc;
+    background: rgba(255, 255, 255, 0.82);
+    color: #0f172a;
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.18);
+      background-color: rgba(240, 253, 250, 0.94);
     }
   }
 
@@ -537,12 +537,12 @@ const logout = () => {
   .user-name {
     font-size: 14px;
     font-weight: 600;
-    color: #f8fafc;
+    color: #0f172a;
   }
 
   .user-role {
     font-size: 12px;
-    color: #a7f3d0;
+    color: #0f766e;
   }
 
   .dropdown-icon {

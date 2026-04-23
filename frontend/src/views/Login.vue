@@ -223,9 +223,9 @@ const handleLogin = async () => {
   height: auto;
   overflow: hidden;
   background:
-    radial-gradient(circle at 18% 18%, rgba(141, 235, 255, 0.26), transparent 28%),
-    radial-gradient(circle at 78% 12%, rgba(155, 255, 184, 0.18), transparent 30%),
-    linear-gradient(135deg, #0c1117 0%, #151d24 46%, #0e2023 100%);
+    radial-gradient(circle at 18% 18%, rgba(20, 184, 166, 0.16), transparent 28%),
+    radial-gradient(circle at 78% 12%, rgba(56, 189, 248, 0.14), transparent 30%),
+    linear-gradient(135deg, #f8fffb 0%, #edf7ff 48%, #f8fafc 100%);
 }
 
 .login-bg-decoration {
@@ -261,8 +261,8 @@ const handleLogin = async () => {
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+      linear-gradient(rgba(15, 118, 110, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15, 118, 110, 0.045) 1px, transparent 1px);
     background-size: 54px 54px;
     mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.78), transparent 82%);
   }
@@ -275,10 +275,10 @@ const handleLogin = async () => {
   width: min(1080px, calc(100vw - 48px));
   min-height: 620px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(15, 118, 110, 0.12);
   border-radius: 30px;
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.35);
+  background: rgba(255, 255, 255, 0.66);
+  box-shadow: 0 35px 90px rgba(15, 23, 42, 0.14);
   backdrop-filter: blur(26px);
 }
 
@@ -303,8 +303,8 @@ const handleLogin = async () => {
     height: 58px;
     padding: 10px;
     border-radius: 20px;
-    background: rgba(15, 23, 42, 0.88);
-    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.22);
+    background: linear-gradient(135deg, #0f766e 0%, #0ea5e9 100%);
+    box-shadow: 0 18px 40px rgba(15, 118, 110, 0.22);
   }
 
   .brand-title {
@@ -433,9 +433,8 @@ const handleLogin = async () => {
   width: 470px;
   overflow: hidden;
   background:
-    linear-gradient(160deg, rgba(15, 23, 42, 0.42), rgba(15, 118, 110, 0.28)),
-    radial-gradient(circle at 72% 24%, rgba(190, 242, 100, 0.28), transparent 28%),
-    linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(17, 94, 89, 0.82));
+    radial-gradient(circle at 72% 24%, rgba(190, 242, 100, 0.34), transparent 28%),
+    linear-gradient(135deg, rgba(240, 253, 250, 0.94), rgba(224, 242, 254, 0.9));
 
   &::before {
     content: '';
@@ -468,16 +467,16 @@ const handleLogin = async () => {
 .preview-card {
   padding: 22px;
   margin-bottom: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(15, 118, 110, 0.12);
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.72);
+  color: #0f172a;
   backdrop-filter: blur(16px);
 
   .preview-label {
     display: inline-flex;
     margin-bottom: 12px;
-    color: #bef264;
+    color: #0f766e;
     font-size: 12px;
     font-weight: 900;
     letter-spacing: 0.12em;
@@ -486,7 +485,7 @@ const handleLogin = async () => {
 
   h3 {
     margin: 0 0 10px;
-    color: #ffffff;
+    color: #0f172a;
     font-size: 24px;
     font-weight: 950;
     letter-spacing: -0.04em;
@@ -494,7 +493,7 @@ const handleLogin = async () => {
 
   p {
     margin: 0;
-    color: rgba(241, 245, 249, 0.78);
+    color: #475569;
     line-height: 1.7;
   }
 }
@@ -506,14 +505,14 @@ const handleLogin = async () => {
     gap: 14px;
     padding: 16px;
     margin-bottom: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(15, 118, 110, 0.1);
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.68);
     backdrop-filter: blur(10px);
     transition: all 0.3s ease;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.92);
       transform: translateX(6px);
     }
 
@@ -524,21 +523,21 @@ const handleLogin = async () => {
       width: 48px;
       height: 48px;
       border-radius: 14px;
-      background: rgba(255, 255, 255, 0.18);
-      color: #ffffff;
+      background: rgba(15, 159, 143, 0.1);
+      color: #0f766e;
     }
 
     .feature-text {
       h4 {
         margin: 0 0 4px 0;
-        color: #ffffff;
+        color: #0f172a;
         font-size: 16px;
         font-weight: 750;
       }
 
       p {
         margin: 0;
-        color: rgba(255, 255, 255, 0.76);
+        color: #64748b;
         font-size: 13px;
       }
     }
@@ -549,14 +548,14 @@ const handleLogin = async () => {
   display: flex;
   gap: 28px;
   padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgba(15, 118, 110, 0.12);
 
   .stat-item {
     display: flex;
     flex-direction: column;
 
     .stat-value {
-      color: #ffffff;
+      color: #0f172a;
       font-size: 30px;
       font-weight: 900;
       line-height: 1.2;
@@ -564,7 +563,7 @@ const handleLogin = async () => {
 
     .stat-label {
       margin-top: 4px;
-      color: rgba(255, 255, 255, 0.76);
+      color: #64748b;
       font-size: 13px;
     }
   }

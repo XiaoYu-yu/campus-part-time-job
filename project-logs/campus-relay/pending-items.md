@@ -1,53 +1,21 @@
 # 校园代送待处理事项
 
-## Step 104 最高优先级
+## Step 105 最高优先级
 
-1. Step 96 已完成单机服务器首轮内测部署与 smoke 验证，当前项目已达到“单机服务器可启动、可访问、可进行内测型试运营 smoke”的状态。
-2. Step 97 已完成全局工作记忆日志建立，后续上下文恢复优先读取：
-   - `project-logs/campus-relay/global-working-memory.md`
-   - `project-logs/campus-relay/pending-items.md`
-   - 当前最新 step 日志
-3. Step 98 已完成单机服务器内测运维加固 / 最小回滚与备份准备：
-   - 已新增 `deploy/internal-trial/backup-stack.sh`。
-   - 已补齐 `docs/deployment/backup-and-rollback.md` 与 compose 部署文档中的备份/回滚入口。
-   - 已在真实服务器执行一轮备份，成功产出 MySQL dump、uploads 归档、`.env` 备份和 manifest。
-4. Step 99 已完成单机服务器最小恢复演练 / 运维交付加固：
-   - 已新增 `deploy/internal-trial/restore-drill.sh`。
-   - 已在真实服务器跑通非破坏性 restore drill。
-   - 已验证 dump 可恢复、关键样本订单可回读、uploads 归档可解压，且现有 compose 栈不受影响。
-5. bridge 主线继续保持 `Phase A no-op` 冻结态，下一轮仍不默认寻找 bridge 收口候选。
-6. 展示 polish 线继续保持冻结/维护态，下一轮仍不默认继续 polish 页面。
-7. Step 100 已完成单机服务器运维交接与正式入口 go/no-go：
-   - 已新增 `docs/deployment/internal-trial-ops-runbook.md`。
-   - 已把启动、停机、日志、更新、备份、restore drill、smoke、回滚触发和 HTTPS / 域名 go/no-go 收敛到 runbook。
-   - 已复核服务器 compose 仍为 `Up`，本机 HTTP 返回 `200`，最新 backup manifest 存在。
-   - 结论是当前内测阶段暂不强制进入 HTTPS / 域名 / 正式反向代理准备。
-8. Step 101 已完成 admin 文本乱码修复与前端可读性加固：
-   - 已在 `application-test.properties` 显式声明 `spring.sql.init.encoding=UTF-8`，从源头修复 H2 seed 中文乱码。
-   - 新增前端文本规范化工具，修复接口数据或 `localStorage` 中的 UTF-8 / Windows-1252 mojibake。
-   - 已接入 axios 成功响应和 admin 用户 store。
-   - 已覆盖 `管理员`、`技术部` 等截图中出现的典型乱码样例。
-   - 已通过 `.\mvnw.cmd -DskipTests compile`、`npm run test -- text.spec.js` 与 `npm run build`。
-   - 本地 H2 重启后，admin 登录接口和员工列表接口已真实返回 `管理员 / 技术部`。
-9. Step 102 已完成校园兼职视觉体系与 admin 外壳刷新：
-   - 已刷新全局主题变量，主色从旧外卖橙红切到校园 teal / deep-blue / lime。
-   - 已将 `MainLayout.vue` 品牌、菜单、顶部栏和旧模块命名调整为校园兼职运营口径。
-   - 已将 `Dashboard.vue` 调整为校内兼职平台运营总览。
-   - 已将 `Employee.vue` 调整为运营人员页，并优化空态、表格、状态和筛选区展示。
-   - 本轮只改展示层，未改 bridge、鉴权、接口、路由、API 调用顺序或后端业务。
-   - 已通过 `npm run build`、`npm run test -- text.spec.js` 和 `git diff --check`。
-10. Step 103 已完成 admin 玻璃拟态视觉重基线与残留乱码兜底：
-   - 登录页已从旧餐饮后台切换为 `校内兼职运营台 / Campus Part-time Console`。
-   - admin 主框架和 dashboard 已进一步向用户选定的深色玻璃拟态参考靠拢。
-   - 已复核后端 login / employee list 原始响应为正常中文。
-   - 已对 `admin_user_info` localStorage、in-memory user store、MainLayout、Dashboard、Employee 列表和编辑弹窗增加文本归一化兜底。
-   - 已通过 `npm run test -- text.spec.js`、`npm run build` 和 `git diff --check`。
-11. 当前最高优先级是 owner 本地复核新版登录页、dashboard、employee 是否已经解决“旧外卖观感”和残留乱码问题。
-12. Step 104 建议：
-   - 先由 owner 在本地 `http://127.0.0.1:5173/login` 使用 `13800138000 / 123456` 登录复核。
-   - 优先查看 `/dashboard` 顶部欢迎语、顶部用户信息和 `/employee` 姓名 / 职位 / 部门是否正常中文。
-   - 若方向确认，再决定是否继续小范围统一旧模块兼容页；若仍不满意，先收敛视觉参考与信息架构，不要继续零散改组件。
-   - 继续不改 bridge、鉴权、接口、路由、API 调用顺序或后端业务。
+1. Step 104 已完成 admin 浅色视觉回调：
+   - 登录页、主框架、dashboard、employee 高曝光区域已切回浅色玻璃风格。
+   - Element Plus `light-*` 变量已修正为真正浅色档，避免 tag / switch / select 在浅色主题下反常发深。
+   - `/campus/courier-ops` 左侧配送员表格已增加横向滚动和最小宽度，窄屏下“审核状态”列不再只显示一半。
+2. 当前最高优先级是 owner 本地复核浅色基线是否符合“校园兼职项目”定位，而不是继续追加业务开发。
+3. 建议优先复核：
+   - `/login`
+   - `/dashboard`
+   - `/employee`
+   - `/campus/courier-ops`
+4. 若本地复核通过，下一轮再决定是否继续按同一浅色基线收敛其它高曝光 admin 页面；若仍有问题，只按单页修复，不重开全站重做。
+5. bridge 主线继续保持 `Phase A no-op` 冻结态，不默认重开。
+6. 展示 polish 主线继续保持冻结/维护态；当前只处理 owner 明确指出的高曝光样式问题，不机械扩散到所有页面。
+7. 本轮仍不改 bridge、鉴权、接口、路由、API 调用顺序或后端业务。
 3. Step 72 已完成腾讯地图最小产品化试点：
    - 只在现有 `/campus/courier-ops` 接入腾讯地图 JS SDK 最小预览，不新增页面、不改后端接口。
    - 继续复用现有 courier 位置上报数据，不引入轨迹回放、实时调度或地图写操作。

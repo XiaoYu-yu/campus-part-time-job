@@ -51,31 +51,34 @@
             </div>
           </el-form>
 
-          <el-table
-            ref="courierTableRef"
-            v-loading="courierLoading"
-            :data="couriers"
-            border
-            highlight-current-row
-            empty-text="当前筛选条件下暂无配送员数据"
-            @current-change="handleCourierSelect"
-          >
-            <el-table-column prop="id" label="ID" width="88" align="center" />
-            <el-table-column prop="realName" label="姓名" min-width="110" />
-            <el-table-column prop="phone" label="手机号" min-width="130" />
-            <el-table-column label="审核状态" width="110" align="center">
-              <template #default="{ row }">
-                <el-tag :type="reviewTagType(row.reviewStatus)">{{ row.reviewStatus || 'PENDING' }}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="启用" width="90" align="center">
-              <template #default="{ row }">
-                <el-tag :type="Number(row.enabled) === 1 ? 'success' : 'info'">
-                  {{ Number(row.enabled) === 1 ? '是' : '否' }}
-                </el-tag>
-              </template>
-            </el-table-column>
-          </el-table>
+          <div class="table-scroll">
+            <el-table
+              ref="courierTableRef"
+              v-loading="courierLoading"
+              :data="couriers"
+              border
+              highlight-current-row
+              empty-text="当前筛选条件下暂无配送员数据"
+              class="courier-table"
+              @current-change="handleCourierSelect"
+            >
+              <el-table-column prop="id" label="ID" width="88" align="center" />
+              <el-table-column prop="realName" label="姓名" min-width="110" />
+              <el-table-column prop="phone" label="手机号" min-width="130" />
+              <el-table-column label="审核状态" width="120" align="center">
+                <template #default="{ row }">
+                  <el-tag :type="reviewTagType(row.reviewStatus)">{{ row.reviewStatus || 'PENDING' }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="启用" width="96" align="center">
+                <template #default="{ row }">
+                  <el-tag :type="Number(row.enabled) === 1 ? 'success' : 'info'">
+                    {{ Number(row.enabled) === 1 ? '是' : '否' }}
+                  </el-tag>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
 
           <div class="pagination-wrapper">
             <el-pagination
@@ -549,11 +552,13 @@ onMounted(() => loadCourierList())
 
 .page-header,
 .panel-card {
-  background: #fff;
-  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(15, 118, 110, 0.08);
+  border-radius: 18px;
   padding: 20px;
   margin-bottom: 16px;
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(18px);
 }
 
 .page-header {
@@ -614,6 +619,48 @@ onMounted(() => loadCourierList())
   display: flex;
   gap: 8px;
   margin-bottom: 8px;
+}
+
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 4px;
+  border-radius: 14px;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(15, 118, 110, 0.22);
+    border-radius: 999px;
+  }
+}
+
+.courier-table {
+  min-width: 620px;
+  border-radius: 14px;
+
+  :deep(.el-table__inner-wrapper::before) {
+    display: none;
+  }
+
+  :deep(.el-table__header-wrapper th) {
+    background: rgba(240, 253, 250, 0.92);
+    color: #0f172a;
+    font-weight: 850;
+  }
+
+  :deep(.el-table__body tr.current-row > td.el-table__cell) {
+    background: rgba(15, 118, 110, 0.9);
+    color: #f8fafc;
+  }
+
+  :deep(.el-table__body tr.current-row .el-tag) {
+    border-color: transparent;
+    background: rgba(255, 255, 255, 0.92);
+  }
 }
 
 .selected-summary {
@@ -684,6 +731,27 @@ onMounted(() => loadCourierList())
 @media (max-width: 1280px) {
   .ops-layout {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .campus-admin-page {
+    padding: 12px;
+  }
+
+  .page-header,
+  .panel-card {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .filter-actions {
+    flex-wrap: wrap;
+  }
+
+  .pagination-wrapper {
+    justify-content: flex-start;
+    overflow-x: auto;
   }
 }
 </style>

@@ -1569,3 +1569,19 @@
 - [project-logs/campus-relay/step-103-admin-glass-visual-rebaseline-and-text-hardening.md](step-103-admin-glass-visual-rebaseline-and-text-hardening.md)
 
 本轮是 admin 玻璃拟态视觉重基线与残留乱码兜底轮：登录页、admin 主框架和 dashboard 继续按用户选择的深色玻璃拟态参考方向调整；同时对 admin localStorage / in-memory 用户信息和 employee 列表高曝光字段增加文本归一化兜底。后端接口原始响应已复核为正常中文。本轮没有改 bridge、接口、鉴权、路由、后端业务、数据库或新增页面。
+
+## Step 104 - 浅色校园视觉回调与 courier ops 窄屏裁切修复
+
+- [frontend/src/layout/MainLayout.vue](../../frontend/src/layout/MainLayout.vue)
+- [frontend/src/views/Dashboard.vue](../../frontend/src/views/Dashboard.vue)
+- [frontend/src/views/Login.vue](../../frontend/src/views/Login.vue)
+- [frontend/src/views/Employee.vue](../../frontend/src/views/Employee.vue)
+- [frontend/src/views/CampusCourierOpsView.vue](../../frontend/src/views/CampusCourierOpsView.vue)
+- [frontend/src/styles/element-plus.scss](../../frontend/src/styles/element-plus.scss)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-104-light-admin-visual-and-courier-ops-mobile-fix.md](step-104-light-admin-visual-and-courier-ops-mobile-fix.md)
+
+本轮是浅色校园视觉回调与 courier ops 窄屏裁切修复轮：将 Step 103 的深色玻璃方向回调为浅色校园玻璃风格，并修正 Element Plus `light-*` 变量映射；同时为 `/campus/courier-ops` 左侧配送员列表增加横向滚动容器和最小宽度，解决窄屏下“审核状态”列被裁切的问题。本轮没有改 bridge、接口、鉴权、路由、token 附着、后端业务或新增页面。
