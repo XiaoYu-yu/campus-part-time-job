@@ -155,6 +155,7 @@
 - [backend/src/test/java/com/cangqiong/takeaway/CampusSkeletonIntegrationTest.java](../../backend/src/test/java/com/cangqiong/takeaway/CampusSkeletonIntegrationTest.java)
 - [project-logs/campus-relay/summary.md](summary.md)
 - [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 - [project-logs/campus-relay/step-03d-pickup-deliver-confirm.md](step-03d-pickup-deliver-confirm.md)
 
@@ -1522,3 +1523,17 @@
 - [project-logs/campus-relay/step-100-internal-trial-ops-runbook-and-entry-go-no-go.md](step-100-internal-trial-ops-runbook-and-entry-go-no-go.md)
 
 本轮是单机服务器运维交接与正式入口 go/no-go 轮：新增 `internal-trial-ops-runbook.md`，把启动、停机、日志、更新、备份、restore drill、smoke、回滚触发和 HTTPS / 域名 go/no-go 统一到一份可交接文档；本轮复核服务器 compose 仍为 `Up`、HTTP 返回 `200`、最新 backup manifest 存在。结论是当前内测阶段暂不强制进入 HTTPS / 域名 / 正式反向代理准备。本轮没有改业务代码、bridge、接口、路由、鉴权或前端页面。
+
+## Step 101 - admin 文本乱码修复与前端可读性加固
+
+- [frontend/src/utils/text.js](../../frontend/src/utils/text.js)
+- [frontend/src/utils/text.spec.js](../../frontend/src/utils/text.spec.js)
+- [frontend/src/utils/request.js](../../frontend/src/utils/request.js)
+- [frontend/src/stores/user.js](../../frontend/src/stores/user.js)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-101-admin-text-mojibake-fix-and-frontend-readability.md](step-101-admin-text-mojibake-fix-and-frontend-readability.md)
+
+本轮是 admin 文本乱码修复与前端可读性加固轮：新增前端文本规范化工具，修复接口数据或 `localStorage` 中 UTF-8 中文被错误解码为 Latin-1 / Windows-1252 后的 mojibake；成功响应和 admin 用户 store 已接入该规范化逻辑，并新增单测覆盖典型乱码样例。本轮没有改 bridge、接口路径、token 附着、后端、路由或业务语义。

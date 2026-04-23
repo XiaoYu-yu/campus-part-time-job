@@ -110,6 +110,7 @@
 - 当前已完成：`Step 98 - 单机服务器内测运维加固 / 最小回滚与备份准备`
 - 当前已完成：`Step 99 - 单机服务器最小恢复演练 / 运维交付加固`
 - 当前已完成：`Step 100 - 单机服务器运维交接与正式入口 go/no-go`
+- 当前已完成：`Step 101 - admin 文本乱码修复与前端可读性加固`
 - 当前日期：`2026-04-22`
 - Step 46 补充：已新增 admin 异常 resolve 后端接口 `POST /api/campus/admin/exceptions/{id}/resolve`，只允许 `REPORTED -> RESOLVED`，重复处理返回明确业务错误；本轮未改订单主状态、settlement、latest exception 摘要、bridge、前端页面或路由。
 - Step 47 补充：本轮只做 admin 异常前端承接 go / no-go 评估，不写业务代码、不补页面；最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备，P2 售后执行历史表继续后置。
@@ -2291,6 +2292,7 @@
 - [Step 98 日志](step-98-internal-trial-ops-hardening-and-backup-prep.md)
 - [Step 99 日志](step-99-minimal-restore-drill-and-ops-handover.md)
 - [Step 100 日志](step-100-internal-trial-ops-runbook-and-entry-go-no-go.md)
+- [Step 101 日志](step-101-admin-text-mojibake-fix-and-frontend-readability.md)
 - [全局工作记忆](global-working-memory.md)
 - [试运营脚本入口说明](../../scripts/trial-operation/README.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)

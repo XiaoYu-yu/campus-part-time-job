@@ -5,6 +5,15 @@
  */
 
 import { defineStore } from 'pinia'
+import { normalizeTextFields } from '../utils/text'
+
+const parseStoredUserInfo = () => {
+  try {
+    return normalizeTextFields(JSON.parse(localStorage.getItem('admin_user_info') || '{"name":"","avatar":"","role":""}'))
+  } catch {
+    return { name: '', avatar: '', role: '' }
+  }
+}
 
 /**
  * 用户信息对象
@@ -35,7 +44,7 @@ export const useUserStore = defineStore('user', {
     },
     /** @type {string} 用户登录令牌，从 localStorage 中读取 */
     token: localStorage.getItem('admin_token') || '',
-    storedUserInfo: JSON.parse(localStorage.getItem('admin_user_info') || '{"name":"","avatar":"","role":""}'),
+    storedUserInfo: parseStoredUserInfo(),
     /** @type {boolean} 用户是否已登录 */
     isLoggedIn: !!localStorage.getItem('admin_token')
   }),
@@ -54,9 +63,10 @@ export const useUserStore = defineStore('user', {
      * @param {UserInfo} userInfo - 用户信息对象
      */
     setUserInfo(userInfo) {
-      this.userInfo = userInfo
-      this.storedUserInfo = userInfo
-      localStorage.setItem('admin_user_info', JSON.stringify(userInfo))
+      const normalizedUserInfo = normalizeTextFields(userInfo)
+      this.userInfo = normalizedUserInfo
+      this.storedUserInfo = normalizedUserInfo
+      localStorage.setItem('admin_user_info', JSON.stringify(normalizedUserInfo))
     },
     
     /**
@@ -77,12 +87,13 @@ export const useUserStore = defineStore('user', {
      * @description 同时设置用户信息和token，完成登录流程
      */
     login(userInfo, token) {
-      this.userInfo = userInfo
-      this.storedUserInfo = userInfo
+      const normalizedUserInfo = normalizeTextFields(userInfo)
+      this.userInfo = normalizedUserInfo
+      this.storedUserInfo = normalizedUserInfo
       this.token = token
       this.isLoggedIn = true
       localStorage.setItem('admin_token', token)
-      localStorage.setItem('admin_user_info', JSON.stringify(userInfo))
+      localStorage.setItem('admin_user_info', JSON.stringify(normalizedUserInfo))
     },
     
     /**

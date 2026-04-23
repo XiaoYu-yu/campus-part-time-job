@@ -7,6 +7,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import router from '../router'
+import { normalizeTextFields } from './text'
 
 const PUBLIC_PREFIXES = ['/public/', '/campus/public/', '/campus/courier/auth/token', '/employees/login', '/users/login']
 const CUSTOMER_PREFIXES = ['/users/', '/user/', '/campus/customer/']
@@ -78,7 +79,7 @@ request.interceptors.response.use(
     
     // 如果返回的状态码是 200，说明请求成功，返回数据部分
     if (res.code === 200) {
-      return res.data
+      return normalizeTextFields(res.data)
     }
     
     // 其他状态码视为错误，显示错误消息
