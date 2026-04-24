@@ -1,21 +1,22 @@
 # 校园代送待处理事项
 
-## Step 113 最高优先级
+## Step 114 最高优先级
 
-1. Step 112 已完成前端 Android 构建目标层：
-   - `npm run build` 继续输出 `frontend/dist`，根路径默认进入 `/dashboard`
-   - `npm run build:android:user` 输出 `frontend/dist-android-user`，根路径默认进入 `/user/login`
-   - `npm run build:android:parttime` 输出 `frontend/dist-android-parttime`，根路径默认进入 `/parttime/login`
-   - 构建 shell 由 Vite `mode` 推导，不依赖被忽略的 `.env.*` 文件
-2. Step 113 最高优先级建议：
-   - 新增双 Capacitor Android 壳 scaffold
-   - 用户端壳指向 `frontend/dist-android-user`
-   - 兼职端壳指向 `frontend/dist-android-parttime`
-   - admin 继续保持 Web-only
-3. Step 113 仍不建议：
-   - 复制第二套前端工程
-   - 原生 Android 重写业务页面
+1. Step 113 已完成双 Capacitor Android 壳 scaffold：
+   - 用户端壳：`mobile/user-app`
+   - 兼职端壳：`mobile/parttime-app`
+   - 用户端包名：`com.xiaoyu.campus.user`
+   - 兼职端包名：`com.xiaoyu.campus.parttime`
+   - 两个壳均已通过 `cap:sync` 和 `npx cap doctor android`
+2. Step 114 最高优先级建议：
+   - 做 Android 本机构建验证
+   - 优先跑用户端 `assembleDebug`
+   - 再跑兼职端 `assembleDebug`
+   - 如果首次 Gradle 下载慢或超时，优先排查代理、Android SDK、JDK 和 Gradle 缓存
+3. Step 114 仍不建议：
+   - 修改业务前端页面
    - 改 bridge、鉴权、token 附着逻辑或后端接口
+   - 原生 Android 重写业务页面
    - 补第五个 admin 页
 4. bridge 主线继续保持 `Phase A no-op` 冻结态，不默认重开。
 5. 展示 polish 主线继续保持冻结/维护态；当前不再默认继续做后台样式微调。

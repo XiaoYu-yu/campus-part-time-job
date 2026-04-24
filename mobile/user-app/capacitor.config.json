@@ -1,0 +1,6 @@
+{
+  "appId": "com.xiaoyu.campus.user",
+  "appName": "校内兼职",
+  "webDir": "../../frontend/dist-android-user",
+  "bundledWebRuntime": false
+}

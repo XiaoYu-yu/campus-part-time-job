@@ -1691,3 +1691,20 @@
 - [project-logs/campus-relay/step-112-frontend-android-build-targets.md](step-112-frontend-android-build-targets.md)
 
 本轮是前端 Android 构建目标最小实现轮：新增 `build:android:user` 与 `build:android:parttime`，分别输出 `dist-android-user` 与 `dist-android-parttime`；根路径 `/` 根据 Vite `mode` 默认进入 `/user/login` 或 `/parttime/login`，现有 `npm run build` 仍保持 admin Web 默认入口 `/dashboard`。本轮没有安装 Capacitor、没有新增 Android 工程、没有改 bridge、鉴权、接口、token 附着或业务页面语义。
+
+## Step 113 - 双 Capacitor Android 壳 scaffold
+
+- [.gitignore](../../.gitignore)
+- [README.md](../../README.md)
+- [docs/README.md](../../docs/README.md)
+- [docs/mobile/android-shell-scaffold-plan.md](../../docs/mobile/android-shell-scaffold-plan.md)
+- [mobile/README.md](../../mobile/README.md)
+- [mobile/user-app](../../mobile/user-app)
+- [mobile/parttime-app](../../mobile/parttime-app)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/step-113-dual-capacitor-android-shell-scaffold.md](step-113-dual-capacitor-android-shell-scaffold.md)
+
+本轮是双 Capacitor Android 壳 scaffold 轮：新增 `mobile/user-app` 与 `mobile/parttime-app`，分别绑定 `com.xiaoyu.campus.user` 和 `com.xiaoyu.campus.parttime`，并分别指向 `frontend/dist-android-user` 与 `frontend/dist-android-parttime`。两个壳均已安装 Capacitor 8.3.1、生成 Android 原生工程并通过 `cap:sync` 与 `npx cap doctor android`。本轮没有改 bridge、鉴权、接口、token 附着、路由结构或业务页面语义。

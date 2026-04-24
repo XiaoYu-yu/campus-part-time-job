@@ -65,6 +65,7 @@
 
 - Frontend: `Vue 3`、`Vite`、`Vue Router`、`Pinia`、`Element Plus`、`Axios`
 - Backend: `Spring Boot 3.2.4`、`MyBatis`、`JWT`、`H2`、`MySQL/MariaDB`
+- Mobile shell: `Capacitor 8`、Android
 - Runtime: `JDK 17`、`Node.js 18+`
 
 ## 目录结构
@@ -73,6 +74,7 @@
 Campus part-time job/
 ├── backend/                         Spring Boot 后端
 ├── frontend/                        Vue 3 前端
+├── mobile/                          用户端 / 兼职端 Capacitor Android 壳
 ├── docs/                            当前交付、API、数据库、部署文档
 │   ├── campus-relay/                校园代送规划与映射
 │   ├── deployment/                  部署、备份和回滚说明

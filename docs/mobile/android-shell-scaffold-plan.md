@@ -2,7 +2,7 @@
 
 ## 当前结论
 
-当前推荐路线是：单一 `frontend/` 业务源码，后续新增两个 Capacitor Android 壳。
+当前推荐路线是：单一 `frontend/` 业务源码，两个 Capacitor Android 壳。
 
 两个壳分别是：
 
@@ -33,16 +33,18 @@
 
 因此 Android 壳只做容器，业务仍以现有 `frontend/` 为真源。
 
-## 当前不能直接创建壳的关键点
+## 已解除的前置关键点
 
-当前 Vue Router 根路径 `/` 默认跳转到 `/dashboard`。
-
-如果现在直接把同一个 `frontend/dist` 放进两个 Android 壳，两个 App 首屏都会先进入 admin 默认路径，而不是：
+Step 112 之前，Vue Router 根路径 `/` 默认跳转到 `/dashboard`。如果直接把同一个 `frontend/dist` 放进两个 Android 壳，两个 App 首屏都会先进入 admin 默认路径，而不是：
 
 1. 用户端 `/user/login`
 2. 兼职端 `/parttime/login`
 
-所以真正创建 Capacitor 壳之前，必须先补一个最小前端构建目标层。
+Step 112 已通过构建目标层解除这个问题：
+
+1. `npm run build` 仍输出 admin Web 构建产物。
+2. `npm run build:android:user` 输出用户端移动构建产物。
+3. `npm run build:android:parttime` 输出兼职端移动构建产物。
 
 ## Step 112 推荐先做的最小准备
 
@@ -75,25 +77,23 @@
    - `frontend/dist-android-user`
    - `frontend/dist-android-parttime`
 
-## Step 113 才适合做的 Capacitor scaffold
+## Step 113 已完成的 Capacitor scaffold
 
-Step 112 已完成前端构建目标层：
+Step 113 已新增：
 
-1. `npm run build` 继续输出 `frontend/dist`，根路径默认进入 `/dashboard`。
-2. `npm run build:android:user` 输出 `frontend/dist-android-user`，根路径默认进入 `/user/login`。
-3. `npm run build:android:parttime` 输出 `frontend/dist-android-parttime`，根路径默认进入 `/parttime/login`。
-4. 构建目标通过 Vite `mode` 推导，不依赖 `.env.android-*` 文件。
+1. `mobile/user-app`
+2. `mobile/parttime-app`
 
-当前建议在前端构建目标稳定后，再新增：
+当前结构：
 
 ```text
 mobile/
 ├── README.md
 ├── user-app/
-│   ├── capacitor.config.*
+│   ├── capacitor.config.json
 │   └── android/
 └── parttime-app/
-    ├── capacitor.config.*
+    ├── capacitor.config.json
     └── android/
 ```
 
@@ -138,7 +138,7 @@ mobile/
 
 ## 推荐推进顺序
 
-1. Step 112：实现前端构建目标层。
-2. Step 113：新增双 Capacitor 壳 scaffold。
-3. Step 114：本地 Android 构建验证。
+1. Step 112：实现前端构建目标层。已完成。
+2. Step 113：新增双 Capacitor 壳 scaffold。已完成。
+3. Step 114：本地 Android 构建验证。下一步。
 4. Step 115：真机或模拟器 smoke。
