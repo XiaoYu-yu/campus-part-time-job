@@ -121,6 +121,7 @@
 - 当前已完成：`Step 109 - 兼职端壳层与资料页最小补齐`
 - 当前已完成：`Step 110 - 用户端 / 兼职端双 Android 壳路线评估`
 - 当前已完成：`Step 111 - 双 Capacitor Android 壳 scaffold go / no-go`
+- 当前已完成：`Step 112 - 前端 Android 构建目标最小实现`
 - 当前日期：`2026-04-24`
 - Step 102 补充：已把 admin 主框架、仪表盘和运营人员页从旧外卖后台视觉收敛到校园兼职运营风格；本轮只改展示层和全局主题变量，未改 bridge、接口、鉴权、路由、API 调用顺序或后端业务。已通过 `npm run build`、`npm run test -- text.spec.js` 和 `git diff --check`；本地 admin seed 登录与员工列表复核返回 `管理员 / 技术部`。
 - Step 103 补充：已把登录页改为 `校内兼职运营台`，并将 admin 外壳 / dashboard 进一步按深色玻璃拟态方向重基线；同时补齐旧 session / localStorage / in-memory 场景的 admin 文本归一化兜底，覆盖顶部用户名、dashboard 欢迎语和 Employee 页姓名 / 职位 / 部门显示。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
@@ -132,6 +133,7 @@
 - Step 109 补充：已新增 `ParttimeLayout` 与 `/parttime/profile`，并把正式工作台入口调整为 `/parttime/workbench`，旧 `/courier/workbench` 继续作为兼容 alias。`CourierWorkbench.vue` 已切换到兼职端壳层，不再借用户端 Layout；用户端 onboarding 和个人中心的工作台跳转同步指向正式兼职端入口。已通过 frontend build/lint/test、backend compile 和 `git diff --check`。本轮未改 bridge、鉴权、后端接口、工作台动作语义或订单状态机。
 - Step 110 补充：已完成用户端 / 兼职端双 Android 壳路线评估，结论为“单前端源码 + 双 Capacitor Android 壳”最符合当前项目结构；admin 继续保持 Web-only，旧 `uni-app/` 仅保留为历史占位，不再作为当前实施主线。本轮只做路线设计，不新增 Android 工程、不改 bridge、鉴权、接口、路由或前端页面语义。
 - Step 111 补充：已完成双 Capacitor Android 壳 scaffold go / no-go，结论为暂不直接创建 Android scaffold，先补前端 Android 构建目标层；原因是当前 `/` 仍默认进入 `/dashboard`，若直接打包同一个 `frontend/dist`，用户端和兼职端壳都会继承后台入口。已新增 `docs/mobile/android-shell-scaffold-plan.md`，明确 Step 112 优先实现 `VITE_APP_SHELL` 与 `build:android:user / build:android:parttime` 等前端构建边界。本轮未安装 Capacitor、未新增 Android 工程、未改 bridge、鉴权、接口或业务页面语义。
+- Step 112 补充：已新增前端 Android 构建目标层，`npm run build` 继续输出 Web/admin 的 `dist` 且 `/` 默认进 `/dashboard`；`npm run build:android:user` 输出 `dist-android-user` 且 `/` 默认进 `/user/login`；`npm run build:android:parttime` 输出 `dist-android-parttime` 且 `/` 默认进 `/parttime/login`。构建目标通过 Vite `mode` 推导，不依赖被 `.gitignore` 忽略的 `.env.*` 文件。本轮未安装 Capacitor、未新增 Android 工程、未改 bridge、鉴权、接口、路由结构或业务页面语义。
 - Step 46 补充：已新增 admin 异常 resolve 后端接口 `POST /api/campus/admin/exceptions/{id}/resolve`，只允许 `REPORTED -> RESOLVED`，重复处理返回明确业务错误；本轮未改订单主状态、settlement、latest exception 摘要、bridge、前端页面或路由。
 - Step 47 补充：本轮只做 admin 异常前端承接 go / no-go 评估，不写业务代码、不补页面；最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备，P2 售后执行历史表继续后置。
 - Step 48 补充：已新增 `/campus/exceptions` admin 异常处理页，接入异常历史列表、详情 drawer 和 `REPORTED -> RESOLVED` 最小 resolve 动作；本轮未改后端接口、bridge、鉴权、订单主状态、settlement 或 latest exception 摘要。
@@ -2321,6 +2323,9 @@
 - [Step 107 日志](step-107-global-button-plain-fix-and-employee-action-cell-cleanup.md)
 - [Step 108 日志](step-108-parttime-login-and-independent-entry.md)
 - [Step 109 日志](step-109-parttime-shell-and-profile-page.md)
+- [Step 110 日志](step-110-dual-android-shell-route-evaluation.md)
+- [Step 111 日志](step-111-dual-capacitor-scaffold-go-no-go.md)
+- [Step 112 日志](step-112-frontend-android-build-targets.md)
 - [全局工作记忆](global-working-memory.md)
 - [试运营脚本入口说明](../../scripts/trial-operation/README.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)

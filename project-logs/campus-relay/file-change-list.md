@@ -1676,3 +1676,18 @@
 - [project-logs/campus-relay/step-111-dual-capacitor-scaffold-go-no-go.md](step-111-dual-capacitor-scaffold-go-no-go.md)
 
 本轮是双 Capacitor Android 壳 scaffold go / no-go 轮：结论为暂不直接创建 Android scaffold，先补前端 Android 构建目标层；核心原因是当前 `/` 仍默认进入 `/dashboard`，直接复用同一个 `frontend/dist` 会让用户端和兼职端壳继承后台入口。已新增 `docs/mobile/android-shell-scaffold-plan.md`，明确 Step 112 优先实现 `VITE_APP_SHELL`、`build:android:user`、`build:android:parttime` 与双移动端 dist 输出。本轮没有安装 Capacitor、没有新增 Android 工程、没有改 bridge、鉴权、接口、路由或业务页面语义。
+
+## Step 112 - 前端 Android 构建目标最小实现
+
+- [.gitignore](../../.gitignore)
+- [frontend/package.json](../../frontend/package.json)
+- [frontend/vite.config.js](../../frontend/vite.config.js)
+- [frontend/src/router/index.js](../../frontend/src/router/index.js)
+- [docs/mobile/android-shell-scaffold-plan.md](../../docs/mobile/android-shell-scaffold-plan.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/step-112-frontend-android-build-targets.md](step-112-frontend-android-build-targets.md)
+
+本轮是前端 Android 构建目标最小实现轮：新增 `build:android:user` 与 `build:android:parttime`，分别输出 `dist-android-user` 与 `dist-android-parttime`；根路径 `/` 根据 Vite `mode` 默认进入 `/user/login` 或 `/parttime/login`，现有 `npm run build` 仍保持 admin Web 默认入口 `/dashboard`。本轮没有安装 Capacitor、没有新增 Android 工程、没有改 bridge、鉴权、接口、token 附着或业务页面语义。

@@ -2,12 +2,25 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '../stores/user'
 import { useCustomerStore } from '../stores/customer'
 
+const shellHomeMap = {
+  user: '/user/login',
+  parttime: '/parttime/login',
+  admin: '/dashboard'
+}
+
+const shellFromMode = {
+  'android-user': 'user',
+  'android-parttime': 'parttime'
+}
+const appShell = import.meta.env.VITE_APP_SHELL || shellFromMode[import.meta.env.MODE] || 'admin'
+const rootRedirect = shellHomeMap[appShell] || shellHomeMap.admin
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
       path: '/',
-      redirect: '/dashboard'
+      redirect: rootRedirect
     },
     {
       path: '/login',

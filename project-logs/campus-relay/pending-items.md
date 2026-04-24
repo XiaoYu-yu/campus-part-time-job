@@ -1,30 +1,25 @@
 # 校园代送待处理事项
 
-## Step 111 最高优先级
+## Step 113 最高优先级
 
-1. Step 111 已完成双 Capacitor Android 壳 scaffold go / no-go：
-   - 结论是不直接创建 Android scaffold
-   - 下一轮先补前端 Android 构建目标层
-   - 当前问题是 `/` 仍默认进入 `/dashboard`，不能直接把同一个 `frontend/dist` 放进两个 App 壳
-2. Step 112 最高优先级建议：
-   - 新增 `VITE_APP_SHELL`
-   - 保持 `npm run build` 默认 admin / web 行为
-   - 新增 `npm run build:android:user`，默认入口 `/user/login`
-   - 新增 `npm run build:android:parttime`，默认入口 `/parttime/login`
-   - 输出 `dist-android-user` 与 `dist-android-parttime`
-3. Step 112 仍不建议：
-   - 安装 Capacitor
-   - 创建 `mobile/user-app` 或 `mobile/parttime-app`
+1. Step 112 已完成前端 Android 构建目标层：
+   - `npm run build` 继续输出 `frontend/dist`，根路径默认进入 `/dashboard`
+   - `npm run build:android:user` 输出 `frontend/dist-android-user`，根路径默认进入 `/user/login`
+   - `npm run build:android:parttime` 输出 `frontend/dist-android-parttime`，根路径默认进入 `/parttime/login`
+   - 构建 shell 由 Vite `mode` 推导，不依赖被忽略的 `.env.*` 文件
+2. Step 113 最高优先级建议：
+   - 新增双 Capacitor Android 壳 scaffold
+   - 用户端壳指向 `frontend/dist-android-user`
+   - 兼职端壳指向 `frontend/dist-android-parttime`
+   - admin 继续保持 Web-only
+3. Step 113 仍不建议：
    - 复制第二套前端工程
-   - 做原生 Android 重写
-4. owner 仍可先本地复核：
-   - `/parttime/login`
-   - `/parttime/workbench`
-   - `/parttime/profile`
-   - `/courier/workbench` 兼容 alias
-5. bridge 主线继续保持 `Phase A no-op` 冻结态，不默认重开。
-6. 展示 polish 主线继续保持冻结/维护态；当前不再默认继续做后台样式微调。
-7. 本轮仍不改 bridge、鉴权、后端 token 接口、订单状态机或 settlement 逻辑。
+   - 原生 Android 重写业务页面
+   - 改 bridge、鉴权、token 附着逻辑或后端接口
+   - 补第五个 admin 页
+4. bridge 主线继续保持 `Phase A no-op` 冻结态，不默认重开。
+5. 展示 polish 主线继续保持冻结/维护态；当前不再默认继续做后台样式微调。
+6. 本轮仍不改 bridge、鉴权、后端 token 接口、订单状态机或 settlement 逻辑。
 3. Step 72 已完成腾讯地图最小产品化试点：
    - 只在现有 `/campus/courier-ops` 接入腾讯地图 JS SDK 最小预览，不新增页面、不改后端接口。
    - 继续复用现有 courier 位置上报数据，不引入轨迹回放、实时调度或地图写操作。

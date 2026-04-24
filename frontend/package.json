@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:android:user": "vite build --mode android-user",
+    "build:android:parttime": "vite build --mode android-parttime",
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{js,vue}\"",
     "test": "vitest run"

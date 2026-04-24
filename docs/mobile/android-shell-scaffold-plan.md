@@ -77,6 +77,13 @@
 
 ## Step 113 才适合做的 Capacitor scaffold
 
+Step 112 已完成前端构建目标层：
+
+1. `npm run build` 继续输出 `frontend/dist`，根路径默认进入 `/dashboard`。
+2. `npm run build:android:user` 输出 `frontend/dist-android-user`，根路径默认进入 `/user/login`。
+3. `npm run build:android:parttime` 输出 `frontend/dist-android-parttime`，根路径默认进入 `/parttime/login`。
+4. 构建目标通过 Vite `mode` 推导，不依赖 `.env.android-*` 文件。
+
 当前建议在前端构建目标稳定后，再新增：
 
 ```text
@@ -135,4 +142,3 @@ mobile/
 2. Step 113：新增双 Capacitor 壳 scaffold。
 3. Step 114：本地 Android 构建验证。
 4. Step 115：真机或模拟器 smoke。
-

@@ -172,7 +172,8 @@
 13. Step 108 已新增 `/parttime/login` 作为兼职端独立登录入口，并把 `/courier/workbench` 调整为 `courier_token` 受保护路由；当前产品边界已从“用户端借道兼职工作台”前进到“用户端负责报名，兼职端负责日常登录”
 14. Step 109 已新增 `ParttimeLayout`、正式 `/parttime/workbench`、兼容 `/courier/workbench` alias 和 `/parttime/profile`；当前兼职端 H5 最小页面群为“登录 -> 工作台 -> 我的资料”，仍未新增 Android 工程
 15. Step 110 已完成双 Android 壳路线评估，当前推荐路线为“单前端源码 + 双 Capacitor Android 壳”；admin 保持 Web-only，旧 `uni-app/` 仅保留为历史占位，不再作为当前实施主线
-16. Step 111 已完成双 Capacitor scaffold go / no-go，结论为先补前端 Android 构建目标层，再创建 Capacitor 壳；当前不直接初始化 Android 工程
+16. Step 111 已完成双 Capacitor scaffold go / no-go，结论为先补前端 Android 构建目标层，再创建 Capacitor 壳
+17. Step 112 已完成前端 Android 构建目标层，`npm run build` 保持 admin Web 默认入口，`build:android:user` 与 `build:android:parttime` 分别输出用户端和兼职端移动构建产物；当前仍未新增 Android 工程
 
 当前已确认的部署层修正：
 
@@ -188,16 +189,19 @@
 
 默认下一主线：
 
-1. 先由 owner 本地复核 `/parttime/login`、`/parttime/workbench`、`/parttime/profile` 和旧 `/courier/workbench` alias 是否稳定
-2. Step 110 已确认 Android 方向优先走双 Capacitor 壳，不再重复做 WebView / 原生 / PWA 总评估
-3. Step 111 已确认不直接 scaffold Android，下一轮优先补 `frontend` 的 Android 构建目标
-4. Step 112 推荐实现 `VITE_APP_SHELL`、`build:android:user`、`build:android:parttime`、`dist-android-user` 和 `dist-android-parttime`
-5. Android 前不要直接复制第二套前端工程，先保证两个移动端构建产物入口正确
+1. Step 110 已确认 Android 方向优先走双 Capacitor 壳，不再重复做 WebView / 原生 / PWA 总评估
+2. Step 112 已确认两个移动端构建产物入口正确：
+   - `dist-android-user` 默认进入 `/user/login`
+   - `dist-android-parttime` 默认进入 `/parttime/login`
+3. Step 113 推荐新增双 Capacitor Android 壳 scaffold：
+   - 用户端壳指向 `frontend/dist-android-user`
+   - 兼职端壳指向 `frontend/dist-android-parttime`
+4. Android 前不要复制第二套前端工程，也不要把 admin 打进移动壳作为默认入口
 
 优先级建议：
 
 1. 如果近期仍是 owner 自测，优先验证兼职端账号 `13900139001 / 123456` 是否可直接完成“登录 -> 工作台 -> 我的资料”
-2. 如果兼职端 H5 最小页面群稳定，直接进入前端 Android 构建目标实现，而不是继续抠 admin 样式
+2. 如果继续 Android 线，优先进入 Step 113 双 Capacitor scaffold，而不是继续抠 admin 样式
 3. 如果准备邀请外部用户长期访问，再进入 HTTPS / 域名 / 正式反向代理准备
 4. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断
 
