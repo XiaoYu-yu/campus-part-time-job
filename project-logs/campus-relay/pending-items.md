@@ -1,23 +1,25 @@
 # 校园代送待处理事项
 
-## Step 109 最高优先级
+## Step 110 最高优先级
 
-1. Step 109 已完成兼职端最小页面群补齐：
-   - 新增 `/parttime/workbench` 正式工作台入口
-   - 继续兼容 `/courier/workbench`
-   - 新增 `/parttime/profile` 兼职资料 / 审核状态页
-   - 工作台已切换到 `ParttimeLayout`，不再借用户端 Layout
-2. 当前最高优先级是 owner 本地复核“用户端报名 / 兼职端日常登录 / 兼职资料查看”这条拆分后的真实使用路径。
-3. 建议优先复核：
-   - `/parttime/login` 是否能用 `13900139001 / 123456` 直接换取 token
-   - 登录成功后是否进入 `/parttime/workbench`
-   - `/parttime/profile` 是否能读取资料与审核状态
-   - `/courier/workbench` 是否仍作为兼容入口可用
-   - `/user/campus/courier-onboarding` 申请 token 后是否仍可直达正式兼职工作台
-4. 若这条路径验证通过，下一轮主线应切到：
-   - 用户端 / 兼职端双 Android 壳路线评估
-   - 明确 WebView / Capacitor / 原生实现边界
-   - 不直接开写 Android，先定技术路线和最小试运营范围
+1. Step 110 已完成双 Android 壳路线评估：
+   - 当前推荐路线为“单前端源码 + 双 Capacitor Android 壳”
+   - 用户端壳默认进入 `/user/login`
+   - 兼职端壳默认进入 `/parttime/login`
+   - admin 继续保持 Web-only，不进入 Android
+2. 当前最高优先级仍是 owner 本地复核拆分后的真实使用路径：
+   - `/parttime/login`
+   - `/parttime/workbench`
+   - `/parttime/profile`
+   - `/courier/workbench` 兼容 alias
+3. 若 H5 路径验证通过，下一轮主线建议切到：
+   - 双 Capacitor Android 壳最小 scaffold go / no-go
+   - 明确 `mobile/` 目录、双包名、双图标和默认入口边界
+   - 不直接复制第二套前端工程，不做原生重写
+4. 当前不建议：
+   - 重新走早期 `uni-app/` 占位路线
+   - 继续抠 admin 样式
+   - 补第 5 个 admin 页
 5. bridge 主线继续保持 `Phase A no-op` 冻结态，不默认重开。
 6. 展示 polish 主线继续保持冻结/维护态；当前不再默认继续做后台样式微调。
 7. 本轮仍不改 bridge、鉴权、后端 token 接口、订单状态机或 settlement 逻辑。

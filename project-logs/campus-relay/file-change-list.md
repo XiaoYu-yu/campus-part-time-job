@@ -1653,3 +1653,13 @@
 - [project-logs/campus-relay/step-109-parttime-shell-and-profile-page.md](step-109-parttime-shell-and-profile-page.md)
 
 本轮是兼职端最小页面群补齐轮：新增 `ParttimeLayout` 和 `/parttime/profile`，将正式工作台入口迁到 `/parttime/workbench`，并保留旧 `/courier/workbench` 作为兼容 alias；`CourierWorkbench.vue` 已切换到兼职端壳层，用户端 onboarding / profile 的工作台跳转同步指向正式兼职端入口。本轮没有改 bridge、鉴权、后端接口、工作台动作语义、订单状态机或新增 Android 工程。
+
+## Step 110 - 用户端 / 兼职端双 Android 壳路线评估
+
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/step-110-dual-android-shell-route-evaluation.md](step-110-dual-android-shell-route-evaluation.md)
+
+本轮是双 Android 壳路线评估轮：基于当前单一 `frontend/` Vite + Vue 工程、已拆分的 `/user/**` 与 `/parttime/**` 路由，以及 `customer_token / courier_token` 双登录态，完成 WebView / Capacitor / 原生 Android / PWA 的对比评估；结论为“单前端源码 + 双 Capacitor Android 壳”是当前最稳妥的下一主线，admin 继续保持 Web-only，旧 `uni-app/` 仅保留为早期占位。本轮只改文档，没有改 bridge、鉴权、接口、路由、前端页面或 Android 工程。
