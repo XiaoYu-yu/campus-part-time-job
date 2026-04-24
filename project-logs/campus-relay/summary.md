@@ -120,6 +120,7 @@
 - 当前已完成：`Step 108 - 兼职端独立登录与前台入口拆分`
 - 当前已完成：`Step 109 - 兼职端壳层与资料页最小补齐`
 - 当前已完成：`Step 110 - 用户端 / 兼职端双 Android 壳路线评估`
+- 当前已完成：`Step 111 - 双 Capacitor Android 壳 scaffold go / no-go`
 - 当前日期：`2026-04-24`
 - Step 102 补充：已把 admin 主框架、仪表盘和运营人员页从旧外卖后台视觉收敛到校园兼职运营风格；本轮只改展示层和全局主题变量，未改 bridge、接口、鉴权、路由、API 调用顺序或后端业务。已通过 `npm run build`、`npm run test -- text.spec.js` 和 `git diff --check`；本地 admin seed 登录与员工列表复核返回 `管理员 / 技术部`。
 - Step 103 补充：已把登录页改为 `校内兼职运营台`，并将 admin 外壳 / dashboard 进一步按深色玻璃拟态方向重基线；同时补齐旧 session / localStorage / in-memory 场景的 admin 文本归一化兜底，覆盖顶部用户名、dashboard 欢迎语和 Employee 页姓名 / 职位 / 部门显示。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
@@ -130,6 +131,7 @@
 - Step 108 补充：已新增 `/parttime/login` 作为兼职端独立登录入口，兼容 `/courier/login`；`/courier/workbench` 已变为需要 `courier_token` 的受保护路由，token 失效时统一回到兼职端登录页。当前边界是“用户端负责报名 / 入驻资料，兼职端负责日常登录”。本轮未改后端 token 接口、bridge、鉴权或订单状态机。
 - Step 109 补充：已新增 `ParttimeLayout` 与 `/parttime/profile`，并把正式工作台入口调整为 `/parttime/workbench`，旧 `/courier/workbench` 继续作为兼容 alias。`CourierWorkbench.vue` 已切换到兼职端壳层，不再借用户端 Layout；用户端 onboarding 和个人中心的工作台跳转同步指向正式兼职端入口。已通过 frontend build/lint/test、backend compile 和 `git diff --check`。本轮未改 bridge、鉴权、后端接口、工作台动作语义或订单状态机。
 - Step 110 补充：已完成用户端 / 兼职端双 Android 壳路线评估，结论为“单前端源码 + 双 Capacitor Android 壳”最符合当前项目结构；admin 继续保持 Web-only，旧 `uni-app/` 仅保留为历史占位，不再作为当前实施主线。本轮只做路线设计，不新增 Android 工程、不改 bridge、鉴权、接口、路由或前端页面语义。
+- Step 111 补充：已完成双 Capacitor Android 壳 scaffold go / no-go，结论为暂不直接创建 Android scaffold，先补前端 Android 构建目标层；原因是当前 `/` 仍默认进入 `/dashboard`，若直接打包同一个 `frontend/dist`，用户端和兼职端壳都会继承后台入口。已新增 `docs/mobile/android-shell-scaffold-plan.md`，明确 Step 112 优先实现 `VITE_APP_SHELL` 与 `build:android:user / build:android:parttime` 等前端构建边界。本轮未安装 Capacitor、未新增 Android 工程、未改 bridge、鉴权、接口或业务页面语义。
 - Step 46 补充：已新增 admin 异常 resolve 后端接口 `POST /api/campus/admin/exceptions/{id}/resolve`，只允许 `REPORTED -> RESOLVED`，重复处理返回明确业务错误；本轮未改订单主状态、settlement、latest exception 摘要、bridge、前端页面或路由。
 - Step 47 补充：本轮只做 admin 异常前端承接 go / no-go 评估，不写业务代码、不补页面；最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备，P2 售后执行历史表继续后置。
 - Step 48 补充：已新增 `/campus/exceptions` admin 异常处理页，接入异常历史列表、详情 drawer 和 `REPORTED -> RESOLVED` 最小 resolve 动作；本轮未改后端接口、bridge、鉴权、订单主状态、settlement 或 latest exception 摘要。

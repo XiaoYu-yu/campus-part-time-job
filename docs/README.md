@@ -7,6 +7,7 @@
 - [交付与启动说明](delivery-guide.md)
 - [试运营运行配置与 Preflight 手册](trial-operation-preflight.md)
 - [模拟资金链路产品化边界](simulated-funds-boundary.md)
+- [用户端 / 兼职端 Android 壳 scaffold 方案](mobile/android-shell-scaffold-plan.md)
 - [项目状态检查](project-status-review.md)
 - [API 总览](api-overview.md)
 - [数据库总览](db-overview.md)

@@ -76,6 +76,7 @@ Campus part-time job/
 ├── docs/                            当前交付、API、数据库、部署文档
 │   ├── campus-relay/                校园代送规划与映射
 │   ├── deployment/                  部署、备份和回滚说明
+│   ├── mobile/                      用户端 / 兼职端 Android 壳方案
 │   └── legacy-takeaway/             旧外卖阶段参考文档归档
 ├── project-logs/
 │   ├── campus-relay/                当前校园代送主线日志
@@ -143,7 +144,10 @@ npm run dev
 
 ### courier
 
-- `/courier/workbench`
+- `/parttime/login`
+- `/parttime/workbench`
+- `/parttime/profile`
+- `/courier/workbench` 兼容旧入口
 
 ### admin
 
@@ -177,6 +181,7 @@ npm run build
 - [交付与启动说明](docs/delivery-guide.md)
 - [试运营运行配置与 Preflight 手册](docs/trial-operation-preflight.md)
 - [模拟资金链路产品化边界](docs/simulated-funds-boundary.md)
+- [用户端 / 兼职端 Android 壳 scaffold 方案](docs/mobile/android-shell-scaffold-plan.md)
 - [项目状态检查](docs/project-status-review.md)
 - [API 总览](docs/api-overview.md)
 - [数据库总览](docs/db-overview.md)

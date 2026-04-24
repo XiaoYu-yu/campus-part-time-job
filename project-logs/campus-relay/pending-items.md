@@ -1,25 +1,27 @@
 # 校园代送待处理事项
 
-## Step 110 最高优先级
+## Step 111 最高优先级
 
-1. Step 110 已完成双 Android 壳路线评估：
-   - 当前推荐路线为“单前端源码 + 双 Capacitor Android 壳”
-   - 用户端壳默认进入 `/user/login`
-   - 兼职端壳默认进入 `/parttime/login`
-   - admin 继续保持 Web-only，不进入 Android
-2. 当前最高优先级仍是 owner 本地复核拆分后的真实使用路径：
+1. Step 111 已完成双 Capacitor Android 壳 scaffold go / no-go：
+   - 结论是不直接创建 Android scaffold
+   - 下一轮先补前端 Android 构建目标层
+   - 当前问题是 `/` 仍默认进入 `/dashboard`，不能直接把同一个 `frontend/dist` 放进两个 App 壳
+2. Step 112 最高优先级建议：
+   - 新增 `VITE_APP_SHELL`
+   - 保持 `npm run build` 默认 admin / web 行为
+   - 新增 `npm run build:android:user`，默认入口 `/user/login`
+   - 新增 `npm run build:android:parttime`，默认入口 `/parttime/login`
+   - 输出 `dist-android-user` 与 `dist-android-parttime`
+3. Step 112 仍不建议：
+   - 安装 Capacitor
+   - 创建 `mobile/user-app` 或 `mobile/parttime-app`
+   - 复制第二套前端工程
+   - 做原生 Android 重写
+4. owner 仍可先本地复核：
    - `/parttime/login`
    - `/parttime/workbench`
    - `/parttime/profile`
    - `/courier/workbench` 兼容 alias
-3. 若 H5 路径验证通过，下一轮主线建议切到：
-   - 双 Capacitor Android 壳最小 scaffold go / no-go
-   - 明确 `mobile/` 目录、双包名、双图标和默认入口边界
-   - 不直接复制第二套前端工程，不做原生重写
-4. 当前不建议：
-   - 重新走早期 `uni-app/` 占位路线
-   - 继续抠 admin 样式
-   - 补第 5 个 admin 页
 5. bridge 主线继续保持 `Phase A no-op` 冻结态，不默认重开。
 6. 展示 polish 主线继续保持冻结/维护态；当前不再默认继续做后台样式微调。
 7. 本轮仍不改 bridge、鉴权、后端 token 接口、订单状态机或 settlement 逻辑。

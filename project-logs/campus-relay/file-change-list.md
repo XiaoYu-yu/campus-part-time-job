@@ -1663,3 +1663,16 @@
 - [project-logs/campus-relay/step-110-dual-android-shell-route-evaluation.md](step-110-dual-android-shell-route-evaluation.md)
 
 本轮是双 Android 壳路线评估轮：基于当前单一 `frontend/` Vite + Vue 工程、已拆分的 `/user/**` 与 `/parttime/**` 路由，以及 `customer_token / courier_token` 双登录态，完成 WebView / Capacitor / 原生 Android / PWA 的对比评估；结论为“单前端源码 + 双 Capacitor Android 壳”是当前最稳妥的下一主线，admin 继续保持 Web-only，旧 `uni-app/` 仅保留为早期占位。本轮只改文档，没有改 bridge、鉴权、接口、路由、前端页面或 Android 工程。
+
+## Step 111 - 双 Capacitor Android 壳 scaffold go / no-go
+
+- [README.md](../../README.md)
+- [docs/README.md](../../docs/README.md)
+- [docs/mobile/android-shell-scaffold-plan.md](../../docs/mobile/android-shell-scaffold-plan.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/step-111-dual-capacitor-scaffold-go-no-go.md](step-111-dual-capacitor-scaffold-go-no-go.md)
+
+本轮是双 Capacitor Android 壳 scaffold go / no-go 轮：结论为暂不直接创建 Android scaffold，先补前端 Android 构建目标层；核心原因是当前 `/` 仍默认进入 `/dashboard`，直接复用同一个 `frontend/dist` 会让用户端和兼职端壳继承后台入口。已新增 `docs/mobile/android-shell-scaffold-plan.md`，明确 Step 112 优先实现 `VITE_APP_SHELL`、`build:android:user`、`build:android:parttime` 与双移动端 dist 输出。本轮没有安装 Capacitor、没有新增 Android 工程、没有改 bridge、鉴权、接口、路由或业务页面语义。
