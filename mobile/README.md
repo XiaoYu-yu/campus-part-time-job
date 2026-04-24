@@ -84,6 +84,53 @@ Debug APK 输出位置：
 1. Gradle wrapper 分发包走腾讯 Gradle 镜像。
 2. Android Gradle 依赖优先走阿里云 Maven 镜像，官方 `google()` / `mavenCentral()` 保留为兜底。
 
+## 真机 / 模拟器 smoke
+
+当前本机已准备过的模拟器基础：
+
+1. Android Emulator：`emulator`
+2. 系统镜像：`system-images;android-35;google_apis;x86_64`
+3. AVD 名称：`campus_api35`
+
+如果模拟器无法上线并提示 hypervisor driver 缺失，需要用管理员权限运行：
+
+```powershell
+C:\Users\20278\AppData\Local\Android\Sdk\extras\google\Android_Emulator_Hypervisor_Driver\silent_install.bat
+```
+
+安装后重新启动模拟器，再执行 smoke 脚本。没有 hypervisor 加速时，当前 x86_64 模拟器无法稳定进入 `adb devices` 在线状态。
+
+先确认设备在线：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1 -ListDevices
+```
+
+安装并启动两个 APK：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1
+```
+
+如果使用本机已创建的 `campus_api35` 模拟器：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1 -StartEmulator
+```
+
+脚本会检查并启动：
+
+1. 用户端包名：`com.xiaoyu.campus.user`
+2. 兼职端包名：`com.xiaoyu.campus.parttime`
+
+如有多台设备，使用：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1 -DeviceId <adb-serial>
+```
+
+本脚本只负责安装、启动和截图，不判断 WebView 内登录是否成功。App 内 `/api` 请求、用户端 / 兼职端登录态隔离、移动网络下后端地址可达性仍需手工 smoke 确认。
+
 ## 边界
 
 1. Android 壳只负责容器、包名、App 名称和原生工程。

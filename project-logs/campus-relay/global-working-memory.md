@@ -180,6 +180,13 @@
    - Android Gradle 依赖优先走阿里云 Maven 镜像
    - 本机安装 JDK 21 与 Android SDK 后，用户端和兼职端 Debug APK 均构建成功
    - APK 输出分别在 `mobile/user-app/android/app/build/outputs/apk/debug/app-debug.apk` 与 `mobile/parttime-app/android/app/build/outputs/apk/debug/app-debug.apk`
+20. Step 115 已完成 Android smoke 入口与模拟器阻塞确认：
+   - 新增 `scripts/trial-operation/android-smoke.ps1`
+   - 已安装 Android Emulator 与 `system-images;android-35;google_apis;x86_64`
+   - 已创建 AVD：`campus_api35`
+   - 当前阻塞是 Android Emulator hypervisor driver 未安装，需要管理员权限安装
+   - 软件加速启动未能让 AVD 进入 `adb devices` 在线状态
+   - 尚未真实完成 APK 安装、首屏、WebView API 和 token/storage 隔离验证
 
 当前已确认的部署层修正：
 
@@ -203,16 +210,17 @@
    - 用户端壳指向 `frontend/dist-android-user`
    - 兼职端壳指向 `frontend/dist-android-parttime`
 4. Step 114 已确认两个 Android 壳可以本机构建 Debug APK
-5. Step 115 推荐进入真机或模拟器 smoke，重点确认：
+5. Step 115 已确认本机可准备模拟器基础，但当前 hypervisor driver 未安装，AVD 无法上线
+6. Step 116 推荐先用管理员权限安装 Android Emulator Hypervisor Driver，再进入真实模拟器 smoke，重点确认：
    - App 首屏入口是否分别进入 `/user/login` 与 `/parttime/login`
    - 移动端 WebView 内 `/api` 请求是否需要显式 API base URL
    - 用户端和兼职端登录态是否按包名隔离
-6. Android 线仍不要复制第二套前端工程，也不要把 admin 打进移动壳作为默认入口
+7. Android 线仍不要复制第二套前端工程，也不要把 admin 打进移动壳作为默认入口
 
 优先级建议：
 
 1. 如果近期仍是 owner 自测，优先验证兼职端账号 `13900139001 / 123456` 是否可直接完成“登录 -> 工作台 -> 我的资料”
-2. 如果继续 Android 线，优先进入 Step 115 真机或模拟器 smoke，而不是继续抠 admin 样式
+2. 如果继续 Android 线，优先先安装 emulator hypervisor driver，再进入 Step 116 真实模拟器 smoke，而不是继续抠 admin 样式
 3. 如果准备邀请外部用户长期访问，再进入 HTTPS / 域名 / 正式反向代理准备
 4. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断
 

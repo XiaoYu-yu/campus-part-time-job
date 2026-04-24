@@ -1,23 +1,26 @@
 # 校园代送待处理事项
 
-## Step 115 最高优先级
+## Step 116 最高优先级
 
-1. Step 114 已完成 Android 本机构建验证：
-   - 用户端壳：`mobile/user-app`
-   - 兼职端壳：`mobile/parttime-app`
-   - 用户端包名：`com.xiaoyu.campus.user`
-   - 兼职端包名：`com.xiaoyu.campus.parttime`
-   - 两个壳均已通过 `cap:sync`
-   - 两个壳均已通过 `assembleDebug`
-   - 用户端 APK：`mobile/user-app/android/app/build/outputs/apk/debug/app-debug.apk`
-   - 兼职端 APK：`mobile/parttime-app/android/app/build/outputs/apk/debug/app-debug.apk`
-2. Step 115 最高优先级建议：
-   - 做真机或模拟器 smoke
-   - 安装用户端 APK，确认首屏进入 `/user/login`
-   - 安装兼职端 APK，确认首屏进入 `/parttime/login`
-   - 验证 App 内 `/api` 请求在 WebView 环境是否需要显式 API base URL
-   - 验证两个包名下 token / storage 隔离
-3. Step 115 仍不建议：
+1. Step 115 已完成 Android 真机 / 模拟器 smoke 入口脚本、模拟器基础安装与阻塞确认：
+   - 新增 `scripts/trial-operation/android-smoke.ps1`
+   - 脚本可列出设备、安装两个 Debug APK、启动两个 App、保存启动截图
+   - 已安装 `emulator` 与 `system-images;android-35;google_apis;x86_64`
+   - 已创建 AVD：`campus_api35`
+   - 当前 `emulator -accel-check` 显示 Android Emulator hypervisor driver 未安装
+   - 普通命令环境无法完成 driver 管理员安装
+   - `-accel off` 软件启动也未能让 AVD 进入 `adb devices` 在线状态
+   - 因此本轮没有伪造 APK 已安装、首屏已验证或 WebView API 已验证
+2. Step 116 最高优先级建议：
+   - 用管理员权限安装 Android Emulator Hypervisor Driver：
+     - `C:\Users\20278\AppData\Local\Android\Sdk\extras\google\Android_Emulator_Hypervisor_Driver\silent_install.bat`
+   - 重新启动 `campus_api35` 模拟器，并确认 `adb devices -l` 出现 `emulator-* device`
+   - 执行 `powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1 -StartEmulator`
+   - 验证用户端 APK 首屏进入 `/user/login`
+   - 验证兼职端 APK 首屏进入 `/parttime/login`
+   - 验证移动 WebView 内 `/api` 请求是否需要显式 API base URL
+   - 验证两个包名下 WebView storage / token 隔离
+3. Step 116 仍不建议：
    - 修改业务前端页面
    - 改 bridge、鉴权、token 附着逻辑或后端接口
    - 原生 Android 重写业务页面

@@ -1726,3 +1726,16 @@
 - [project-logs/campus-relay/step-114-android-local-build-validation.md](step-114-android-local-build-validation.md)
 
 本轮是 Android 本机构建验证轮：将 Gradle wrapper 分发包切到腾讯 Gradle 镜像，将 Android Gradle 依赖优先切到阿里云 Maven 镜像，并记录 JDK 21 / Android SDK 本地构建前置。用户端与兼职端均已完成 `cap:sync` 和 `assembleDebug`，Debug APK 已分别输出到两个壳的 `android/app/build/outputs/apk/debug/app-debug.apk`。本轮没有改 bridge、鉴权、接口、token 附着、路由结构、前端业务页面或后端业务语义。
+
+## Step 115 - Android 真机 / 模拟器 smoke 入口与模拟器阻塞确认
+
+- [scripts/trial-operation/android-smoke.ps1](../../scripts/trial-operation/android-smoke.ps1)
+- [scripts/trial-operation/README.md](../../scripts/trial-operation/README.md)
+- [mobile/README.md](../../mobile/README.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/step-115-android-device-smoke-entry-and-blocker.md](step-115-android-device-smoke-entry-and-blocker.md)
+
+本轮是 Android 设备 smoke 入口与模拟器阻塞确认轮：新增 `android-smoke.ps1`，用于设备在线后安装、启动两个 Debug APK 并保存启动截图；同时安装 Android Emulator 与 Android 35 Google APIs x86_64 system image，并创建 `campus_api35` AVD。当前阻塞是 Android Emulator hypervisor driver 未安装且需要管理员权限，软件加速启动也未能让 AVD 进入 ADB 在线状态。本轮没有改 bridge、鉴权、接口、token 附着、路由结构、前端业务页面或后端业务语义。

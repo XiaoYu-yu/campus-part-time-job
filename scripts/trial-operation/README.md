@@ -64,6 +64,46 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\commands.ps1 -F
 
 The command index does not start backend/frontend processes and does not reset H2 automatically. It only prints the approved local commands and reset boundary.
 
+## Android Smoke
+
+List online Android devices or emulators:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1 -ListDevices
+```
+
+Install and launch both Debug APKs, then save launch screenshots:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1
+```
+
+Start the prepared `campus_api35` emulator first, then run the same install / launch flow:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1 -StartEmulator
+```
+
+Use a specific device when more than one device is online:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1 -DeviceId <adb-serial>
+```
+
+The Android smoke script only installs, launches, and captures screenshots from the existing APKs. It does not modify backend/frontend business code, bridge behavior, auth, routes, or API calls. If no device is online, the script fails explicitly instead of pretending the APK smoke passed.
+
+Current local emulator baseline:
+
+1. AVD name: `campus_api35`
+2. System image: `system-images;android-35;google_apis;x86_64`
+3. Required emulator acceleration: Android Emulator Hypervisor Driver or an equivalent Windows hypervisor setup.
+
+If `adb devices` stays empty after starting the emulator and `emulator -accel-check` reports that the Android Emulator hypervisor driver is missing, run the installer as Administrator:
+
+```powershell
+C:\Users\20278\AppData\Local\Android\Sdk\extras\google\Android_Emulator_Hypervisor_Driver\silent_install.bat
+```
+
 ## Sample Validation
 
 `validate-samples.ps1` reads only `backend/src/main/resources/db/schema-h2.sql` and `backend/src/main/resources/db/data-h2.sql`.
