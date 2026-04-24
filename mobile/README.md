@@ -17,6 +17,8 @@
 
 ## 常用命令
 
+### 前端产物与 Capacitor 同步
+
 先在 `frontend/` 生成对应移动端构建产物：
 
 ```bash
@@ -39,6 +41,48 @@ cd mobile/parttime-app
 npm install
 npm run cap:sync
 ```
+
+### Debug APK 构建
+
+Android 本地构建需要：
+
+1. JDK 21。
+2. Android SDK `platform-tools`、`platforms;android-36`、`build-tools;36.0.0`。
+3. 每个壳工程自己的 `android/local.properties` 指向本机 SDK，例如：
+
+```properties
+sdk.dir=C:/Users/20278/AppData/Local/Android/Sdk
+```
+
+`local.properties`、`android/app/build/`、`android/app/src/main/assets/` 和 `android/app/src/main/res/xml/config.xml` 都是本地生成内容，不提交到仓库。
+
+用户端 APK：
+
+```bash
+cd mobile/user-app
+npm run cap:sync
+cd android
+./gradlew assembleDebug --no-daemon
+```
+
+兼职端 APK：
+
+```bash
+cd mobile/parttime-app
+npm run cap:sync
+cd android
+./gradlew assembleDebug --no-daemon
+```
+
+Debug APK 输出位置：
+
+1. `mobile/user-app/android/app/build/outputs/apk/debug/app-debug.apk`
+2. `mobile/parttime-app/android/app/build/outputs/apk/debug/app-debug.apk`
+
+当前 Android 构建已优先使用国内镜像：
+
+1. Gradle wrapper 分发包走腾讯 Gradle 镜像。
+2. Android Gradle 依赖优先走阿里云 Maven 镜像，官方 `google()` / `mavenCentral()` 保留为兜底。
 
 ## 边界
 

@@ -1708,3 +1708,21 @@
 - [project-logs/campus-relay/step-113-dual-capacitor-android-shell-scaffold.md](step-113-dual-capacitor-android-shell-scaffold.md)
 
 本轮是双 Capacitor Android 壳 scaffold 轮：新增 `mobile/user-app` 与 `mobile/parttime-app`，分别绑定 `com.xiaoyu.campus.user` 和 `com.xiaoyu.campus.parttime`，并分别指向 `frontend/dist-android-user` 与 `frontend/dist-android-parttime`。两个壳均已安装 Capacitor 8.3.1、生成 Android 原生工程并通过 `cap:sync` 与 `npx cap doctor android`。本轮没有改 bridge、鉴权、接口、token 附着、路由结构或业务页面语义。
+
+## Step 114 - Android 本机构建验证
+
+- [mobile/README.md](../../mobile/README.md)
+- [mobile/user-app/android/build.gradle](../../mobile/user-app/android/build.gradle)
+- [mobile/user-app/android/gradle.properties](../../mobile/user-app/android/gradle.properties)
+- [mobile/user-app/android/gradle/wrapper/gradle-wrapper.properties](../../mobile/user-app/android/gradle/wrapper/gradle-wrapper.properties)
+- [mobile/parttime-app/android/build.gradle](../../mobile/parttime-app/android/build.gradle)
+- [mobile/parttime-app/android/gradle.properties](../../mobile/parttime-app/android/gradle.properties)
+- [mobile/parttime-app/android/gradle/wrapper/gradle-wrapper.properties](../../mobile/parttime-app/android/gradle/wrapper/gradle-wrapper.properties)
+- [docs/mobile/android-shell-scaffold-plan.md](../../docs/mobile/android-shell-scaffold-plan.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/step-114-android-local-build-validation.md](step-114-android-local-build-validation.md)
+
+本轮是 Android 本机构建验证轮：将 Gradle wrapper 分发包切到腾讯 Gradle 镜像，将 Android Gradle 依赖优先切到阿里云 Maven 镜像，并记录 JDK 21 / Android SDK 本地构建前置。用户端与兼职端均已完成 `cap:sync` 和 `assembleDebug`，Debug APK 已分别输出到两个壳的 `android/app/build/outputs/apk/debug/app-debug.apk`。本轮没有改 bridge、鉴权、接口、token 附着、路由结构、前端业务页面或后端业务语义。

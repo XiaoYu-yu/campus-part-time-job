@@ -1,19 +1,23 @@
 # 校园代送待处理事项
 
-## Step 114 最高优先级
+## Step 115 最高优先级
 
-1. Step 113 已完成双 Capacitor Android 壳 scaffold：
+1. Step 114 已完成 Android 本机构建验证：
    - 用户端壳：`mobile/user-app`
    - 兼职端壳：`mobile/parttime-app`
    - 用户端包名：`com.xiaoyu.campus.user`
    - 兼职端包名：`com.xiaoyu.campus.parttime`
-   - 两个壳均已通过 `cap:sync` 和 `npx cap doctor android`
-2. Step 114 最高优先级建议：
-   - 做 Android 本机构建验证
-   - 优先跑用户端 `assembleDebug`
-   - 再跑兼职端 `assembleDebug`
-   - 如果首次 Gradle 下载慢或超时，优先排查代理、Android SDK、JDK 和 Gradle 缓存
-3. Step 114 仍不建议：
+   - 两个壳均已通过 `cap:sync`
+   - 两个壳均已通过 `assembleDebug`
+   - 用户端 APK：`mobile/user-app/android/app/build/outputs/apk/debug/app-debug.apk`
+   - 兼职端 APK：`mobile/parttime-app/android/app/build/outputs/apk/debug/app-debug.apk`
+2. Step 115 最高优先级建议：
+   - 做真机或模拟器 smoke
+   - 安装用户端 APK，确认首屏进入 `/user/login`
+   - 安装兼职端 APK，确认首屏进入 `/parttime/login`
+   - 验证 App 内 `/api` 请求在 WebView 环境是否需要显式 API base URL
+   - 验证两个包名下 token / storage 隔离
+3. Step 115 仍不建议：
    - 修改业务前端页面
    - 改 bridge、鉴权、token 附着逻辑或后端接口
    - 原生 Android 重写业务页面

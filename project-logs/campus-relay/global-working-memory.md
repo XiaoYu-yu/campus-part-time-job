@@ -174,7 +174,12 @@
 15. Step 110 已完成双 Android 壳路线评估，当前推荐路线为“单前端源码 + 双 Capacitor Android 壳”；admin 保持 Web-only，旧 `uni-app/` 仅保留为历史占位，不再作为当前实施主线
 16. Step 111 已完成双 Capacitor scaffold go / no-go，结论为先补前端 Android 构建目标层，再创建 Capacitor 壳
 17. Step 112 已完成前端 Android 构建目标层，`npm run build` 保持 admin Web 默认入口，`build:android:user` 与 `build:android:parttime` 分别输出用户端和兼职端移动构建产物
-18. Step 113 已完成双 Capacitor Android 壳 scaffold，`mobile/user-app` 与 `mobile/parttime-app` 均已生成 Android 工程并通过 `cap:sync`；APK 构建验证留到 Step 114
+18. Step 113 已完成双 Capacitor Android 壳 scaffold，`mobile/user-app` 与 `mobile/parttime-app` 均已生成 Android 工程并通过 `cap:sync`
+19. Step 114 已完成 Android 本机构建验证：
+   - Gradle wrapper 分发包切到腾讯 Gradle 镜像
+   - Android Gradle 依赖优先走阿里云 Maven 镜像
+   - 本机安装 JDK 21 与 Android SDK 后，用户端和兼职端 Debug APK 均构建成功
+   - APK 输出分别在 `mobile/user-app/android/app/build/outputs/apk/debug/app-debug.apk` 与 `mobile/parttime-app/android/app/build/outputs/apk/debug/app-debug.apk`
 
 当前已确认的部署层修正：
 
@@ -197,13 +202,17 @@
 3. Step 113 已新增双 Capacitor Android 壳 scaffold：
    - 用户端壳指向 `frontend/dist-android-user`
    - 兼职端壳指向 `frontend/dist-android-parttime`
-4. Step 114 推荐专门做 Android 本机构建验证和 APK 产物确认
-5. Android 线仍不要复制第二套前端工程，也不要把 admin 打进移动壳作为默认入口
+4. Step 114 已确认两个 Android 壳可以本机构建 Debug APK
+5. Step 115 推荐进入真机或模拟器 smoke，重点确认：
+   - App 首屏入口是否分别进入 `/user/login` 与 `/parttime/login`
+   - 移动端 WebView 内 `/api` 请求是否需要显式 API base URL
+   - 用户端和兼职端登录态是否按包名隔离
+6. Android 线仍不要复制第二套前端工程，也不要把 admin 打进移动壳作为默认入口
 
 优先级建议：
 
 1. 如果近期仍是 owner 自测，优先验证兼职端账号 `13900139001 / 123456` 是否可直接完成“登录 -> 工作台 -> 我的资料”
-2. 如果继续 Android 线，优先进入 Step 114 Android 本机构建验证，而不是继续抠 admin 样式
+2. 如果继续 Android 线，优先进入 Step 115 真机或模拟器 smoke，而不是继续抠 admin 样式
 3. 如果准备邀请外部用户长期访问，再进入 HTTPS / 域名 / 正式反向代理准备
 4. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断
 

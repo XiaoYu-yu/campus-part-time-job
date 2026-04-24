@@ -136,9 +136,35 @@ mobile/
 5. 不接真实支付、真实退款、真实打款。
 6. 不因 Android 壳重开 bridge 主线。
 
+## Step 114 已完成的本地 Android 构建验证
+
+Step 114 已确认两个 Android 壳可以在本机完成 Debug APK 构建：
+
+1. 用户端：
+   - `mobile/user-app`
+   - APK：`mobile/user-app/android/app/build/outputs/apk/debug/app-debug.apk`
+2. 兼职端：
+   - `mobile/parttime-app`
+   - APK：`mobile/parttime-app/android/app/build/outputs/apk/debug/app-debug.apk`
+
+本轮修正了本机构建阻塞：
+
+1. Gradle wrapper 分发包从默认海外地址切到腾讯 Gradle 镜像。
+2. `networkTimeout` 从 `10000` 提高到 `120000`。
+3. Android Gradle 依赖优先使用阿里云 Maven 镜像，官方源保留兜底。
+4. 本机安装 JDK 21 与 Android SDK 后，两个壳均通过 `cap:sync` 和 `assembleDebug`。
+
+本轮仍不改变：
+
+1. 前端业务源码。
+2. bridge / 鉴权 / token 附着逻辑。
+3. 后端接口。
+4. Android 默认入口。
+5. admin Web-only 边界。
+
 ## 推荐推进顺序
 
 1. Step 112：实现前端构建目标层。已完成。
 2. Step 113：新增双 Capacitor 壳 scaffold。已完成。
-3. Step 114：本地 Android 构建验证。下一步。
-4. Step 115：真机或模拟器 smoke。
+3. Step 114：本地 Android 构建验证。已完成。
+4. Step 115：真机或模拟器 smoke，重点验证 App 启动入口、登录页展示和移动端 API base URL。
