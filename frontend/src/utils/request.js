@@ -108,7 +108,7 @@ request.interceptors.response.use(
             router.push({
               path: '/parttime/login',
               query: {
-                redirect: '/courier/workbench'
+                redirect: '/parttime/workbench'
               }
             })
           } else if (courierRequest) {
@@ -117,7 +117,7 @@ request.interceptors.response.use(
             router.push({
               path: '/parttime/login',
               query: {
-                redirect: '/courier/workbench'
+                redirect: '/parttime/workbench'
               }
             })
           } else {

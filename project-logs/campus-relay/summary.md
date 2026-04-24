@@ -118,6 +118,7 @@
 - 当前已完成：`Step 106 - 售后执行页表格列拖拽关闭修复`
 - 当前已完成：`Step 107 - 全局按钮 plain 语义修正与员工页操作列样式清理`
 - 当前已完成：`Step 108 - 兼职端独立登录与前台入口拆分`
+- 当前已完成：`Step 109 - 兼职端壳层与资料页最小补齐`
 - 当前日期：`2026-04-23`
 - Step 102 补充：已把 admin 主框架、仪表盘和运营人员页从旧外卖后台视觉收敛到校园兼职运营风格；本轮只改展示层和全局主题变量，未改 bridge、接口、鉴权、路由、API 调用顺序或后端业务。已通过 `npm run build`、`npm run test -- text.spec.js` 和 `git diff --check`；本地 admin seed 登录与员工列表复核返回 `管理员 / 技术部`。
 - Step 103 补充：已把登录页改为 `校内兼职运营台`，并将 admin 外壳 / dashboard 进一步按深色玻璃拟态方向重基线；同时补齐旧 session / localStorage / in-memory 场景的 admin 文本归一化兜底，覆盖顶部用户名、dashboard 欢迎语和 Employee 页姓名 / 职位 / 部门显示。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
@@ -125,6 +126,8 @@
 - Step 105 补充：已将 `Employee.vue` 与 `Statistics.vue` 重新接回 `MainLayout`，恢复统一侧边栏、breadcrumb 和首页返回入口；同时重整 `Statistics.vue` 展示层级，并补上 ECharts 页面卸载清理、实例复用和 `LegacyGridContainLabel` 注册，消除统计页真实 smoke 中的控制台 warning。本轮未改 bridge、接口、鉴权、路由、token 附着、后端业务或新增页面。
 - Step 106 补充：已在 `frontend/src/views/CampusAfterSaleExecutionList.vue` 的主列表和详情 drawer 执行历史表中显式关闭列宽拖拽，为所有 `el-table-column` 增加 `:resizable="false"`；本轮只消除 Element Plus 默认列拖拽交互噪音，未改接口、分页、筛选语义、drawer 行为、bridge、鉴权、路由或后端业务。
 - Step 107 补充：已修正 `frontend/src/styles/element-plus.scss` 中对 `el-button` 的全局主题覆盖，避免把 `is-plain` / `is-link` / `is-text` 误刷成实心渐变按钮；同时在 `frontend/src/views/Employee.vue` 中收紧操作列按钮间距，移除 `gap` 与 Element Plus 默认 `margin-left` 叠加导致的布局噪音。当前 `type=\"danger\" plain` 的删除按钮已恢复浅底红框语义，且不再出现视觉覆盖问题。本轮未改 bridge、接口、鉴权、路由、后端业务或页面语义。
+- Step 108 补充：已新增 `/parttime/login` 作为兼职端独立登录入口，兼容 `/courier/login`；`/courier/workbench` 已变为需要 `courier_token` 的受保护路由，token 失效时统一回到兼职端登录页。当前边界是“用户端负责报名 / 入驻资料，兼职端负责日常登录”。本轮未改后端 token 接口、bridge、鉴权或订单状态机。
+- Step 109 补充：已新增 `ParttimeLayout` 与 `/parttime/profile`，并把正式工作台入口调整为 `/parttime/workbench`，旧 `/courier/workbench` 继续作为兼容 alias。`CourierWorkbench.vue` 已切换到兼职端壳层，不再借用户端 Layout；用户端 onboarding 和个人中心的工作台跳转同步指向正式兼职端入口。已通过 frontend build/lint/test、backend compile 和 `git diff --check`。本轮未改 bridge、鉴权、后端接口、工作台动作语义或订单状态机。
 - Step 46 补充：已新增 admin 异常 resolve 后端接口 `POST /api/campus/admin/exceptions/{id}/resolve`，只允许 `REPORTED -> RESOLVED`，重复处理返回明确业务错误；本轮未改订单主状态、settlement、latest exception 摘要、bridge、前端页面或路由。
 - Step 47 补充：本轮只做 admin 异常前端承接 go / no-go 评估，不写业务代码、不补页面；最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备，P2 售后执行历史表继续后置。
 - Step 48 补充：已新增 `/campus/exceptions` admin 异常处理页，接入异常历史列表、详情 drawer 和 `REPORTED -> RESOLVED` 最小 resolve 动作；本轮未改后端接口、bridge、鉴权、订单主状态、settlement 或 latest exception 摘要。
@@ -2313,6 +2316,7 @@
 - [Step 106 日志](step-106-after-sale-table-resize-handle-fix.md)
 - [Step 107 日志](step-107-global-button-plain-fix-and-employee-action-cell-cleanup.md)
 - [Step 108 日志](step-108-parttime-login-and-independent-entry.md)
+- [Step 109 日志](step-109-parttime-shell-and-profile-page.md)
 - [全局工作记忆](global-working-memory.md)
 - [试运营脚本入口说明](../../scripts/trial-operation/README.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)

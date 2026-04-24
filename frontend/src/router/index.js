@@ -180,10 +180,17 @@ const router = createRouter({
       component: () => import('../views/courier/Login.vue')
     },
     {
-      path: '/courier/workbench',
-      name: 'CourierWorkbench',
+      path: '/parttime/workbench',
+      alias: '/courier/workbench',
+      name: 'ParttimeWorkbench',
       meta: { requiresCourierAuth: true },
       component: () => import('../views/courier/CourierWorkbench.vue')
+    },
+    {
+      path: '/parttime/profile',
+      name: 'ParttimeProfile',
+      meta: { requiresCourierAuth: true },
+      component: () => import('../views/courier/Profile.vue')
     }
   ]
 })
@@ -224,7 +231,7 @@ router.beforeEach((to, from, next) => {
   }
 
   if ((to.path === '/parttime/login' || to.path === '/courier/login') && hasCourierToken) {
-    next('/courier/workbench')
+    next('/parttime/workbench')
     return
   }
 

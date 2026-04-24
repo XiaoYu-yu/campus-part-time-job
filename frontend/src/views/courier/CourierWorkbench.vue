@@ -1,5 +1,5 @@
 <template>
-  <UserLayout>
+  <ParttimeLayout>
     <div class="workbench-page">
       <section class="card hero-card">
         <div>
@@ -151,7 +151,7 @@
           <div class="action-group">
             <el-button type="primary" @click="loadWorkbench">刷新工作台</el-button>
             <el-button @click="goToOnboarding">回到入驻页面</el-button>
-            <el-button @click="goToProfile">回到个人中心</el-button>
+            <el-button @click="goToProfile">查看兼职资料</el-button>
           </div>
         </section>
 
@@ -452,18 +452,18 @@
         <el-empty description="当前浏览器还没有兼职 token，暂时无法进入兼职工作台。">
           <el-button type="primary" @click="goToParttimeLogin">前往兼职端登录</el-button>
           <el-button @click="goToOnboarding">返回入驻页面</el-button>
-          <el-button @click="goToProfile">回到个人中心</el-button>
+          <el-button @click="goToProfile">查看兼职资料</el-button>
         </el-empty>
       </section>
     </div>
-  </UserLayout>
+  </ParttimeLayout>
 </template>
 
 <script setup>
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import UserLayout from '../../layout/UserLayout.vue'
+import ParttimeLayout from '../../layout/ParttimeLayout.vue'
 import {
   acceptCourierOrder,
   deliverCourierOrder,
@@ -795,7 +795,7 @@ const goToParttimeLogin = () => {
 }
 
 const goToProfile = () => {
-  router.push('/user/profile')
+  router.push('/parttime/profile')
 }
 
 onMounted(() => {

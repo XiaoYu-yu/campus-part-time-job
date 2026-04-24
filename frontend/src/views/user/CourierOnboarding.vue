@@ -306,7 +306,7 @@ const loadAll = async () => {
 }
 
 const goToCourierWorkbench = () => {
-  router.push('/courier/workbench')
+  router.push('/parttime/workbench')
 }
 
 const applyToken = async () => {

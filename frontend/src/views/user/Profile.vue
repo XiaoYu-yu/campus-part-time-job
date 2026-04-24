@@ -57,7 +57,7 @@
         <div class="menu-item" @click="router.push('/user/campus/after-sale-result')">售后结果回执</div>
         <div class="menu-item" @click="router.push('/user/campus/courier-onboarding')">兼职配送入驻</div>
         <div class="menu-item" @click="router.push('/parttime/login')">兼职端登录</div>
-        <div class="menu-item" @click="router.push('/courier/workbench')">兼职工作台</div>
+        <div class="menu-item" @click="router.push('/parttime/workbench')">兼职工作台</div>
       </section>
 
       <button class="logout-btn" @click="handleLogout">退出登录</button>

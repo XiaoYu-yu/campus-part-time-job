@@ -100,7 +100,7 @@ const rules = {
 
 const resolveRedirect = () => {
   const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : ''
-  return redirect || '/courier/workbench'
+  return redirect || '/parttime/workbench'
 }
 
 const handleLogin = async () => {

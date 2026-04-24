@@ -1,20 +1,23 @@
 # 校园代送待处理事项
 
-## Step 108 最高优先级
+## Step 109 最高优先级
 
-1. Step 108 已完成兼职端独立登录入口：
-   - 新增 `/parttime/login`
-   - 兼容 `/courier/login`
-   - `/courier/workbench` 已改为需要 `courier_token` 的受保护路由
-   - token 失效时统一回到兼职端登录页
-2. 当前最高优先级是 owner 本地复核“用户端报名 / 兼职端日常登录”这条拆分后的真实使用路径，而不是继续抠后台样式。
+1. Step 109 已完成兼职端最小页面群补齐：
+   - 新增 `/parttime/workbench` 正式工作台入口
+   - 继续兼容 `/courier/workbench`
+   - 新增 `/parttime/profile` 兼职资料 / 审核状态页
+   - 工作台已切换到 `ParttimeLayout`，不再借用户端 Layout
+2. 当前最高优先级是 owner 本地复核“用户端报名 / 兼职端日常登录 / 兼职资料查看”这条拆分后的真实使用路径。
 3. 建议优先复核：
    - `/parttime/login` 是否能用 `13900139001 / 123456` 直接换取 token
-   - `/user/campus/courier-onboarding` 申请 token 后是否仍可直达工作台
-   - `/courier/workbench` 无 token 时是否会正确回到兼职端登录
+   - 登录成功后是否进入 `/parttime/workbench`
+   - `/parttime/profile` 是否能读取资料与审核状态
+   - `/courier/workbench` 是否仍作为兼容入口可用
+   - `/user/campus/courier-onboarding` 申请 token 后是否仍可直达正式兼职工作台
 4. 若这条路径验证通过，下一轮主线应切到：
-   - 兼职端最小页面群补齐
    - 用户端 / 兼职端双 Android 壳路线评估
+   - 明确 WebView / Capacitor / 原生实现边界
+   - 不直接开写 Android，先定技术路线和最小试运营范围
 5. bridge 主线继续保持 `Phase A no-op` 冻结态，不默认重开。
 6. 展示 polish 主线继续保持冻结/维护态；当前不再默认继续做后台样式微调。
 7. 本轮仍不改 bridge、鉴权、后端 token 接口、订单状态机或 settlement 逻辑。

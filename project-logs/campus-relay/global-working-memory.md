@@ -170,6 +170,7 @@
 11. Step 104 已将登录页、admin 外壳、dashboard 和 employee 高曝光区域统一回浅色玻璃风格
 12. Step 105 已将 `Employee.vue` 与 `Statistics.vue` 接回 `MainLayout`，修复后台公共导航丢失问题，并把数据看板重整到当前浅色校园后台视觉层级，同时清掉统计页真实 smoke 中暴露的 ECharts 重复初始化 warning
 13. Step 108 已新增 `/parttime/login` 作为兼职端独立登录入口，并把 `/courier/workbench` 调整为 `courier_token` 受保护路由；当前产品边界已从“用户端借道兼职工作台”前进到“用户端负责报名，兼职端负责日常登录”
+14. Step 109 已新增 `ParttimeLayout`、正式 `/parttime/workbench`、兼容 `/courier/workbench` alias 和 `/parttime/profile`；当前兼职端 H5 最小页面群为“登录 -> 工作台 -> 我的资料”，仍未新增 Android 工程
 
 当前已确认的部署层修正：
 
@@ -185,14 +186,14 @@
 
 默认下一主线：
 
-1. 先由 owner 本地复核 `/employee` 与 `/statistics` 是否已经恢复统一后台壳层、首页返回和菜单高亮
-2. 若这两页验收通过，再继续观察其它高曝光后台页是否还存在单点样式问题
-3. 若仍发现旧外卖视觉残留，下一轮只选一个页面继续小范围修复，不做全站重写
+1. 先由 owner 本地复核 `/parttime/login`、`/parttime/workbench`、`/parttime/profile` 和旧 `/courier/workbench` alias 是否稳定
+2. 若兼职端 H5 最小页面群验收通过，下一轮优先做用户端 / 兼职端双 Android 壳路线评估
+3. Android 前不要直接开写，先明确 WebView / Capacitor / 原生方案、登录态隔离、接口复用和试运营最小范围
 
 优先级建议：
 
-1. 如果近期仍是 owner 自测，优先验证兼职端账号 `13900139001 / 123456` 是否可直接完成“登录 -> 工作台”
-2. 如果兼职端独立登录稳定，再评估哪些兼职端页面仍缺最小承接，而不是继续抠 admin 样式
+1. 如果近期仍是 owner 自测，优先验证兼职端账号 `13900139001 / 123456` 是否可直接完成“登录 -> 工作台 -> 我的资料”
+2. 如果兼职端 H5 最小页面群稳定，再评估 Android 双端路线，而不是继续抠 admin 样式
 3. 如果准备邀请外部用户长期访问，再进入 HTTPS / 域名 / 正式反向代理准备
 4. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断
 

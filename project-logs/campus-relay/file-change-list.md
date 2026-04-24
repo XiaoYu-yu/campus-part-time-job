@@ -1634,3 +1634,22 @@
 - [project-logs/campus-relay/step-108-parttime-login-and-independent-entry.md](step-108-parttime-login-and-independent-entry.md)
 
 本轮是前端样式语义修正轮：针对全局 `Element Plus` 按钮主题覆盖误伤 `plain / link / text` 语义的问题，收紧了 `el-button` 的渐变样式作用范围，并补齐 `primary / success / warning / danger / info` 的 `is-plain` 视觉规则；同时在 `Employee.vue` 中移除操作列按钮间距叠加问题，避免 `删除` 按钮出现红色背景覆盖和布局噪音。验证已覆盖 frontend build、frontend lint、frontend test、backend compile 和 `git diff --check`；本轮没有改 bridge、接口、鉴权、路由、后端业务或新增页面。
+
+## Step 109 - 兼职端壳层与资料页最小补齐
+
+- [frontend/src/layout/ParttimeLayout.vue](../../frontend/src/layout/ParttimeLayout.vue)
+- [frontend/src/views/courier/Profile.vue](../../frontend/src/views/courier/Profile.vue)
+- [frontend/src/router/index.js](../../frontend/src/router/index.js)
+- [frontend/src/utils/request.js](../../frontend/src/utils/request.js)
+- [frontend/src/views/courier/Login.vue](../../frontend/src/views/courier/Login.vue)
+- [frontend/src/views/courier/CourierWorkbench.vue](../../frontend/src/views/courier/CourierWorkbench.vue)
+- [frontend/src/views/user/CourierOnboarding.vue](../../frontend/src/views/user/CourierOnboarding.vue)
+- [frontend/src/views/user/Profile.vue](../../frontend/src/views/user/Profile.vue)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/step-108-parttime-login-and-independent-entry.md](step-108-parttime-login-and-independent-entry.md)
+- [project-logs/campus-relay/step-109-parttime-shell-and-profile-page.md](step-109-parttime-shell-and-profile-page.md)
+
+本轮是兼职端最小页面群补齐轮：新增 `ParttimeLayout` 和 `/parttime/profile`，将正式工作台入口迁到 `/parttime/workbench`，并保留旧 `/courier/workbench` 作为兼容 alias；`CourierWorkbench.vue` 已切换到兼职端壳层，用户端 onboarding / profile 的工作台跳转同步指向正式兼职端入口。本轮没有改 bridge、鉴权、后端接口、工作台动作语义、订单状态机或新增 Android 工程。
