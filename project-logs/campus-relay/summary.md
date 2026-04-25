@@ -127,6 +127,7 @@
 - 当前已完成：`Step 115 - Android 真机 / 模拟器 smoke 入口与模拟器阻塞确认`
 - 当前已完成：`Step 116 - Android 模拟器真实 smoke 与 API base 加固`
 - 当前已完成：`Step 117 - 用户端移动首页校园兼职化`
+- 当前已完成：`Step 118 - 用户端移动首页真实视觉 smoke 与登录文案修正`
 - 当前日期：`2026-04-25`
 - Step 102 补充：已把 admin 主框架、仪表盘和运营人员页从旧外卖后台视觉收敛到校园兼职运营风格；本轮只改展示层和全局主题变量，未改 bridge、接口、鉴权、路由、API 调用顺序或后端业务。已通过 `npm run build`、`npm run test -- text.spec.js` 和 `git diff --check`；本地 admin seed 登录与员工列表复核返回 `管理员 / 技术部`。
 - Step 103 补充：已把登录页改为 `校内兼职运营台`，并将 admin 外壳 / dashboard 进一步按深色玻璃拟态方向重基线；同时补齐旧 session / localStorage / in-memory 场景的 admin 文本归一化兜底，覆盖顶部用户名、dashboard 欢迎语和 Employee 页姓名 / 职位 / 部门显示。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
@@ -144,6 +145,7 @@
 - Step 115 补充：已新增 Android smoke 脚本 `scripts/trial-operation/android-smoke.ps1`，可在设备在线后安装、启动用户端和兼职端 Debug APK 并保存启动截图；同时已安装 Android Emulator、Android 35 Google APIs x86_64 system image 并创建 `campus_api35` AVD。当前真实阻塞是 Android Emulator hypervisor driver 未安装，普通命令环境无法完成管理员驱动安装，`-accel off` 软件启动也未能让 AVD 进入 `adb devices` 在线状态；因此本轮未伪造 APK 安装、首屏和 WebView API 验证结果。
 - Step 116 补充：Android Emulator Hypervisor Driver 已可用，`campus_api35` 已以 `emulator-5554` 在线；用户端和兼职端 Debug APK 已真实安装、启动和截图。新增 Android 构建专用 API base：`frontend/.env.android-user` 与 `frontend/.env.android-parttime` 指向 `http://10.0.2.2:8080/api`；两个 Capacitor 壳补齐本地 cleartext smoke 配置，backend dev/test CORS 放行 WebView 本地 origin。真实 WebView 验证已通过兼职端 token 登录、profile、review-status、available orders，以及用户端登录。当前剩余产品问题是用户端登录后首页仍带旧外卖语义，建议 Step 117 优先校园兼职化用户端移动首页。本轮未改 bridge、鉴权、接口语义、路由、订单状态机或页面业务行为。
 - Step 117 补充：已将用户端登录后的默认首页从旧外卖商品推荐语义收敛为“校园兼职 / 校园代送用户端首页”。`UserLayout.vue` 改为用户端移动 shell 与底部校园入口，`Home.vue` 改为校园结果回看、兼职入驻状态、token 资格提示和旧外卖兼容入口；旧 `category/cart/orders/profile` 页面仍保留为兼容入口。本轮没有改 bridge、`request.js`、token 附着、API 调用顺序、路由结构、后端接口、Android 原生工程或旧外卖模块。
+- Step 118 补充：已启动本地 backend(test) 与 frontend dev，使用 Playwright CLI 在 390x844 移动视口真实登录用户端并采集 `/user/login`、`/user`、`/user/campus/order-result?orderId=CR202604060001`、`/user/campus/courier-onboarding` 截图。smoke 发现用户登录页仍有“点餐”文案，已修正为校园兼职用户端登录文案和浅色校园风格；用户首页、底部导航、结果回看快捷入口和入驻摘要可读。本轮没有改 bridge、鉴权、token 附着、API 调用顺序、后端接口、Android 原生工程或旧外卖模块。
 - Step 46 补充：已新增 admin 异常 resolve 后端接口 `POST /api/campus/admin/exceptions/{id}/resolve`，只允许 `REPORTED -> RESOLVED`，重复处理返回明确业务错误；本轮未改订单主状态、settlement、latest exception 摘要、bridge、前端页面或路由。
 - Step 47 补充：本轮只做 admin 异常前端承接 go / no-go 评估，不写业务代码、不补页面；最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备，P2 售后执行历史表继续后置。
 - Step 48 补充：已新增 `/campus/exceptions` admin 异常处理页，接入异常历史列表、详情 drawer 和 `REPORTED -> RESOLVED` 最小 resolve 动作；本轮未改后端接口、bridge、鉴权、订单主状态、settlement 或 latest exception 摘要。
@@ -2341,6 +2343,7 @@
 - [Step 115 日志](step-115-android-device-smoke-entry-and-blocker.md)
 - [Step 116 日志](step-116-android-emulator-smoke-and-api-base.md)
 - [Step 117 日志](step-117-user-mobile-home-campusization.md)
+- [Step 118 日志](step-118-user-home-visual-smoke-and-login-copy.md)
 - [全局工作记忆](global-working-memory.md)
 - [试运营脚本入口说明](../../scripts/trial-operation/README.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)

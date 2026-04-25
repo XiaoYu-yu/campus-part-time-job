@@ -1,18 +1,20 @@
 # 校园代送待处理事项
 
-## Step 118 最高优先级
+## Step 119 最高优先级
 
-1. Step 117 已完成用户端移动首页校园兼职化：
+1. Step 118 已完成用户端移动首页真实视觉 smoke 与登录文案修正：
    - `frontend/src/layout/UserLayout.vue` 已从旧外卖顶部栏 / 购物车语义切到用户端移动 shell 与校园入口底部导航。
    - `frontend/src/views/user/Home.vue` 已从商品推荐首页切到校园代送结果回看、兼职入驻状态、token 资格提示和旧外卖兼容入口。
+   - 已用 Playwright CLI 在 390x844 移动视口真实登录用户端并采集 `/user/login`、`/user`、`/user/campus/order-result?orderId=CR202604060001`、`/user/campus/courier-onboarding` 截图。
+   - smoke 发现并修正 `frontend/src/views/user/Login.vue` 仍保留“点餐”文案的问题。
    - 旧 `category/cart/orders/profile` 页面仍保留为兼容入口，未删除旧外卖模块。
    - 本轮未改 bridge、`request.js`、token 附着、API 调用顺序、路由结构、后端接口或 Android 原生工程。
-2. Step 118 最高优先级建议：
-   - 先做用户端 Android / 浏览器真实视觉 smoke，确认 `/user` 登录后首页、底部导航、结果回看快捷入口和兼职入驻摘要在移动宽度下可读。
-   - 如果视觉 smoke 稳定，再评估是否补“用户端校园代送下单 / 我的代送单”最小入口；这比继续改旧外卖兼容页面更接近内测型试运营。
+2. Step 119 最高优先级建议：
+   - 评估并实现“用户端校园代送下单 / 我的代送单”最小入口；这是当前用户端从“能回看结果”走向“能发起试运营订单”的关键缺口。
+   - 范围应限定为用户端移动 H5 页面与现有 customer campus 接口复用，先不要改订单状态机、支付语义或旧外卖模块。
    - 同步评估 Android API base 分层：本地模拟器、局域网真机、公网 HTTPS，不要把 `10.0.2.2` 直接当成真机 / 服务器通用配置。
    - 不要在这一步重开 bridge、改鉴权、改订单状态机或重写 Android 原生工程结构。
-3. Step 118 仍不建议：
+3. Step 119 仍不建议：
    - 重开 bridge 收口主线。
    - 原生 Android 重写用户端 / 兼职端页面。
    - 继续机械补 admin 页面或第五个 admin 页。

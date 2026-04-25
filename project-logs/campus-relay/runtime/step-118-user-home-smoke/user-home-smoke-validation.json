@@ -1,0 +1,56 @@
+{
+  "step": "118",
+  "name": "user-home-visual-smoke-and-login-copy",
+  "date": "2026-04-25",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "runtime": {
+    "frontend": "http://127.0.0.1:5173",
+    "backend": "http://127.0.0.1:8080",
+    "backendProfile": "test"
+  },
+  "account": {
+    "role": "customer",
+    "phone": "13900139000"
+  },
+  "verifiedPages": [
+    {
+      "path": "/user/login",
+      "result": "passed",
+      "screenshot": "project-logs/campus-relay/runtime/step-118-user-home-smoke/screenshots/user-login-mobile.png",
+      "notes": "登录页已改为校园兼职用户端文案，不再出现点餐主文案。"
+    },
+    {
+      "path": "/user",
+      "result": "passed",
+      "screenshot": "project-logs/campus-relay/runtime/step-118-user-home-smoke/screenshots/user-home-after-login-mobile.png",
+      "notes": "登录后首页展示校园兼职用户端、结果回看、兼职入驻、兼职端登录和旧模块兼容入口。"
+    },
+    {
+      "path": "/user/campus/order-result?orderId=CR202604060001",
+      "result": "passed",
+      "screenshot": "project-logs/campus-relay/runtime/step-118-user-home-smoke/screenshots/user-order-result-mobile.png",
+      "notes": "结果页可自动带入订单号并回读 completed 订单。"
+    },
+    {
+      "path": "/user/campus/courier-onboarding",
+      "result": "passed",
+      "screenshot": "project-logs/campus-relay/runtime/step-118-user-home-smoke/screenshots/user-onboarding-mobile.png",
+      "notes": "入驻页在移动视口可读，底部导航入驻项可达。"
+    }
+  ],
+  "network": {
+    "login": "POST /api/users/login => 200",
+    "reviewStatus": "GET /api/campus/customer/courier-onboarding/review-status => 200",
+    "tokenEligibility": "GET /api/campus/customer/courier-onboarding/token-eligibility => 200"
+  },
+  "console": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "bridgeChanged": false,
+  "requestJsChanged": false,
+  "androidNativeChanged": false
+}

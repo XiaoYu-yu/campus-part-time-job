@@ -1774,3 +1774,16 @@
 - [project-logs/campus-relay/step-117-user-mobile-home-campusization.md](step-117-user-mobile-home-campusization.md)
 
 本轮是用户端移动首页校园兼职化轮：`UserLayout.vue` 从旧外卖顶部栏、购物车状态和店铺营业语义切到校园用户端移动 shell 与底部导航；`Home.vue` 从商品推荐首页切到校园代送结果回看、兼职入驻状态、token 资格提示和旧外卖兼容入口。本轮没有改 bridge、`request.js`、token 附着逻辑、API 调用顺序、路由结构、后端接口、Android 原生工程或旧外卖模块。
+
+## Step 118 - 用户端移动首页真实视觉 smoke 与登录文案修正
+
+- [frontend/src/views/user/Login.vue](../../frontend/src/views/user/Login.vue)
+- [project-logs/campus-relay/runtime/step-118-user-home-smoke/screenshots](runtime/step-118-user-home-smoke/screenshots)
+- [project-logs/campus-relay/runtime/step-118-user-home-smoke/user-home-smoke-validation.json](runtime/step-118-user-home-smoke/user-home-smoke-validation.json)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/step-118-user-home-visual-smoke-and-login-copy.md](step-118-user-home-visual-smoke-and-login-copy.md)
+
+本轮是用户端移动首页真实视觉 smoke 与登录文案修正轮：本地启动 backend(test) 与 frontend dev，使用 Playwright CLI 在 390x844 移动视口真实登录并验证用户端首页、底部导航、结果回看和入驻页；同时修正 `Login.vue` 中遗留的“点餐”文案和旧外卖色彩，统一到校园兼职用户端浅色风格。本轮没有改 bridge、`request.js`、token 附着逻辑、API 调用顺序、后端接口、Android 原生工程或旧外卖模块。
