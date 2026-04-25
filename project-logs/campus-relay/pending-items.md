@@ -1,21 +1,18 @@
 # 校园代送待处理事项
 
-## Step 117 最高优先级
+## Step 118 最高优先级
 
-1. Step 116 已完成 Android 模拟器真实 smoke 与 API base 加固：
-   - `campus_api35` 已通过 Android Emulator Hypervisor Driver 加速进入 `adb devices -l` 在线状态。
-   - 用户端与兼职端 Debug APK 均已真实安装、启动和截图。
-   - Android 构建专用 env 已固定到模拟器访问宿主机的 `http://10.0.2.2:8080/api`。
-   - Capacitor 壳已补齐本地 smoke 所需 `http` scheme 与 cleartext 配置。
-   - backend dev/test CORS 已放行 Android WebView 本地 origin。
-   - 兼职端 WebView 已真实验证 token 登录、profile、review-status 和 available orders。
-   - 用户端 WebView 已真实验证用户登录。
-2. Step 117 最高优先级建议：
-   - 优先把用户端 Android 登录后首页从旧外卖语义收敛为校园兼职 / 校园代送用户端首页。
-   - 保持旧外卖模块可运行，但不要让用户端移动壳默认展示旧外卖首页。
-   - 同步设计 Android API base 分层：本地模拟器、局域网真机、公网 HTTPS。
-   - 不要在这一步改 bridge、鉴权、订单状态机或 Android 原生工程结构。
-3. Step 117 仍不建议：
+1. Step 117 已完成用户端移动首页校园兼职化：
+   - `frontend/src/layout/UserLayout.vue` 已从旧外卖顶部栏 / 购物车语义切到用户端移动 shell 与校园入口底部导航。
+   - `frontend/src/views/user/Home.vue` 已从商品推荐首页切到校园代送结果回看、兼职入驻状态、token 资格提示和旧外卖兼容入口。
+   - 旧 `category/cart/orders/profile` 页面仍保留为兼容入口，未删除旧外卖模块。
+   - 本轮未改 bridge、`request.js`、token 附着、API 调用顺序、路由结构、后端接口或 Android 原生工程。
+2. Step 118 最高优先级建议：
+   - 先做用户端 Android / 浏览器真实视觉 smoke，确认 `/user` 登录后首页、底部导航、结果回看快捷入口和兼职入驻摘要在移动宽度下可读。
+   - 如果视觉 smoke 稳定，再评估是否补“用户端校园代送下单 / 我的代送单”最小入口；这比继续改旧外卖兼容页面更接近内测型试运营。
+   - 同步评估 Android API base 分层：本地模拟器、局域网真机、公网 HTTPS，不要把 `10.0.2.2` 直接当成真机 / 服务器通用配置。
+   - 不要在这一步重开 bridge、改鉴权、改订单状态机或重写 Android 原生工程结构。
+3. Step 118 仍不建议：
    - 重开 bridge 收口主线。
    - 原生 Android 重写用户端 / 兼职端页面。
    - 继续机械补 admin 页面或第五个 admin 页。

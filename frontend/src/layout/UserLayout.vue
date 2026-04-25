@@ -1,47 +1,34 @@
 <template>
   <div class="user-layout">
-    <header class="header">
-      <div class="header-content">
-        <div class="shop-info">
-          <h1 class="shop-name">{{ shopName }}</h1>
-          <p class="shop-desc">
-            {{ shopStatus.isOpen ? '营业中，欢迎下单' : '当前休息中' }}
-            <span v-if="shopStatus.restNotice"> · {{ shopStatus.restNotice }}</span>
-          </p>
-        </div>
-        <div v-if="showCustomerNav" class="header-actions">
-          <button class="header-btn" @click="goToCart">
-            <i class="el-icon-shopping-cart-2"></i>
-            <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
-          </button>
-          <button class="header-btn" @click="goToUser">
-            <i class="el-icon-user"></i>
-          </button>
-        </div>
+    <header class="mobile-header">
+      <div class="brand-mark">校</div>
+      <div class="brand-copy">
+        <strong>校内兼职</strong>
+        <span>校园代送 · 兼职报名 · 结果回看</span>
       </div>
+      <button class="profile-button" type="button" @click="goToUser">我的</button>
     </header>
 
     <main class="main-content">
       <slot></slot>
     </main>
 
-    <footer v-if="showCustomerNav" class="footer">
+    <footer v-if="showCustomerNav" class="mobile-footer">
       <nav class="footer-nav">
-        <router-link to="/user" class="nav-item" active-class="active">
-          <i class="el-icon-s-home"></i>
+        <router-link to="/user" class="nav-item" :class="{ active: route.path === '/user' }">
+          <span class="nav-icon">⌂</span>
           <span>首页</span>
         </router-link>
-        <router-link to="/user/category" class="nav-item" active-class="active">
-          <i class="el-icon-menu"></i>
-          <span>分类</span>
+        <router-link to="/user/campus/order-result" class="nav-item" :class="{ active: route.path.startsWith('/user/campus/order-result') }">
+          <span class="nav-icon">✓</span>
+          <span>结果</span>
         </router-link>
-        <router-link to="/user/cart" class="nav-item" active-class="active">
-          <i class="el-icon-shopping-cart-2"></i>
-          <span>购物车</span>
-          <span v-if="cartCount > 0" class="cart-badge-small">{{ cartCount }}</span>
+        <router-link to="/user/campus/courier-onboarding" class="nav-item" :class="{ active: route.path.startsWith('/user/campus/courier-onboarding') }">
+          <span class="nav-icon">＋</span>
+          <span>入驻</span>
         </router-link>
-        <router-link to="/user/profile" class="nav-item" active-class="active">
-          <i class="el-icon-user"></i>
+        <router-link to="/user/profile" class="nav-item" :class="{ active: route.path.startsWith('/user/profile') }">
+          <span class="nav-icon">◎</span>
           <span>我的</span>
         </router-link>
       </nav>
@@ -50,58 +37,18 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { getCartCount } from '../api/cart'
-import { getPublicShopStatus } from '../api/shop'
 
 const router = useRouter()
 const route = useRoute()
 
-const shopName = '苍穹外卖'
-const cartCount = ref(0)
-const shopStatus = ref({
-  isOpen: true,
-  restNotice: ''
-})
 const hasCustomerToken = computed(() => Boolean(localStorage.getItem('customer_token')))
-const showCustomerNav = computed(() => hasCustomerToken.value && !route.path.startsWith('/courier/'))
-
-const loadCartCount = async () => {
-  if (!hasCustomerToken.value) {
-    cartCount.value = 0
-    return
-  }
-  try {
-    cartCount.value = await getCartCount()
-  } catch (error) {
-    cartCount.value = 0
-  }
-}
-
-const loadShopStatus = async () => {
-  try {
-    shopStatus.value = await getPublicShopStatus()
-  } catch (error) {
-    console.error('加载店铺状态失败:', error)
-  }
-}
-
-const goToCart = () => {
-  router.push('/user/cart')
-}
+const showCustomerNav = computed(() => hasCustomerToken.value && !route.path.startsWith('/parttime/') && !route.path.startsWith('/courier/'))
 
 const goToUser = () => {
   router.push('/user/profile')
 }
-
-onMounted(async () => {
-  await Promise.all([loadShopStatus(), loadCartCount()])
-})
-
-watch(() => route.fullPath, () => {
-  loadCartCount()
-})
 </script>
 
 <style scoped lang="scss">
@@ -109,115 +56,142 @@ watch(() => route.fullPath, () => {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f5f5f5;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(45, 212, 191, 0.2), transparent 28%),
+    linear-gradient(180deg, #effdfa 0%, #f7fbff 42%, #f8fafc 100%);
+  color: #102a43;
 }
 
-.header {
-  background: linear-gradient(135deg, #ff7d00 0%, #ffb74d 100%);
-  color: white;
-  padding: 16px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.mobile-header {
   position: sticky;
   top: 0;
   z-index: 100;
-
-  .header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .shop-name {
-    font-size: 20px;
-    font-weight: bold;
-    margin: 0 0 4px;
-  }
-
-  .shop-desc {
-    font-size: 12px;
-    margin: 0;
-    opacity: 0.95;
-  }
-}
-
-.header-actions {
   display: flex;
+  align-items: center;
   gap: 12px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.86);
+  border-bottom: 1px solid rgba(15, 118, 110, 0.1);
+  box-shadow: 0 12px 28px rgba(15, 118, 110, 0.08);
+  backdrop-filter: blur(16px);
 }
 
-.header-btn {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  cursor: pointer;
+.brand-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #14b8a6 0%, #38bdf8 100%);
+  color: #fff;
+  font-weight: 800;
+  box-shadow: 0 12px 24px rgba(20, 184, 166, 0.22);
 }
 
-.cart-badge,
-.cart-badge-small {
-  position: absolute;
-  background: #f56c6c;
-  color: white;
+.brand-copy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+
+  strong {
+    font-size: 17px;
+    line-height: 1.2;
+    color: #0f172a;
+  }
+
+  span {
+    margin-top: 3px;
+    font-size: 12px;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.profile-button {
+  border: 1px solid rgba(15, 118, 110, 0.16);
   border-radius: 999px;
-  text-align: center;
-}
-
-.cart-badge {
-  top: -4px;
-  right: -4px;
-  min-width: 20px;
-  padding: 2px 6px;
-  font-size: 12px;
+  background: rgba(240, 253, 250, 0.86);
+  color: #0f766e;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 12px;
+  cursor: pointer;
 }
 
 .main-content {
   flex: 1;
-  padding-bottom: 60px;
+  padding-bottom: 78px;
 }
 
-.footer {
+.mobile-footer {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #fff;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 100;
+  border: 1px solid rgba(15, 118, 110, 0.1);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  backdrop-filter: blur(18px);
 }
 
 .footer-nav {
-  display: flex;
-  justify-content: space-around;
-  height: 56px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  height: 64px;
   align-items: center;
 }
 
 .nav-item {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #909399;
+  gap: 4px;
+  color: #64748b;
   text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
 
   &.active {
-    color: #ff7d00;
-  }
+    color: #0f766e;
 
-  span {
-    font-size: 12px;
+    .nav-icon {
+      background: linear-gradient(135deg, #14b8a6 0%, #38bdf8 100%);
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(20, 184, 166, 0.2);
+    }
   }
 }
 
-.cart-badge-small {
-  top: 0;
-  right: -8px;
-  min-width: 16px;
-  padding: 1px 4px;
-  font-size: 10px;
+.nav-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 118, 110, 0.08);
+  color: #0f766e;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+@media (min-width: 768px) {
+  .mobile-header,
+  .main-content {
+    max-width: 520px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .mobile-footer {
+    left: 50%;
+    right: auto;
+    width: min(496px, calc(100% - 24px));
+    transform: translateX(-50%);
+  }
 }
 </style>

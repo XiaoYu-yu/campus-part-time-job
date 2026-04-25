@@ -192,6 +192,11 @@
    - 两个 Capacitor 壳已补齐本地 cleartext HTTP smoke 配置
    - 兼职端 WebView 已真实验证 token 登录、profile、review-status 和 available orders
    - 用户端 WebView 已真实验证用户登录
+22. Step 117 已完成用户端移动首页校园兼职化：
+   - 用户端登录后默认 `/user` 不再展示旧外卖商品推荐首页
+   - `UserLayout.vue` 已切到校园用户端移动 shell 与底部校园入口
+   - `Home.vue` 已提供校园结果回看、兼职入驻摘要、token 资格提示和旧外卖兼容入口
+   - 旧外卖 `category/cart/orders/profile` 页面仍保留为兼容入口，未删除旧模块
 
 当前已确认的部署层修正：
 
@@ -221,12 +226,13 @@
    - Android WebView 内已通过 `http://10.0.2.2:8080/api` 访问本机 backend test profile
    - 用户端和兼职端按不同包名分别维护 storage / token
 7. 当前 Android 线仍不要复制第二套前端工程，也不要把 admin 打进移动壳作为默认入口
-8. 当前下一优先产品问题是：用户端 Android 登录后首页仍展示旧外卖语义，需要收敛为校园兼职 / 校园代送用户端首页
+8. Step 117 已解决用户端 Android 登录后默认首页旧外卖语义问题，`/user` 现在作为校园兼职 / 校园代送用户端首页
+9. 当前下一优先产品问题是：用户端已有结果回看与入驻入口，但仍缺“校园代送下单 / 我的代送单”的移动端最小主入口；是否补该入口应先做视觉 smoke 和范围评估
 
 优先级建议：
 
-1. 如果近期仍是 owner 自测，优先验证兼职端账号 `13900139001 / 123456` 是否可直接完成“登录 -> 工作台 -> 我的资料”
-2. 如果继续 Android 线，优先处理用户端移动首页旧外卖语义和真机 / 服务器 API base 分层，而不是继续抠 admin 样式
+1. 如果近期仍是 owner 自测，优先验证用户端 `/user` 新首页在 Android WebView 和浏览器移动宽度下是否清楚可读
+2. 如果继续 Android 线，优先评估用户端校园代送下单 / 我的代送单最小入口和真机 / 服务器 API base 分层，而不是继续抠 admin 样式
 3. 如果准备邀请外部用户长期访问，再进入 HTTPS / 域名 / 正式反向代理准备
 4. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断
 

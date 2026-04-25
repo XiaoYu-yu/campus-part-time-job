@@ -1762,3 +1762,15 @@
 - [project-logs/campus-relay/step-116-android-emulator-smoke-and-api-base.md](step-116-android-emulator-smoke-and-api-base.md)
 
 本轮是 Android 模拟器真实 smoke 与 API base 加固轮：Android Emulator Hypervisor Driver 可用后，`campus_api35` 已以 `emulator-5554` 在线；用户端与兼职端 Debug APK 已真实安装、启动和截图。新增 Android 构建专用 env 指向 `http://10.0.2.2:8080/api`，两个 Capacitor 壳补齐本地 cleartext HTTP smoke 配置，backend dev/test CORS 放行 Android WebView origin；兼职端 WebView 已验证 token 登录、profile、review-status、available orders，用户端 WebView 已验证登录。本轮没有改 bridge、鉴权、接口语义、路由、订单状态机或页面业务行为。
+
+## Step 117 - 用户端移动首页校园兼职化
+
+- [frontend/src/layout/UserLayout.vue](../../frontend/src/layout/UserLayout.vue)
+- [frontend/src/views/user/Home.vue](../../frontend/src/views/user/Home.vue)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/step-117-user-mobile-home-campusization.md](step-117-user-mobile-home-campusization.md)
+
+本轮是用户端移动首页校园兼职化轮：`UserLayout.vue` 从旧外卖顶部栏、购物车状态和店铺营业语义切到校园用户端移动 shell 与底部导航；`Home.vue` 从商品推荐首页切到校园代送结果回看、兼职入驻状态、token 资格提示和旧外卖兼容入口。本轮没有改 bridge、`request.js`、token 附着逻辑、API 调用顺序、路由结构、后端接口、Android 原生工程或旧外卖模块。
