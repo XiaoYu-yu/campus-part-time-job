@@ -1,5 +1,32 @@
 import request from '../utils/request'
 
+export const getCampusPickupPoints = () => request({
+  url: '/campus/public/pickup-points',
+  method: 'get'
+})
+
+export const getCampusDeliveryRules = () => request({
+  url: '/campus/public/delivery-rules',
+  method: 'get'
+})
+
+export const createCampusCustomerOrder = (data) => request({
+  url: '/campus/customer/orders',
+  method: 'post',
+  data
+})
+
+export const getCampusCustomerOrders = (params) => request({
+  url: '/campus/customer/orders',
+  method: 'get',
+  params
+})
+
+export const mockPayCampusCustomerOrder = (orderId) => request({
+  url: `/campus/customer/orders/${orderId}/mock-pay`,
+  method: 'post'
+})
+
 export const getCampusCustomerAfterSaleResult = (orderId) => request({
   url: `/campus/customer/orders/${orderId}/after-sale-result`,
   method: 'get'

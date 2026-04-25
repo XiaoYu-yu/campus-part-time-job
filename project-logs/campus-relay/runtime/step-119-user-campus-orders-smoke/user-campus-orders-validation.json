@@ -1,0 +1,69 @@
+{
+  "startedAt": "2026-04-25T08:58:33.030Z",
+  "page": "/user/campus/orders",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "endpoints": [
+    {
+      "method": "POST",
+      "url": "/api/users/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "url": "/api/campus/public/delivery-rules",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "url": "/api/campus/public/pickup-points",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "url": "/api/campus/customer/orders?page=1&pageSize=5",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "url": "/api/campus/customer/orders",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "url": "/api/campus/customer/orders?page=1&pageSize=5",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "url": "/api/campus/customer/orders/CR202604251658356537/mock-pay",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "url": "/api/campus/customer/orders?page=1&pageSize=5",
+      "status": 200
+    }
+  ],
+  "console": [],
+  "errors": [],
+  "checks": {
+    "login": true,
+    "pageLoaded": true,
+    "createOrder": true,
+    "mockPay": true
+  },
+  "createdOrderId": "CR202604251658356537",
+  "mockPayStatus": 200,
+  "mockPayUrl": "/api/campus/customer/orders/CR202604251658356537/mock-pay",
+  "screenshots": [
+    "D:\\20278\\code\\Campus part-time job\\project-logs\\campus-relay\\runtime\\step-119-user-campus-orders-smoke\\screenshots\\user-campus-orders-mobile.png",
+    "D:\\20278\\code\\Campus part-time job\\project-logs\\campus-relay\\runtime\\step-119-user-campus-orders-smoke\\screenshots\\user-campus-orders-created-mobile.png",
+    "D:\\20278\\code\\Campus part-time job\\project-logs\\campus-relay\\runtime\\step-119-user-campus-orders-smoke\\screenshots\\user-campus-orders-paid-mobile.png"
+  ],
+  "createStatus": 200,
+  "finishedAt": "2026-04-25T08:58:38.075Z",
+  "success": true
+}

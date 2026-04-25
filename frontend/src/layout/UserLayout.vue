@@ -19,12 +19,16 @@
           <span class="nav-icon">⌂</span>
           <span>首页</span>
         </router-link>
+        <router-link to="/user/campus/orders" class="nav-item" :class="{ active: route.path.startsWith('/user/campus/orders') }">
+          <span class="nav-icon">＋</span>
+          <span>代送</span>
+        </router-link>
         <router-link to="/user/campus/order-result" class="nav-item" :class="{ active: route.path.startsWith('/user/campus/order-result') }">
           <span class="nav-icon">✓</span>
           <span>结果</span>
         </router-link>
         <router-link to="/user/campus/courier-onboarding" class="nav-item" :class="{ active: route.path.startsWith('/user/campus/courier-onboarding') }">
-          <span class="nav-icon">＋</span>
+          <span class="nav-icon">↗</span>
           <span>入驻</span>
         </router-link>
         <router-link to="/user/profile" class="nav-item" :class="{ active: route.path.startsWith('/user/profile') }">
@@ -141,7 +145,7 @@ const goToUser = () => {
 
 .footer-nav {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   height: 64px;
   align-items: center;
 }

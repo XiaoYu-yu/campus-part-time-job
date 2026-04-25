@@ -6,12 +6,18 @@
         <h1>找人代送、查看结果、申请兼职，一处完成</h1>
         <p>当前移动端默认展示校园兼职主链路，旧外卖模块继续保留为兼容入口，不再作为首页主内容。</p>
         <div class="hero-actions">
-          <button class="primary-action" type="button" @click="goTo('/user/campus/order-result')">查看代送结果</button>
+          <button class="primary-action" type="button" @click="goTo('/user/campus/orders')">发布代送单</button>
+          <button class="ghost-action" type="button" @click="goTo('/user/campus/order-result')">查看结果</button>
           <button class="ghost-action" type="button" @click="goTo('/user/campus/courier-onboarding')">申请成为兼职</button>
         </div>
       </section>
 
       <section class="quick-grid">
+        <button class="quick-card" type="button" @click="goTo('/user/campus/orders')">
+          <span class="quick-icon order">＋</span>
+          <strong>发布代送</strong>
+          <p>填写取餐点和送达信息，创建后可执行模拟支付。</p>
+        </button>
         <button class="quick-card" type="button" @click="goTo('/user/campus/order-result')">
           <span class="quick-icon result">✓</span>
           <strong>结果回看</strong>
@@ -234,6 +240,7 @@ onMounted(() => {
   position: relative;
   z-index: 1;
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-top: 18px;
 }
@@ -312,6 +319,10 @@ onMounted(() => {
 
 .quick-icon.result {
   background: linear-gradient(135deg, #10b981, #14b8a6);
+}
+
+.quick-icon.order {
+  background: linear-gradient(135deg, #0f766e, #0ea5e9);
 }
 
 .quick-icon.onboard {

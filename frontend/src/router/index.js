@@ -180,6 +180,12 @@ const router = createRouter({
       component: () => import('../views/user/CampusOrderResult.vue')
     },
     {
+      path: '/user/campus/orders',
+      name: 'UserCampusRelayOrders',
+      meta: { requiresCustomerAuth: true },
+      component: () => import('../views/user/CampusRelayOrders.vue')
+    },
+    {
       path: '/user/campus/courier-onboarding',
       name: 'UserCampusCourierOnboarding',
       meta: { requiresCustomerAuth: true },

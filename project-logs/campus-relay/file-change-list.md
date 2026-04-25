@@ -1787,3 +1787,20 @@
 - [project-logs/campus-relay/step-118-user-home-visual-smoke-and-login-copy.md](step-118-user-home-visual-smoke-and-login-copy.md)
 
 本轮是用户端移动首页真实视觉 smoke 与登录文案修正轮：本地启动 backend(test) 与 frontend dev，使用 Playwright CLI 在 390x844 移动视口真实登录并验证用户端首页、底部导航、结果回看和入驻页；同时修正 `Login.vue` 中遗留的“点餐”文案和旧外卖色彩，统一到校园兼职用户端浅色风格。本轮没有改 bridge、`request.js`、token 附着逻辑、API 调用顺序、后端接口、Android 原生工程或旧外卖模块。
+
+## Step 119 - 用户端校园代送下单 / 我的代送单最小入口
+
+- [frontend/src/api/campus-customer.js](../../frontend/src/api/campus-customer.js)
+- [frontend/src/layout/UserLayout.vue](../../frontend/src/layout/UserLayout.vue)
+- [frontend/src/router/index.js](../../frontend/src/router/index.js)
+- [frontend/src/views/user/Home.vue](../../frontend/src/views/user/Home.vue)
+- [frontend/src/views/user/CampusRelayOrders.vue](../../frontend/src/views/user/CampusRelayOrders.vue)
+- [project-logs/campus-relay/runtime/step-119-user-campus-orders-smoke/screenshots](runtime/step-119-user-campus-orders-smoke/screenshots)
+- [project-logs/campus-relay/runtime/step-119-user-campus-orders-smoke/user-campus-orders-validation.json](runtime/step-119-user-campus-orders-smoke/user-campus-orders-validation.json)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/step-119-user-campus-order-entry.md](step-119-user-campus-order-entry.md)
+
+本轮是用户端校园代送下单 / 我的代送单最小入口轮：新增 `/user/campus/orders`，复用现有 customer campus 接口读取取餐点、配送规则、创建校园代送单、分页读取我的代送单并触发 mock-pay；用户端底部导航新增“代送”，首页主按钮切到发布代送单。真实移动视口 smoke 已创建并模拟支付订单 `CR202604251658356537`。本轮没有改 bridge、`request.js`、token 附着逻辑、后端接口、订单状态机、Android 原生工程或旧外卖模块。

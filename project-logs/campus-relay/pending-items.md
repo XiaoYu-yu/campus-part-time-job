@@ -1,27 +1,26 @@
 # 校园代送待处理事项
 
-## Step 119 最高优先级
+## Step 120 最高优先级
 
-1. Step 118 已完成用户端移动首页真实视觉 smoke 与登录文案修正：
-   - `frontend/src/layout/UserLayout.vue` 已从旧外卖顶部栏 / 购物车语义切到用户端移动 shell 与校园入口底部导航。
-   - `frontend/src/views/user/Home.vue` 已从商品推荐首页切到校园代送结果回看、兼职入驻状态、token 资格提示和旧外卖兼容入口。
-   - 已用 Playwright CLI 在 390x844 移动视口真实登录用户端并采集 `/user/login`、`/user`、`/user/campus/order-result?orderId=CR202604060001`、`/user/campus/courier-onboarding` 截图。
-   - smoke 发现并修正 `frontend/src/views/user/Login.vue` 仍保留“点餐”文案的问题。
-   - 旧 `category/cart/orders/profile` 页面仍保留为兼容入口，未删除旧外卖模块。
-   - 本轮未改 bridge、`request.js`、token 附着、API 调用顺序、路由结构、后端接口或 Android 原生工程。
-2. Step 119 最高优先级建议：
-   - 评估并实现“用户端校园代送下单 / 我的代送单”最小入口；这是当前用户端从“能回看结果”走向“能发起试运营订单”的关键缺口。
-   - 范围应限定为用户端移动 H5 页面与现有 customer campus 接口复用，先不要改订单状态机、支付语义或旧外卖模块。
-   - 同步评估 Android API base 分层：本地模拟器、局域网真机、公网 HTTPS，不要把 `10.0.2.2` 直接当成真机 / 服务器通用配置。
-   - 不要在这一步重开 bridge、改鉴权、改订单状态机或重写 Android 原生工程结构。
-3. Step 119 仍不建议：
+1. Step 119 已完成用户端校园代送下单 / 我的代送单最小入口：
+   - 新增 `/user/campus/orders`，接入创建校园代送单、我的代送单列表和 mock-pay。
+   - `UserLayout.vue` 底部导航新增“代送”入口。
+   - `Home.vue` 主按钮切到“发布代送单”。
+   - 已在 390x844 移动视口真实登录 `13900139000 / 123456`，创建并模拟支付订单 `CR202604251658356537`。
+   - 本轮未改 bridge、`request.js`、token 附着、后端接口、订单状态机、Android 原生工程或旧外卖模块。
+2. Step 120 最高优先级建议：
+   - 评估并固化 Android / 内测 API base 分层：本地模拟器、局域网真机、公网服务器三类环境不应混用同一个 `10.0.2.2` 配置。
+   - 若继续 Android 线，优先补“用户端新代送入口在 Android 壳内的真实 smoke”，不要直接写原生页面。
+   - 若继续用户端产品线，可评估订单详情 / 取消 / confirm 的最小入口，但必须先明确不改订单状态机。
+   - 若准备服务器内测，应优先整理公网 API base、HTTPS / 反向代理和 Android WebView 访问策略。
+3. Step 120 仍不建议：
    - 重开 bridge 收口主线。
    - 原生 Android 重写用户端 / 兼职端页面。
    - 继续机械补 admin 页面或第五个 admin 页。
    - 接真实支付、真实退款或真实打款。
 4. bridge 主线继续保持 `Phase A no-op` 冻结态，不默认重开。
-5. 展示 polish 主线继续保持冻结/维护态；只有用户端移动首页旧外卖语义属于产品定位问题，值得单独处理。
-6. Android 当前内测 smoke 配置只适合本地模拟器；公网 / 真机内测仍需改为真实服务器 API base。
+5. 展示 polish 主线继续保持冻结/维护态。
+6. Android 当前本地模拟器 smoke 配置使用 `10.0.2.2`；公网 / 真机内测仍需独立 API base。
 7. Step 72 已完成腾讯地图最小产品化试点：
    - 只在现有 `/campus/courier-ops` 接入腾讯地图 JS SDK 最小预览，不新增页面、不改后端接口。
    - 继续复用现有 courier 位置上报数据，不引入轨迹回放、实时调度或地图写操作。
