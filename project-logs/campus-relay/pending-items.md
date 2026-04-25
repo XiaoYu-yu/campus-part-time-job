@@ -1,34 +1,29 @@
 # 校园代送待处理事项
 
-## Step 116 最高优先级
+## Step 117 最高优先级
 
-1. Step 115 已完成 Android 真机 / 模拟器 smoke 入口脚本、模拟器基础安装与阻塞确认：
-   - 新增 `scripts/trial-operation/android-smoke.ps1`
-   - 脚本可列出设备、安装两个 Debug APK、启动两个 App、保存启动截图
-   - 已安装 `emulator` 与 `system-images;android-35;google_apis;x86_64`
-   - 已创建 AVD：`campus_api35`
-   - 当前 `emulator -accel-check` 显示 Android Emulator hypervisor driver 未安装
-   - 普通命令环境无法完成 driver 管理员安装
-   - `-accel off` 软件启动也未能让 AVD 进入 `adb devices` 在线状态
-   - 因此本轮没有伪造 APK 已安装、首屏已验证或 WebView API 已验证
-2. Step 116 最高优先级建议：
-   - 用管理员权限安装 Android Emulator Hypervisor Driver：
-     - `C:\Users\20278\AppData\Local\Android\Sdk\extras\google\Android_Emulator_Hypervisor_Driver\silent_install.bat`
-   - 重新启动 `campus_api35` 模拟器，并确认 `adb devices -l` 出现 `emulator-* device`
-   - 执行 `powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1 -StartEmulator`
-   - 验证用户端 APK 首屏进入 `/user/login`
-   - 验证兼职端 APK 首屏进入 `/parttime/login`
-   - 验证移动 WebView 内 `/api` 请求是否需要显式 API base URL
-   - 验证两个包名下 WebView storage / token 隔离
-3. Step 116 仍不建议：
-   - 修改业务前端页面
-   - 改 bridge、鉴权、token 附着逻辑或后端接口
-   - 原生 Android 重写业务页面
-   - 补第五个 admin 页
+1. Step 116 已完成 Android 模拟器真实 smoke 与 API base 加固：
+   - `campus_api35` 已通过 Android Emulator Hypervisor Driver 加速进入 `adb devices -l` 在线状态。
+   - 用户端与兼职端 Debug APK 均已真实安装、启动和截图。
+   - Android 构建专用 env 已固定到模拟器访问宿主机的 `http://10.0.2.2:8080/api`。
+   - Capacitor 壳已补齐本地 smoke 所需 `http` scheme 与 cleartext 配置。
+   - backend dev/test CORS 已放行 Android WebView 本地 origin。
+   - 兼职端 WebView 已真实验证 token 登录、profile、review-status 和 available orders。
+   - 用户端 WebView 已真实验证用户登录。
+2. Step 117 最高优先级建议：
+   - 优先把用户端 Android 登录后首页从旧外卖语义收敛为校园兼职 / 校园代送用户端首页。
+   - 保持旧外卖模块可运行，但不要让用户端移动壳默认展示旧外卖首页。
+   - 同步设计 Android API base 分层：本地模拟器、局域网真机、公网 HTTPS。
+   - 不要在这一步改 bridge、鉴权、订单状态机或 Android 原生工程结构。
+3. Step 117 仍不建议：
+   - 重开 bridge 收口主线。
+   - 原生 Android 重写用户端 / 兼职端页面。
+   - 继续机械补 admin 页面或第五个 admin 页。
+   - 接真实支付、真实退款或真实打款。
 4. bridge 主线继续保持 `Phase A no-op` 冻结态，不默认重开。
-5. 展示 polish 主线继续保持冻结/维护态；当前不再默认继续做后台样式微调。
-6. 本轮仍不改 bridge、鉴权、后端 token 接口、订单状态机或 settlement 逻辑。
-3. Step 72 已完成腾讯地图最小产品化试点：
+5. 展示 polish 主线继续保持冻结/维护态；只有用户端移动首页旧外卖语义属于产品定位问题，值得单独处理。
+6. Android 当前内测 smoke 配置只适合本地模拟器；公网 / 真机内测仍需改为真实服务器 API base。
+7. Step 72 已完成腾讯地图最小产品化试点：
    - 只在现有 `/campus/courier-ops` 接入腾讯地图 JS SDK 最小预览，不新增页面、不改后端接口。
    - 继续复用现有 courier 位置上报数据，不引入轨迹回放、实时调度或地图写操作。
    - 运行态验证确认 `CR202604060001` / 配送员 `id=2` 可在页面内看到地图比例尺和版权信息。

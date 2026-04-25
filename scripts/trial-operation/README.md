@@ -90,6 +90,12 @@ Use a specific device when more than one device is online:
 powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1 -DeviceId <adb-serial>
 ```
 
+Wait longer before each launch screenshot:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1 -DeviceId emulator-5554 -LaunchWaitSeconds 8
+```
+
 The Android smoke script only installs, launches, and captures screenshots from the existing APKs. It does not modify backend/frontend business code, bridge behavior, auth, routes, or API calls. If no device is online, the script fails explicitly instead of pretending the APK smoke passed.
 
 Current local emulator baseline:
@@ -103,6 +109,20 @@ If `adb devices` stays empty after starting the emulator and `emulator -accel-ch
 ```powershell
 C:\Users\20278\AppData\Local\Android\Sdk\extras\google\Android_Emulator_Hypervisor_Driver\silent_install.bat
 ```
+
+Current local Android WebView API baseline:
+
+1. Build-time API base for emulator smoke lives in `frontend/.env.android-user` and `frontend/.env.android-parttime`.
+2. Both files point to `http://10.0.2.2:8080/api`, which is the Android emulator alias for the host machine.
+3. Backend `dev` / `test` profiles allow `http://localhost`, `https://localhost`, and `capacitor://localhost` for local WebView CORS.
+4. Both Capacitor shells allow local cleartext HTTP for smoke only; real server / public trial builds should switch to HTTPS and a real API base.
+
+Step 116 verified on `emulator-5554`:
+
+1. User app package `com.xiaoyu.campus.user` launched to `/user/login`.
+2. Part-time app package `com.xiaoyu.campus.parttime` launched to `/parttime/login`.
+3. Part-time WebView token login, profile, review status, and available-orders calls returned 200.
+4. User WebView login returned 200 and reached `/user`.
 
 ## Sample Validation
 

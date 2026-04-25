@@ -1739,3 +1739,26 @@
 - [project-logs/campus-relay/step-115-android-device-smoke-entry-and-blocker.md](step-115-android-device-smoke-entry-and-blocker.md)
 
 本轮是 Android 设备 smoke 入口与模拟器阻塞确认轮：新增 `android-smoke.ps1`，用于设备在线后安装、启动两个 Debug APK 并保存启动截图；同时安装 Android Emulator 与 Android 35 Google APIs x86_64 system image，并创建 `campus_api35` AVD。当前阻塞是 Android Emulator hypervisor driver 未安装且需要管理员权限，软件加速启动也未能让 AVD 进入 ADB 在线状态。本轮没有改 bridge、鉴权、接口、token 附着、路由结构、前端业务页面或后端业务语义。
+
+## Step 116 - Android 模拟器真实 smoke 与 API base 加固
+
+- [.gitignore](../../.gitignore)
+- [frontend/.env.android-user](../../frontend/.env.android-user)
+- [frontend/.env.android-parttime](../../frontend/.env.android-parttime)
+- [backend/src/main/resources/application-dev.properties](../../backend/src/main/resources/application-dev.properties)
+- [backend/src/main/resources/application-test.properties](../../backend/src/main/resources/application-test.properties)
+- [mobile/user-app/capacitor.config.json](../../mobile/user-app/capacitor.config.json)
+- [mobile/user-app/android/app/src/main/AndroidManifest.xml](../../mobile/user-app/android/app/src/main/AndroidManifest.xml)
+- [mobile/parttime-app/capacitor.config.json](../../mobile/parttime-app/capacitor.config.json)
+- [mobile/parttime-app/android/app/src/main/AndroidManifest.xml](../../mobile/parttime-app/android/app/src/main/AndroidManifest.xml)
+- [mobile/README.md](../../mobile/README.md)
+- [scripts/trial-operation/android-smoke.ps1](../../scripts/trial-operation/android-smoke.ps1)
+- [scripts/trial-operation/README.md](../../scripts/trial-operation/README.md)
+- [project-logs/campus-relay/runtime/android-smoke](runtime/android-smoke)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/step-116-android-emulator-smoke-and-api-base.md](step-116-android-emulator-smoke-and-api-base.md)
+
+本轮是 Android 模拟器真实 smoke 与 API base 加固轮：Android Emulator Hypervisor Driver 可用后，`campus_api35` 已以 `emulator-5554` 在线；用户端与兼职端 Debug APK 已真实安装、启动和截图。新增 Android 构建专用 env 指向 `http://10.0.2.2:8080/api`，两个 Capacitor 壳补齐本地 cleartext HTTP smoke 配置，backend dev/test CORS 放行 Android WebView origin；兼职端 WebView 已验证 token 登录、profile、review-status、available orders，用户端 WebView 已验证登录。本轮没有改 bridge、鉴权、接口语义、路由、订单状态机或页面业务行为。

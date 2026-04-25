@@ -2,5 +2,9 @@
   "appId": "com.xiaoyu.campus.parttime",
   "appName": "校内兼职端",
   "webDir": "../../frontend/dist-android-parttime",
-  "bundledWebRuntime": false
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "http",
+    "cleartext": true
+  }
 }

@@ -184,9 +184,14 @@
    - 新增 `scripts/trial-operation/android-smoke.ps1`
    - 已安装 Android Emulator 与 `system-images;android-35;google_apis;x86_64`
    - 已创建 AVD：`campus_api35`
-   - 当前阻塞是 Android Emulator hypervisor driver 未安装，需要管理员权限安装
-   - 软件加速启动未能让 AVD 进入 `adb devices` 在线状态
-   - 尚未真实完成 APK 安装、首屏、WebView API 和 token/storage 隔离验证
+   - 当时阻塞是 Android Emulator hypervisor driver 未安装，需要管理员权限安装
+21. Step 116 已完成 Android 模拟器真实 smoke 与 API base 加固：
+   - Android Emulator Hypervisor Driver 已可用，`campus_api35` 已以 `emulator-5554` 在线
+   - 用户端与兼职端 Debug APK 已真实安装、启动和截图
+   - Android 构建专用 API base 已固定为模拟器访问宿主机的 `http://10.0.2.2:8080/api`
+   - 两个 Capacitor 壳已补齐本地 cleartext HTTP smoke 配置
+   - 兼职端 WebView 已真实验证 token 登录、profile、review-status 和 available orders
+   - 用户端 WebView 已真实验证用户登录
 
 当前已确认的部署层修正：
 
@@ -210,17 +215,18 @@
    - 用户端壳指向 `frontend/dist-android-user`
    - 兼职端壳指向 `frontend/dist-android-parttime`
 4. Step 114 已确认两个 Android 壳可以本机构建 Debug APK
-5. Step 115 已确认本机可准备模拟器基础，但当前 hypervisor driver 未安装，AVD 无法上线
-6. Step 116 推荐先用管理员权限安装 Android Emulator Hypervisor Driver，再进入真实模拟器 smoke，重点确认：
-   - App 首屏入口是否分别进入 `/user/login` 与 `/parttime/login`
-   - 移动端 WebView 内 `/api` 请求是否需要显式 API base URL
-   - 用户端和兼职端登录态是否按包名隔离
-7. Android 线仍不要复制第二套前端工程，也不要把 admin 打进移动壳作为默认入口
+5. Step 115 曾确认本机可准备模拟器基础但缺 hypervisor driver。
+6. Step 116 已解除模拟器阻塞并完成真实 Android smoke：
+   - App 首屏分别进入 `/user/login` 与 `/parttime/login`
+   - Android WebView 内已通过 `http://10.0.2.2:8080/api` 访问本机 backend test profile
+   - 用户端和兼职端按不同包名分别维护 storage / token
+7. 当前 Android 线仍不要复制第二套前端工程，也不要把 admin 打进移动壳作为默认入口
+8. 当前下一优先产品问题是：用户端 Android 登录后首页仍展示旧外卖语义，需要收敛为校园兼职 / 校园代送用户端首页
 
 优先级建议：
 
 1. 如果近期仍是 owner 自测，优先验证兼职端账号 `13900139001 / 123456` 是否可直接完成“登录 -> 工作台 -> 我的资料”
-2. 如果继续 Android 线，优先先安装 emulator hypervisor driver，再进入 Step 116 真实模拟器 smoke，而不是继续抠 admin 样式
+2. 如果继续 Android 线，优先处理用户端移动首页旧外卖语义和真机 / 服务器 API base 分层，而不是继续抠 admin 样式
 3. 如果准备邀请外部用户长期访问，再进入 HTTPS / 域名 / 正式反向代理准备
 4. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断
 

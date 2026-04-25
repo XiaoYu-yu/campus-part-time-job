@@ -9,7 +9,8 @@ param(
     [switch]$CaptureScreenshots,
     [switch]$StartEmulator,
     [string]$AvdName = "campus_api35",
-    [int]$EmulatorBootTimeoutSeconds = 360
+    [int]$EmulatorBootTimeoutSeconds = 360,
+    [int]$LaunchWaitSeconds = 8
 )
 
 $ErrorActionPreference = "Stop"
@@ -70,13 +71,13 @@ function Resolve-Emulator {
 }
 
 function Invoke-Adb {
-    param([string[]]$Args)
+    param([string[]]$CommandArgs)
 
     $adbArgs = @()
     if ($DeviceId) {
         $adbArgs += @("-s", $DeviceId)
     }
-    $adbArgs += $Args
+    $adbArgs += $CommandArgs
     & $script:adb @adbArgs
 }
 
@@ -107,7 +108,7 @@ function Start-EmulatorAndWait {
         Start-Sleep -Seconds 5
         $devices = Get-ConnectedDevices
         if ($devices.Count -gt 0) {
-            $bootCompleted = (Invoke-Adb @("shell", "getprop", "sys.boot_completed") 2>$null | Select-Object -First 1).Trim()
+            $bootCompleted = (Invoke-Adb -CommandArgs @("shell", "getprop", "sys.boot_completed") 2>$null | Select-Object -First 1).Trim()
             Write-Host "Emulator boot status: devices=$($devices -join ', ') boot=$bootCompleted"
             if ($bootCompleted -eq "1") {
                 return
@@ -148,8 +149,8 @@ function Install-Apk {
 
     Assert-Apk $ApkPath
     Write-Host "Installing $PackageName from $ApkPath"
-    Invoke-Adb @("install", "-r", $ApkPath) | Write-Host
-    $packagePath = Invoke-Adb @("shell", "pm", "path", $PackageName)
+    Invoke-Adb -CommandArgs @("install", "-r", $ApkPath) | Write-Host
+    $packagePath = Invoke-Adb -CommandArgs @("shell", "pm", "path", $PackageName)
     if (-not ($packagePath -match "package:")) {
         throw "Package install check failed for $PackageName."
     }
@@ -160,8 +161,8 @@ function Launch-App {
     param([string]$PackageName)
 
     Write-Host "Launching $PackageName"
-    Invoke-Adb @("shell", "monkey", "-p", $PackageName, "-c", "android.intent.category.LAUNCHER", "1") | Write-Host
-    Start-Sleep -Seconds 3
+    Invoke-Adb -CommandArgs @("shell", "monkey", "-p", $PackageName, "-c", "android.intent.category.LAUNCHER", "1") | Write-Host
+    Start-Sleep -Seconds $LaunchWaitSeconds
 }
 
 function Capture-Screenshot {
@@ -170,9 +171,9 @@ function Capture-Screenshot {
     New-Item -ItemType Directory -Path $captureRoot -Force | Out-Null
     $file = Join-Path $captureRoot ("{0}-{1}.png" -f (Get-Date -Format "yyyyMMdd-HHmmss"), $Name)
     $remoteFile = "/sdcard/$Name.png"
-    Invoke-Adb @("shell", "screencap", "-p", $remoteFile) | Out-Null
-    Invoke-Adb @("pull", $remoteFile, $file) | Write-Host
-    Invoke-Adb @("shell", "rm", $remoteFile) | Out-Null
+    Invoke-Adb -CommandArgs @("shell", "screencap", "-p", $remoteFile) | Out-Null
+    Invoke-Adb -CommandArgs @("pull", $remoteFile, $file) | Write-Host
+    Invoke-Adb -CommandArgs @("shell", "rm", $remoteFile) | Out-Null
     Write-Host "Screenshot saved: $file"
 }
 

@@ -100,6 +100,50 @@ C:\Users\20278\AppData\Local\Android\Sdk\extras\google\Android_Emulator_Hypervis
 
 安装后重新启动模拟器，再执行 smoke 脚本。没有 hypervisor 加速时，当前 x86_64 模拟器无法稳定进入 `adb devices` 在线状态。
 
+当前本机已验证：
+
+1. `campus_api35` 可进入 `adb devices -l` 在线状态。
+2. 用户端与兼职端 Debug APK 可安装、启动和截图。
+3. 兼职端 WebView 可通过 `http://10.0.2.2:8080/api` 调用本机 test profile 后端。
+4. 用户端 WebView 可完成 `POST /api/users/login`。
+
+### Android 本地 API base
+
+Android 模拟器访问宿主机后端时不能使用 `127.0.0.1`，需要使用 `10.0.2.2`。当前仓库提供两个 Android 构建专用 env：
+
+```text
+frontend/.env.android-user
+frontend/.env.android-parttime
+```
+
+默认内容为：
+
+```properties
+VITE_API_BASE_URL=http://10.0.2.2:8080/api
+VITE_USE_MOCK=false
+```
+
+后端 test/dev profile 已放行 Android WebView 本地 origin：`http://localhost`、`https://localhost`、`capacitor://localhost`。
+
+### 本地 cleartext 边界
+
+两个 Android 壳当前为本地 / 内测 smoke 配置：
+
+1. `server.androidScheme = "http"`
+2. `server.cleartext = true`
+3. AndroidManifest `usesCleartextTraffic = true`
+
+原因是 Capacitor 默认 `https://localhost` 会拦截页面访问本地 HTTP 后端。正式公网试运营时应改为 HTTPS 域名和正式 API base，不应把 `10.0.2.2` 当作真机或服务器配置。
+
+### JDK 21
+
+Android Gradle 构建需要 JDK 21。当前本机可使用：
+
+```powershell
+$env:JAVA_HOME='D:\software\jdk-21-temurin'
+$env:Path="$env:JAVA_HOME\bin;$env:Path"
+```
+
 先确认设备在线：
 
 ```powershell
@@ -129,7 +173,13 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.p
 powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1 -DeviceId <adb-serial>
 ```
 
-本脚本只负责安装、启动和截图，不判断 WebView 内登录是否成功。App 内 `/api` 请求、用户端 / 兼职端登录态隔离、移动网络下后端地址可达性仍需手工 smoke 确认。
+延长首屏等待时间：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1 -DeviceId emulator-5554 -LaunchWaitSeconds 8
+```
+
+本脚本只负责安装、启动和截图，不自动断言 WebView 内登录是否成功。App 内 `/api` 请求、用户端 / 兼职端登录态隔离、移动网络下后端地址可达性仍需手工或 DevTools smoke 确认。
 
 ## 边界
 
