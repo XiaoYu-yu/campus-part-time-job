@@ -132,6 +132,7 @@
 - 当前已完成：`Step 120 - Android / 内测 API base 分层与用户端代送入口壳级验证`
 - 当前已完成：`Step 121 - Android public API base 演练与 smoke 加固`
 - 当前已完成：`Step 122 - 公网 API base 切换与 Android public APK 复核`
+- 当前已完成：`Step 123 - Android public WebView 真实接口 smoke`
 - 当前日期：`2026-04-26`
 - Step 102 补充：已把 admin 主框架、仪表盘和运营人员页从旧外卖后台视觉收敛到校园兼职运营风格；本轮只改展示层和全局主题变量，未改 bridge、接口、鉴权、路由、API 调用顺序或后端业务。已通过 `npm run build`、`npm run test -- text.spec.js` 和 `git diff --check`；本地 admin seed 登录与员工列表复核返回 `管理员 / 技术部`。
 - Step 103 补充：已把登录页改为 `校内兼职运营台`，并将 admin 外壳 / dashboard 进一步按深色玻璃拟态方向重基线；同时补齐旧 session / localStorage / in-memory 场景的 admin 文本归一化兜底，覆盖顶部用户名、dashboard 欢迎语和 Employee 页姓名 / 职位 / 部门显示。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
@@ -2354,6 +2355,7 @@
 - [Step 120 日志](step-120-android-api-base-layering-and-user-entry-smoke.md)
 - [Step 121 日志](step-121-android-public-api-base-drill-and-smoke-hardening.md)
 - [Step 122 日志](step-122-public-api-base-refresh-and-android-public-build.md)
+- [Step 123 日志](step-123-android-public-webview-real-api-smoke.md)
 - [全局工作记忆](global-working-memory.md)
 - [试运营脚本入口说明](../../scripts/trial-operation/README.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)

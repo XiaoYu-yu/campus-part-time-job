@@ -1869,3 +1869,20 @@
 - [project-logs/campus-relay/step-122-public-api-base-refresh-and-android-public-build.md](step-122-public-api-base-refresh-and-android-public-build.md)
 
 本轮是公网 API base 切换与 Android public APK 复核轮：owner 开机后公网 IP 变化，本地 ignored public env 已切到新 API base；public API base 只读 smoke 已从 Step 121 的 404 阻塞变为 `passed=2 failed=0`；用户端和兼职端已重新执行 `cap:sync:public`、Debug APK 构建和清数据启动 smoke，两个 App 仍进入正确移动入口。真实公网 IP 未提交，tracked evidence 继续使用脱敏地址。本轮没有改 bridge、`request.js`、token 附着、后端接口、订单状态机、旧外卖模块或真实支付能力。
+
+## Step 123 - Android public WebView 真实接口 smoke
+
+- [scripts/trial-operation/android-webview-user-public-smoke.ps1](../../scripts/trial-operation/android-webview-user-public-smoke.ps1)
+- [scripts/trial-operation/android-webview-parttime-public-smoke.ps1](../../scripts/trial-operation/android-webview-parttime-public-smoke.ps1)
+- [scripts/trial-operation/README.md](../../scripts/trial-operation/README.md)
+- [project-logs/campus-relay/runtime/step-123-android-public-webview/user-public-webview-smoke.json](runtime/step-123-android-public-webview/user-public-webview-smoke.json)
+- [project-logs/campus-relay/runtime/step-123-android-public-webview/user-campus-orders-public-webview.png](runtime/step-123-android-public-webview/user-campus-orders-public-webview.png)
+- [project-logs/campus-relay/runtime/step-123-android-public-webview/parttime-public-webview-smoke.json](runtime/step-123-android-public-webview/parttime-public-webview-smoke.json)
+- [project-logs/campus-relay/runtime/step-123-android-public-webview/parttime-workbench-public-webview.png](runtime/step-123-android-public-webview/parttime-workbench-public-webview.png)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/step-123-android-public-webview-real-api-smoke.md](step-123-android-public-webview-real-api-smoke.md)
+
+本轮是 Android public WebView 真实接口 smoke 轮：新增用户端和兼职端 WebView/CDP smoke 脚本；用户端在真实 Android WebView 内完成登录、取餐点 / 配送规则 / 我的代送单读取、创建订单和 mock-pay，创建订单 `CR202604261108119903` 并回读 `paymentStatus = PAID`；兼职端在真实 Android WebView 内完成登录、profile、review-status 和 available-orders 读取。报告继续脱敏 public API base，未提交真实公网 IP、token 或本地 ignored env。本轮没有改 bridge、`request.js`、token 附着、后端接口、订单状态机、旧外卖模块或真实支付能力。

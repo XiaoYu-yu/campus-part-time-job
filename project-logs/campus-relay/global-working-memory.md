@@ -212,6 +212,11 @@
    - LAN / Public 构建必须由本地 ignored env 显式提供 `VITE_API_BASE_URL`，否则构建失败，不会静默回退到 `/api`
    - 已在 `campus_api35` 模拟器中安装启动两个 APK，并确认用户端可进入 `/user/campus/orders`
    - 未改 bridge、`request.js`、token 附着、后端接口、订单状态机、Android 原生壳结构或旧外卖模块
+26. Step 123 已完成 Android public WebView 真实接口 smoke：
+   - 用户端 public WebView 已真实登录、读取 public 依赖、读取我的代送单、创建校园代送单并 mock-pay
+   - 本轮真实创建并支付订单 `CR202604261108119903`，最终回读 `paymentStatus = PAID`
+   - 兼职端 public WebView 已真实登录、读取 profile、review-status 和 available orders
+   - 证据文件位于 `project-logs/campus-relay/runtime/step-123-android-public-webview/`，真实公网 API base 继续脱敏
 
 当前已确认的部署层修正：
 
@@ -255,16 +260,19 @@
    - public API base 只读 smoke 已通过，`pickup-points` 与 `delivery-rules` 均返回正常。
    - user / parttime public 壳已重新同步、构建并完成 clean launch smoke。
    - 真实公网 IP 不写入仓库，tracked evidence 只保留脱敏地址。
-14. 当前下一优先产品问题是：Android public WebView 真实接口 smoke 尚未完成，需要验证用户端登录、代送列表、创建订单和 mock-pay
+14. Step 123 已完成 Android public WebView 真实接口 smoke：
+   - 用户端登录、代送列表、创建订单和 mock-pay 已通过。
+   - 兼职端登录、workbench 依赖读取和可接单列表已通过。
+   - 当前 smoke 脚本仍为手工入口，尚未纳入 preflight 或 CI。
 
 优先级建议：
 
-1. 如果继续 Android / 内测线，优先在 WebView 内跑用户端登录、代送列表、创建和 mock-pay
-2. 用户端 public smoke 通过后，再验证兼职端 public 登录、workbench 加载和可接单列表
-3. 如果 WebView 内请求失败，优先排查公网 CORS、Android cleartext HTTP、后端 token、反向代理路径，而不是改业务语义
-4. 如果转回用户端产品线，再评估订单详情 / 取消 / confirm 最小入口，仍不要改订单状态机
-5. 如果准备邀请外部用户长期访问，再进入 HTTPS / 域名 / 正式反向代理准备
-6. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断
+1. 如果继续 Android / 内测线，优先做 WebView smoke 可重复性复核与试运营 readiness 判断。
+2. 评估是否把 `android-webview-user-public-smoke.ps1` 与 `android-webview-parttime-public-smoke.ps1` 文档化到 preflight / runbook。
+3. 如果准备邀请外部用户长期访问，优先进入 HTTPS / 域名 / 正式反向代理准备，收口 Android HTTP cleartext 风险。
+4. 如果 WebView 内请求失败，优先排查公网 CORS、Android cleartext HTTP、后端 token、反向代理路径，而不是改业务语义。
+5. 如果转回用户端产品线，再评估订单详情 / 取消 / confirm 最小入口，仍不要改订单状态机。
+6. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断。
 
 当前默认不进入：
 

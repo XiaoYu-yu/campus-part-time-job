@@ -1,0 +1,72 @@
+﻿{
+    "step":  "Step 123",
+    "date":  "2026-04-26",
+    "purpose":  "Android public WebView user smoke for login, customer campus order read/create/mock-pay",
+    "apiBase":  "http://\u003credacted\u003e/api",
+    "packageName":  "com.xiaoyu.campus.user",
+    "webView":  {
+                    "devtoolsPort":  9222,
+                    "launchUrl":  "http://localhost/user/login",
+                    "loginResult":  {
+                                        "clicked":  true,
+                                        "hasCustomerToken":  true,
+                                        "currentUrl":  "http://localhost/user"
+                                    }
+                },
+    "checks":  {
+                   "ok":  true,
+                   "pickup":  {
+                                  "httpStatus":  200,
+                                  "bodyCode":  200,
+                                  "bodyMsg":  "success",
+                                  "count":  2,
+                                  "firstPointId":  1
+                              },
+                   "rules":  {
+                                 "httpStatus":  200,
+                                 "bodyCode":  200,
+                                 "bodyMsg":  "success"
+                             },
+                   "before":  {
+                                  "httpStatus":  200,
+                                  "bodyCode":  200,
+                                  "bodyMsg":  "success",
+                                  "total":  3
+                              },
+                   "create":  {
+                                  "httpStatus":  200,
+                                  "bodyCode":  200,
+                                  "bodyMsg":  "success",
+                                  "orderId":  "CR202604261108119903"
+                              },
+                   "pay":  {
+                               "httpStatus":  200,
+                               "bodyCode":  200,
+                               "bodyMsg":  "success"
+                           },
+                   "detail":  {
+                                  "httpStatus":  200,
+                                  "bodyCode":  200,
+                                  "bodyMsg":  "success",
+                                  "id":  "CR202604261108119903",
+                                  "status":  "BUILDING_PRIORITY_PENDING",
+                                  "paymentStatus":  "PAID"
+                              }
+               },
+    "screenshot":  {
+                       "path":  "D:\\20278\\code\\Campus part-time job\\project-logs\\campus-relay\\runtime\\step-123-android-public-webview\\user-campus-orders-public-webview.png",
+                       "description":  "User campus orders page after WebView public API smoke"
+                   },
+    "summary":  {
+                    "passed":  true,
+                    "createdOrderId":  "CR202604261108119903",
+                    "finalOrderStatus":  "BUILDING_PRIORITY_PENDING",
+                    "finalPaymentStatus":  "PAID"
+                },
+    "notes":  [
+                  "The real API host is redacted. Do not commit frontend/.env.android-user-public.",
+                  "This smoke uses the Android WebView DevTools context, not a host-only curl.",
+                  "It logs in through the visible user login page, then invokes public customer APIs from the WebView context.",
+                  "It does not change bridge behavior, token attachment logic, routes, backend state machine, or old takeaway modules."
+              ]
+}

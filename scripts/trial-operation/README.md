@@ -60,6 +60,25 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-public-
 
 This smoke only checks the read-only public dependencies used by the Android user campus order entry. It writes a redacted JSON report under `project-logs/campus-relay/runtime/step-121-public-api-base/` and does not mutate orders, tokens, bridge behavior, or server data. If the API base fails here, the Android public build can still be compiled, but WebView API smoke remains blocked until the server route/proxy is fixed.
 
+Run Android public WebView user smoke after public APK sync/build:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-webview-user-public-smoke.ps1 -StartEmulator -ClearData
+```
+
+Run Android public WebView part-time smoke after public APK sync/build:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-webview-parttime-public-smoke.ps1 -StartEmulator -ClearData
+```
+
+These two WebView smoke scripts read the API base from ignored local files by default:
+
+1. `frontend/.env.android-user-public`
+2. `frontend/.env.android-parttime-public`
+
+They drive the real Android WebView through DevTools/CDP, log in through the visible login pages, call the public API base from inside the WebView context, and write redacted reports under `project-logs/campus-relay/runtime/step-123-android-public-webview/`. They do not commit the real public host, token, server credentials, or secrets.
+
 Treat closed ports as hard failures:
 
 ```powershell
