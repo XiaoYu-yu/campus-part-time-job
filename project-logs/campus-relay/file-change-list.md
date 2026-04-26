@@ -1886,3 +1886,21 @@
 - [project-logs/campus-relay/step-123-android-public-webview-real-api-smoke.md](step-123-android-public-webview-real-api-smoke.md)
 
 本轮是 Android public WebView 真实接口 smoke 轮：新增用户端和兼职端 WebView/CDP smoke 脚本；用户端在真实 Android WebView 内完成登录、取餐点 / 配送规则 / 我的代送单读取、创建订单和 mock-pay，创建订单 `CR202604261108119903` 并回读 `paymentStatus = PAID`；兼职端在真实 Android WebView 内完成登录、profile、review-status 和 available-orders 读取。报告继续脱敏 public API base，未提交真实公网 IP、token 或本地 ignored env。本轮没有改 bridge、`request.js`、token 附着、后端接口、订单状态机、旧外卖模块或真实支付能力。
+
+## Step 124 - Android public WebView readiness 复核与试运营入口固化
+
+- [scripts/trial-operation/android-webview-public-smoke.ps1](../../scripts/trial-operation/android-webview-public-smoke.ps1)
+- [scripts/trial-operation/README.md](../../scripts/trial-operation/README.md)
+- [docs/trial-operation-preflight.md](../../docs/trial-operation-preflight.md)
+- [project-logs/campus-relay/runtime/step-124-android-public-webview-readiness/android-public-webview-readiness-summary.json](runtime/step-124-android-public-webview-readiness/android-public-webview-readiness-summary.json)
+- [project-logs/campus-relay/runtime/step-124-android-public-webview-readiness/user-public-webview-smoke.json](runtime/step-124-android-public-webview-readiness/user-public-webview-smoke.json)
+- [project-logs/campus-relay/runtime/step-124-android-public-webview-readiness/user-campus-orders-public-webview.png](runtime/step-124-android-public-webview-readiness/user-campus-orders-public-webview.png)
+- [project-logs/campus-relay/runtime/step-124-android-public-webview-readiness/parttime-public-webview-smoke.json](runtime/step-124-android-public-webview-readiness/parttime-public-webview-smoke.json)
+- [project-logs/campus-relay/runtime/step-124-android-public-webview-readiness/parttime-workbench-public-webview.png](runtime/step-124-android-public-webview-readiness/parttime-workbench-public-webview.png)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/step-124-android-public-webview-readiness.md](step-124-android-public-webview-readiness.md)
+
+本轮是 Android public WebView readiness 复核与试运营入口固化轮：新增聚合脚本顺序复用用户端和兼职端真实 Android WebView smoke，并生成 Step 124 汇总报告。实际复跑通过，用户端创建并 mock-pay 订单 `CR202604261141588261`，兼职端回读 profile / review-status / available-orders 成功。Runbook 已补聚合命令和 HTTP cleartext 边界说明。本轮没有改 bridge、`request.js`、token 附着、后端接口、订单状态机、旧外卖模块、Vue 页面或真实支付能力。

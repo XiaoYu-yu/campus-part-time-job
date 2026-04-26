@@ -116,6 +116,34 @@ npm run dev
 1. `http://localhost:5173`
 2. 后端默认访问 `http://localhost:8080`
 
+### Android public WebView readiness
+
+如果要验证用户端和兼职端 Android 壳能在真实 WebView 内访问公网 / 内测 API base，先确认 ignored 本地环境文件已经配置：
+
+1. `frontend/.env.android-user-public`
+2. `frontend/.env.android-parttime-public`
+
+然后执行聚合 smoke：
+
+```powershell
+cd D:\20278\code\Campus part-time job
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-webview-public-smoke.ps1 -StartEmulator -ClearData
+```
+
+脚本行为：
+
+1. 启动或复用 `campus_api35` 模拟器。
+2. 清理用户端 / 兼职端 App data 后启动真实 Android WebView。
+3. 用户端完成登录、取餐点 / 配送规则 / 我的代送单读取、创建订单和 mock-pay。
+4. 兼职端完成登录、profile / review-status / available-orders 读取。
+5. 输出脱敏报告到 `project-logs/campus-relay/runtime/step-124-android-public-webview-readiness/`。
+
+边界：
+
+1. 不提交真实公网 API base、token、服务器密码或密钥。
+2. 不修改 bridge、鉴权、路由、接口或业务页面。
+3. 当前 HTTP public API 只适合 owner-controlled smoke；如果要邀请外部用户安装 APK，应先补域名、HTTPS 证书、反向代理和 Android cleartext 收口。
+
 ## 本地密钥配置
 
 ### 腾讯地图 key

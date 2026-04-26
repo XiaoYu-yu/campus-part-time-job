@@ -1,0 +1,57 @@
+﻿{
+    "step":  "Step 123",
+    "date":  "2026-04-26",
+    "purpose":  "Android public WebView parttime smoke for login, profile/review-status, available orders",
+    "apiBase":  "http://\u003credacted\u003e/api",
+    "packageName":  "com.xiaoyu.campus.parttime",
+    "webView":  {
+                    "devtoolsPort":  9223,
+                    "launchUrl":  "http://localhost/parttime/login",
+                    "loginResult":  {
+                                        "clicked":  true,
+                                        "hasCourierToken":  true,
+                                        "currentUrl":  "http://localhost/parttime/workbench"
+                                    }
+                },
+    "checks":  {
+                   "ok":  true,
+                   "profile":  {
+                                   "httpStatus":  200,
+                                   "bodyCode":  200,
+                                   "bodyMsg":  "success",
+                                   "id":  2,
+                                   "reviewStatus":  "APPROVED",
+                                   "enabled":  1
+                               },
+                   "review":  {
+                                  "httpStatus":  200,
+                                  "bodyCode":  200,
+                                  "bodyMsg":  "success",
+                                  "reviewStatus":  "APPROVED",
+                                  "enabled":  1
+                              },
+                   "available":  {
+                                     "httpStatus":  200,
+                                     "bodyCode":  200,
+                                     "bodyMsg":  "success",
+                                     "total":  4,
+                                     "records":  4
+                                 }
+               },
+    "screenshot":  {
+                       "path":  "D:\\20278\\code\\Campus part-time job\\project-logs\\campus-relay\\runtime\\step-124-android-public-webview-readiness\\parttime-workbench-public-webview.png",
+                       "description":  "Parttime workbench after WebView public API smoke"
+                   },
+    "summary":  {
+                    "passed":  true,
+                    "courierProfileId":  2,
+                    "reviewStatus":  "APPROVED",
+                    "availableOrders":  4
+                },
+    "notes":  [
+                  "The real API host is redacted. Do not commit frontend/.env.android-parttime-public.",
+                  "This smoke uses the Android WebView DevTools context, not a host-only curl.",
+                  "It logs in through the visible parttime login page, then invokes courier APIs from the WebView context.",
+                  "It does not change bridge behavior, token attachment logic, routes, backend state machine, or old takeaway modules."
+              ]
+}

@@ -217,6 +217,12 @@
    - 本轮真实创建并支付订单 `CR202604261108119903`，最终回读 `paymentStatus = PAID`
    - 兼职端 public WebView 已真实登录、读取 profile、review-status 和 available orders
    - 证据文件位于 `project-logs/campus-relay/runtime/step-123-android-public-webview/`，真实公网 API base 继续脱敏
+27. Step 124 已完成 Android public WebView readiness 复核与试运营入口固化：
+   - 新增 `scripts/trial-operation/android-webview-public-smoke.ps1` 聚合入口
+   - 已复跑用户端和兼职端 public WebView smoke，聚合结果 `passed = true`
+   - 本轮用户端创建并 mock-pay 订单 `CR202604261141588261`
+   - 证据文件位于 `project-logs/campus-relay/runtime/step-124-android-public-webview-readiness/`
+   - 当前 HTTP public API 仍只适合 owner-controlled smoke；外部用户内测前优先做 HTTPS / 域名 / cleartext 收口
 
 当前已确认的部署层修正：
 
@@ -263,13 +269,16 @@
 14. Step 123 已完成 Android public WebView 真实接口 smoke：
    - 用户端登录、代送列表、创建订单和 mock-pay 已通过。
    - 兼职端登录、workbench 依赖读取和可接单列表已通过。
-   - 当前 smoke 脚本仍为手工入口，尚未纳入 preflight 或 CI。
+15. Step 124 已完成 Android public WebView readiness 复核：
+   - 新增一键聚合 smoke 入口 `android-webview-public-smoke.ps1`。
+   - 用户端和兼职端 public WebView smoke 已可重复执行并生成聚合报告。
+   - 当前不纳入 CI，因为依赖本机模拟器、APK 与 WebView DevTools 环境。
 
 优先级建议：
 
-1. 如果继续 Android / 内测线，优先做 WebView smoke 可重复性复核与试运营 readiness 判断。
-2. 评估是否把 `android-webview-user-public-smoke.ps1` 与 `android-webview-parttime-public-smoke.ps1` 文档化到 preflight / runbook。
-3. 如果准备邀请外部用户长期访问，优先进入 HTTPS / 域名 / 正式反向代理准备，收口 Android HTTP cleartext 风险。
+1. 如果继续 Android / 内测线，优先做 HTTPS / 域名 / 正式反向代理方案，收口 Android HTTP cleartext 风险。
+2. owner-controlled smoke 可继续使用 `android-webview-public-smoke.ps1 -StartEmulator -ClearData`。
+3. 如果准备邀请外部用户长期访问，先完成域名、HTTPS 证书、后端 CORS 和 Android cleartext 策略收口。
 4. 如果 WebView 内请求失败，优先排查公网 CORS、Android cleartext HTTP、后端 token、反向代理路径，而不是改业务语义。
 5. 如果转回用户端产品线，再评估订单详情 / 取消 / confirm 最小入口，仍不要改订单状态机。
 6. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断。

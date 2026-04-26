@@ -1,21 +1,21 @@
 # 校园代送待处理事项
 
-## Step 124 最高优先级
+## Step 125 最高优先级
 
-1. Step 123 已完成 Android public WebView 真实接口 smoke：
-   - 用户端通过 Android WebView 页面真实登录，确认 `customer_token` 写入。
-   - 用户端在同一 WebView 上下文调用 public API base，读取取餐点、配送规则、我的代送单。
-   - 用户端创建并 mock-pay 订单 `CR202604261108119903`，最终回读 `paymentStatus = PAID`。
-   - 兼职端通过 Android WebView 页面真实登录，确认 `courier_token` 写入。
-   - 兼职端在同一 WebView 上下文调用 profile、review-status、available-orders，均返回成功。
-   - 证据和报告只保存脱敏 API base，不提交真实公网 IP、token 或本地 ignored env。
-2. Step 124 最高优先级建议：
-   - 进入 Android public WebView 稳定性复核 / 试运营 readiness 判断：
-     - 复用 Step 123 两个脚本，确认 user / parttime public WebView smoke 可重复执行。
-     - 评估是否需要把这两个 smoke 纳入试运营 preflight 或文档化为手工验收命令。
-     - 若准备邀请真实内测用户，优先补 HTTPS / 域名 / 证书 / Android cleartext 收口方案，而不是继续扩业务页。
-   - 若暂不进入公网内测，则当前 Android public WebView 用户端与兼职端最小链路已具备本地验收证据。
-3. Step 124 仍不建议：
+1. Step 124 已完成 Android public WebView readiness 复核：
+   - 新增 `scripts/trial-operation/android-webview-public-smoke.ps1` 聚合入口。
+   - 已复用用户端和兼职端 WebView/CDP smoke，确认两条 public WebView 链路可重复执行。
+   - 用户端本轮创建并 mock-pay 订单 `CR202604261141588261`，最终回读 `paymentStatus = PAID`。
+   - 兼职端本轮回读 `courierProfileId = 2`、`reviewStatus = APPROVED`、`availableOrders = 4`。
+   - 聚合报告位于 `project-logs/campus-relay/runtime/step-124-android-public-webview-readiness/`，继续只保存脱敏 API base。
+2. Step 125 最高优先级建议：
+   - 如果准备邀请外部用户安装 Android APK，优先进入 HTTPS / 域名 / 证书 / Android cleartext 收口方案设计：
+     - 明确公网 API 域名和反向代理边界。
+     - 明确证书申请、Nginx HTTPS 配置和后端 CORS allowed-origins 边界。
+     - 明确 Android public build 从 HTTP 迁移到 HTTPS 后如何验证。
+     - 明确是否收紧 Capacitor Android cleartext 配置。
+   - 如果暂不邀请外部用户，当前 Android public WebView readiness 已足够作为 owner-controlled 内测验收入口。
+3. Step 125 仍不建议：
    - 重开 bridge 收口主线。
    - 原生 Android 重写用户端 / 兼职端页面。
    - 继续机械补 admin 页面或第五个 admin 页。
@@ -23,7 +23,7 @@
    - 把真实公网 IP、token、服务器密码或密钥写入仓库。
 4. bridge 主线继续保持 `Phase A no-op` 冻结态，不默认重开。
 5. 展示 polish 主线继续保持冻结/维护态。
-6. Android 当前已有三类 API base 配置边界；public WebView 用户端与兼职端最小真实接口 smoke 已通过。
+6. Android 当前已有 emulator / LAN / public 三类 API base 配置边界；public WebView 用户端与兼职端聚合 readiness smoke 已通过。
 7. Step 72 已完成腾讯地图最小产品化试点：
    - 只在现有 `/campus/courier-ops` 接入腾讯地图 JS SDK 最小预览，不新增页面、不改后端接口。
    - 继续复用现有 courier 位置上报数据，不引入轨迹回放、实时调度或地图写操作。

@@ -72,12 +72,20 @@ Run Android public WebView part-time smoke after public APK sync/build:
 powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-webview-parttime-public-smoke.ps1 -StartEmulator -ClearData
 ```
 
+Run both Android public WebView smokes and write a combined readiness report:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-webview-public-smoke.ps1 -StartEmulator -ClearData
+```
+
 These two WebView smoke scripts read the API base from ignored local files by default:
 
 1. `frontend/.env.android-user-public`
 2. `frontend/.env.android-parttime-public`
 
-They drive the real Android WebView through DevTools/CDP, log in through the visible login pages, call the public API base from inside the WebView context, and write redacted reports under `project-logs/campus-relay/runtime/step-123-android-public-webview/`. They do not commit the real public host, token, server credentials, or secrets.
+They drive the real Android WebView through DevTools/CDP, log in through the visible login pages, call the public API base from inside the WebView context, and write redacted reports under `project-logs/campus-relay/runtime/step-123-android-public-webview/` or `project-logs/campus-relay/runtime/step-124-android-public-webview-readiness/`. They do not commit the real public host, token, server credentials, or secrets.
+
+Use the combined readiness script before owner-controlled Android public smoke or internal-trial handoff. If real external users will install the APK, do not treat HTTP cleartext as production-ready: move to a real domain, HTTPS certificate, reverse proxy, and then tighten Android cleartext settings in a separate release step.
 
 Treat closed ports as hard failures:
 
