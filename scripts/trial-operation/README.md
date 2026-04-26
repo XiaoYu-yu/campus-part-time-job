@@ -40,6 +40,18 @@ Run preflight with sample validation:
 powershell -ExecutionPolicy Bypass -File scripts\trial-operation\preflight.ps1 -RunSampleValidation
 ```
 
+Run Android API base layering checks:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-api-base-check.ps1
+```
+
+Include Android API base checks in preflight:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\preflight.ps1 -RunAndroidApiBaseCheck
+```
+
 Treat closed ports as hard failures:
 
 ```powershell
@@ -112,10 +124,12 @@ C:\Users\20278\AppData\Local\Android\Sdk\extras\google\Android_Emulator_Hypervis
 
 Current local Android WebView API baseline:
 
-1. Build-time API base for emulator smoke lives in `frontend/.env.android-user` and `frontend/.env.android-parttime`.
-2. Both files point to `http://10.0.2.2:8080/api`, which is the Android emulator alias for the host machine.
-3. Backend `dev` / `test` profiles allow `http://localhost`, `https://localhost`, and `capacitor://localhost` for local WebView CORS.
-4. Both Capacitor shells allow local cleartext HTTP for smoke only; real server / public trial builds should switch to HTTPS and a real API base.
+1. Default emulator build-time API base lives in `frontend/.env.android-user` and `frontend/.env.android-parttime`.
+2. Explicit emulator modes live in `frontend/.env.android-user-emulator` and `frontend/.env.android-parttime-emulator`.
+3. LAN phone builds should copy `frontend/.env.android-user-lan.example` / `frontend/.env.android-parttime-lan.example` to ignored local env files and replace the example IP.
+4. Public/internal-trial builds should copy `frontend/.env.android-user-public.example` / `frontend/.env.android-parttime-public.example` to ignored local env files and prefer an HTTPS API base.
+5. Backend `dev` / `test` profiles allow `http://localhost`, `https://localhost`, and `capacitor://localhost` for local WebView CORS.
+6. Both Capacitor shells allow local cleartext HTTP for smoke only; real server / public trial builds should switch to HTTPS and a real API base.
 
 Step 116 verified on `emulator-5554`:
 

@@ -107,13 +107,19 @@ C:\Users\20278\AppData\Local\Android\Sdk\extras\google\Android_Emulator_Hypervis
 3. 兼职端 WebView 可通过 `http://10.0.2.2:8080/api` 调用本机 test profile 后端。
 4. 用户端 WebView 可完成 `POST /api/users/login`。
 
-### Android 本地 API base
+### Android API base 分层
 
-Android 模拟器访问宿主机后端时不能使用 `127.0.0.1`，需要使用 `10.0.2.2`。当前仓库提供两个 Android 构建专用 env：
+Android 构建必须按运行场景选择 API base，不要把模拟器、局域网真机和公网内测混用同一份配置。
+
+#### 1. 本地模拟器
+
+Android 模拟器访问宿主机后端时不能使用 `127.0.0.1`，需要使用 `10.0.2.2`。当前默认命令仍保留为模拟器安全配置：
 
 ```text
 frontend/.env.android-user
 frontend/.env.android-parttime
+frontend/.env.android-user-emulator
+frontend/.env.android-parttime-emulator
 ```
 
 默认内容为：
@@ -122,6 +128,61 @@ frontend/.env.android-parttime
 VITE_API_BASE_URL=http://10.0.2.2:8080/api
 VITE_USE_MOCK=false
 ```
+
+构建命令：
+
+```bash
+npm run build:android:user
+npm run build:android:parttime
+npm run build:android:user:emulator
+npm run build:android:parttime:emulator
+```
+
+#### 2. 局域网真机
+
+真机访问开发机后端时必须使用开发机在同一局域网中的 IP，例如 `http://192.168.1.100:8080/api`。不要使用 `10.0.2.2`，它只适用于 Android 模拟器。
+
+先复制 example，再填入真实局域网 IP：
+
+```powershell
+Copy-Item frontend\.env.android-user-lan.example frontend\.env.android-user-lan
+Copy-Item frontend\.env.android-parttime-lan.example frontend\.env.android-parttime-lan
+```
+
+构建命令：
+
+```bash
+npm run build:android:user:lan
+npm run build:android:parttime:lan
+```
+
+#### 3. 公网 / 服务器内测
+
+公网内测应优先使用 HTTPS 域名或反向代理后的公网 API base，例如 `https://your-domain.example.com/api`。如果临时使用公网 IP + HTTP，只能作为短期内测 smoke，不能作为长期发布口径。
+
+先复制 example，再填入真实公网地址：
+
+```powershell
+Copy-Item frontend\.env.android-user-public.example frontend\.env.android-user-public
+Copy-Item frontend\.env.android-parttime-public.example frontend\.env.android-parttime-public
+```
+
+构建命令：
+
+```bash
+npm run build:android:user:public
+npm run build:android:parttime:public
+```
+
+#### 4. API base 检查
+
+运行脚本检查当前 Android API base 分层：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-api-base-check.ps1
+```
+
+本脚本会把未创建的 LAN / public 本地 env 视为 warning；只有默认模拟器配置缺失或类型错误时才视为 hard failure。使用 `-Strict` 时，LAN / public 本地 env 缺失也会视为 hard failure。
 
 后端 test/dev profile 已放行 Android WebView 本地 origin：`http://localhost`、`https://localhost`、`capacitor://localhost`。
 

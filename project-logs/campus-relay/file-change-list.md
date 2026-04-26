@@ -1804,3 +1804,33 @@
 - [project-logs/campus-relay/step-119-user-campus-order-entry.md](step-119-user-campus-order-entry.md)
 
 本轮是用户端校园代送下单 / 我的代送单最小入口轮：新增 `/user/campus/orders`，复用现有 customer campus 接口读取取餐点、配送规则、创建校园代送单、分页读取我的代送单并触发 mock-pay；用户端底部导航新增“代送”，首页主按钮切到发布代送单。真实移动视口 smoke 已创建并模拟支付订单 `CR202604251658356537`。本轮没有改 bridge、`request.js`、token 附着逻辑、后端接口、订单状态机、Android 原生工程或旧外卖模块。
+
+## Step 120 - Android / 内测 API base 分层与用户端代送入口壳级验证
+
+- [.gitignore](../../.gitignore)
+- [frontend/.env.android-user](../../frontend/.env.android-user)
+- [frontend/.env.android-parttime](../../frontend/.env.android-parttime)
+- [frontend/.env.android-user-emulator](../../frontend/.env.android-user-emulator)
+- [frontend/.env.android-parttime-emulator](../../frontend/.env.android-parttime-emulator)
+- [frontend/.env.android-user-lan.example](../../frontend/.env.android-user-lan.example)
+- [frontend/.env.android-parttime-lan.example](../../frontend/.env.android-parttime-lan.example)
+- [frontend/.env.android-user-public.example](../../frontend/.env.android-user-public.example)
+- [frontend/.env.android-parttime-public.example](../../frontend/.env.android-parttime-public.example)
+- [frontend/.env.example](../../frontend/.env.example)
+- [frontend/package.json](../../frontend/package.json)
+- [frontend/vite.config.js](../../frontend/vite.config.js)
+- [mobile/README.md](../../mobile/README.md)
+- [scripts/trial-operation/android-api-base-check.ps1](../../scripts/trial-operation/android-api-base-check.ps1)
+- [scripts/trial-operation/preflight.ps1](../../scripts/trial-operation/preflight.ps1)
+- [scripts/trial-operation/README.md](../../scripts/trial-operation/README.md)
+- [project-logs/campus-relay/runtime/android-smoke/20260426-132135-user-app-launch.png](runtime/android-smoke/20260426-132135-user-app-launch.png)
+- [project-logs/campus-relay/runtime/android-smoke/20260426-132156-parttime-app-launch.png](runtime/android-smoke/20260426-132156-parttime-app-launch.png)
+- [project-logs/campus-relay/runtime/android-smoke/20260426-132330-user-campus-orders.png](runtime/android-smoke/20260426-132330-user-campus-orders.png)
+- [project-logs/campus-relay/runtime/step-120-android-api-base/user-campus-orders-android-smoke.json](runtime/step-120-android-api-base/user-campus-orders-android-smoke.json)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/step-120-android-api-base-layering-and-user-entry-smoke.md](step-120-android-api-base-layering-and-user-entry-smoke.md)
+
+本轮是 Android / 内测 API base 分层与用户端代送入口壳级验证轮：新增 emulator / lan / public 三类 Android 构建 mode 和 env example，新增 `android-api-base-check.ps1` 并接入 preflight；`android-user-lan` 在没有本地 env 时会失败，避免静默回退到 `/api`。已重新同步并构建用户端 / 兼职端 Android APK，在 `campus_api35` 模拟器中完成安装、启动和用户端“代送”入口截图。本轮没有改 bridge、`request.js`、token 附着逻辑、后端接口、订单状态机、Android 原生壳结构或旧外卖模块。

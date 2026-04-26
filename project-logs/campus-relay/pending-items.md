@@ -1,26 +1,30 @@
 # 校园代送待处理事项
 
-## Step 120 最高优先级
+## Step 121 最高优先级
 
-1. Step 119 已完成用户端校园代送下单 / 我的代送单最小入口：
-   - 新增 `/user/campus/orders`，接入创建校园代送单、我的代送单列表和 mock-pay。
-   - `UserLayout.vue` 底部导航新增“代送”入口。
-   - `Home.vue` 主按钮切到“发布代送单”。
-   - 已在 390x844 移动视口真实登录 `13900139000 / 123456`，创建并模拟支付订单 `CR202604251658356537`。
-   - 本轮未改 bridge、`request.js`、token 附着、后端接口、订单状态机、Android 原生工程或旧外卖模块。
-2. Step 120 最高优先级建议：
-   - 评估并固化 Android / 内测 API base 分层：本地模拟器、局域网真机、公网服务器三类环境不应混用同一个 `10.0.2.2` 配置。
-   - 若继续 Android 线，优先补“用户端新代送入口在 Android 壳内的真实 smoke”，不要直接写原生页面。
-   - 若继续用户端产品线，可评估订单详情 / 取消 / confirm 的最小入口，但必须先明确不改订单状态机。
-   - 若准备服务器内测，应优先整理公网 API base、HTTPS / 反向代理和 Android WebView 访问策略。
-3. Step 120 仍不建议：
+1. Step 120 已完成 Android / 内测 API base 分层与用户端代送入口壳级验证：
+   - 新增模拟器、局域网真机、公网内测三类 Android API base 构建模式。
+   - 新增 `scripts/trial-operation/android-api-base-check.ps1`，并接入 `preflight.ps1 -RunAndroidApiBaseCheck`。
+   - 保留默认 `build:android:user` / `build:android:parttime` 的模拟器 `10.0.2.2` 配置。
+   - LAN/Public 构建必须由 ignored 本地 env 显式提供 `VITE_API_BASE_URL`，否则构建失败，不再静默回退到 `/api`。
+   - 已在 `campus_api35` 模拟器中安装启动用户端和兼职端 APK，并确认用户端可进入 `/user/campus/orders`。
+   - 本轮未改 bridge、`request.js`、token 附着、后端接口、订单状态机、Android 原生壳结构或旧外卖模块。
+2. Step 121 最高优先级建议：
+   - 若继续 Android / 内测线，优先做真实 LAN 或公网 API base 配置演练：
+     - 复制 `frontend/.env.android-user-lan.example` 或 `frontend/.env.android-user-public.example`。
+     - 填入真实局域网 IP、公网 IP 或 HTTPS 域名。
+     - 构建用户端 APK。
+     - 在真机或模拟器中完成用户端登录、进入 `/user/campus/orders`、读取列表和创建 / mock-pay smoke。
+   - 若转回用户端产品线，可评估订单详情 / 取消 / confirm 的最小入口，但必须先明确不改订单状态机。
+   - 若准备服务器内测，应继续整理公网 HTTPS / 反向代理和 Android WebView 访问策略。
+3. Step 121 仍不建议：
    - 重开 bridge 收口主线。
    - 原生 Android 重写用户端 / 兼职端页面。
    - 继续机械补 admin 页面或第五个 admin 页。
    - 接真实支付、真实退款或真实打款。
 4. bridge 主线继续保持 `Phase A no-op` 冻结态，不默认重开。
 5. 展示 polish 主线继续保持冻结/维护态。
-6. Android 当前本地模拟器 smoke 配置使用 `10.0.2.2`；公网 / 真机内测仍需独立 API base。
+6. Android 当前已有三类 API base 配置边界；LAN / Public 的真实地址仍需 owner 在目标网络中填写本地 ignored env。
 7. Step 72 已完成腾讯地图最小产品化试点：
    - 只在现有 `/campus/courier-ops` 接入腾讯地图 JS SDK 最小预览，不新增页面、不改后端接口。
    - 继续复用现有 courier 位置上报数据，不引入轨迹回放、实时调度或地图写操作。

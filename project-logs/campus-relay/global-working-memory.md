@@ -206,6 +206,12 @@
    - 已封装 customer campus 下单、列表、mock-pay 与 public pickup/rules 读取 API
    - 真实 390x844 移动视口 smoke 已创建并模拟支付订单 `CR202604251658356537`
    - 未改 bridge、`request.js`、后端状态机、旧外卖模块或 Android 原生壳结构
+25. Step 120 已完成 Android / 内测 API base 分层与用户端代送入口壳级验证：
+   - Android 构建已分为 emulator / lan / public 三类 mode，默认 `build:android:user` 与 `build:android:parttime` 仍保留模拟器 `10.0.2.2`
+   - 新增 `android-api-base-check.ps1`，可检查默认模拟器配置、LAN 真机本地 env 和公网内测 env
+   - LAN / Public 构建必须由本地 ignored env 显式提供 `VITE_API_BASE_URL`，否则构建失败，不会静默回退到 `/api`
+   - 已在 `campus_api35` 模拟器中安装启动两个 APK，并确认用户端可进入 `/user/campus/orders`
+   - 未改 bridge、`request.js`、token 附着、后端接口、订单状态机、Android 原生壳结构或旧外卖模块
 
 当前已确认的部署层修正：
 
@@ -238,12 +244,13 @@
 8. Step 117 已解决用户端 Android 登录后默认首页旧外卖语义问题，`/user` 现在作为校园兼职 / 校园代送用户端首页
 9. Step 118 已完成用户端移动视口真实 smoke 并修正登录页旧点餐文案
 10. Step 119 已补齐用户端校园代送下单 / 我的代送单最小入口
-11. 当前下一优先产品问题是：Android / 内测访问 API base 分层仍需固化，尤其是本地模拟器、局域网真机、公网服务器三类环境的切换边界
+11. Step 120 已固化 Android / 内测 API base 分层，并完成用户端“代送”入口 Android 壳级 smoke
+12. 当前下一优先产品问题是：LAN 真机或公网内测 API base 需要在真实网络环境中填写本地 env 后做一次完整接口 smoke
 
 优先级建议：
 
-1. 如果继续 Android / 内测线，优先固化本地模拟器、局域网真机、公网服务器三类 API base 配置
-2. 对 `/user/campus/orders` 做 Android 壳内 smoke，确认下单、列表、mock-pay 在 WebView 内不受环境配置影响
+1. 如果继续 Android / 内测线，优先做 LAN 真机或公网 API base 配置演练，并在 WebView 内跑用户端登录、代送列表、创建和 mock-pay
+2. 如果转回用户端产品线，再评估订单详情 / 取消 / confirm 最小入口，仍不要改订单状态机
 3. 如果准备邀请外部用户长期访问，再进入 HTTPS / 域名 / 正式反向代理准备
 4. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断
 

@@ -7,7 +7,13 @@
     "dev": "vite",
     "build": "vite build",
     "build:android:user": "vite build --mode android-user",
+    "build:android:user:emulator": "vite build --mode android-user-emulator",
+    "build:android:user:lan": "vite build --mode android-user-lan",
+    "build:android:user:public": "vite build --mode android-user-public",
     "build:android:parttime": "vite build --mode android-parttime",
+    "build:android:parttime:emulator": "vite build --mode android-parttime-emulator",
+    "build:android:parttime:lan": "vite build --mode android-parttime-lan",
+    "build:android:parttime:public": "vite build --mode android-parttime-public",
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{js,vue}\"",
     "test": "vitest run"

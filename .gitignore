@@ -22,6 +22,12 @@ Thumbs.db
 !frontend/.env.example
 !frontend/.env.android-user
 !frontend/.env.android-parttime
+!frontend/.env.android-user-emulator
+!frontend/.env.android-parttime-emulator
+!frontend/.env.android-user-lan.example
+!frontend/.env.android-parttime-lan.example
+!frontend/.env.android-user-public.example
+!frontend/.env.android-parttime-public.example
 
 uploads/
 deploy/internal-trial/backups/

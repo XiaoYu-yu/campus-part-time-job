@@ -129,7 +129,8 @@
 - 当前已完成：`Step 117 - 用户端移动首页校园兼职化`
 - 当前已完成：`Step 118 - 用户端移动首页真实视觉 smoke 与登录文案修正`
 - 当前已完成：`Step 119 - 用户端校园代送下单 / 我的代送单最小入口`
-- 当前日期：`2026-04-25`
+- 当前已完成：`Step 120 - Android / 内测 API base 分层与用户端代送入口壳级验证`
+- 当前日期：`2026-04-26`
 - Step 102 补充：已把 admin 主框架、仪表盘和运营人员页从旧外卖后台视觉收敛到校园兼职运营风格；本轮只改展示层和全局主题变量，未改 bridge、接口、鉴权、路由、API 调用顺序或后端业务。已通过 `npm run build`、`npm run test -- text.spec.js` 和 `git diff --check`；本地 admin seed 登录与员工列表复核返回 `管理员 / 技术部`。
 - Step 103 补充：已把登录页改为 `校内兼职运营台`，并将 admin 外壳 / dashboard 进一步按深色玻璃拟态方向重基线；同时补齐旧 session / localStorage / in-memory 场景的 admin 文本归一化兜底，覆盖顶部用户名、dashboard 欢迎语和 Employee 页姓名 / 职位 / 部门显示。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
 - Step 104 补充：根据 owner 反馈，已把 Step 103 的深色玻璃方向回调为浅色校园兼职运营风格；登录页、admin 主框架、dashboard 和 Employee 高曝光区域均切回浅色玻璃，同时修正 Element Plus `light-*` 主题变量映射，并修复 `/campus/courier-ops` 窄屏下配送员列表表格裁切导致“审核状态”列显示一半的问题。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
@@ -148,6 +149,7 @@
 - Step 117 补充：已将用户端登录后的默认首页从旧外卖商品推荐语义收敛为“校园兼职 / 校园代送用户端首页”。`UserLayout.vue` 改为用户端移动 shell 与底部校园入口，`Home.vue` 改为校园结果回看、兼职入驻状态、token 资格提示和旧外卖兼容入口；旧 `category/cart/orders/profile` 页面仍保留为兼容入口。本轮没有改 bridge、`request.js`、token 附着、API 调用顺序、路由结构、后端接口、Android 原生工程或旧外卖模块。
 - Step 118 补充：已启动本地 backend(test) 与 frontend dev，使用 Playwright CLI 在 390x844 移动视口真实登录用户端并采集 `/user/login`、`/user`、`/user/campus/order-result?orderId=CR202604060001`、`/user/campus/courier-onboarding` 截图。smoke 发现用户登录页仍有“点餐”文案，已修正为校园兼职用户端登录文案和浅色校园风格；用户首页、底部导航、结果回看快捷入口和入驻摘要可读。本轮没有改 bridge、鉴权、token 附着、API 调用顺序、后端接口、Android 原生工程或旧外卖模块。
 - Step 119 补充：已新增用户端 `/user/campus/orders` 校园代送下单 / 我的代送单最小入口，复用现有 customer campus 接口读取取餐点、配送规则、创建校园代送单、分页读取我的代送单并手动触发 mock-pay。真实移动视口 smoke 已创建并模拟支付订单 `CR202604251658356537`，接口均返回 200，browser console 无 error / warning；用户端底部导航新增“代送”，首页主按钮切到发布代送单。本轮未改 bridge、`request.js`、token 附着、后端接口、订单状态机、Android 原生工程或旧外卖模块。
+- Step 120 补充：已将 Android API base 从单一模拟器配置固化为模拟器、局域网真机、公网内测三类构建模式；新增 `android-api-base-check.ps1` 与 preflight 集成，LAN/Public 未配置时只给 warning，但对应构建会因缺少显式 `VITE_API_BASE_URL` 失败，不再静默回退。已在 `campus_api35` 模拟器中完成用户端和兼职端 APK 安装启动，并确认用户端可从底部导航进入 `/user/campus/orders`。本轮未改 bridge、`request.js`、token 附着、后端接口、订单状态机、旧外卖模块或 Android 原生壳结构。
 - Step 46 补充：已新增 admin 异常 resolve 后端接口 `POST /api/campus/admin/exceptions/{id}/resolve`，只允许 `REPORTED -> RESOLVED`，重复处理返回明确业务错误；本轮未改订单主状态、settlement、latest exception 摘要、bridge、前端页面或路由。
 - Step 47 补充：本轮只做 admin 异常前端承接 go / no-go 评估，不写业务代码、不补页面；最终选择方向 A，建议 Step 48 进入 admin 异常历史 / resolve 最小前端承接方案与实现准备，P2 售后执行历史表继续后置。
 - Step 48 补充：已新增 `/campus/exceptions` admin 异常处理页，接入异常历史列表、详情 drawer 和 `REPORTED -> RESOLVED` 最小 resolve 动作；本轮未改后端接口、bridge、鉴权、订单主状态、settlement 或 latest exception 摘要。
@@ -2347,6 +2349,7 @@
 - [Step 117 日志](step-117-user-mobile-home-campusization.md)
 - [Step 118 日志](step-118-user-home-visual-smoke-and-login-copy.md)
 - [Step 119 日志](step-119-user-campus-order-entry.md)
+- [Step 120 日志](step-120-android-api-base-layering-and-user-entry-smoke.md)
 - [全局工作记忆](global-working-memory.md)
 - [试运营脚本入口说明](../../scripts/trial-operation/README.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)

@@ -3,7 +3,8 @@ param(
     [switch]$StrictPorts,
     [switch]$RunBackendCompile,
     [switch]$RunFrontendBuild,
-    [switch]$RunSampleValidation
+    [switch]$RunSampleValidation,
+    [switch]$RunAndroidApiBaseCheck
 )
 
 $ErrorActionPreference = "Stop"
@@ -147,6 +148,10 @@ if ($RunFrontendBuild) {
 
 if ($RunSampleValidation) {
     Invoke-Step "sample validation" $RepoRoot "powershell" @("-ExecutionPolicy", "Bypass", "-File", (Join-Path $RepoRoot "scripts\trial-operation\validate-samples.ps1")) @(2)
+}
+
+if ($RunAndroidApiBaseCheck) {
+    Invoke-Step "android API base check" $RepoRoot "powershell" @("-ExecutionPolicy", "Bypass", "-File", (Join-Path $RepoRoot "scripts\trial-operation\android-api-base-check.ps1")) @(2)
 }
 
 Write-Host "Preflight completed with $script:HardFailures hard failure(s) and $script:Warnings warning(s)."

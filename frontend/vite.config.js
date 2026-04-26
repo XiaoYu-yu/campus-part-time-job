@@ -4,15 +4,18 @@ import vue from '@vitejs/plugin-vue'
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const shellFromMode = {
-    'android-user': 'user',
-    'android-parttime': 'parttime'
-  }
-  const appShell = env.VITE_APP_SHELL || shellFromMode[mode] || 'admin'
+  const isAndroidUserMode = mode.startsWith('android-user')
+  const isAndroidParttimeMode = mode.startsWith('android-parttime')
+  const isAndroidMode = isAndroidUserMode || isAndroidParttimeMode
+  const appShell = env.VITE_APP_SHELL || (isAndroidUserMode ? 'user' : isAndroidParttimeMode ? 'parttime' : 'admin')
   const outDirMap = {
     user: 'dist-android-user',
     parttime: 'dist-android-parttime',
     admin: 'dist'
+  }
+
+  if (isAndroidMode && (!env.VITE_API_BASE_URL || env.VITE_API_BASE_URL === '/api')) {
+    throw new Error(`Android build mode '${mode}' must set an explicit VITE_API_BASE_URL. Copy the matching frontend/.env.${mode}.example if needed.`)
   }
 
   return {

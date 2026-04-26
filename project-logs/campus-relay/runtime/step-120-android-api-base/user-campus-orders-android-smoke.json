@@ -1,0 +1,40 @@
+{
+  "step": "Step 120",
+  "date": "2026-04-26",
+  "scope": "Android API base layering and Android shell smoke for user campus orders entry",
+  "apiBaseLayering": {
+    "defaultUser": "frontend/.env.android-user -> http://10.0.2.2:8080/api",
+    "defaultParttime": "frontend/.env.android-parttime -> http://10.0.2.2:8080/api",
+    "emulatorUser": "frontend/.env.android-user-emulator -> http://10.0.2.2:8080/api",
+    "emulatorParttime": "frontend/.env.android-parttime-emulator -> http://10.0.2.2:8080/api",
+    "lanExamples": [
+      "frontend/.env.android-user-lan.example",
+      "frontend/.env.android-parttime-lan.example"
+    ],
+    "publicExamples": [
+      "frontend/.env.android-user-public.example",
+      "frontend/.env.android-parttime-public.example"
+    ]
+  },
+  "validation": {
+    "androidApiBaseCheck": "passed with warnings for intentionally missing local LAN/Public env files",
+    "androidUserEmulatorBuild": "passed",
+    "androidParttimeEmulatorBuild": "passed",
+    "androidUserLanBuildWithoutLocalEnv": "failed as expected, no silent fallback to /api",
+    "userCapSync": "passed",
+    "parttimeCapSync": "passed",
+    "userAssembleDebug": "passed with JDK 21",
+    "parttimeAssembleDebug": "passed with JDK 21",
+    "androidSmoke": "passed for install, launch and screenshot",
+    "userCampusOrdersRouteSmoke": "passed by opening the packaged Android user app and tapping the bottom nav campus orders entry"
+  },
+  "screenshots": [
+    "project-logs/campus-relay/runtime/android-smoke/20260426-132135-user-app-launch.png",
+    "project-logs/campus-relay/runtime/android-smoke/20260426-132156-parttime-app-launch.png",
+    "project-logs/campus-relay/runtime/android-smoke/20260426-132330-user-campus-orders.png"
+  ],
+  "notes": [
+    "This round did not modify request.js, bridge behavior, auth, backend APIs, routes, old takeaway semantics, or Android native shell structure.",
+    "Full Android in-WebView order creation/mock-pay is still a candidate for a later, more targeted UI automation round. Browser mobile viewport smoke already covered create and mock-pay in Step 119."
+  ]
+}
