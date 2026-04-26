@@ -1,0 +1,20 @@
+{
+  "step": "Step 121",
+  "date": "2026-04-26",
+  "apiBase": "http://<redacted>/api",
+  "userPublicSync": {
+    "emulatorBaseMatches": 0,
+    "publicBaseMatches": 1,
+    "publicModeEmbedded": true
+  },
+  "parttimePublicSync": {
+    "emulatorBaseMatches": 0,
+    "publicBaseMatches": 1,
+    "publicModeEmbedded": true
+  },
+  "cleanLaunchScreenshots": [
+    "project-logs/campus-relay/runtime/android-smoke/20260426-140630-user-app-launch.png",
+    "project-logs/campus-relay/runtime/android-smoke/20260426-140641-parttime-app-launch.png"
+  ],
+  "note": "Android shell generated assets are ignored; this report stores only redacted public API base evidence."
+}

@@ -1834,3 +1834,24 @@
 - [project-logs/campus-relay/step-120-android-api-base-layering-and-user-entry-smoke.md](step-120-android-api-base-layering-and-user-entry-smoke.md)
 
 本轮是 Android / 内测 API base 分层与用户端代送入口壳级验证轮：新增 emulator / lan / public 三类 Android 构建 mode 和 env example，新增 `android-api-base-check.ps1` 并接入 preflight；`android-user-lan` 在没有本地 env 时会失败，避免静默回退到 `/api`。已重新同步并构建用户端 / 兼职端 Android APK，在 `campus_api35` 模拟器中完成安装、启动和用户端“代送”入口截图。本轮没有改 bridge、`request.js`、token 附着逻辑、后端接口、订单状态机、Android 原生壳结构或旧外卖模块。
+
+## Step 121 - Android public API base 演练与 smoke 加固
+
+- [frontend/src/router/index.js](../../frontend/src/router/index.js)
+- [mobile/user-app/package.json](../../mobile/user-app/package.json)
+- [mobile/parttime-app/package.json](../../mobile/parttime-app/package.json)
+- [mobile/README.md](../../mobile/README.md)
+- [scripts/trial-operation/android-smoke.ps1](../../scripts/trial-operation/android-smoke.ps1)
+- [scripts/trial-operation/android-public-api-smoke.ps1](../../scripts/trial-operation/android-public-api-smoke.ps1)
+- [scripts/trial-operation/README.md](../../scripts/trial-operation/README.md)
+- [project-logs/campus-relay/runtime/android-smoke/20260426-140630-user-app-launch.png](runtime/android-smoke/20260426-140630-user-app-launch.png)
+- [project-logs/campus-relay/runtime/android-smoke/20260426-140641-parttime-app-launch.png](runtime/android-smoke/20260426-140641-parttime-app-launch.png)
+- [project-logs/campus-relay/runtime/step-121-public-api-base/public-api-smoke.json](runtime/step-121-public-api-base/public-api-smoke.json)
+- [project-logs/campus-relay/runtime/step-121-public-api-base/android-public-sync-evidence.json](runtime/step-121-public-api-base/android-public-sync-evidence.json)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/step-121-android-public-api-base-drill-and-smoke-hardening.md](step-121-android-public-api-base-drill-and-smoke-hardening.md)
+
+本轮是 Android public API base 演练与 smoke 加固轮：新增只读 public API base smoke 脚本；两个 Android 壳补齐 `cap:sync:public / lan / emulator`，避免 public build 被默认同步覆盖回模拟器配置；router 改为按 `android-user* / android-parttime*` 前缀识别移动壳，修复 public mode clean launch 误进 admin 的问题；`android-smoke.ps1` 增加 `-ClearData`，用于清理 WebView / app data 后验证首屏。public Android 壳已确认嵌入脱敏公网 API base 且不含 `10.0.2.2`，用户端和兼职端 clean launch 截图正常；公网 public API 当前仍返回 404，完整公网 WebView API smoke 需等服务器 API 路由修复后继续。本轮没有改 bridge、`request.js`、token 附着、后端接口、订单状态机、旧外卖模块或真实支付能力。

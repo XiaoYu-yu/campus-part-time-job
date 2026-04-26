@@ -7,6 +7,7 @@ param(
     [switch]$InstallParttime,
     [switch]$Launch,
     [switch]$CaptureScreenshots,
+    [switch]$ClearData,
     [switch]$StartEmulator,
     [string]$AvdName = "campus_api35",
     [int]$EmulatorBootTimeoutSeconds = 360,
@@ -165,6 +166,13 @@ function Launch-App {
     Start-Sleep -Seconds $LaunchWaitSeconds
 }
 
+function Clear-AppData {
+    param([string]$PackageName)
+
+    Write-Host "Clearing app data for $PackageName"
+    Invoke-Adb -CommandArgs @("shell", "pm", "clear", $PackageName) | Write-Host
+}
+
 function Capture-Screenshot {
     param([string]$Name)
 
@@ -202,11 +210,17 @@ if ($All -or $InstallParttime) {
 }
 
 if ($All -or $Launch) {
+    if ($ClearData) {
+        Clear-AppData $userPackage
+    }
     Launch-App $userPackage
     if ($All -or $CaptureScreenshots) {
         Capture-Screenshot "user-app-launch"
     }
 
+    if ($ClearData) {
+        Clear-AppData $parttimePackage
+    }
     Launch-App $parttimePackage
     if ($All -or $CaptureScreenshots) {
         Capture-Screenshot "parttime-app-launch"

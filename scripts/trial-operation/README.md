@@ -52,6 +52,14 @@ Include Android API base checks in preflight:
 powershell -ExecutionPolicy Bypass -File scripts\trial-operation\preflight.ps1 -RunAndroidApiBaseCheck
 ```
 
+Check a real public/internal-trial API base before building a public Android APK:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-public-api-smoke.ps1 -ApiBase https://your-domain.example.com/api
+```
+
+This smoke only checks the read-only public dependencies used by the Android user campus order entry. It writes a redacted JSON report under `project-logs/campus-relay/runtime/step-121-public-api-base/` and does not mutate orders, tokens, bridge behavior, or server data. If the API base fails here, the Android public build can still be compiled, but WebView API smoke remains blocked until the server route/proxy is fixed.
+
 Treat closed ports as hard failures:
 
 ```powershell
@@ -106,6 +114,12 @@ Wait longer before each launch screenshot:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1 -DeviceId emulator-5554 -LaunchWaitSeconds 8
+```
+
+Clear app data before launching when validating clean first-entry routing:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1 -StartEmulator -ClearData
 ```
 
 The Android smoke script only installs, launches, and captures screenshots from the existing APKs. It does not modify backend/frontend business code, bridge behavior, auth, routes, or API calls. If no device is online, the script fails explicitly instead of pretending the APK smoke passed.

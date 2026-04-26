@@ -1,0 +1,42 @@
+﻿{
+    "step":  "Step 121",
+    "date":  "2026-04-26",
+    "purpose":  "Android public API base smoke for customer campus order entry dependencies",
+    "apiBase":  "http://\u003credacted\u003e/api",
+    "apiBaseScheme":  "http",
+    "checks":  [
+                   {
+                       "name":  "pickup points",
+                       "path":  "/campus/public/pickup-points",
+                       "method":  "GET",
+                       "httpStatus":  404,
+                       "bodyCode":  null,
+                       "bodyMsg":  null,
+                       "passed":  false,
+                       "error":  "远程服务器返回错误: (404) 未找到。",
+                       "checkedAt":  "2026-04-26T14:10:04"
+                   },
+                   {
+                       "name":  "delivery rules",
+                       "path":  "/campus/public/delivery-rules",
+                       "method":  "GET",
+                       "httpStatus":  404,
+                       "bodyCode":  null,
+                       "bodyMsg":  null,
+                       "passed":  false,
+                       "error":  "远程服务器返回错误: (404) 未找到。",
+                       "checkedAt":  "2026-04-26T14:10:05"
+                   }
+               ],
+    "summary":  {
+                    "total":  2,
+                    "passed":  0,
+                    "failed":  2,
+                    "usableForAndroidPublicSmoke":  false
+                },
+    "notes":  [
+                  "This script only checks read-only public dependencies needed by the Android user campus order entry.",
+                  "It does not create orders, mutate data, change bridge behavior, or store the real host unless -NoRedact is used.",
+                  "If public endpoints fail, build-mode validation can still pass, but WebView API smoke must stay blocked."
+              ]
+}

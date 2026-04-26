@@ -8,11 +8,13 @@ const shellHomeMap = {
   admin: '/dashboard'
 }
 
-const shellFromMode = {
-  'android-user': 'user',
-  'android-parttime': 'parttime'
-}
-const appShell = import.meta.env.VITE_APP_SHELL || shellFromMode[import.meta.env.MODE] || 'admin'
+const viteMode = import.meta.env.MODE || ''
+const shellFromMode = viteMode.startsWith('android-user')
+  ? 'user'
+  : viteMode.startsWith('android-parttime')
+    ? 'parttime'
+    : ''
+const appShell = import.meta.env.VITE_APP_SHELL || shellFromMode || 'admin'
 const rootRedirect = shellHomeMap[appShell] || shellHomeMap.admin
 
 const router = createRouter({

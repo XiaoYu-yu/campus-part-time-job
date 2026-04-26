@@ -5,9 +5,15 @@
   "type": "module",
   "scripts": {
     "build:web": "npm --prefix ../../frontend run build:android:user",
+    "build:web:emulator": "npm --prefix ../../frontend run build:android:user:emulator",
+    "build:web:lan": "npm --prefix ../../frontend run build:android:user:lan",
+    "build:web:public": "npm --prefix ../../frontend run build:android:user:public",
     "cap:add:android": "npx cap add android",
     "cap:copy": "npx cap copy android",
     "cap:sync": "npm run build:web && npx cap sync android",
+    "cap:sync:emulator": "npm run build:web:emulator && npx cap sync android",
+    "cap:sync:lan": "npm run build:web:lan && npx cap sync android",
+    "cap:sync:public": "npm run build:web:public && npx cap sync android",
     "cap:open": "npx cap open android"
   },
   "dependencies": {

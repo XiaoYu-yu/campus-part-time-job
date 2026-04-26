@@ -245,14 +245,20 @@
 9. Step 118 已完成用户端移动视口真实 smoke 并修正登录页旧点餐文案
 10. Step 119 已补齐用户端校园代送下单 / 我的代送单最小入口
 11. Step 120 已固化 Android / 内测 API base 分层，并完成用户端“代送”入口 Android 壳级 smoke
-12. 当前下一优先产品问题是：LAN 真机或公网内测 API base 需要在真实网络环境中填写本地 env 后做一次完整接口 smoke
+12. Step 121 已完成 Android public API base 演练与 smoke 加固：
+   - 新增 public API base 只读 smoke 脚本，报告只保存脱敏 API base。
+   - Android user / parttime 壳新增 `cap:sync:public / lan / emulator`，避免 public build 被默认 `cap:sync` 覆盖回模拟器 `10.0.2.2`。
+   - router 已按 `android-user* / android-parttime*` 前缀识别 Android shell，修复 public mode clean launch 误进 admin 的问题。
+   - `android-smoke.ps1 -ClearData` 已用于清空 app data 后验证用户端进入用户登录、兼职端进入兼职入口。
+13. 当前下一优先产品问题是：公网 API base 当前返回 404，需先修公网 backend / Nginx / gateway API 路由，再继续 Android WebView 真实接口 smoke
 
 优先级建议：
 
-1. 如果继续 Android / 内测线，优先做 LAN 真机或公网 API base 配置演练，并在 WebView 内跑用户端登录、代送列表、创建和 mock-pay
-2. 如果转回用户端产品线，再评估订单详情 / 取消 / confirm 最小入口，仍不要改订单状态机
-3. 如果准备邀请外部用户长期访问，再进入 HTTPS / 域名 / 正式反向代理准备
-4. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断
+1. 如果继续 Android / 内测线，优先修公网 API 路由可达性，至少让 `/api/campus/public/pickup-points` 与 `/api/campus/public/delivery-rules` 返回 200
+2. public API smoke 通过后，再在 WebView 内跑用户端登录、代送列表、创建和 mock-pay
+3. 如果转回用户端产品线，再评估订单详情 / 取消 / confirm 最小入口，仍不要改订单状态机
+4. 如果准备邀请外部用户长期访问，再进入 HTTPS / 域名 / 正式反向代理准备
+5. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断
 
 当前默认不进入：
 

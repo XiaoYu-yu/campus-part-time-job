@@ -42,6 +42,18 @@ npm install
 npm run cap:sync
 ```
 
+`cap:sync` 默认仍使用模拟器 API base。局域网真机或公网内测不要直接用默认 `cap:sync`，否则会把已生成的 LAN/Public 构建覆盖回 `10.0.2.2`。对应场景使用：
+
+```bash
+cd mobile/user-app
+npm run cap:sync:lan
+npm run cap:sync:public
+
+cd ../parttime-app
+npm run cap:sync:lan
+npm run cap:sync:public
+```
+
 ### Debug APK 构建
 
 Android 本地构建需要：
@@ -174,6 +186,24 @@ npm run build:android:user:public
 npm run build:android:parttime:public
 ```
 
+同步到 Android 壳时使用对应的 public sync 命令，避免默认 `cap:sync` 重新生成模拟器构建：
+
+```bash
+cd mobile/user-app
+npm run cap:sync:public
+
+cd ../parttime-app
+npm run cap:sync:public
+```
+
+在打包前建议先检查公网 API base 上的只读依赖是否可用。该检查只访问用户端代送入口依赖的 public API，不会创建订单或写入数据：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-public-api-smoke.ps1 -ApiBase https://your-domain.example.com/api
+```
+
+如果返回失败，只能说明“该 API base 当前不适合做 Android WebView 真实接口 smoke”；仍可继续验证构建模式，但不要把失败写成真机 / 公网 smoke 通过。
+
 #### 4. API base 检查
 
 运行脚本检查当前 Android API base 分层：
@@ -238,6 +268,12 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.p
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1 -DeviceId emulator-5554 -LaunchWaitSeconds 8
+```
+
+如果要验证干净首屏入口，建议清空两个壳的本地 WebView / app data，避免恢复上一次停留路由：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\android-smoke.ps1 -StartEmulator -ClearData
 ```
 
 本脚本只负责安装、启动和截图，不自动断言 WebView 内登录是否成功。App 内 `/api` 请求、用户端 / 兼职端登录态隔离、移动网络下后端地址可达性仍需手工或 DevTools smoke 确认。
