@@ -1,33 +1,30 @@
 # 校园代送待处理事项
 
-## Step 122 最高优先级
+## Step 123 最高优先级
 
-1. Step 121 已完成 Android public API base 演练与 smoke 加固：
-   - 新增 `scripts/trial-operation/android-public-api-smoke.ps1`，只检查 Android 用户端代送入口依赖的 public 只读 API，并输出脱敏报告。
-   - `mobile/user-app` 与 `mobile/parttime-app` 已新增 `cap:sync:emulator / cap:sync:lan / cap:sync:public`，避免默认 `cap:sync` 把 public 壳覆盖回模拟器 `10.0.2.2`。
-   - `frontend/src/router/index.js` 已修正 Android suffixed mode 识别，`android-user-public` 与 `android-parttime-public` 不再回落到 admin shell。
-   - `android-smoke.ps1` 已新增 `-ClearData`，可验证 clean first-entry，不被 WebView 历史路由缓存误导。
-   - 用户端和兼职端 public 壳已重新同步、构建，并在 `campus_api35` 模拟器中完成清数据启动截图：用户端进入用户登录，兼职端进入兼职入口。
-2. Step 122 最高优先级建议：
-   - 先修公网服务器 API 可达性，而不是继续改 Android 前端：
-     - 确认公网 backend 是否部署当前 main。
-     - 确认 Nginx / gateway 是否将 `/api/**` 转发到当前 backend。
-     - 确认 `/api/campus/public/pickup-points` 与 `/api/campus/public/delivery-rules` 在公网 API base 返回 `200`。
-   - public API smoke 通过后，再做 Android WebView 真实接口 smoke：
+1. Step 122 已完成公网 API base 切换与 Android public APK 复核：
+   - owner 开机后公网 IP 变化，本地 ignored public env 已切到新 API base。
+   - `android-public-api-smoke.ps1` 已对新的 public API base 执行只读检查，`pickup-points` 与 `delivery-rules` 均通过。
+   - 用户端与兼职端已执行 `cap:sync:public`，并重新构建 Debug APK。
+   - `android-smoke.ps1 -StartEmulator -ClearData` 已确认用户端进入“用户端登录”、兼职端进入“兼职端入口”。
+   - 真实公网 IP 不写入仓库，日志和证据文件继续脱敏。
+2. Step 123 最高优先级建议：
+   - 进入 Android public WebView 真实接口 smoke：
      - 用户端登录。
      - 进入 `/user/campus/orders`。
-     - 读取代送单列表。
+     - 读取取餐点 / 配送规则 / 我的代送单。
      - 创建代送单。
      - mock-pay。
-   - 若暂不修公网服务，可改做 LAN 真机 API base smoke，但仍需先填写本地 ignored LAN env。
-3. Step 122 仍不建议：
+   - 用户端 public smoke 通过后，再验证兼职端 public 登录、workbench 加载和可接单列表。
+   - 若 WebView 内请求失败，优先排查公网 CORS、Android cleartext HTTP、后端 token、反向代理路径，而不是改业务语义。
+3. Step 123 仍不建议：
    - 重开 bridge 收口主线。
    - 原生 Android 重写用户端 / 兼职端页面。
    - 继续机械补 admin 页面或第五个 admin 页。
    - 接真实支付、真实退款或真实打款。
 4. bridge 主线继续保持 `Phase A no-op` 冻结态，不默认重开。
 5. 展示 polish 主线继续保持冻结/维护态。
-6. Android 当前已有三类 API base 配置边界；public 构建已可用，但当前公网 API route 仍返回 `404`，完整公网 WebView API smoke 被服务器部署 / 代理状态阻塞。
+6. Android 当前已有三类 API base 配置边界；public API base 已通过只读依赖检查，下一步应验证 WebView 内完整用户端业务链路。
 7. Step 72 已完成腾讯地图最小产品化试点：
    - 只在现有 `/campus/courier-ops` 接入腾讯地图 JS SDK 最小预览，不新增页面、不改后端接口。
    - 继续复用现有 courier 位置上报数据，不引入轨迹回放、实时调度或地图写操作。

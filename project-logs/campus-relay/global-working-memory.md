@@ -250,15 +250,21 @@
    - Android user / parttime 壳新增 `cap:sync:public / lan / emulator`，避免 public build 被默认 `cap:sync` 覆盖回模拟器 `10.0.2.2`。
    - router 已按 `android-user* / android-parttime*` 前缀识别 Android shell，修复 public mode clean launch 误进 admin 的问题。
    - `android-smoke.ps1 -ClearData` 已用于清空 app data 后验证用户端进入用户登录、兼职端进入兼职入口。
-13. 当前下一优先产品问题是：公网 API base 当前返回 404，需先修公网 backend / Nginx / gateway API 路由，再继续 Android WebView 真实接口 smoke
+13. Step 122 已完成公网 API base 切换与 Android public APK 复核：
+   - owner 开机后公网 IP 变化，本地 ignored public env 已切到新 API base。
+   - public API base 只读 smoke 已通过，`pickup-points` 与 `delivery-rules` 均返回正常。
+   - user / parttime public 壳已重新同步、构建并完成 clean launch smoke。
+   - 真实公网 IP 不写入仓库，tracked evidence 只保留脱敏地址。
+14. 当前下一优先产品问题是：Android public WebView 真实接口 smoke 尚未完成，需要验证用户端登录、代送列表、创建订单和 mock-pay
 
 优先级建议：
 
-1. 如果继续 Android / 内测线，优先修公网 API 路由可达性，至少让 `/api/campus/public/pickup-points` 与 `/api/campus/public/delivery-rules` 返回 200
-2. public API smoke 通过后，再在 WebView 内跑用户端登录、代送列表、创建和 mock-pay
-3. 如果转回用户端产品线，再评估订单详情 / 取消 / confirm 最小入口，仍不要改订单状态机
-4. 如果准备邀请外部用户长期访问，再进入 HTTPS / 域名 / 正式反向代理准备
-5. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断
+1. 如果继续 Android / 内测线，优先在 WebView 内跑用户端登录、代送列表、创建和 mock-pay
+2. 用户端 public smoke 通过后，再验证兼职端 public 登录、workbench 加载和可接单列表
+3. 如果 WebView 内请求失败，优先排查公网 CORS、Android cleartext HTTP、后端 token、反向代理路径，而不是改业务语义
+4. 如果转回用户端产品线，再评估订单详情 / 取消 / confirm 最小入口，仍不要改订单状态机
+5. 如果准备邀请外部用户长期访问，再进入 HTTPS / 域名 / 正式反向代理准备
+6. 如果服务器发生异常，优先按 runbook 做备份、restore drill、smoke 和回滚判断
 
 当前默认不进入：
 

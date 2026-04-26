@@ -9,30 +9,30 @@
                        "name":  "pickup points",
                        "path":  "/campus/public/pickup-points",
                        "method":  "GET",
-                       "httpStatus":  404,
-                       "bodyCode":  null,
-                       "bodyMsg":  null,
-                       "passed":  false,
-                       "error":  "远程服务器返回错误: (404) 未找到。",
-                       "checkedAt":  "2026-04-26T14:10:04"
+                       "httpStatus":  200,
+                       "bodyCode":  200,
+                       "bodyMsg":  "success",
+                       "passed":  true,
+                       "error":  null,
+                       "checkedAt":  "2026-04-26T14:29:32"
                    },
                    {
                        "name":  "delivery rules",
                        "path":  "/campus/public/delivery-rules",
                        "method":  "GET",
-                       "httpStatus":  404,
-                       "bodyCode":  null,
-                       "bodyMsg":  null,
-                       "passed":  false,
-                       "error":  "远程服务器返回错误: (404) 未找到。",
-                       "checkedAt":  "2026-04-26T14:10:05"
+                       "httpStatus":  200,
+                       "bodyCode":  200,
+                       "bodyMsg":  "success",
+                       "passed":  true,
+                       "error":  null,
+                       "checkedAt":  "2026-04-26T14:29:35"
                    }
                ],
     "summary":  {
                     "total":  2,
-                    "passed":  0,
-                    "failed":  2,
-                    "usableForAndroidPublicSmoke":  false
+                    "passed":  2,
+                    "failed":  0,
+                    "usableForAndroidPublicSmoke":  true
                 },
     "notes":  [
                   "This script only checks read-only public dependencies needed by the Android user campus order entry.",

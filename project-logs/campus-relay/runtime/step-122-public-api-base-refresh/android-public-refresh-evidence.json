@@ -1,0 +1,21 @@
+{
+  "step": "Step 122",
+  "date": "2026-04-26",
+  "apiBase": "http://<redacted>/api",
+  "publicApiSmokeReport": "project-logs/campus-relay/runtime/step-121-public-api-base/public-api-smoke.json",
+  "userPublicSync": {
+    "emulatorBaseMatches": 0,
+    "publicBaseMatches": 1,
+    "publicModeEmbedded": true
+  },
+  "parttimePublicSync": {
+    "emulatorBaseMatches": 0,
+    "publicBaseMatches": 1,
+    "publicModeEmbedded": true
+  },
+  "cleanLaunchScreenshots": [
+    "project-logs/campus-relay/runtime/android-smoke/20260426-143330-user-app-launch.png",
+    "project-logs/campus-relay/runtime/android-smoke/20260426-143341-parttime-app-launch.png"
+  ],
+  "note": "Real public IP is stored only in ignored local env files and is redacted from tracked evidence."
+}

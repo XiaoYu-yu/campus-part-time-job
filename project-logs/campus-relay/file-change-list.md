@@ -1855,3 +1855,17 @@
 - [project-logs/campus-relay/step-121-android-public-api-base-drill-and-smoke-hardening.md](step-121-android-public-api-base-drill-and-smoke-hardening.md)
 
 本轮是 Android public API base 演练与 smoke 加固轮：新增只读 public API base smoke 脚本；两个 Android 壳补齐 `cap:sync:public / lan / emulator`，避免 public build 被默认同步覆盖回模拟器配置；router 改为按 `android-user* / android-parttime*` 前缀识别移动壳，修复 public mode clean launch 误进 admin 的问题；`android-smoke.ps1` 增加 `-ClearData`，用于清理 WebView / app data 后验证首屏。public Android 壳已确认嵌入脱敏公网 API base 且不含 `10.0.2.2`，用户端和兼职端 clean launch 截图正常；公网 public API 当前仍返回 404，完整公网 WebView API smoke 需等服务器 API 路由修复后继续。本轮没有改 bridge、`request.js`、token 附着、后端接口、订单状态机、旧外卖模块或真实支付能力。
+
+## Step 122 - 公网 API base 切换与 Android public APK 复核
+
+- [project-logs/campus-relay/runtime/step-121-public-api-base/public-api-smoke.json](runtime/step-121-public-api-base/public-api-smoke.json)
+- [project-logs/campus-relay/runtime/step-122-public-api-base-refresh/android-public-refresh-evidence.json](runtime/step-122-public-api-base-refresh/android-public-refresh-evidence.json)
+- [project-logs/campus-relay/runtime/android-smoke/20260426-143330-user-app-launch.png](runtime/android-smoke/20260426-143330-user-app-launch.png)
+- [project-logs/campus-relay/runtime/android-smoke/20260426-143341-parttime-app-launch.png](runtime/android-smoke/20260426-143341-parttime-app-launch.png)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/step-122-public-api-base-refresh-and-android-public-build.md](step-122-public-api-base-refresh-and-android-public-build.md)
+
+本轮是公网 API base 切换与 Android public APK 复核轮：owner 开机后公网 IP 变化，本地 ignored public env 已切到新 API base；public API base 只读 smoke 已从 Step 121 的 404 阻塞变为 `passed=2 failed=0`；用户端和兼职端已重新执行 `cap:sync:public`、Debug APK 构建和清数据启动 smoke，两个 App 仍进入正确移动入口。真实公网 IP 未提交，tracked evidence 继续使用脱敏地址。本轮没有改 bridge、`request.js`、token 附着、后端接口、订单状态机、旧外卖模块或真实支付能力。
