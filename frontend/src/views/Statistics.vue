@@ -5,7 +5,7 @@
         <div>
           <span class="section-kicker">Campus Analytics</span>
           <h2>数据看板</h2>
-          <p>聚合展示销售、订单、用户与校内运营概览，保持只读统计语义，不改旧外卖兼容链路。</p>
+          <p>聚合展示模拟服务流水、校园订单、用户与运营概览，保持只读统计语义，不改旧模块兼容链路。</p>
         </div>
         <div class="hero-note">
           <span>看板模式</span>
@@ -56,7 +56,7 @@
         <div class="charts-container">
           <div class="chart-card">
             <div class="chart-heading">
-              <h3>销售趋势</h3>
+              <h3>模拟服务趋势</h3>
               <span>趋势</span>
             </div>
             <div ref="salesTrendChart" class="chart"></div>
@@ -64,7 +64,7 @@
 
           <div class="chart-card">
             <div class="chart-heading">
-              <h3>菜品销售分布</h3>
+              <h3>服务类型分布</h3>
               <span>结构</span>
             </div>
             <div ref="dishDistributionChart" class="chart"></div>
@@ -88,7 +88,7 @@
 
           <div class="chart-card full-width">
             <div class="chart-heading">
-              <h3>销售时段分布</h3>
+              <h3>任务时段分布</h3>
               <span>时段</span>
             </div>
             <div ref="salesTimeChart" class="chart"></div>
@@ -107,12 +107,12 @@ import { getDashboardData, getSalesTrend, getPopularDishes } from '../api/statis
 
 // 统计数据
 const metricsData = ref([
-  { title: '总销售额', value: '¥0', icon: 'el-icon-s-data', color: '#ff7d00', change: '+0%', changeType: 'up' },
-  { title: '总订单数', value: '0', icon: 'el-icon-s-order', color: '#409eff', change: '+0%', changeType: 'up' },
+  { title: '模拟服务流水', value: '¥0', icon: 'el-icon-s-data', color: '#0f9f8f', change: '+0%', changeType: 'up' },
+  { title: '校园订单数', value: '0', icon: 'el-icon-s-order', color: '#0284c7', change: '+0%', changeType: 'up' },
   { title: '新用户数', value: '0', icon: 'el-icon-user', color: '#67c23a', change: '+0%', changeType: 'up' },
   { title: '客单价', value: '¥0', icon: 'el-icon-money', color: '#e6a23c', change: '+0%', changeType: 'up' },
   { title: '转化率', value: '0%', icon: 'el-icon-s-marketing', color: '#909399', change: '+0%', changeType: 'up' },
-  { title: '复购率', value: '0%', icon: 'el-icon-s-flag', color: '#f56c6c', change: '+0%', changeType: 'up' }
+  { title: '复访率', value: '0%', icon: 'el-icon-s-flag', color: '#0ea5e9', change: '+0%', changeType: 'up' }
 ])
 
 // 图表数据
@@ -159,12 +159,12 @@ const loadStatisticsData = async () => {
     if (res) {
       // 更新指标数据
       metricsData.value = [
-        { title: '总销售额', value: res.totalSales || '¥0', icon: 'el-icon-s-data', color: '#ff7d00', change: res.salesChange || '+0%', changeType: res.salesChangeType || 'up' },
-        { title: '总订单数', value: String(res.totalOrders || 0), icon: 'el-icon-s-order', color: '#409eff', change: res.ordersChange || '+0%', changeType: res.ordersChangeType || 'up' },
+        { title: '模拟服务流水', value: res.totalSales || '¥0', icon: 'el-icon-s-data', color: '#0f9f8f', change: res.salesChange || '+0%', changeType: res.salesChangeType || 'up' },
+        { title: '校园订单数', value: String(res.totalOrders || 0), icon: 'el-icon-s-order', color: '#0284c7', change: res.ordersChange || '+0%', changeType: res.ordersChangeType || 'up' },
         { title: '新用户数', value: String(res.newUsers || 0), icon: 'el-icon-user', color: '#67c23a', change: res.usersChange || '+0%', changeType: res.usersChangeType || 'up' },
         { title: '客单价', value: res.avgOrderValue || '¥0', icon: 'el-icon-money', color: '#e6a23c', change: res.avgChange || '+0%', changeType: res.avgChangeType || 'up' },
         { title: '转化率', value: res.conversionRate || '0%', icon: 'el-icon-s-marketing', color: '#909399', change: res.conversionChange || '+0%', changeType: res.conversionChangeType || 'up' },
-        { title: '复购率', value: res.repurchaseRate || '0%', icon: 'el-icon-s-flag', color: '#f56c6c', change: res.repurchaseChange || '+0%', changeType: res.repurchaseChangeType || 'up' }
+        { title: '复访率', value: res.repurchaseRate || '0%', icon: 'el-icon-s-flag', color: '#0ea5e9', change: res.repurchaseChange || '+0%', changeType: res.repurchaseChangeType || 'up' }
       ]
       
       // 更新图表数据
@@ -183,7 +183,7 @@ const loadStatisticsData = async () => {
   }
 }
 
-// 加载销售趋势数据
+// 加载模拟服务趋势数据
 const loadSalesTrend = async () => {
   try {
     const res = await getSalesTrend()
@@ -191,11 +191,11 @@ const loadSalesTrend = async () => {
       salesTrendData.value = res
     }
   } catch (error) {
-    console.error('加载销售趋势失败:', error)
+    console.error('加载模拟服务趋势失败:', error)
   }
 }
 
-// 加载菜品销售分布数据
+// 加载服务类型分布数据
 const loadDishDistribution = async () => {
   try {
     const res = await getPopularDishes({ top: 8 })
@@ -206,11 +206,11 @@ const loadDishDistribution = async () => {
       }
     }
   } catch (error) {
-    console.error('加载菜品销售分布失败:', error)
+    console.error('加载服务类型分布失败:', error)
   }
 }
 
-// 初始化销售趋势图
+// 初始化模拟服务趋势图
 const initSalesTrendChart = () => {
   if (salesTrendChart.value) {
     if (!salesTrendChartInstance) {
@@ -227,7 +227,7 @@ const initSalesTrendChart = () => {
         }
       },
       legend: {
-        data: ['销售额', '订单数']
+        data: ['模拟流水', '订单数']
       },
       grid: {
         left: '3%',
@@ -245,7 +245,7 @@ const initSalesTrendChart = () => {
       yAxis: [
         {
           type: 'value',
-          name: '销售额',
+          name: '模拟流水',
           position: 'left'
         },
         {
@@ -256,22 +256,22 @@ const initSalesTrendChart = () => {
       ],
       series: [
         {
-          name: '销售额',
+          name: '模拟流水',
           type: 'line',
           data: salesTrendData.value.sales,
           smooth: true,
           lineStyle: {
-            color: '#409eff'
+            color: '#0f9f8f'
           },
           areaStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
-                color: 'rgba(64, 158, 255, 0.5)'
+                color: 'rgba(15, 159, 143, 0.42)'
               },
               {
                 offset: 1,
-                color: 'rgba(64, 158, 255, 0.1)'
+                color: 'rgba(15, 159, 143, 0.08)'
               }
             ])
           }
@@ -282,7 +282,7 @@ const initSalesTrendChart = () => {
           yAxisIndex: 1,
           data: salesTrendData.value.orders,
           itemStyle: {
-            color: '#67c23a'
+            color: '#0ea5e9'
           }
         }
       ]
@@ -291,7 +291,7 @@ const initSalesTrendChart = () => {
   }
 }
 
-// 初始化菜品销售分布图
+// 初始化服务类型分布图
 const initDishDistributionChart = () => {
   if (dishDistributionChart.value) {
     if (!dishDistributionChartInstance) {
@@ -309,7 +309,7 @@ const initDishDistributionChart = () => {
       },
       series: [
         {
-          name: '菜品销售',
+          name: '服务类型',
           type: 'pie',
           radius: '50%',
           data: dishDistributionData.value.names.map((name, index) => ({
@@ -417,11 +417,11 @@ const initUserRegionChart = () => {
             color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
               {
                 offset: 0,
-                color: '#ff7d00'
+                color: '#0ea5e9'
               },
               {
                 offset: 1,
-                color: '#ffb74d'
+                color: '#67e8f9'
               }
             ])
           }
@@ -432,7 +432,7 @@ const initUserRegionChart = () => {
   }
 }
 
-// 初始化销售时段分布图
+// 初始化任务时段分布图
 const initSalesTimeChart = () => {
   if (salesTimeChart.value) {
     if (!salesTimeChartInstance) {
@@ -457,22 +457,22 @@ const initSalesTimeChart = () => {
       },
       yAxis: {
         type: 'value',
-        name: '销售占比(%)'
+        name: '任务占比(%)'
       },
       series: [
         {
-          name: '销售占比',
+          name: '任务占比',
           type: 'bar',
           data: salesTimeData.value.values,
           itemStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
-                color: '#f56c6c'
+                color: '#10b981'
               },
               {
                 offset: 1,
-                color: '#fbc5c5'
+                color: '#a7f3d0'
               }
             ])
           }
@@ -635,7 +635,7 @@ watch([salesTrendData, dishDistributionData, orderStatusData, userRegionData, sa
     border-radius: 18px;
     box-shadow: 0 16px 32px rgba(15, 23, 42, 0.06);
     padding: 18px;
-    border-left: 4px solid #409eff;
+    border-left: 4px solid #0f9f8f;
     display: flex;
     align-items: center;
   }
@@ -679,7 +679,7 @@ watch([salesTrendData, dishDistributionData, orderStatusData, userRegionData, sa
   }
 
   .metric-change.down {
-    color: #f56c6c;
+    color: #ef4444;
   }
 
   .charts-container {

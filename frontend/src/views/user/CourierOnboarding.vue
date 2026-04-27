@@ -4,10 +4,10 @@
       <section class="card status-card">
         <div>
           <div class="title-row">
-            <h2>兼职配送入驻</h2>
-            <span class="entry-badge">customer 前置入口</span>
+            <h2>校园兼职入驻</h2>
+            <span class="entry-badge">用户端前置入口</span>
           </div>
-          <p>通过用户端 onboarding 新入口提交资料，不影响现有兼职端登录链路。</p>
+          <p>通过用户端提交兼职资料，审核通过后可申请兼职端 token 进入工作台。</p>
         </div>
         <div class="status-pill" :class="statusClass(reviewStatus.reviewStatus)">
           {{ reviewStatus.reviewStatus || '未提交资料' }}
@@ -374,10 +374,13 @@ onMounted(() => loadAll())
 }
 
 .card {
-  background: white;
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 14px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(15, 118, 110, 0.1);
+  border-radius: 22px;
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 16px 36px rgba(15, 118, 110, 0.08);
+  backdrop-filter: blur(18px);
 }
 
 .status-card {
@@ -389,11 +392,12 @@ onMounted(() => loadAll())
 
 .status-card h2 {
   margin: 0 0 6px;
+  color: #0f172a;
 }
 
 .status-card p {
   margin: 0;
-  color: #909399;
+  color: #64748b;
   font-size: 14px;
 }
 
@@ -408,11 +412,11 @@ onMounted(() => loadAll())
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  padding: 4px 10px;
-  background: #ecf5ff;
-  color: #337ecc;
+  padding: 5px 12px;
+  background: rgba(15, 118, 110, 0.1);
+  color: #0f766e;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .flow-strip {
@@ -423,34 +427,36 @@ onMounted(() => loadAll())
 }
 
 .flow-step {
-  background: #fff;
-  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.82);
+  border-radius: 16px;
   padding: 14px;
-  border: 1px solid #eef2ff;
+  border: 1px solid rgba(15, 118, 110, 0.1);
+  box-shadow: 0 8px 20px rgba(15, 118, 110, 0.05);
 }
 
 .flow-step span {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  background: #ecf5ff;
-  color: #337ecc;
+  width: 24px;
+  height: 24px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #14b8a6, #38bdf8);
+  color: #fff;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
   margin-bottom: 8px;
 }
 
 .flow-step strong {
   display: block;
   margin-bottom: 6px;
+  color: #0f172a;
 }
 
 .flow-step p {
   margin: 0;
-  color: #909399;
+  color: #64748b;
   font-size: 13px;
   line-height: 1.5;
 }
@@ -458,27 +464,28 @@ onMounted(() => loadAll())
 .status-pill {
   padding: 8px 14px;
   border-radius: 999px;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 13px;
 }
 
 .status-pill.approved {
-  background: #f0f9eb;
-  color: #67c23a;
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
 }
 
 .status-pill.pending {
-  background: #ecf5ff;
-  color: #409eff;
+  background: rgba(14, 165, 233, 0.1);
+  color: #0284c7;
 }
 
 .status-pill.rejected {
-  background: #fef0f0;
-  color: #f56c6c;
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
 }
 
 .status-pill.disabled {
-  background: #f4f4f5;
-  color: #909399;
+  background: rgba(100, 116, 139, 0.1);
+  color: #64748b;
 }
 
 .summary-grid,
@@ -498,11 +505,12 @@ onMounted(() => loadAll())
 
 .section-heading h3 {
   margin: 0 0 6px;
+  color: #0f172a;
 }
 
 .section-heading p {
   margin: 0;
-  color: #909399;
+  color: #64748b;
   font-size: 14px;
 }
 
@@ -511,17 +519,21 @@ onMounted(() => loadAll())
 }
 
 .summary-item {
-  background: #f8fafc;
-  border-radius: 12px;
-  padding: 12px;
+  background: rgba(248, 250, 252, 0.82);
+  border-radius: 14px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
 .summary-item span {
-  color: #909399;
+  color: #94a3b8;
   font-size: 13px;
+}
+
+.summary-item strong {
+  color: #0f172a;
 }
 
 .token-guide {
@@ -532,20 +544,20 @@ onMounted(() => loadAll())
 }
 
 .guide-item {
-  background: #f8fafc;
-  border-radius: 12px;
-  padding: 12px;
+  background: rgba(248, 250, 252, 0.82);
+  border-radius: 14px;
+  padding: 14px;
 }
 
 .guide-item span {
   display: block;
-  color: #909399;
+  color: #94a3b8;
   font-size: 13px;
   margin-bottom: 6px;
 }
 
 .guide-item strong {
-  color: #18181b;
+  color: #0f172a;
 }
 
 .onboarding-form {
@@ -559,14 +571,17 @@ onMounted(() => loadAll())
 }
 
 .result-panel {
-  border-radius: 14px;
-  border: 1px solid #e1f3d8;
-  background: #fbfff8;
-  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(16, 185, 129, 0.16);
+  background: rgba(240, 253, 250, 0.7);
+  padding: 16px;
 }
 
 .form-section-title {
   margin: 14px 0 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(240, 253, 250, 0.58);
 }
 
 .form-section-title:first-child {
@@ -575,11 +590,12 @@ onMounted(() => loadAll())
 
 .form-section-title h4 {
   margin: 0 0 6px;
+  color: #0f766e;
 }
 
 .form-section-title p {
   margin: 0;
-  color: #909399;
+  color: #64748b;
   font-size: 13px;
   line-height: 1.6;
 }

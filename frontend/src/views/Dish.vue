@@ -1,10 +1,17 @@
 <!--
-  菜品管理页面组件
-  @description 提供菜品的增删改查功能，支持图片上传、分类筛选、批量操作
+  商品兼容管理页面组件
+  @description 旧模块兼容 — 商品管理，保留旧模块兼容能力，不作为当前校园兼职主业务入口
 -->
 <template>
   <div class="dish-management">
-    <h2>菜品管理</h2>
+    <div class="compat-notice">
+      <el-alert type="info" :closable="false" show-icon>
+        <template #title>
+          该页面保留旧模块兼容能力，不作为当前校园兼职主业务入口。
+        </template>
+      </el-alert>
+    </div>
+    <h2>商品兼容管理</h2>
     <div class="content">
       <!-- 搜索和筛选 -->
       <div class="search-filter">
@@ -559,6 +566,10 @@ onMounted(() => {
 
 <style scoped>
 .dish-management {
+  .compat-notice {
+    margin-bottom: 16px;
+  }
+
   h2 {
     margin-bottom: 20px;
     color: #303133;

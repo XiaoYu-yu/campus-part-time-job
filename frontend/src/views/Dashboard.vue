@@ -40,8 +40,8 @@
 
         <div class="chart-card">
           <div class="section-title">
-            <span>服务热度</span>
-            <small>示例排行</small>
+            <span>任务热度</span>
+            <small>校园服务排行</small>
           </div>
           <div ref="popularChartRef" class="chart-container"></div>
         </div>
@@ -49,13 +49,13 @@
 
       <div class="recent-orders">
         <div class="section-title">
-          <span>最近订单快照</span>
-          <small>只读预览，不改变旧订单语义</small>
+          <span>最近校园单快照</span>
+          <small>只读预览，保留旧订单兼容语义</small>
         </div>
         <el-table v-loading="loading" :data="recentOrders" class="glass-table" style="width: 100%">
           <el-table-column prop="id" label="订单号" width="120" />
-          <el-table-column prop="customerName" label="客户" />
-          <el-table-column prop="totalAmount" label="金额" width="100">
+          <el-table-column prop="customerName" label="用户" />
+          <el-table-column prop="totalAmount" label="模拟金额" width="110">
             <template #default="scope">
               ¥{{ Number(scope.row.totalAmount).toFixed(2) }}
             </template>
@@ -313,7 +313,7 @@ const initPopularChart = () => {
       xAxis: {
         type: 'value',
         axisLabel: {
-          formatter: '{value}份',
+          formatter: '{value}单',
           color: '#64748b'
         },
         splitLine: {
@@ -329,7 +329,7 @@ const initPopularChart = () => {
       },
       series: [
         {
-          name: '销量',
+          name: '任务量',
           type: 'bar',
           data: popularDishes.value.map(dish => dish.sales),
           itemStyle: {

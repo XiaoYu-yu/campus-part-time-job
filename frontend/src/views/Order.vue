@@ -1,10 +1,17 @@
 <!--
-  订单管理页面组件
-  @description 提供订单的查询、详情查看和状态管理功能，支持按订单号、客户姓名、状态和时间筛选
+  订单兼容管理页面组件
+  @description 旧模块兼容 — 订单管理，保留旧模块兼容能力，不作为当前校园兼职主业务入口
 -->
 <template>
   <div class="order-management">
-    <h2>订单管理</h2>
+    <div class="compat-notice">
+      <el-alert type="info" :closable="false" show-icon>
+        <template #title>
+          该页面保留旧模块兼容能力，不作为当前校园兼职主业务入口。
+        </template>
+      </el-alert>
+    </div>
+    <h2>订单兼容管理</h2>
     <div class="content">
       <!-- 搜索和筛选 -->
       <div class="search-filter">
@@ -372,6 +379,10 @@ onMounted(() => {
 
 <style scoped>
 .order-management {
+  .compat-notice {
+    margin-bottom: 16px;
+  }
+
   h2 {
     margin-bottom: 20px;
     color: #303133;

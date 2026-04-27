@@ -238,6 +238,12 @@ const goToUserLogin = () => {
 .login-btn {
   width: 100%;
   margin-top: 8px;
+  border: none;
+  border-radius: 16px;
+  min-height: 44px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #0f766e 0%, #0ea5e9 100%);
+  box-shadow: 0 14px 28px rgba(14, 165, 233, 0.2);
 }
 
 .tips {

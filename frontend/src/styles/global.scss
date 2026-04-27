@@ -23,9 +23,13 @@ body {
   font-size: $font-size-base;
   line-height: $line-height-base;
   color: $text-primary;
-  background-color: $bg-secondary;
+  background: $campus-page-bg;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  min-height: 100vh;
 }
 
 // ==============================
@@ -128,15 +132,79 @@ ul, ol {
 // ==============================
 
 .card {
-  background: $bg-primary;
-  border-radius: $radius-xl;
-  box-shadow: $shadow-sm;
+  background: $campus-glass-bg;
+  border: 1px solid $campus-glass-border;
+  border-radius: $radius-2xl;
+  box-shadow: $campus-card-shadow;
   padding: $spacing-xl;
   transition: $transition-base-ease;
+  backdrop-filter: blur(18px);
 
   &:hover {
     box-shadow: $shadow-md;
   }
+}
+
+// ==============================
+// 校园运营视觉工具类
+// ==============================
+
+.campus-page {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.campus-hero,
+.campus-panel {
+  border: 1px solid $campus-glass-border;
+  background: $campus-glass-bg;
+  box-shadow: $campus-panel-shadow;
+  backdrop-filter: blur(20px);
+}
+
+.campus-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  padding: 32px 38px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 84% 18%, rgba(132, 204, 22, 0.22), transparent 28%),
+      radial-gradient(circle at 16% 16%, rgba(14, 165, 233, 0.14), transparent 34%);
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.campus-panel {
+  border-radius: 24px;
+  padding: 22px 24px;
+}
+
+.campus-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: $primary-600;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.campus-muted {
+  color: $gray-500;
+  font-size: 13px;
+  line-height: 1.7;
 }
 
 // ==============================

@@ -134,7 +134,10 @@
 - 当前已完成：`Step 122 - 公网 API base 切换与 Android public APK 复核`
 - 当前已完成：`Step 123 - Android public WebView 真实接口 smoke`
 - 当前已完成：`Step 124 - Android public WebView readiness 复核与试运营入口固化`
-- 当前日期：`2026-04-26`
+- 当前日期：`2026-04-27`
+- Step 125 补充：已完成旧外卖模块删除前审计与 AI 协作交接文件建立。新增 `agent-collaboration.md`、`legacy-takeaway-removal-readiness.md`，审计覆盖 10 个旧前端页面、13 个旧 API 文件、14 个旧 Controller 等，明确标记每个模块的 campus 依赖关系。本轮仅做文档，未改任何业务代码。
+- Step 126 补充：已完成前端视觉优化优先轮：MainLayout 菜单"旧店铺状态"→"店铺状态兼容"，5 个旧兼容页面标题更新为"X 兼容管理"并新增兼容提示 banner，mock.js 旧词替换。本轮仅改前端可见文案，未删除任何旧模块代码。
+- Step 127 补充：已完成用户端 + 兼职端移动入口视觉统一。用户端 5 个页面（Login/Home/CampusRelayOrders/CampusOrderResult/CourierOnboarding）和兼职端 3 个页面（Login/CourierWorkbench/Profile）全部统一为浅色玻璃态 + campus teal 色系。关键旧词替换："外卖内容"→"代送内容"、"兼职配送入驻"→"校园兼职入驻"。本轮只改展示层（CSS 颜色/背景/圆角/阴影 + 页面文案），未改任何业务行为、API、路由语义、鉴权或后端代码。已通过 `npm run build`（1.00s）。
 - Step 102 补充：已把 admin 主框架、仪表盘和运营人员页从旧外卖后台视觉收敛到校园兼职运营风格；本轮只改展示层和全局主题变量，未改 bridge、接口、鉴权、路由、API 调用顺序或后端业务。已通过 `npm run build`、`npm run test -- text.spec.js` 和 `git diff --check`；本地 admin seed 登录与员工列表复核返回 `管理员 / 技术部`。
 - Step 103 补充：已把登录页改为 `校内兼职运营台`，并将 admin 外壳 / dashboard 进一步按深色玻璃拟态方向重基线；同时补齐旧 session / localStorage / in-memory 场景的 admin 文本归一化兜底，覆盖顶部用户名、dashboard 欢迎语和 Employee 页姓名 / 职位 / 部门显示。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
 - Step 104 补充：根据 owner 反馈，已把 Step 103 的深色玻璃方向回调为浅色校园兼职运营风格；登录页、admin 主框架、dashboard 和 Employee 高曝光区域均切回浅色玻璃，同时修正 Element Plus `light-*` 主题变量映射，并修复 `/campus/courier-ops` 窄屏下配送员列表表格裁切导致“审核状态”列显示一半的问题。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
@@ -2358,6 +2361,11 @@
 - [Step 122 日志](step-122-public-api-base-refresh-and-android-public-build.md)
 - [Step 123 日志](step-123-android-public-webview-real-api-smoke.md)
 - [Step 124 日志](step-124-android-public-webview-readiness.md)
+- [Step 125 日志](step-125-legacy-takeaway-audit-and-handoff.md)
+- [Step 126 日志](step-126-campus-admin-frontend-visual-rebaseline.md)
+- [Step 127 日志](step-127-mobile-user-parttime-visual-unification.md)
+- [旧外卖模块删除前审计与分阶段收口计划](legacy-takeaway-removal-readiness.md)
+- [AI 协作交接文件](agent-collaboration.md)
 - [全局工作记忆](global-working-memory.md)
 - [试运营脚本入口说明](../../scripts/trial-operation/README.md)
 - [bridge 收口评估](bridge-phaseout-evaluation.md)

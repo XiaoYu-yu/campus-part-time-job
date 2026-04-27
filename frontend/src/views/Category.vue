@@ -1,10 +1,17 @@
 <!--
   分类管理页面组件
-  @description 提供菜品/套餐分类的增删改查功能，支持排序和状态管理
+  @description 旧模块兼容 — 分类管理，保留旧模块兼容能力，不作为当前校园兼职主业务入口
 -->
 <template>
   <div class="category-management">
-    <h2>分类管理</h2>
+    <div class="compat-notice">
+      <el-alert type="info" :closable="false" show-icon>
+        <template #title>
+          该页面保留旧模块兼容能力，不作为当前校园兼职主业务入口。
+        </template>
+      </el-alert>
+    </div>
+    <h2>分类兼容管理</h2>
     <div class="content">
       <!-- 操作栏 -->
       <div class="operation-bar">
@@ -310,6 +317,10 @@ onMounted(() => {
 
 <style scoped>
 .category-management {
+  .compat-notice {
+    margin-bottom: 16px;
+  }
+
   h2 {
     margin-bottom: 20px;
     color: #303133;

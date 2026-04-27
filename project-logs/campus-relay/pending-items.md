@@ -1,58 +1,22 @@
 # 校园代送待处理事项
 
-## Step 125 最高优先级
+## Step 128 待处理
 
-1. Step 124 已完成 Android public WebView readiness 复核：
-   - 新增 `scripts/trial-operation/android-webview-public-smoke.ps1` 聚合入口。
-   - 已复用用户端和兼职端 WebView/CDP smoke，确认两条 public WebView 链路可重复执行。
-   - 用户端本轮创建并 mock-pay 订单 `CR202604261141588261`，最终回读 `paymentStatus = PAID`。
-   - 兼职端本轮回读 `courierProfileId = 2`、`reviewStatus = APPROVED`、`availableOrders = 4`。
-   - 聚合报告位于 `project-logs/campus-relay/runtime/step-124-android-public-webview-readiness/`，继续只保存脱敏 API base。
-2. Step 125 最高优先级建议：
-   - 如果准备邀请外部用户安装 Android APK，优先进入 HTTPS / 域名 / 证书 / Android cleartext 收口方案设计：
-     - 明确公网 API 域名和反向代理边界。
-     - 明确证书申请、Nginx HTTPS 配置和后端 CORS allowed-origins 边界。
-     - 明确 Android public build 从 HTTP 迁移到 HTTPS 后如何验证。
-     - 明确是否收紧 Capacitor Android cleartext 配置。
-   - 如果暂不邀请外部用户，当前 Android public WebView readiness 已足够作为 owner-controlled 内测验收入口。
-3. Step 125 仍不建议：
-   - 重开 bridge 收口主线。
-   - 原生 Android 重写用户端 / 兼职端页面。
-   - 继续机械补 admin 页面或第五个 admin 页。
-   - 接真实支付、真实退款或真实打款。
-   - 把真实公网 IP、token、服务器密码或密钥写入仓库。
-4. bridge 主线继续保持 `Phase A no-op` 冻结态，不默认重开。
-5. 展示 polish 主线继续保持冻结/维护态。
-6. Android 当前已有 emulator / LAN / public 三类 API base 配置边界；public WebView 用户端与兼职端聚合 readiness smoke 已通过。
-7. Step 72 已完成腾讯地图最小产品化试点：
-   - 只在现有 `/campus/courier-ops` 接入腾讯地图 JS SDK 最小预览，不新增页面、不改后端接口。
-   - 继续复用现有 courier 位置上报数据，不引入轨迹回放、实时调度或地图写操作。
-   - 运行态验证确认 `CR202604060001` / 配送员 `id=2` 可在页面内看到地图比例尺和版权信息。
-   - 当前 key 未开启 WebService API，静态图路线已明确放弃，后续如继续推进仍以 JS SDK 为主。
-4. Step 73 已完成腾讯地图产品化线 go / no-go：
-   - 结论为不扩到第二个既有页面。
-   - 当前地图能力正式收住为 `CampusCourierOpsView.vue` 单页 admin 只读点位预览。
-   - 继续保留 `frontend/src/utils/tencentMap.js` 和现有地图试点成果。
-   - 不做轨迹回放、路线规划、实时调度、导航、地图写操作或第二个地图页面。
-5. Step 74 已完成试运营版产品化下一阶段规划：
-   - 已评估地图扩展、模拟资金链路、试运营运行配置、admin 运营处理动作和真实部署等方向。
-   - 结论是地图线继续冻结为单页 admin 只读点位预览。
-   - 下一阶段最高优先级是试运营运行配置与 preflight 手册。
-6. Step 75 已完成试运营运行配置与 preflight 手册：
-   - 新增 `docs/trial-operation-preflight.md`。
-   - 明确 backend / frontend 启动方式。
-   - 明确 `test profile + H2` 与 MySQL/dev 的边界。
-   - 明确腾讯地图 key 本地配置方式，继续不提交真实 key。
-   - 明确模拟支付、模拟退款、模拟打款和 settlement 的试运营口径。
-   - 整理关键账号、样本订单、关键页面、关键接口的演示前检查清单。
-   - 更新 `docs/delivery-guide.md` 中地图能力口径。
-7. Step 76 已完成“模拟资金链路产品化边界说明”：
-   - 新增 `docs/simulated-funds-boundary.md`。
-   - 明确 mock-pay 只推进订单业务状态，不代表真实支付。
-   - 明确售后执行只记录模拟退款 / 执行审计，不接真实退款通道。
-   - 明确 settlement payout、批次操作审计和对账差异只表达模拟打款与运营审计，不代表真实财务执行。
-   - 同步更新 `README.md`、`docs/README.md`、`docs/delivery-guide.md` 与 `docs/trial-operation-preflight.md`。
-   - 本轮没有改业务代码、后端接口、路由、鉴权、bridge 或前端页面。
+1. Step 127 已完成用户端 + 兼职端移动入口视觉统一：
+   - 用户端 5 个页面：Login/Home/CampusRelayOrders/CampusOrderResult/CourierOnboarding
+   - 兼职端 3 个页面：Login/CourierWorkbench/Profile
+   - 全部统一为浅色玻璃态 + campus teal 色系
+   - 关键旧词替换：”外卖内容”→”代送内容”、”兼职配送入驻”→”校园兼职入驻”
+   - 新增 `step-127-mobile-user-parttime-visual-unification.md`
+   - 更新 `summary.md`、`pending-items.md`、`file-change-list.md`、`agent-collaboration.md`
+   - **本轮未改任何业务行为、API、路由语义、鉴权或后端代码**
+2. Step 128 候选方向：
+   - A. 继续视觉统一：处理旧兼容模块页面（Category/Dish/Setmeal/Order/ShopStatus）的移动端适配
+   - B. 功能开发：评估”用户端自助售后申请”的最小实现
+   - C. 维护态：当前项目已达到三端视觉统一的稳定状态，可暂停推进
+   - D. 清理残留文件：HelloWorld.vue / ComponentDemo.vue / vue.svg / vite.svg（低优先级）
+3. Step 128 不进入 Phase 3（后端旧模块删除）。
+4. bridge 主线继续保持 `Phase A no-op` 冻结态。
 8. Step 77 已完成“试运营交付文档一致性复核 / 最小 preflight 验证”：
    - 已复核 `README.md`、`docs/delivery-guide.md`、`docs/trial-operation-preflight.md`、`docs/simulated-funds-boundary.md` 与 `summary.md` 的交付口径，docs 范围内未发现“地图 SDK 未接入 / 真实支付已接入 / 真实退款已接入 / 真实打款已接入 / bridge 已可删除”等过期表述。
    - 已通过 backend `.\mvnw.cmd -DskipTests compile`。

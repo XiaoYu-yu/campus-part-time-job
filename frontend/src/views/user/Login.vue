@@ -14,8 +14,8 @@
         <el-button type="primary" class="login-btn" :loading="loading" @click="handleLogin">登录进入校园兼职</el-button>
       </el-form>
       <div class="tips">
-        <p>测试账号：13900139000</p>
-        <p>测试密码：123456</p>
+        <p><span>测试账号</span>13900139000</p>
+        <p><span>测试密码</span>123456</p>
       </div>
     </div>
   </div>
@@ -120,9 +120,19 @@ const handleLogin = async () => {
 
   .tips {
     margin-top: 20px;
+    border-radius: 16px;
+    background: rgba(240, 253, 250, 0.7);
+    padding: 14px 16px;
     font-size: 13px;
     color: #475569;
-    line-height: 1.8;
+    line-height: 2;
+
+    span {
+      display: inline-block;
+      width: 70px;
+      color: #0f766e;
+      font-weight: 700;
+    }
   }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="main-layout">
     <aside class="sidebar">
-      <div class="logo-section">
+      <button class="logo-section" type="button" @click="goDashboard">
         <div class="logo-icon">
           <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M20 3L5 12L20 21L35 12L20 3Z" fill="url(#logoGrad1)"/>
@@ -22,7 +22,7 @@
           <h1>校内兼职</h1>
           <p>Campus Ops</p>
         </div>
-      </div>
+      </button>
 
       <el-menu
         :default-active="activeMenu"
@@ -83,7 +83,7 @@
         </el-menu-item>
         <el-menu-item index="/shop-status">
           <el-icon><Position /></el-icon>
-          <template #title>旧店铺状态</template>
+          <template #title>店铺状态兼容</template>
         </el-menu-item>
       </el-menu>
 
@@ -213,7 +213,7 @@ const breadcrumb = computed(() => {
     '/campus/courier-ops': '校园配送运营',
     '/campus/settlements': '校园结算运营',
     '/campus/exceptions': '校园异常处理',
-    '/shop-status': '店铺营业状态'
+    '/shop-status': '店铺状态兼容'
   }
   return pathMap[path] || ''
 })
@@ -228,6 +228,10 @@ const userInitial = computed(() => {
 
 const toggleCollapse = () => {
   isCollapse.value = !isCollapse.value
+}
+
+const goDashboard = () => {
+  router.push('/dashboard')
 }
 
 const toggleFullscreen = () => {
@@ -280,6 +284,17 @@ const logout = () => {
   gap: 12px;
   padding: 22px 18px;
   border-bottom: 1px solid rgba(15, 118, 110, 0.1);
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+
+  &:hover {
+    .logo-icon {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 18px 38px rgba(45, 212, 191, 0.24);
+    }
+  }
 }
 
 .logo-icon {
@@ -290,6 +305,7 @@ const logout = () => {
   border-radius: 16px;
   background: linear-gradient(135deg, #e0f2fe 0%, #67e8f9 48%, #a7f3d0 100%);
   box-shadow: 0 16px 35px rgba(45, 212, 191, 0.18);
+  transition: all 0.2s ease;
 }
 
 .logo-text {

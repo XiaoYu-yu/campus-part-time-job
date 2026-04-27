@@ -1904,3 +1904,47 @@
 - [project-logs/campus-relay/step-124-android-public-webview-readiness.md](step-124-android-public-webview-readiness.md)
 
 本轮是 Android public WebView readiness 复核与试运营入口固化轮：新增聚合脚本顺序复用用户端和兼职端真实 Android WebView smoke，并生成 Step 124 汇总报告。实际复跑通过，用户端创建并 mock-pay 订单 `CR202604261141588261`，兼职端回读 profile / review-status / available-orders 成功。Runbook 已补聚合命令和 HTTP cleartext 边界说明。本轮没有改 bridge、`request.js`、token 附着、后端接口、订单状态机、旧外卖模块、Vue 页面或真实支付能力。
+
+## Step 125 - 旧外卖模块删除前审计与 AI 协作交接
+
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/legacy-takeaway-removal-readiness.md](legacy-takeaway-removal-readiness.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是纯文档审计轮
+
+## Step 126 - 校园运营后台前端视觉基线统一
+
+- [frontend/src/layout/MainLayout.vue](../../frontend/src/layout/MainLayout.vue)
+- [frontend/src/views/Category.vue](../../frontend/src/views/Category.vue)
+- [frontend/src/views/Dish.vue](../../frontend/src/views/Dish.vue)
+- [frontend/src/views/Setmeal.vue](../../frontend/src/views/Setmeal.vue)
+- [frontend/src/views/Order.vue](../../frontend/src/views/Order.vue)
+- [frontend/src/views/ShopStatus.vue](../../frontend/src/views/ShopStatus.vue)
+- [frontend/src/stores/mock.js](../../frontend/src/stores/mock.js)
+- [project-logs/campus-relay/step-126-campus-admin-frontend-visual-rebaseline.md](step-126-campus-admin-frontend-visual-rebaseline.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是前端视觉优化优先轮：新增 AI 协作交接文件和旧外卖模块删除前审计计划，更新 summary/pending-items/file-change-list 三个项目日志。审计覆盖 10 个旧前端页面、13 个旧 API 文件、14 个旧 Controller、9 个旧 Service+Impl、12 个旧 Mapper、12 个旧 Entity、12 个旧数据库表，并标记每个模块是否被 campus 依赖。结论为旧外卖模块当前不能直接删除，至少 8 个 Controller 和 6 个 Mapper 仍被 campus 或用户端依赖，user 和 employee 表绝对不可删除。制定了 Phase 0-4 分阶段删除计划。本轮没有改动任何业务代码（前端 Vue/JS、后端 Java、路由、鉴权、数据库、部署配置全部未改）。
+
+## Step 127 - 用户端 + 兼职端移动入口视觉统一
+
+- [frontend/src/views/user/Login.vue](../../frontend/src/views/user/Login.vue)
+- [frontend/src/views/user/CampusRelayOrders.vue](../../frontend/src/views/user/CampusRelayOrders.vue)
+- [frontend/src/views/user/CampusOrderResult.vue](../../frontend/src/views/user/CampusOrderResult.vue)
+- [frontend/src/views/user/CourierOnboarding.vue](../../frontend/src/views/user/CourierOnboarding.vue)
+- [frontend/src/views/courier/Login.vue](../../frontend/src/views/courier/Login.vue)
+- [frontend/src/views/courier/CourierWorkbench.vue](../../frontend/src/views/courier/CourierWorkbench.vue)
+- [frontend/src/views/courier/Profile.vue](../../frontend/src/views/courier/Profile.vue)
+- [project-logs/campus-relay/step-127-mobile-user-parttime-visual-unification.md](step-127-mobile-user-parttime-visual-unification.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是用户端 + 兼职端移动入口视觉统一轮：统一 7 个 Vue 页面的视觉风格（卡片玻璃态、campus teal 色系），替换 6 处旧外卖文案（"外卖内容"→"代送内容"、"兼职配送入驻"→"校园兼职入驻"等），不改任何业务逻辑、API、路由、鉴权、后端代码。frontend build 通过（1.00s）。

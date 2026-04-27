@@ -61,7 +61,7 @@ export const useMockStore = defineStore('mock', {
     dashboardData: {
       stats: [
         {
-          title: '销售额',
+          title: '模拟流水',
           value: '¥123,456',
           icon: 'el-icon-s-data',
           color: '#ff7d00'
@@ -145,7 +145,7 @@ export const useMockStore = defineStore('mock', {
       // 指标数据
       metrics: [
         {
-          title: '总销售额',
+          title: '模拟服务流水',
           value: '¥1,234,567',
           icon: 'el-icon-s-data',
           color: '#ff7d00',
@@ -199,7 +199,7 @@ export const useMockStore = defineStore('mock', {
         sales: [120000, 132000, 101000, 134000, 90000, 230000, 210000, 250000, 220000, 300000, 280000, 320000],
         orders: [1200, 1320, 1010, 1340, 900, 2300, 2100, 2500, 2200, 3000, 2800, 3200]
       },
-      // 菜品销售分布
+      // 服务类型分布
       dishDistribution: {
         names: ['红烧肉', '宫保鸡丁', '麻婆豆腐', '鱼香肉丝', '糖醋排骨', '拍黄瓜', '凉拌木耳', '西红柿鸡蛋汤'],
         values: [156, 132, 118, 105, 98, 89, 76, 65]

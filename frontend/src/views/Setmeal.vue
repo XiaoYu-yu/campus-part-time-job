@@ -1,10 +1,17 @@
 <!--
-  套餐管理页面组件
-  @description 提供套餐的增删改查功能，支持图片上传、菜品组合、分类筛选、批量操作
+  套餐兼容管理页面组件
+  @description 旧模块兼容 — 套餐管理，保留旧模块兼容能力，不作为当前校园兼职主业务入口
 -->
 <template>
   <div class="setmeal-management">
-    <h2>套餐管理</h2>
+    <div class="compat-notice">
+      <el-alert type="info" :closable="false" show-icon>
+        <template #title>
+          该页面保留旧模块兼容能力，不作为当前校园兼职主业务入口。
+        </template>
+      </el-alert>
+    </div>
+    <h2>套餐兼容管理</h2>
     <div class="content">
       <!-- 搜索和筛选 -->
       <div class="search-filter">
@@ -609,6 +616,10 @@ onMounted(() => {
 
 <style scoped>
 .setmeal-management {
+  .compat-notice {
+    margin-bottom: 16px;
+  }
+
   h2 {
     margin-bottom: 20px;
     color: #303133;

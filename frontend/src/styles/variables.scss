@@ -186,6 +186,19 @@ $shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 $shadow-primary: 0 4px 14px 0 rgba(15, 159, 143, 0.28);
 $shadow-primary-lg: 0 8px 30px 0 rgba(15, 159, 143, 0.24);
 
+// 校园玻璃质感
+$campus-page-bg:
+  radial-gradient(circle at 10% 8%, rgba(20, 184, 166, 0.12), transparent 28%),
+  radial-gradient(circle at 88% 5%, rgba(56, 189, 248, 0.12), transparent 30%),
+  linear-gradient(135deg, #f8fffb 0%, #eef7ff 48%, #f8fafc 100%);
+$campus-glass-bg: rgba(255, 255, 255, 0.86);
+$campus-glass-strong-bg: rgba(255, 255, 255, 0.94);
+$campus-glass-border: rgba(15, 118, 110, 0.12);
+$campus-soft-border: rgba(148, 163, 184, 0.18);
+$campus-panel-shadow: 0 20px 54px rgba(15, 23, 42, 0.08);
+$campus-card-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
+$campus-grid-line: rgba(15, 118, 110, 0.035);
+
 // ==============================
 // 过渡动画
 // ==============================

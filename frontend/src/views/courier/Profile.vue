@@ -257,17 +257,17 @@ onMounted(() => loadProfile())
   gap: 6px;
   border-radius: 16px;
   padding: 14px;
-  background: #f7fbfb;
-  border: 1px solid #e4f0f2;
+  background: rgba(248, 250, 252, 0.78);
+  border: 1px solid rgba(15, 118, 110, 0.08);
 }
 
 .summary-item span {
-  color: #7b8794;
+  color: #94a3b8;
   font-size: 13px;
 }
 
 .summary-item strong {
-  color: #102a43;
+  color: #0f172a;
 }
 
 .notice-panel {
@@ -276,15 +276,15 @@ onMounted(() => loadProfile())
   gap: 8px;
   padding: 14px 16px;
   border-radius: 16px;
-  background: #fff8eb;
-  border: 1px solid #f3dfb8;
-  color: #8a5a00;
+  background: rgba(254, 243, 199, 0.7);
+  border: 1px solid rgba(245, 158, 11, 0.16);
+  color: #92400e;
 }
 
 .notice-panel.approved {
-  background: #eefcf8;
-  border-color: #c3eee3;
-  color: #067a68;
+  background: rgba(240, 253, 250, 0.78);
+  border-color: rgba(20, 184, 166, 0.18);
+  color: #0f766e;
 }
 
 .action-grid {

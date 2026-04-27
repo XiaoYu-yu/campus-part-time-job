@@ -39,7 +39,7 @@
         </div>
 
         <el-alert
-          title="本页只创建 campus 代送单并支持模拟支付，不改旧 orders/cart/address 语义。"
+          title="本页创建校园代送单并支持模拟支付，不改旧模块语义。"
           type="info"
           :closable="false"
           show-icon
@@ -96,12 +96,12 @@
             </el-form-item>
           </div>
 
-          <el-form-item label="外卖内容">
+          <el-form-item label="代送内容">
             <el-input
               v-model="form.foodDescription"
               type="textarea"
               :rows="3"
-              placeholder="例如：美团订单：汉堡套餐 + 奶茶"
+              placeholder="请描述需要代送的物品，例如：汉堡套餐 + 奶茶"
               maxlength="120"
               show-word-limit
             />
@@ -447,7 +447,7 @@ const validateForm = () => {
     ['deliveryDetail', '请填写送达详情'],
     ['contactName', '请填写联系人'],
     ['contactPhone', '请填写手机号'],
-    ['foodDescription', '请填写外卖内容'],
+    ['foodDescription', '请填写代送内容'],
     ['externalPlatformName', '请填写外部平台'],
     ['externalOrderRef', '请填写外部订单号'],
     ['pickupCode', '请填写取餐码']

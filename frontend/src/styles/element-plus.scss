@@ -62,6 +62,17 @@
 
   // 过渡
   --el-transition-duration: #{$transition-base};
+
+  // 校园运营后台基线
+  --el-bg-color: #{$white};
+  --el-bg-color-page: #f6fbfb;
+  --el-fill-color-light: #f8fafc;
+  --el-fill-color-lighter: #fbfefe;
+  --el-border-color: #dbe6eb;
+  --el-border-color-light: #e7eef2;
+  --el-text-color-primary: #0f172a;
+  --el-text-color-regular: #334155;
+  --el-text-color-secondary: #64748b;
 }
 
 // ==============================
@@ -73,6 +84,7 @@
   font-weight: $font-weight-medium;
   transition: $transition-base-ease;
   box-shadow: none;
+  white-space: nowrap;
 
   &:hover {
     transform: translateY(-1px);
@@ -246,7 +258,7 @@
 
 .el-input {
   .el-input__wrapper {
-    border-radius: $radius-md;
+    border-radius: $radius-lg;
     box-shadow: 0 0 0 1px $border-base inset;
     transition: $transition-base-ease;
     background-color: $white;
@@ -269,7 +281,7 @@
 
 .el-textarea {
   .el-textarea__inner {
-    border-radius: $radius-md;
+    border-radius: $radius-lg;
     border: 1px solid $border-base;
     transition: $transition-base-ease;
 
@@ -290,7 +302,7 @@
 
 .el-select {
   .el-select__wrapper {
-    border-radius: $radius-md;
+    border-radius: $radius-lg;
     box-shadow: 0 0 0 1px $border-base inset;
     transition: $transition-base-ease;
 
@@ -309,20 +321,35 @@
 // ==============================
 
 .el-table {
-  border-radius: $radius-lg;
+  border-radius: $radius-xl;
   overflow: hidden;
-  box-shadow: $shadow-xs;
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
+  border: 1px solid $border-light;
 
   --el-table-border-color: $border-light;
-  --el-table-row-hover-bg-color: $gray-50;
-  --el-table-header-bg-color: $gray-50;
-  --el-table-header-text-color: $text-secondary;
+  --el-table-row-hover-bg-color: #f0fdfa;
+  --el-table-header-bg-color: #f8fafc;
+  --el-table-header-text-color: #0f172a;
   --el-table-tr-bg-color: $white;
   --el-table-text-color: $text-primary;
 
+  .el-table__inner-wrapper::before,
+  .el-table__border-left-patch {
+    display: none;
+  }
+
   th.el-table__cell {
-    background-color: $gray-50;
-    font-weight: $font-weight-semibold;
+    background-color: #f8fafc;
+    color: #0f172a;
+    font-weight: 800;
+
+    > .cell {
+      white-space: nowrap;
+    }
+  }
+
+  td.el-table__cell {
+    color: #334155;
   }
 
   tr {
@@ -330,7 +357,39 @@
   }
 
   .el-table__body tr:hover > td {
-    background-color: $primary-light;
+    background-color: #f0fdfa;
+  }
+
+  .cell {
+    line-height: 1.55;
+  }
+}
+
+.el-table__column-resize-proxy {
+  display: none !important;
+}
+
+.el-table__fixed,
+.el-table__fixed-right {
+  box-shadow: none !important;
+}
+
+.el-table__fixed-right {
+  border-left: 1px solid $border-light;
+}
+
+.el-table__empty-block {
+  min-height: 160px;
+
+  .el-table__empty-text {
+    width: 100%;
+    min-width: 320px;
+    max-width: 720px;
+    padding: 0 24px;
+    color: $gray-500;
+    font-weight: 700;
+    line-height: 1.7;
+    white-space: normal;
   }
 }
 
@@ -339,7 +398,7 @@
 // ==============================
 
 .el-dialog {
-  border-radius: $radius-xl;
+  border-radius: $radius-2xl;
   box-shadow: $shadow-xl;
   overflow: hidden;
 
@@ -371,9 +430,9 @@
 // ==============================
 
 .el-card {
-  border-radius: $radius-xl;
-  border: none;
-  box-shadow: $shadow-sm;
+  border-radius: $radius-2xl;
+  border: 1px solid $campus-glass-border;
+  box-shadow: $campus-card-shadow;
   transition: $transition-base-ease;
 
   &:hover {
@@ -397,11 +456,12 @@
 
 .el-tag {
   border-radius: $radius-full;
-  font-weight: $font-weight-medium;
-  padding: 0 $spacing-sm;
+  font-weight: 800;
+  padding: 0 10px;
   height: 24px;
   line-height: 22px;
   font-size: $font-size-xs;
+  letter-spacing: 0.01em;
 
   &--primary {
     background-color: $primary-light;
@@ -456,8 +516,8 @@
   margin-bottom: $spacing-lg;
 
   .el-form-item__label {
-    font-weight: $font-weight-medium;
-    color: $text-secondary;
+    font-weight: 800;
+    color: #334155;
   }
 }
 
@@ -502,8 +562,10 @@
 // ==============================
 
 .el-pagination {
+  gap: 4px;
+
   .el-pager li {
-    border-radius: $radius-md;
+    border-radius: $radius-lg;
     margin: 0 $spacing-xs;
     font-weight: $font-weight-medium;
 
@@ -521,7 +583,7 @@
 
   .btn-prev,
   .btn-next {
-    border-radius: $radius-md;
+    border-radius: $radius-lg;
 
     &:hover {
       color: $primary-color;
@@ -587,12 +649,33 @@
   .el-drawer__header {
     padding: $spacing-lg $spacing-xl;
     border-bottom: 1px solid $border-light;
-    background: linear-gradient(180deg, $gray-50 0%, $white 100%);
+    background: linear-gradient(180deg, #f8fafc 0%, $white 100%);
     margin-bottom: 0;
   }
 
   .el-drawer__body {
     padding: $spacing-xl;
+  }
+}
+
+@media (max-width: 768px) {
+  .el-table {
+    border-radius: $radius-lg;
+  }
+
+  .el-table__header-wrapper th.el-table__cell,
+  .el-table__body-wrapper td.el-table__cell {
+    padding: 10px 0;
+  }
+
+  .el-pagination {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .el-dialog {
+    width: calc(100vw - 28px) !important;
+    max-width: calc(100vw - 28px);
   }
 }
 
