@@ -33,3 +33,6 @@ uploads/
 deploy/internal-trial/backups/
 project-logs/*.tmp
 .playwright-mcp/
+.claude/
+.mcp.json
+frontend/public/prototype/
