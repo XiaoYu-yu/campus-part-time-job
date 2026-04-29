@@ -49,7 +49,6 @@
         v-if="actions && actions.length > 0"
         label="操作"
         :width="actionsWidth"
-        fixed="right"
       >
         <template #default="scope">
           <el-button

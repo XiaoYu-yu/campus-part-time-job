@@ -1,0 +1,48 @@
+{
+  "generatedAt": "2026-04-29T20:10:03",
+  "note": "SPA shell reachability only; authenticated rendering covered by API smoke in this step.",
+  "results": [
+    {
+      "path": "/dashboard",
+      "status": "PASS",
+      "httpStatus": 200,
+      "hasAppRoot": true
+    },
+    {
+      "path": "/employee",
+      "status": "PASS",
+      "httpStatus": 200,
+      "hasAppRoot": true
+    },
+    {
+      "path": "/campus/settlements",
+      "status": "PASS",
+      "httpStatus": 200,
+      "hasAppRoot": true
+    },
+    {
+      "path": "/campus/after-sale-executions",
+      "status": "PASS",
+      "httpStatus": 200,
+      "hasAppRoot": true
+    },
+    {
+      "path": "/campus/exceptions",
+      "status": "PASS",
+      "httpStatus": 200,
+      "hasAppRoot": true
+    },
+    {
+      "path": "/user/campus/order-result?orderId=CR202604060001",
+      "status": "PASS",
+      "httpStatus": 200,
+      "hasAppRoot": true
+    },
+    {
+      "path": "/parttime/workbench",
+      "status": "PASS",
+      "httpStatus": 200,
+      "hasAppRoot": true
+    }
+  ]
+}

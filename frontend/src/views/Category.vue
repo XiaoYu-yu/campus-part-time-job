@@ -50,7 +50,7 @@
             {{ formatDateTime(scope.row.createdAt) }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="150" fixed="right">
+        <el-table-column label="操作" width="150">
           <template #default="scope">
             <el-button size="small" @click="handleEdit(scope.row)">
               <el-icon><Edit /></el-icon>

@@ -23,7 +23,7 @@
           <div class="toolbar-copy">
             <span class="section-kicker">筛选与维护</span>
             <h3>按姓名或手机号定位运营人员</h3>
-            <p>这里只维护后台 employee 账号，不改变旧订单、地址或外卖兼容模块。</p>
+            <p>这里只维护后台 employee 账号，不改变旧订单、地址或兼容模块。</p>
           </div>
           <div class="search-section">
             <el-input
@@ -85,7 +85,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="操作" width="190" fixed="right">
+            <el-table-column label="操作" width="190">
               <template #default="scope">
                 <div class="action-cell">
                   <el-button size="small" @click="handleEditEmployee(scope.row)">

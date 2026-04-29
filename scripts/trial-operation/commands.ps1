@@ -36,8 +36,13 @@ Write-Host "The test profile uses jdbc:h2:mem:takeaway_test with DB_CLOSE_DELAY=
 Write-Host "This script intentionally does not kill processes or reset data automatically."
 Write-Host ""
 
+Write-Host "7. Local browser smoke"
+Write-Host "Start backend test profile and frontend dev server first, then run:"
+Write-Host "powershell -ExecutionPolicy Bypass -File scripts\trial-operation\browser-smoke.ps1"
+Write-Host ""
+
 if ($Full) {
-    Write-Host "7. Browser entrypoints"
+    Write-Host "8. Browser entrypoints"
     Write-Host "Frontend: http://localhost:5173"
     Write-Host "Backend:  http://localhost:8080"
     Write-Host "Customer onboarding: /user/campus/courier-onboarding"

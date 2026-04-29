@@ -1,6 +1,6 @@
 <template>
   <div class="main-layout">
-    <aside class="sidebar">
+    <aside class="sidebar" :class="{ 'is-collapsed': isCollapse }">
       <button class="logo-section" type="button" @click="goDashboard">
         <div class="logo-icon">
           <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -8,19 +8,19 @@
             <path d="M5 26L20 35L35 26" stroke="url(#logoGrad2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             <defs>
               <linearGradient id="logoGrad1" x1="5" y1="3" x2="35" y2="35" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#042f2e"/>
-                <stop offset="1" stop-color="#0f766e"/>
+                <stop stop-color="#0b3b91"/>
+                <stop offset="1" stop-color="#1d6cf2"/>
               </linearGradient>
               <linearGradient id="logoGrad2" x1="5" y1="26" x2="35" y2="26" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#042f2e"/>
-                <stop offset="1" stop-color="#0f766e"/>
+                <stop stop-color="#0b3b91"/>
+                <stop offset="1" stop-color="#1d6cf2"/>
               </linearGradient>
             </defs>
           </svg>
         </div>
         <div class="logo-text">
-          <h1>校内兼职</h1>
-          <p>Campus Ops</p>
+          <h1>校内兼职平台</h1>
+          <p>Campus Admin</p>
         </div>
       </button>
 
@@ -101,12 +101,18 @@
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/dashboard' }">
               <el-icon><House /></el-icon>
+              <span class="home-crumb">运营总览</span>
             </el-breadcrumb-item>
             <el-breadcrumb-item>{{ breadcrumb }}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
 
         <div class="nav-right">
+          <div class="global-search">
+            <el-icon><Search /></el-icon>
+            <span>搜索订单、用户、配送员等</span>
+          </div>
+
           <div class="nav-actions">
             <el-tooltip content="全屏" placement="bottom">
               <button class="icon-btn" @click="toggleFullscreen">
@@ -168,7 +174,7 @@ import { useUserStore } from '../stores/user'
 import { normalizeDisplayText } from '../utils/text'
 import { 
   HomeFilled, User, Grid, Mug, Sugar, ShoppingCart, DataAnalysis, Position, Tickets, Document, LocationInformation, Coin,
-  DArrowLeft, DArrowRight, House, FullScreen, Bell, ArrowDown, Setting, SwitchButton
+  DArrowLeft, DArrowRight, House, FullScreen, Bell, ArrowDown, Setting, SwitchButton, Search
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -250,40 +256,57 @@ const logout = () => {
 
 <style lang="scss" scoped>
 .main-layout {
+  --admin-blue: #1d6cf2;
+  --admin-blue-dark: #1357d8;
+  --admin-blue-soft: #eaf2ff;
+  --admin-text: #13264d;
+  --admin-muted: #64748b;
+
   display: flex;
   height: 100vh;
   overflow: hidden;
   background:
-    radial-gradient(circle at 14% 12%, rgba(20, 184, 166, 0.14), transparent 30%),
-    radial-gradient(circle at 82% 6%, rgba(56, 189, 248, 0.14), transparent 32%),
-    linear-gradient(135deg, #f8fffb 0%, #eef7ff 50%, #f8fafc 100%);
-  color: #0f172a;
+    radial-gradient(circle at 90% 4%, rgba(29, 108, 242, 0.1), transparent 26%),
+    linear-gradient(135deg, #f8fbff 0%, #f3f7ff 54%, #ffffff 100%);
+  color: var(--admin-text);
 }
 
 .sidebar {
-  width: 250px;
-  margin: 16px 0 16px 16px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.62) 100%);
-  border: 1px solid rgba(15, 118, 110, 0.12);
-  border-radius: 28px;
+  position: relative;
+  width: 272px;
+  background: rgba(255, 255, 255, 0.96);
+  border-right: 1px solid rgba(148, 163, 184, 0.18);
   display: flex;
   flex-direction: column;
   transition: width 0.3s ease;
-  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.1);
-  backdrop-filter: blur(24px);
+  box-shadow: 18px 0 42px rgba(30, 64, 175, 0.06);
+  backdrop-filter: blur(18px);
 
   &.is-collapsed {
-    width: 64px;
+    width: 78px;
+
+    .logo-text,
+    .menu-section-label {
+      display: none;
+    }
+
+    .logo-section {
+      justify-content: center;
+      padding: 24px 12px;
+    }
+
+    .sidebar-menu {
+      padding: 14px 10px;
+    }
   }
 }
 
 .logo-section {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 22px 18px;
-  border-bottom: 1px solid rgba(15, 118, 110, 0.1);
+  gap: 14px;
+  padding: 28px 18px 26px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
   width: 100%;
   text-align: left;
   cursor: pointer;
@@ -292,35 +315,39 @@ const logout = () => {
   &:hover {
     .logo-icon {
       transform: translateY(-1px) scale(1.02);
-      box-shadow: 0 18px 38px rgba(45, 212, 191, 0.24);
+      box-shadow: 0 18px 38px rgba(29, 108, 242, 0.22);
     }
   }
 }
 
 .logo-icon {
-  width: 42px;
-  height: 42px;
+  width: 50px;
+  height: 50px;
   flex-shrink: 0;
-  padding: 7px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #e0f2fe 0%, #67e8f9 48%, #a7f3d0 100%);
-  box-shadow: 0 16px 35px rgba(45, 212, 191, 0.18);
+  padding: 9px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 52%, #eef2ff 100%);
+  box-shadow: 0 14px 34px rgba(29, 108, 242, 0.15);
   transition: all 0.2s ease;
+
+  svg path:first-child {
+    fill: var(--admin-blue);
+  }
 }
 
 .logo-text {
   h1 {
-    font-size: 17px;
-    font-weight: 800;
-    color: #0f172a;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--admin-text);
     margin: 0;
     line-height: 1.2;
-    letter-spacing: 0.04em;
+    letter-spacing: -0.02em;
   }
 
   p {
     font-size: 11px;
-    color: #0f766e;
+    color: var(--admin-blue);
     margin: 0;
     line-height: 1.2;
     text-transform: uppercase;
@@ -332,7 +359,7 @@ const logout = () => {
   flex: 1;
   border-right: none;
   background: transparent;
-  padding: 14px 10px;
+  padding: 18px 14px;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -340,13 +367,13 @@ const logout = () => {
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(15, 118, 110, 0.24);
+    background: rgba(29, 108, 242, 0.24);
     border-radius: 2px;
   }
 
   .menu-section-label {
-    padding: 16px 12px 8px;
-    color: #64748b;
+    padding: 18px 12px 10px;
+    color: #94a3b8;
     font-size: 11px;
     font-weight: 800;
     letter-spacing: 0.16em;
@@ -354,29 +381,33 @@ const logout = () => {
   }
 
   .el-menu-item {
-    height: 40px;
-    line-height: 40px;
-    margin: 4px 0;
+    height: 46px;
+    line-height: 46px;
+    margin: 6px 0;
     border-radius: 12px;
-    font-weight: 650;
-    color: #334155;
+    font-weight: 700;
+    color: #475569;
     transition: all 0.2s ease;
     letter-spacing: 0.01em;
 
     .el-icon {
       font-size: 18px;
-      color: #0f766e;
+      color: #64748b;
     }
 
     &:hover {
-      background-color: rgba(15, 159, 143, 0.08);
-      color: #0f766e;
+      background-color: #f1f5ff;
+      color: var(--admin-blue);
+
+      .el-icon {
+        color: var(--admin-blue);
+      }
     }
 
     &.is-active {
-      background: linear-gradient(135deg, #0f766e 0%, #0ea5e9 100%);
+      background: linear-gradient(135deg, #1d6cf2 0%, #0f5be8 100%);
       color: #ffffff;
-      box-shadow: 0 14px 34px rgba(15, 118, 110, 0.22);
+      box-shadow: 0 16px 34px rgba(29, 108, 242, 0.24);
 
       &::before {
         display: none;
@@ -390,8 +421,8 @@ const logout = () => {
 }
 
 .sidebar-footer {
-  padding: 12px;
-  border-top: 1px solid rgba(15, 118, 110, 0.1);
+  padding: 14px;
+  border-top: 1px solid rgba(148, 163, 184, 0.16);
 }
 
 .collapse-btn {
@@ -401,12 +432,12 @@ const logout = () => {
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  color: #0f766e;
+  color: var(--admin-blue);
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: rgba(15, 159, 143, 0.08);
-    color: #0f172a;
+    background-color: rgba(29, 108, 242, 0.08);
+    color: var(--admin-blue);
   }
 
   .el-icon {
@@ -419,24 +450,24 @@ const logout = () => {
   display: flex;
   flex-direction: column;
   background:
-    linear-gradient(rgba(15, 118, 110, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15, 118, 110, 0.035) 1px, transparent 1px);
+    linear-gradient(rgba(29, 108, 242, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29, 108, 242, 0.028) 1px, transparent 1px);
   background-size: 52px 52px;
   min-width: 0;
 }
 
 .top-nav {
-  height: 68px;
-  margin: 16px 16px 0;
-  background-color: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(22px);
-  border: 1px solid rgba(15, 118, 110, 0.12);
-  border-radius: 24px;
+  height: 88px;
+  margin: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
-  box-shadow: 0 20px 54px rgba(15, 23, 42, 0.08);
+  padding: 0 34px;
+  box-shadow: none;
 }
 
 .nav-left {
@@ -453,12 +484,16 @@ const logout = () => {
 
         &.is-link {
           &:hover {
-            color: #0f766e;
+            color: var(--admin-blue);
           }
         }
 
         .el-icon {
           font-size: 16px;
+        }
+
+        .home-crumb {
+          margin-left: 4px;
         }
       }
 
@@ -478,12 +513,31 @@ const logout = () => {
   gap: 16px;
 }
 
+.global-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(320px, 26vw);
+  height: 42px;
+  padding: 0 16px;
+  border: 1px solid rgba(148, 163, 184, 0.26);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.86);
+  color: #94a3b8;
+  font-size: 13px;
+  box-shadow: 0 12px 28px rgba(30, 64, 175, 0.06);
+
+  .el-icon {
+    color: #64748b;
+  }
+}
+
 .nav-actions {
   display: flex;
   align-items: center;
   gap: 8px;
   padding-right: 16px;
-  border-right: 1px solid rgba(15, 118, 110, 0.12);
+  border-right: 1px solid rgba(148, 163, 184, 0.2);
 }
 
 .icon-btn {
@@ -498,8 +552,8 @@ const logout = () => {
   position: relative;
 
   &:hover {
-    background-color: rgba(15, 159, 143, 0.08);
-    color: #0f766e;
+    background-color: #eef4ff;
+    color: var(--admin-blue);
   }
 
   .el-icon {
@@ -529,19 +583,19 @@ const logout = () => {
     padding: 6px 12px;
     border-radius: 12px;
     transition: all 0.2s ease;
-    border: 1px solid rgba(15, 118, 110, 0.12);
+    border: 1px solid rgba(29, 108, 242, 0.14);
     background: rgba(255, 255, 255, 0.82);
     color: #0f172a;
 
     &:hover {
-      background-color: rgba(240, 253, 250, 0.94);
+      background-color: rgba(239, 246, 255, 0.96);
     }
   }
 
   .user-avatar {
-    background: linear-gradient(135deg, #0f9f8f 0%, #38bdf8 100%);
+    background: linear-gradient(135deg, #1d6cf2 0%, #60a5fa 100%);
     font-weight: 600;
-    box-shadow: 0 12px 24px rgba(15, 118, 110, 0.22);
+    box-shadow: 0 12px 24px rgba(29, 108, 242, 0.22);
   }
 
   .user-details {
@@ -558,7 +612,7 @@ const logout = () => {
 
   .user-role {
     font-size: 12px;
-    color: #0f766e;
+    color: var(--admin-blue);
   }
 
   .dropdown-icon {
@@ -570,8 +624,14 @@ const logout = () => {
 
 .content {
   flex: 1;
-  padding: 24px 16px 16px;
+  padding: 28px 28px 20px;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+@media (max-width: 1180px) {
+  .global-search {
+    display: none;
+  }
 }
 </style>

@@ -171,7 +171,7 @@
               {{ formatDateTime(row.createdAt) }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="120" fixed="right">
+          <el-table-column label="操作" width="120">
             <template #default="{ row }">
               <el-button type="primary" link @click="openDetail(row.id)">查看详情</el-button>
             </template>

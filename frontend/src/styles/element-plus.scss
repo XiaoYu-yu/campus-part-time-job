@@ -226,7 +226,7 @@
   }
 
   &--danger.is-plain {
-    background: $danger-50;
+    background: $white;
     border: 1px solid $danger-200;
     color: $danger-700;
     box-shadow: none;
@@ -236,6 +236,14 @@
       border-color: $danger-300;
       color: $danger-800;
     }
+  }
+
+  &--danger.is-plain.is-disabled,
+  &--danger.is-plain.is-disabled:hover {
+    background: $danger-50 !important;
+    border-color: $danger-100 !important;
+    color: $danger-300 !important;
+    opacity: 1;
   }
 
   &--info.is-plain {
@@ -362,20 +370,68 @@
 
   .cell {
     line-height: 1.55;
+    min-width: 0;
   }
 }
 
-.el-table__column-resize-proxy {
+.el-table__column-resize,
+.el-table__column-resize-proxy,
+.el-table__resize-proxy,
+.el-table__header th .el-table__column-resize,
+.el-table th.el-table__cell .el-table__column-resize {
   display: none !important;
+  width: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  cursor: default !important;
+}
+
+.el-table th.el-table__cell {
+  cursor: default !important;
+  user-select: none;
 }
 
 .el-table__fixed,
 .el-table__fixed-right {
+  background: $white !important;
   box-shadow: none !important;
 }
 
 .el-table__fixed-right {
   border-left: 1px solid $border-light;
+}
+
+.el-table__fixed-right-patch {
+  background: #f8fafc !important;
+  border-bottom-color: $border-light !important;
+}
+
+.el-table__fixed-right .el-table__cell,
+.el-table__fixed .el-table__cell {
+  background: inherit;
+}
+
+.el-table .el-table-fixed-column--left,
+.el-table .el-table-fixed-column--right,
+.el-table .el-table__cell.is-right,
+.el-table .el-table__cell.is-left {
+  background: $white !important;
+  box-shadow: none !important;
+}
+
+.el-table .el-table__body tr:hover > td.el-table-fixed-column--left,
+.el-table .el-table__body tr:hover > td.el-table-fixed-column--right,
+.el-table .el-table__body tr:hover > td.el-table__cell.is-right,
+.el-table .el-table__body tr:hover > td.el-table__cell.is-left {
+  background-color: #f0fdfa !important;
+}
+
+.el-table .el-button + .el-button {
+  margin-left: 6px;
+}
+
+.el-table .el-button.is-link {
+  padding: 0 2px;
 }
 
 .el-table__empty-block {

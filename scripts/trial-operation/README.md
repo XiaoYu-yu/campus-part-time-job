@@ -40,6 +40,14 @@ Run preflight with sample validation:
 powershell -ExecutionPolicy Bypass -File scripts\trial-operation\preflight.ps1 -RunSampleValidation
 ```
 
+Run local browser smoke after backend `test` profile and frontend dev server are already running:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\browser-smoke.ps1
+```
+
+This script logs in with the fixed H2 sample accounts, writes only redacted browser-smoke reports, captures screenshots for the key admin / customer / parttime pages under `project-logs/campus-relay/runtime/step-132-browser-smoke/`, and does not mutate bridge, auth, route, API, or page behavior. It requires `127.0.0.1:8080` and `127.0.0.1:5173` to be running before execution.
+
 Run Android API base layering checks:
 
 ```powershell

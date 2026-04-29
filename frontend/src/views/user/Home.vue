@@ -4,7 +4,7 @@
       <section class="hero-card">
         <div class="hero-kicker">校园兼职用户端</div>
         <h1>找人代送、查看结果、申请兼职，一处完成</h1>
-        <p>当前移动端默认展示校园兼职主链路，旧外卖模块继续保留为兼容入口，不再作为首页主内容。</p>
+        <p>当前移动端默认展示校园兼职主链路，旧兼容模块继续保留为兼容入口，不再作为首页主内容。</p>
         <div class="hero-actions">
           <button class="primary-action" type="button" @click="goTo('/user/campus/orders')">发布代送单</button>
           <button class="ghost-action" type="button" @click="goTo('/user/campus/order-result')">查看结果</button>
@@ -93,7 +93,7 @@
         <div class="section-heading">
           <div>
             <span>旧模块兼容</span>
-            <h2>外卖功能仍保留</h2>
+            <h2>兼容功能仍保留</h2>
           </div>
         </div>
         <p>旧分类、购物车、历史订单和地址能力未删除，当前仅从首页主视觉中降级为兼容入口。</p>

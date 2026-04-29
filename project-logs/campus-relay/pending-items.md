@@ -1,6 +1,116 @@
 # 校园代送待处理事项
 
-## Step 128 待处理
+## Step 134 待处理
+
+1. Step 133 已完成本地内测 RC 状态复盘：
+   - Step 131 API smoke：16 项通过，0 项失败。
+   - Step 132 浏览器 smoke：7 项通过，0 项失败，并保存 7 张关键页面截图。
+   - 当前本地/内测型试运营已具备构建、API、页面截图三层可重复验证基线。
+2. Step 134 建议二选一：
+   - A. 如果准备服务器内测：整理远端部署 smoke 命令、环境变量、端口检查和远端页面/API 验证清单。
+   - B. 如果继续本地体验：只修真实体验中发现的前端 bug，不再凭感觉继续大范围改样式。
+3. Step 134 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不改后端接口和路由。
+   - 不删除旧兼容模块。
+
+## Step 133 历史待处理记录
+
+1. Step 132 已完成稳定浏览器 smoke 工具链：
+   - 新增 `scripts/trial-operation/browser-smoke.ps1`。
+   - 已通过真实登录接口获取 admin / customer / parttime token，报告中不输出 token。
+   - 已覆盖 `/dashboard`、`/employee`、`/campus/settlements`、`/campus/after-sale-executions`、`/campus/exceptions`、`/user/campus/order-result?orderId=CR202604060001`、`/parttime/workbench` 7 个关键入口。
+   - 浏览器 smoke 7 项通过，0 项失败。
+   - 截图与报告已写入 `project-logs/campus-relay/runtime/step-132-browser-smoke/`。
+2. Step 133 建议先做本地内测 RC 状态复盘：
+   - 汇总 Step 131 API smoke 与 Step 132 浏览器 smoke 覆盖范围。
+   - 判断当前本地/内测型试运营是否已具备可反复验证基线。
+   - 如果继续开发，优先只处理真实用户指出的前端 bug 或试运营阻塞，不再凭感觉继续大改样式。
+3. Step 133 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不改后端接口和路由。
+   - 不删除旧兼容模块。
+
+## Step 132 历史待处理记录
+
+1. Step 131 已完成本地/内测型试运营 smoke：
+   - `preflight.ps1 -RunSampleValidation -RunBackendCompile -RunFrontendBuild` 通过，无硬失败。
+   - H2 必需样本存在；after-sale / exception / reconcile difference 固定运行期样本仍为 warning。
+   - backend test profile 已在 `127.0.0.1:8080` 启动。
+   - frontend dev server 已在 `127.0.0.1:5173` 可访问。
+   - API smoke 16 项通过，0 项失败，覆盖 admin / customer / parttime 三类身份和关键接口。
+   - SPA shell reachability 7 项通过。
+2. Step 132 建议二选一：
+   - A. 若继续本地内测：补一个可重复的浏览器 smoke 工具链，避免每次靠人工点页面。
+   - B. 若准备服务器内测：先整理部署配置与服务器 smoke 清单，再做远端环境验证。
+3. Step 132 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不改后端接口和路由。
+   - 不删除旧兼容模块。
+
+## Step 131 历史待处理记录
+
+1. Step 130 已完成管理后台最终可见问题巡检与低风险修补：
+   - 已清理 `frontend/src` 范围内剩余可见“外卖”等旧词残留。
+   - 已移除 `BaseTable.vue` 的操作列 `fixed="right"`，避免后续复用时重新出现右侧固定列遮挡。
+   - 已确认 `frontend/src` 范围内不再命中 `苍穹 / 外卖 / 旧店铺 / 骑手 / 销售额 / 总销售额 / fixed="right"`。
+   - `npm run build`、`.\mvnw.cmd -DskipTests compile`、`git diff --check` 均通过。
+2. Step 131 不再默认继续样式优化：
+   - 如果用户指出具体页面 bug，则只做 bug 级修补。
+   - 如果进入试运营准备，优先复核本地运行、账号、样本数据和关键 smoke。
+   - 如果继续功能开发，优先评估 admin 异常历史/处理前端承接是否值得做。
+3. Step 131 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不改后端接口和路由。
+   - 不删除旧兼容模块。
+
+## Step 130 历史待处理记录
+
+1. Step 129 已完成管理后台可用性巡检与明显样式问题修复：
+   - breadcrumb 首页入口已补充“运营总览”文字，后台子页面返回主页更明确。
+   - 已取消后台所有 `fixed="right"` 操作列，避免固定列阴影/遮罩造成按钮覆盖或右侧视觉异常。
+   - 已强化 Element Plus 表格 resize 句柄隐藏和表格按钮间距。
+   - 已强化 `.campus-admin-page` 的表格、筛选区和分页区横向约束。
+   - `npm run build` 通过，`git diff --check` 通过。
+2. Step 130 不建议继续凭感觉大改后台样式：
+   - 如果用户提供完整后台原型图，优先选择 `Dashboard.vue` 或 `Employee.vue` 做第一张样板页。
+   - 如果没有新原型图，只做 bug 级前端修复，不继续扩大视觉重构范围。
+3. Step 130 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不改后端接口和路由。
+   - 不删除旧外卖兼容模块。
+
+## Step 129 历史待处理记录
+
+1. Step 128 已完成管理后台视觉基线修正：
+   - 修复 `MainLayout.vue` 侧边栏折叠外层 class 未同步问题。
+   - Element Plus 全局切换中文 locale，分页不再显示英文文案。
+   - 表格列拖拽视觉条、固定列背景和 danger plain 按钮状态已做全局修正。
+   - `.campus-admin-page` 已补统一浅色蓝白玻璃态页面基线。
+   - `MainLayout.vue` 已按原型图方向调整为蓝白后台壳子：白底侧栏、蓝色 active、顶部搜索占位和轻量用户区。
+   - `npm run build` 通过，`git diff --check` 通过。
+2. Step 129 建议继续只围绕管理后台做单页精修，不铺开重做：
+   - A. `Dashboard.vue`：后台首屏，继续对齐原型图的卡片密度和数据层级。
+   - B. `Employee.vue`：基础表格和操作按钮细节，继续按原型图校准筛选区与表格区。
+   - C. `CampusExceptionOpsView.vue`：新异常闭环能力页，适合后续做单页原型化。
+3. Step 129 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不改后端接口和路由。
+   - 不删除旧外卖兼容模块。
+
+## Step 128 历史待处理记录
 
 1. Step 127 已完成用户端 + 兼职端移动入口视觉统一：
    - 用户端 5 个页面：Login/Home/CampusRelayOrders/CampusOrderResult/CourierOnboarding

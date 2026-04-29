@@ -1,0 +1,67 @@
+﻿{
+    "generatedAt":  "2026-04-29T20:47:24",
+    "frontendBase":  "http://127.0.0.1:5173",
+    "apiBase":  "http://127.0.0.1:8080/api",
+    "tokensRedacted":  true,
+    "screenshotDirectory":  "D:\\20278\\code\\Campus part-time job\\project-logs\\campus-relay\\runtime\\step-132-browser-smoke",
+    "pass":  7,
+    "fail":  0,
+    "results":  [
+                    {
+                        "name":  "admin dashboard",
+                        "status":  "PASS",
+                        "message":  "page rendered and screenshot saved",
+                        "path":  "/dashboard",
+                        "screenshot":  "D:\\20278\\code\\Campus part-time job\\project-logs\\campus-relay\\runtime\\step-132-browser-smoke\\admin-dashboard.png",
+                        "currentUrl":  "http://127.0.0.1:5173/dashboard"
+                    },
+                    {
+                        "name":  "admin employee",
+                        "status":  "PASS",
+                        "message":  "page rendered and screenshot saved",
+                        "path":  "/employee",
+                        "screenshot":  "D:\\20278\\code\\Campus part-time job\\project-logs\\campus-relay\\runtime\\step-132-browser-smoke\\admin-employee.png",
+                        "currentUrl":  "http://127.0.0.1:5173/employee"
+                    },
+                    {
+                        "name":  "admin settlements",
+                        "status":  "PASS",
+                        "message":  "page rendered and screenshot saved",
+                        "path":  "/campus/settlements",
+                        "screenshot":  "D:\\20278\\code\\Campus part-time job\\project-logs\\campus-relay\\runtime\\step-132-browser-smoke\\admin-settlements.png",
+                        "currentUrl":  "http://127.0.0.1:5173/campus/settlements"
+                    },
+                    {
+                        "name":  "admin after-sale executions",
+                        "status":  "PASS",
+                        "message":  "page rendered and screenshot saved",
+                        "path":  "/campus/after-sale-executions",
+                        "screenshot":  "D:\\20278\\code\\Campus part-time job\\project-logs\\campus-relay\\runtime\\step-132-browser-smoke\\admin-after-sale-executions.png",
+                        "currentUrl":  "http://127.0.0.1:5173/campus/after-sale-executions"
+                    },
+                    {
+                        "name":  "admin exceptions",
+                        "status":  "PASS",
+                        "message":  "page rendered and screenshot saved",
+                        "path":  "/campus/exceptions",
+                        "screenshot":  "D:\\20278\\code\\Campus part-time job\\project-logs\\campus-relay\\runtime\\step-132-browser-smoke\\admin-exceptions.png",
+                        "currentUrl":  "http://127.0.0.1:5173/campus/exceptions"
+                    },
+                    {
+                        "name":  "customer order result",
+                        "status":  "PASS",
+                        "message":  "page rendered and screenshot saved",
+                        "path":  "/user/campus/order-result?orderId=CR202604060001",
+                        "screenshot":  "D:\\20278\\code\\Campus part-time job\\project-logs\\campus-relay\\runtime\\step-132-browser-smoke\\customer-order-result.png",
+                        "currentUrl":  "http://127.0.0.1:5173/user/campus/order-result?orderId=CR202604060001"
+                    },
+                    {
+                        "name":  "parttime workbench",
+                        "status":  "PASS",
+                        "message":  "page rendered and screenshot saved",
+                        "path":  "/parttime/workbench",
+                        "screenshot":  "D:\\20278\\code\\Campus part-time job\\project-logs\\campus-relay\\runtime\\step-132-browser-smoke\\parttime-workbench.png",
+                        "currentUrl":  "http://127.0.0.1:5173/parttime/workbench"
+                    }
+                ]
+}

@@ -129,7 +129,7 @@
               {{ formatDateTime(row.afterSaleExecutionCorrectedAt) }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="120" fixed="right" :resizable="false">
+          <el-table-column label="操作" width="120" :resizable="false">
             <template #default="{ row }">
               <el-button type="primary" link @click="openDetail(row.relayOrderId)">查看详情</el-button>
             </template>

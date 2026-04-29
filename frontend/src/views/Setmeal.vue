@@ -116,7 +116,7 @@
             {{ formatDateTime(scope.row.createdAt) }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="150" fixed="right">
+        <el-table-column label="操作" width="150">
           <template #default="scope">
             <el-button size="small" type="primary" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button size="small" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>

@@ -1948,3 +1948,96 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是用户端 + 兼职端移动入口视觉统一轮：统一 7 个 Vue 页面的视觉风格（卡片玻璃态、campus teal 色系），替换 6 处旧外卖文案（"外卖内容"→"代送内容"、"兼职配送入驻"→"校园兼职入驻"等），不改任何业务逻辑、API、路由、鉴权、后端代码。frontend build 通过（1.00s）。
+
+## Step 128 - 管理后台视觉基线修正
+
+- [frontend/src/layout/MainLayout.vue](../../frontend/src/layout/MainLayout.vue)
+- [frontend/src/main.js](../../frontend/src/main.js)
+- [frontend/src/styles/element-plus.scss](../../frontend/src/styles/element-plus.scss)
+- [frontend/src/styles/global.scss](../../frontend/src/styles/global.scss)
+- [project-logs/campus-relay/step-128-admin-shell-visual-hardening.md](step-128-admin-shell-visual-hardening.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮只处理管理后台展示层：修复侧边栏折叠 class、Element Plus 中文 locale、表格列拖拽视觉条、固定列背景、danger plain 按钮状态，并将 `MainLayout.vue` 与 `.campus-admin-page` 统一为贴近原型图的蓝白后台视觉基线。未改 bridge、`request.js`、API 文件运行时行为、路由、后端、旧外卖兼容模块或新增页面。`npm run build` 和 `git diff --check` 均通过，已抽查 `/dashboard`、`/employee`、`/campus/after-sale-executions`。
+
+## Step 129 - 管理后台可用性巡检与明显样式问题修复
+
+- [frontend/src/layout/MainLayout.vue](../../frontend/src/layout/MainLayout.vue)
+- [frontend/src/styles/element-plus.scss](../../frontend/src/styles/element-plus.scss)
+- [frontend/src/styles/global.scss](../../frontend/src/styles/global.scss)
+- [frontend/src/views/Employee.vue](../../frontend/src/views/Employee.vue)
+- [frontend/src/views/CampusAfterSaleExecutionList.vue](../../frontend/src/views/CampusAfterSaleExecutionList.vue)
+- [frontend/src/views/CampusSettlementOpsView.vue](../../frontend/src/views/CampusSettlementOpsView.vue)
+- [frontend/src/views/CampusExceptionOpsView.vue](../../frontend/src/views/CampusExceptionOpsView.vue)
+- [frontend/src/views/CampusSettlementBatchList.vue](../../frontend/src/views/CampusSettlementBatchList.vue)
+- [frontend/src/views/Category.vue](../../frontend/src/views/Category.vue)
+- [frontend/src/views/Dish.vue](../../frontend/src/views/Dish.vue)
+- [frontend/src/views/Order.vue](../../frontend/src/views/Order.vue)
+- [frontend/src/views/Setmeal.vue](../../frontend/src/views/Setmeal.vue)
+- [project-logs/campus-relay/step-129-admin-usability-sweep-and-visible-ui-fixes.md](step-129-admin-usability-sweep-and-visible-ui-fixes.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮继续只处理管理后台展示层和可用性问题：breadcrumb 首页入口增加“运营总览”文字；后台所有 `fixed="right"` 操作列取消，避免固定列阴影/遮罩造成按钮覆盖；Element Plus 表格 resize 句柄隐藏规则进一步收紧；`.campus-admin-page` 表格、筛选区和分页区补横向约束。未改 bridge、`request.js`、API 文件运行时行为、路由、后端、旧外卖兼容模块或新增页面。`npm run build` 和 `git diff --check` 均通过。
+
+## Step 130 - 管理后台最终可见问题巡检与低风险修补
+
+- [frontend/src/components/BaseTable.vue](../../frontend/src/components/BaseTable.vue)
+- [frontend/src/views/Employee.vue](../../frontend/src/views/Employee.vue)
+- [frontend/src/views/user/Home.vue](../../frontend/src/views/user/Home.vue)
+- [frontend/src/views/user/CampusRelayOrders.vue](../../frontend/src/views/user/CampusRelayOrders.vue)
+- [project-logs/campus-relay/step-130-admin-final-visible-ui-sweep.md](step-130-admin-final-visible-ui-sweep.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是管理后台最终可见问题巡检与低风险修补轮：移除通用 `BaseTable.vue` 操作列 `fixed="right"`，清理前端仍可见的“外卖”等旧词残留，确认 `frontend/src` 范围内不再命中 `苍穹 / 外卖 / 旧店铺 / 骑手 / 销售额 / 总销售额 / fixed="right"`。未改 bridge、`request.js`、API 文件运行时行为、路由、后端、旧兼容模块或新增页面。`npm run build`、`.\mvnw.cmd -DskipTests compile` 和 `git diff --check` 均通过。
+
+## Step 131 - 本地/内测型试运营 smoke 复核
+
+- [project-logs/campus-relay/step-131-local-internal-trial-smoke.md](step-131-local-internal-trial-smoke.md)
+- [project-logs/campus-relay/runtime/step-131-local-smoke/api-smoke.ps1](runtime/step-131-local-smoke/api-smoke.ps1)
+- [project-logs/campus-relay/runtime/step-131-local-smoke/api-smoke-report.json](runtime/step-131-local-smoke/api-smoke-report.json)
+- [project-logs/campus-relay/runtime/step-131-local-smoke/frontend-shell-report.json](runtime/step-131-local-smoke/frontend-shell-report.json)
+- [project-logs/campus-relay/runtime/step-131-local-smoke/backend.out.log](runtime/step-131-local-smoke/backend.out.log)
+- [project-logs/campus-relay/runtime/step-131-local-smoke/backend.err.log](runtime/step-131-local-smoke/backend.err.log)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是本地/内测型试运营 smoke 复核轮：复用现有 `scripts/trial-operation` 完成 build/compile/sample preflight，启动 backend test profile 到 `127.0.0.1:8080`，确认 frontend dev server `127.0.0.1:5173` 可访问，新增本地 API smoke 脚本并完成 16 项接口验证，SPA shell 7 项可访问。未改 bridge、`request.js`、API 文件运行时行为、路由、后端业务、旧兼容模块或新增页面。
+
+## Step 132 - 稳定浏览器 smoke 工具链
+
+- [.gitignore](../../.gitignore)
+- [scripts/trial-operation/browser-smoke.ps1](../../scripts/trial-operation/browser-smoke.ps1)
+- [scripts/trial-operation/README.md](../../scripts/trial-operation/README.md)
+- [scripts/trial-operation/commands.ps1](../../scripts/trial-operation/commands.ps1)
+- [project-logs/campus-relay/runtime/step-132-browser-smoke/browser-smoke-report.json](runtime/step-132-browser-smoke/browser-smoke-report.json)
+- [project-logs/campus-relay/runtime/step-132-browser-smoke/admin-dashboard.png](runtime/step-132-browser-smoke/admin-dashboard.png)
+- [project-logs/campus-relay/runtime/step-132-browser-smoke/admin-employee.png](runtime/step-132-browser-smoke/admin-employee.png)
+- [project-logs/campus-relay/runtime/step-132-browser-smoke/admin-settlements.png](runtime/step-132-browser-smoke/admin-settlements.png)
+- [project-logs/campus-relay/runtime/step-132-browser-smoke/admin-after-sale-executions.png](runtime/step-132-browser-smoke/admin-after-sale-executions.png)
+- [project-logs/campus-relay/runtime/step-132-browser-smoke/admin-exceptions.png](runtime/step-132-browser-smoke/admin-exceptions.png)
+- [project-logs/campus-relay/runtime/step-132-browser-smoke/customer-order-result.png](runtime/step-132-browser-smoke/customer-order-result.png)
+- [project-logs/campus-relay/runtime/step-132-browser-smoke/parttime-workbench.png](runtime/step-132-browser-smoke/parttime-workbench.png)
+- [project-logs/campus-relay/step-131-local-internal-trial-smoke.md](step-131-local-internal-trial-smoke.md)
+- [project-logs/campus-relay/step-132-stable-browser-smoke-toolchain.md](step-132-stable-browser-smoke-toolchain.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是稳定浏览器 smoke 工具链补齐轮：新增 `browser-smoke.ps1`，通过真实登录接口获取 admin / customer / parttime token，使用浏览器 CLI 写入 localStorage 后访问 7 个关键页面并保存截图。报告脱敏 token，浏览器 smoke 7 项通过、0 项失败。同步更新 trial-operation README 和命令索引，并把 `.playwright-cli/` 加入 `.gitignore`，避免本地 CLI 快照缓存进入版本管理。本轮未改 bridge、`request.js`、API 文件运行时行为、路由、后端业务、旧兼容模块或新增页面。
+
+## Step 133 - 本地内测 RC 状态复盘
+
+- [project-logs/campus-relay/step-132-stable-browser-smoke-toolchain.md](step-132-stable-browser-smoke-toolchain.md)
+- [project-logs/campus-relay/step-133-local-internal-trial-rc-review.md](step-133-local-internal-trial-rc-review.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是本地内测 RC 状态复盘轮：汇总 Step 131 API smoke 与 Step 132 浏览器 smoke，确认当前本地/内测型试运营已有构建、API、页面截图三层可重复验证基线。当前结论是本地 RC 可反复验证；服务器内测仍需单独做远端 smoke，不能直接用本地结论替代。本轮没有业务代码改动，没有改 bridge、`request.js`、API 文件运行时行为、路由、后端业务、旧兼容模块或新增页面。

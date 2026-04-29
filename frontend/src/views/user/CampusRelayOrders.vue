@@ -4,7 +4,7 @@
       <section class="hero-card">
         <div class="hero-kicker">校园代送</div>
         <h1>发布代送单，继续查看我的订单</h1>
-        <p>复用现有 customer 代送接口，创建后可手动触发模拟支付；本页不接真实支付，也不改变旧外卖模块。</p>
+        <p>复用现有 customer 代送接口，创建后可手动触发模拟支付；本页不接真实支付，也不改变旧兼容模块。</p>
         <div class="hero-meta">
           <span>基础代送 {{ formatAmount(deliveryRules.baseFee) }}</span>
           <span>加急窗口 {{ deliveryRules.priorityWindowMinutes || 5 }} 分钟</span>
