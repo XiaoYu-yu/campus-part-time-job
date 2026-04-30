@@ -1,27 +1,32 @@
 # 校园代送待处理事项
 
-## Step 142 待处理 / 建议
+## Step 143 待处理 / 建议
 
-1. Step 141 已完成单机内测日志留存 / 轮转策略：
-   - `deploy/internal-trial/docker-compose.yml` 已给 `mysql / backend / frontend` 加 Docker `json-file` 日志轮转。
-   - 默认 `DOCKER_LOG_MAX_SIZE=20m`、`DOCKER_LOG_MAX_FILE=5`。
-   - `deploy/internal-trial/.env.example` 已补可调参数。
-   - 新增 `docs/deployment/internal-trial-log-retention.md`。
-   - 已同步 runbook、compose 部署说明、部署后 smoke checklist 和命令索引。
-2. Step 141 本地验证已完成：
-   - `powershell -ExecutionPolicy Bypass -File scripts\trial-operation\commands.ps1` 通过。
-   - `.\mvnw.cmd -DskipTests compile` 通过。
-   - `npm run build` 通过。
-   - `git diff --check` 通过。
-   - 本机当前没有 Docker CLI，因此 `docker compose config` 与 `LogConfig` 生效验证后置到 Step 142 的服务器部署验证。
-3. Step 142 建议二选一：
-   - A. 将 Step 141 日志轮转配置部署到服务器，重建 compose 后验证 `LogConfig`，再跑 health + remote smoke。
-   - B. 如果暂不动服务器，固化 SSH `22` 安全组来源限制操作清单，由 owner 在云控制台手动执行。
+1. Step 142 已完成服务器日志轮转部署与远端验证：
+   - 服务器更新前已执行备份。
+   - 服务器从旧提交 `9cc8d13` fast-forward 到 `1f343ce`。
+   - compose 已重建，`mysql / backend / frontend` 均运行中。
+   - 三个容器的 Docker `LogConfig` 均已验证为 `json-file max-size=20m max-file=5`。
+   - health endpoint 在重建 warm-up 后返回 `UP`。
+   - 远端 smoke 25 项通过、0 项失败、0 项跳过。
+   - 报告路径：`project-logs/campus-relay/runtime/step-142-remote-smoke/remote-smoke-report.json`。
+2. Step 143 建议优先处理 SSH 运维入口硬化，但不要直接关闭当前可用登录方式：
+   - 先重新确认 key-based SSH 是否可用。
+   - key 登录确认可用前，不关闭 password login。
+   - 由 owner 在云控制台限制 SSH `22` 来源 IP。
+   - 明确回滚方式，避免把服务器锁死。
+3. 如果暂不处理 SSH，Step 143 可改为固化“服务器部署后验证清单”：
+   - backup。
+   - `git pull --ff-only origin main`。
+   - compose rebuild。
+   - health。
+   - remote smoke。
+   - Docker `LogConfig` 检查。
 4. 当前仍未处理：
    - 当前没有 HTTPS、域名、证书、正式监控告警。
    - SSH `22` 当前可达，长期内测建议在云安全组限制来源 IP。
-   - Step 141 的 compose 日志轮转配置需要在下一次服务器 `git pull + compose up -d` 后才会在运行容器中生效。
-5. Step 142 继续禁止：
+   - SSH key 登录本轮未作为成功前提，后续应单独恢复和验证。
+5. Step 143 继续禁止：
    - 不改 bridge。
    - 不改 `request.js`。
    - 不改 token 附着逻辑。

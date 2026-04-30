@@ -112,6 +112,14 @@ DOCKER_LOG_MAX_FILE=5
 
 本机当前没有 Docker CLI，因此本轮没有在本地执行 `docker compose config`。Compose 日志轮转的实际生效验证放到 Step 142 的服务器部署验证中完成。
 
+Step 142 已完成服务器部署验证：
+
+1. 服务器已拉取包含日志轮转配置的最新提交并重建 compose。
+2. `mysql / backend / frontend` 三个容器的 `LogConfig` 均为 `json-file max-size=20m max-file=5`。
+3. health endpoint 在重建 warm-up 后返回 `UP`。
+4. 远端 smoke 25 项通过、0 项失败、0 项跳过。
+5. 详见 `project-logs/campus-relay/step-142-server-log-rotation-deploy-validation.md`。
+
 服务器应用本次 compose 日志轮转配置后，建议执行：
 
 ```bash

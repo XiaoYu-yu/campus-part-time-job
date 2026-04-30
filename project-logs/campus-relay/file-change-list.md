@@ -2152,3 +2152,14 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是单机内测日志留存与轮转策略轮：为 compose 中 `mysql / backend / frontend` 统一启用 Docker `json-file` 日志轮转，默认 `20m / 5`；`.env.example` 新增可调参数；新增日志留存文档并同步 runbook、compose 部署说明、部署后 smoke checklist 和命令索引。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库或旧兼容模块。
+
+## Step 142 - 服务器日志轮转部署与远端验证
+
+- [project-logs/campus-relay/step-142-server-log-rotation-deploy-validation.md](step-142-server-log-rotation-deploy-validation.md)
+- [project-logs/campus-relay/runtime/step-142-remote-smoke/remote-smoke-report.json](runtime/step-142-remote-smoke/remote-smoke-report.json)
+- [project-logs/campus-relay/step-141-internal-trial-log-retention.md](step-141-internal-trial-log-retention.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是服务器日志轮转部署与远端验证轮：服务器更新前完成备份，从旧提交 `9cc8d13` fast-forward 到 `1f343ce` 并重建 compose；`mysql / backend / frontend` 均验证 Docker `json-file max-size=20m max-file=5` 生效。health endpoint 在重建 warm-up 后返回 `UP`，远端 smoke 25 项通过、0 项失败、0 项跳过，报告已脱敏。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库或旧兼容模块。
