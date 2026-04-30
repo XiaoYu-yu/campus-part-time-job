@@ -204,6 +204,18 @@ bash deploy/internal-trial/restore-drill.sh
 
 - [部署后 Smoke Checklist](post-deploy-smoke-checklist.md)
 
+如果需要从本地对服务器做一轮参数化 smoke，可执行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host:8080/api -FrontendBase http://your-host/
+```
+
+具体说明见：
+
+- [远端内测 Smoke 执行说明](remote-internal-trial-smoke.md)
+
+脚本报告默认脱敏 host，不应提交真实公网 IP、服务器密码、JWT secret、腾讯地图 key 或 token。
+
 ## 更新部署
 
 推荐顺序：

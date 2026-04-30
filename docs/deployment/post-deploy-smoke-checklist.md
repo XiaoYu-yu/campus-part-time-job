@@ -17,6 +17,7 @@
 - [ ] 已阅读 [环境变量与密钥配置清单](env-and-secret-checklist.md)。
 - [ ] 已阅读 [生产部署说明](production-deploy.md)。
 - [ ] 已阅读 [备份与回滚说明](backup-and-rollback.md)。
+- [ ] 若是单机内测服务器，已阅读 [远端内测 Smoke 执行说明](remote-internal-trial-smoke.md)。
 - [ ] 已确认真实腾讯地图 key、数据库密码、JWT secret 没有提交到仓库。
 - [ ] 已确认当前仍不接真实支付、真实退款、真实打款。
 - [ ] 已确认 bridge 仍处于 `Phase A no-op` 冻结态。
@@ -57,6 +58,14 @@
 - [ ] admin 登录接口可用。
 - [ ] 受保护接口未带 token 时不会误放行。
 - [ ] 带正确 token 时关键接口可访问。
+
+单机内测服务器可以先执行参数化脚本：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host:8080/api -FrontendBase http://your-host/
+```
+
+该脚本默认脱敏报告中的 host；不要把真实公网 IP、域名或 token 写入仓库。
 
 ## 三、customer smoke
 
@@ -148,3 +157,7 @@
 如果需要把人工检查前移到代码合并阶段，先阅读：
 
 - [最小 CI 检查边界](ci-check-boundary.md)
+
+如果需要在单机内测服务器上做远端 smoke，先阅读：
+
+- [远端内测 Smoke 执行说明](remote-internal-trial-smoke.md)

@@ -48,6 +48,22 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\browser-smoke.p
 
 This script logs in with the fixed H2 sample accounts, writes only redacted browser-smoke reports, captures screenshots for the key admin / customer / parttime pages under `project-logs/campus-relay/runtime/step-132-browser-smoke/`, and does not mutate bridge, auth, route, API, or page behavior. It requires `127.0.0.1:8080` and `127.0.0.1:5173` to be running before execution.
 
+Run remote/internal-trial API and SPA shell smoke after the server stack is deployed:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host:8080/api -FrontendBase http://your-host/
+```
+
+The remote smoke script uses the same fixed trial-operation sample accounts as the local smoke baseline. It checks admin / customer / parttime login, key protected API reads, and optional frontend SPA shell reachability. Reports are written under `project-logs/campus-relay/runtime/step-134-remote-smoke/` and redact host names by default. Do not commit reports that intentionally use `-NoRedact` or include real server addresses.
+
+If a deployed frontend requires screenshot-level validation, reuse the local browser smoke script with explicit bases and an untracked runtime directory:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\browser-smoke.ps1 -ApiBase http://your-host:8080/api -FrontendBase http://your-host/ -RuntimeDir .\tmp\remote-browser-smoke
+```
+
+This browser smoke writes current URLs into its report, so store remote reports outside committed project logs unless the host is safe to disclose.
+
 Run Android API base layering checks:
 
 ```powershell

@@ -2041,3 +2041,22 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是本地内测 RC 状态复盘轮：汇总 Step 131 API smoke 与 Step 132 浏览器 smoke，确认当前本地/内测型试运营已有构建、API、页面截图三层可重复验证基线。当前结论是本地 RC 可反复验证；服务器内测仍需单独做远端 smoke，不能直接用本地结论替代。本轮没有业务代码改动，没有改 bridge、`request.js`、API 文件运行时行为、路由、后端业务、旧兼容模块或新增页面。
+
+## Step 134 - 远端内测 smoke 准备
+
+- [scripts/trial-operation/remote-smoke.ps1](../../scripts/trial-operation/remote-smoke.ps1)
+- [scripts/trial-operation/README.md](../../scripts/trial-operation/README.md)
+- [scripts/trial-operation/commands.ps1](../../scripts/trial-operation/commands.ps1)
+- [docs/deployment/remote-internal-trial-smoke.md](../../docs/deployment/remote-internal-trial-smoke.md)
+- [docs/deployment/post-deploy-smoke-checklist.md](../../docs/deployment/post-deploy-smoke-checklist.md)
+- [docs/deployment/internal-trial-ops-runbook.md](../../docs/deployment/internal-trial-ops-runbook.md)
+- [project-logs/campus-relay/runtime/step-134-remote-smoke/backend.log](runtime/step-134-remote-smoke/backend.log)
+- [project-logs/campus-relay/runtime/step-134-remote-smoke/frontend.log](runtime/step-134-remote-smoke/frontend.log)
+- [project-logs/campus-relay/runtime/step-134-remote-smoke/local-remote-smoke-report.json](runtime/step-134-remote-smoke/local-remote-smoke-report.json)
+- [project-logs/campus-relay/step-133-local-internal-trial-rc-review.md](step-133-local-internal-trial-rc-review.md)
+- [project-logs/campus-relay/step-134-remote-internal-trial-smoke-prep.md](step-134-remote-internal-trial-smoke-prep.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是远端/服务器内测 smoke 准备轮：新增 `remote-smoke.ps1`，支持传入远端 API 和前端 base，默认脱敏 host 与 token，覆盖 admin / customer / parttime 登录、关键受保护接口和可选 SPA shell 检查。新增远端内测 smoke 文档，并同步部署后 smoke checklist、内测运维 runbook、试运营脚本 README 与命令索引。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、后端业务、旧兼容模块或新增页面。

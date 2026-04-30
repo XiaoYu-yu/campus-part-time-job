@@ -41,8 +41,13 @@ Write-Host "Start backend test profile and frontend dev server first, then run:"
 Write-Host "powershell -ExecutionPolicy Bypass -File scripts\trial-operation\browser-smoke.ps1"
 Write-Host ""
 
+Write-Host "8. Remote/internal-trial smoke"
+Write-Host "Run after server deployment. Use placeholders in docs; do not commit real host values:"
+Write-Host "powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host:8080/api -FrontendBase http://your-host/"
+Write-Host ""
+
 if ($Full) {
-    Write-Host "8. Browser entrypoints"
+    Write-Host "9. Browser entrypoints"
     Write-Host "Frontend: http://localhost:5173"
     Write-Host "Backend:  http://localhost:8080"
     Write-Host "Customer onboarding: /user/campus/courier-onboarding"

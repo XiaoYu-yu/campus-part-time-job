@@ -1,6 +1,26 @@
 # 校园代送待处理事项
 
-## Step 134 待处理
+## Step 135 待处理
+
+1. Step 134 已完成远端/服务器内测 smoke 准备：
+   - 新增 `scripts/trial-operation/remote-smoke.ps1`。
+   - 新增 `docs/deployment/remote-internal-trial-smoke.md`。
+   - `scripts/trial-operation/README.md` 与 `commands.ps1` 已补远端 smoke 命令。
+   - `post-deploy-smoke-checklist.md` 与 `internal-trial-ops-runbook.md` 已补远端 smoke 入口。
+   - 报告默认脱敏 host，不写真实公网 IP、服务器密码、token 或腾讯地图 key。
+2. Step 135 建议：
+   - 如果服务器已部署并启动，使用真实服务器地址手工执行 `remote-smoke.ps1`，但不要提交未脱敏报告。
+   - 如果服务器 smoke 失败，优先修部署、端口、profile、CORS、seed 或静态资源 fallback。
+   - 如果服务器尚未稳定部署，先按 `docs/deployment/internal-trial-ops-runbook.md` 完成启动、备份和状态检查。
+3. Step 135 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不改后端接口和路由。
+   - 不删除旧兼容模块。
+   - 不提交真实密钥、公网 IP、服务器密码、GitHub token 或腾讯地图 key。
+
+## Step 134 历史待处理记录
 
 1. Step 133 已完成本地内测 RC 状态复盘：
    - Step 131 API smoke：16 项通过，0 项失败。

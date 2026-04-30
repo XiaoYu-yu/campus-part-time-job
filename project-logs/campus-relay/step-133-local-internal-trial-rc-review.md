@@ -175,3 +175,13 @@ bridge 主线继续保持 `Phase A no-op` 冻结态：
 
 1. 如果 owner 要开始服务器内测，Step 134 优先整理远端部署 smoke 命令、环境变量和端口检查，不直接改业务代码。
 2. 如果 owner 继续本地体验，Step 134 只修真实截图或手动体验中发现的页面问题，不再大范围重做视觉体系。
+
+## Step 134 跟进结果
+
+Step 134 已选择服务器内测 smoke 准备方向，并完成：
+
+1. 新增 `scripts/trial-operation/remote-smoke.ps1`，支持远端 API / SPA shell smoke。
+2. 新增 `docs/deployment/remote-internal-trial-smoke.md`。
+3. 同步 `scripts/trial-operation/README.md`、`commands.ps1`、`post-deploy-smoke-checklist.md` 和 `internal-trial-ops-runbook.md`。
+4. 报告默认脱敏 host，不输出 token，不提交真实公网 IP、服务器密码或地图 key。
+5. 本轮仍没有改 bridge、`request.js`、API 运行时行为、路由、后端业务或旧兼容模块。
