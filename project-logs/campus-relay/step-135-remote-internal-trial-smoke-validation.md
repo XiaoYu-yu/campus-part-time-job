@@ -107,3 +107,15 @@ bridge 主线继续保持 `Phase A no-op` 冻结态：
 2. 如果开始内测运维加固：检查服务器 compose 状态、备份脚本、restore drill 和日志查看流程是否可执行。
 
 不建议下一轮继续扩业务功能或继续大范围改前端样式。
+
+## Step 136 跟进结果
+
+Step 136 已选择内测运维加固方向，并完成：
+
+1. compose 状态检查：backend / frontend / mysql 均为 Up。
+2. 基础 HTTP 检查：服务器本机前端与后端入口可响应。
+3. 备份脚本验证：MySQL dump、uploads、env backup、manifest 均已生成。
+4. 非破坏性 restore drill：成功恢复最近备份，关键订单 `CR202604070002` 和 `CR202604060001` 均存在。
+5. 日志查看流程：backend / frontend / mysql 日志均可读取。
+6. 当前主要风险：服务器部署 hash 仍不是本地最新提交，且公网暴露 backend 8080 与 mysql 3306。
+7. 本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、后端业务或旧兼容模块。

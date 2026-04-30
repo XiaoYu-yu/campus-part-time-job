@@ -1,6 +1,31 @@
 # 校园代送待处理事项
 
-## Step 136 待处理
+## Step 137 待处理
+
+1. Step 136 已完成服务器内测运维检查与恢复演练：
+   - 服务器部署目录存在，工作区干净。
+   - compose 中 backend / frontend / mysql 均为 Up。
+   - 服务器本机前端和后端基础访问可用。
+   - `backup-stack.sh` 已成功生成 MySQL dump、uploads 归档、env 备份和 manifest。
+   - `restore-drill.sh` 已成功完成非破坏性恢复演练，关键订单 `CR202604070002` 和 `CR202604060001` 均存在。
+   - 日志查看流程可用。
+2. 当前主要风险：
+   - 服务器部署 hash 仍停在 `1a2329e`，不是本地最新提交。
+   - 服务器公网仍暴露 backend 8080 和 mysql 3306，不适合长期正式外部试用。
+   - backend 暂无独立健康检查接口，仍依赖业务 smoke。
+3. Step 137 建议：
+   - 先把本地领先提交推送到 GitHub。
+   - 服务器先备份，再 `git pull --ff-only origin main`，再重建 compose。
+   - 重建后重新执行 `remote-smoke.ps1`。
+   - 评估是否先收紧公网端口，至少不要长期公网暴露 mysql 3306。
+4. Step 137 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不删除旧兼容模块。
+   - 不提交真实密钥、公网 IP、服务器密码、GitHub token 或腾讯地图 key。
+
+## Step 136 历史待处理记录
 
 1. Step 135 已完成远端内测 smoke 真实验证：
    - 使用 `scripts/trial-operation/remote-smoke.ps1` 对 owner 提供的内测服务器完成 API + frontend shell smoke。

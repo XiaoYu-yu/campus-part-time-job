@@ -2068,3 +2068,12 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是远端内测 smoke 真实验证轮：使用 Step 134 新增的 `remote-smoke.ps1` 对 owner 提供的内测服务器完成 API + frontend shell smoke，24 项通过、0 项失败。报告默认脱敏 host 与 endpoint，未提交真实公网 IP、服务器密码、token 或腾讯地图 key。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、后端业务、旧兼容模块或新增页面。
+
+## Step 136 - 服务器内测运维检查与恢复演练
+
+- [project-logs/campus-relay/step-136-server-ops-check-and-restore-drill.md](step-136-server-ops-check-and-restore-drill.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是服务器内测运维检查与恢复演练轮：通过 SSH 执行 runbook 中的 compose 状态检查、基础 HTTP 检查、备份脚本、非破坏性 restore drill 和日志查看流程。backend / frontend / mysql 均为 Up；备份与 restore drill 均通过，关键订单可恢复校验。当前主要风险是服务器部署 hash 不是本地最新提交，且公网仍暴露 backend 8080 和 mysql 3306。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、后端业务、旧兼容模块或新增页面。
