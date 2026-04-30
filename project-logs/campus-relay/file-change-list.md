@@ -2098,8 +2098,9 @@
 - [docs/deployment/post-deploy-smoke-checklist.md](../../docs/deployment/post-deploy-smoke-checklist.md)
 - [scripts/trial-operation/commands.ps1](../../scripts/trial-operation/commands.ps1)
 - [project-logs/campus-relay/step-138-internal-trial-port-hardening.md](step-138-internal-trial-port-hardening.md)
+- [project-logs/campus-relay/runtime/step-138-remote-smoke/remote-smoke-report.json](runtime/step-138-remote-smoke/remote-smoke-report.json)
 - [project-logs/campus-relay/summary.md](summary.md)
 - [project-logs/campus-relay/pending-items.md](pending-items.md)
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
-本轮是内测服务器端口边界与备份告警加固轮：将 compose 中 backend 8080 与 MySQL 3306 收敛为服务器本机 `127.0.0.1` 绑定，公网默认只保留 frontend 80；远端 smoke 推荐入口改为 nginx `/api` 反向代理；`backup-stack.sh` 增加 `--no-tablespaces`，用于消除 MySQL 8 tablespace 权限 warning。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、后端业务、旧兼容模块或新增页面。
+本轮是内测服务器端口边界与备份告警加固轮：将 compose 中 backend 8080 与 MySQL 3306 收敛为服务器本机 `127.0.0.1` 绑定，公网默认只保留 frontend 80；远端 smoke 推荐入口改为 nginx `/api` 反向代理；`backup-stack.sh` 增加 `--no-tablespaces`，用于消除 MySQL 8 tablespace 权限 warning。服务器已拉取最新提交并重建 compose，公网 `8080 / 3306` 已不可访问；远端 smoke 24 项通过、0 项失败、0 项跳过；最新备份已通过非破坏性 restore drill。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、后端业务、旧兼容模块或新增页面。

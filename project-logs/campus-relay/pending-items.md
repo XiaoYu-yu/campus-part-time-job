@@ -1,6 +1,35 @@
 # 校园代送待处理事项
 
-## Step 138 待处理 / 进行中
+## Step 139 待处理 / 建议
+
+1. Step 138 已完成内测服务器端口边界与备份告警加固：
+   - `mysql` 端口改为 `127.0.0.1:${MYSQL_PORT:-3306}:3306`。
+   - `backend` 端口改为 `127.0.0.1:${BACKEND_PORT:-8080}:8080`。
+   - frontend 继续对外开放 80，并通过 nginx 代理 `/api`。
+   - `backup-stack.sh` 增加 `--no-tablespaces`。
+   - 远端 smoke 文档推荐入口切换为 `http://your-host/api`。
+2. Step 138 已完成真实服务器验证：
+   - 服务器已拉取最新代码并重建 compose。
+   - 公网 `80` 可访问。
+   - 公网 `8080` 不可访问。
+   - 公网 `3306` 不可访问。
+   - 通过 nginx `/api` 入口远端 smoke：24 项通过、0 项失败、0 项跳过。
+   - 最新备份已通过非破坏性 restore drill，恢复出 7 笔订单，关键订单 `CR202604070002` 和 `CR202604060001` 均存在。
+3. Step 139 建议二选一：
+   - A. 固化单机内测安全组 / 防火墙说明，明确服务器侧只开放 80，其余端口仅本机或 SSH tunnel 诊断。
+   - B. 评估是否补一个最小 backend health endpoint，用于替代对业务登录接口的存活探测。
+4. 当前仍未处理：
+   - 当前没有 HTTPS、域名、证书、正式监控告警。
+   - backend 暂无独立健康检查接口，仍依赖业务 smoke。
+   - restore drill 第一次曾短暂出现临时 MySQL root 登录失败，复跑已通过；若后续复现，再加固 SQL readiness 检测。
+5. Step 139 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不删除旧兼容模块。
+   - 不提交真实密钥、公网 IP、服务器密码、GitHub token 或腾讯地图 key。
+
+## Step 138 历史待处理记录
 
 1. Step 137 已完成 GitHub / 服务器同步与远端 smoke 复核：
    - 本地 `main` 已推送到 GitHub。
@@ -10,29 +39,12 @@
    - 已配置本机专用 SSH key 免密登录，私钥未进入仓库。
    - 远端 smoke 24 项通过、0 项失败、0 项跳过。
    - 最新备份已通过非破坏性 restore drill。
-2. 当前主要风险：
-   - 服务器公网仍暴露 backend 8080 和 mysql 3306，不适合长期外部试用。
-   - backup 脚本在 MySQL 8 下仍有 tablespace 权限 warning，虽然本轮 restore drill 已验证最新备份可恢复。
-   - backend 暂无独立健康检查接口，仍依赖业务 smoke。
-   - 当前没有 HTTPS、域名、证书、正式反向代理、安全组收敛或监控告警。
-3. Step 138 已完成本地配置改动：
-   - `mysql` 端口改为 `127.0.0.1:${MYSQL_PORT:-3306}:3306`。
-   - `backend` 端口改为 `127.0.0.1:${BACKEND_PORT:-8080}:8080`。
-   - frontend 继续对外开放 80，并通过 nginx 代理 `/api`。
-   - `backup-stack.sh` 增加 `--no-tablespaces`。
-   - 远端 smoke 文档推荐入口切换为 `http://your-host/api`。
-4. Step 138 仍需完成：
-   - 推送本地配置到 GitHub。
-   - 服务器拉取最新代码并重建 compose。
-   - 确认公网 8080 / 3306 不可访问。
-   - 使用 `http://<redacted>/api` 重跑远端 smoke。
-   - 重新执行 backup + restore drill。
-5. Step 138 继续禁止：
-   - 不改 bridge。
-   - 不改 `request.js`。
-   - 不改 token 附着逻辑。
-   - 不删除旧兼容模块。
-   - 不提交真实密钥、公网 IP、服务器密码、GitHub token 或腾讯地图 key。
+2. Step 138 建议：
+   - 收紧公网端口暴露。
+   - 保留 frontend 80 作为默认公网入口。
+   - backend 8080 与 MySQL 3306 仅绑定服务器本机。
+   - 远端 smoke 改为通过 nginx `/api` 访问。
+   - 修正 MySQL 8 `mysqldump` tablespace 权限 warning。
 
 ## Step 137 历史待处理记录
 

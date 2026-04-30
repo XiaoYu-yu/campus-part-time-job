@@ -102,16 +102,37 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps
 
 ## 服务器验证结果
 
-待执行：
+已完成：
 
-1. 推送本地配置到 GitHub。
-2. 服务器 `git pull --ff-only origin main`。
-3. 服务器执行 `docker compose ... config`。
-4. 服务器重建 compose。
-5. 服务器确认 backend / mysql 只绑定 `127.0.0.1`。
-6. 本地确认公网 8080 / 3306 不可访问。
-7. 通过 `http://<redacted>/api` 重新跑远端 smoke。
-8. 再执行 backup + restore drill，确认 `--no-tablespaces` 后备份仍可恢复。
+1. 本地配置已提交并推送到 GitHub，服务器已 `git pull --ff-only origin main` 更新到 Step 138 提交。
+2. 服务器已执行 compose 配置展开检查，确认：
+   - `backend` 绑定 `127.0.0.1:8080->8080/tcp`。
+   - `mysql` 绑定 `127.0.0.1:3306->3306/tcp`。
+   - `frontend` 继续绑定公网 `80`。
+3. 服务器已重建 compose，`backend / frontend / mysql` 均为 running。
+4. 本地公网端口探测结果：
+   - `80` 可访问。
+   - `8080` 不可访问。
+   - `3306` 不可访问。
+5. 已通过 nginx `/api` 入口重新跑远端 smoke：
+   - 报告路径：`project-logs/campus-relay/runtime/step-138-remote-smoke/remote-smoke-report.json`。
+   - PASS：24。
+   - FAIL：0。
+   - SKIP：0。
+   - 报告已脱敏 host、endpoint 和 token。
+6. 已执行 `backup-stack.sh`，`mysqldump` 未再出现 tablespace `PROCESS` 权限 warning；仅保留 MySQL CLI 使用密码的通用 warning。
+7. 已执行非破坏性 restore drill：
+   - 最新 dump 可恢复。
+   - `restored_order_count=7`。
+   - `CR202604070002` 存在。
+   - `CR202604060001` 存在。
+   - uploads 归档可解压，当前文件数为 `0`。
+
+补充说明：
+
+1. 第一次 restore drill 曾短暂出现临时 MySQL root 登录失败，复查时临时 MySQL 认证单独验证通过。
+2. 复跑同一最新备份的 `restore-drill.sh` 已通过，未改业务代码或数据库结构。
+3. 后续如果再次出现同类失败，再考虑加固 restore drill 的 SQL readiness 检测；本轮不扩大脚本改动。
 
 ## 明确没做
 
@@ -136,13 +157,10 @@ bridge 主线继续保持 `Phase A no-op` 冻结态：
 
 ## Step 139 建议
 
-待 Step 138 服务器验证完成后再确定。
+Step 138 端口收敛、远端 smoke、backup 和 restore drill 均已通过。
 
-如果端口收敛和 smoke 均通过，Step 139 建议进入：
+Step 139 建议进入：
 
 1. 单机内测安全组 / 防火墙说明固化。
 2. 或补最小 backend health endpoint go / no-go。
 3. 或继续做服务器监控 / 日志留存最小方案。
-
-如果端口收敛后 smoke 失败，Step 139 必须优先修复部署入口，不进入新功能开发。
-

@@ -188,10 +188,12 @@ bridge 主线继续保持 `Phase A no-op` 冻结态：
 
 ## Step 138 后续结果回填
 
-Step 138 已开始执行本建议：
+Step 138 已完成本建议：
 
 1. compose 中 backend 8080 与 MySQL 3306 已改为服务器本机 `127.0.0.1` 绑定。
 2. frontend 80 继续作为默认公网入口。
 3. 远端 smoke 推荐入口已切换为 `http://your-host/api`。
 4. `backup-stack.sh` 已增加 `--no-tablespaces`。
-5. 服务器侧重建、端口收敛验证和远端 smoke 待 Step 138 完成。
+5. 服务器侧已重建，公网 `8080 / 3306` 已不可访问。
+6. nginx `/api` 入口远端 smoke 24 项通过、0 项失败、0 项跳过。
+7. 最新备份已通过非破坏性 restore drill。
