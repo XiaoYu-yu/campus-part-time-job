@@ -1,0 +1,29 @@
+﻿{
+    "generatedAt":  "2026-04-30T23:32:54",
+    "apiBase":  "http://\u003credacted\u003e/api",
+    "frontendBase":  "http://\u003credacted\u003e/",
+    "sshHost":  "\u003credacted-host\u003e",
+    "urlsRedacted":  true,
+    "pass":  2,
+    "fail":  0,
+    "skip":  0,
+    "results":  [
+                    {
+                        "name":  "remote smoke",
+                        "status":  "PASS",
+                        "message":  "Report written to project-logs\\campus-relay\\runtime\\step-144-server-post-deploy-check\\remote-smoke-report.json",
+                        "details":  null
+                    },
+                    {
+                        "name":  "ssh deployment checks",
+                        "status":  "PASS",
+                        "message":  "Key SSH, commit read, and container LogConfig checks passed.",
+                        "details":  [
+                                        "commit=1f343ce",
+                                        "campus-trial-backend-1={\"Type\":\"json-file\",\"Config\":{\"max-file\":\"5\",\"max-size\":\"20m\"}}",
+                                        "campus-trial-frontend-1={\"Type\":\"json-file\",\"Config\":{\"max-file\":\"5\",\"max-size\":\"20m\"}}",
+                                        "campus-trial-mysql-1={\"Type\":\"json-file\",\"Config\":{\"max-file\":\"5\",\"max-size\":\"20m\"}}"
+                                    ]
+                    }
+                ]
+}

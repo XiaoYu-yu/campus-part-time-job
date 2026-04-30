@@ -1,27 +1,22 @@
 # 校园代送待处理事项
 
-## Step 144 待处理 / 建议
+## Step 145 待处理 / 建议
 
-1. Step 143 已完成 SSH 运维入口硬化清单：
-   - 默认 `ssh root@host` 未自动选择项目专用 key。
-   - 服务器 `authorized_keys` 已包含项目专用公钥。
-   - 显式使用 `~/.ssh/campus_trial_ed25519` 与 `IdentitiesOnly=yes` 可完成 key-based SSH 登录。
-   - 新增 `docs/deployment/internal-trial-ssh-hardening.md`。
-   - 本轮未修改服务器 `sshd_config`，未关闭 password login。
-2. Step 144 建议二选一：
-   - A. 由 owner 在云控制台按 `docs/deployment/internal-trial-ssh-hardening.md` 限制 SSH `22` 来源 IP，再复核显式 key 登录。
-   - B. 如果暂不动云安全组，固化“服务器部署后验证清单”：
-   - backup。
-   - `git pull --ff-only origin main`。
-   - compose rebuild。
-   - health。
-   - remote smoke。
-   - Docker `LogConfig` 检查。
+1. Step 144 已完成服务器部署后验证清单脚本化：
+   - 新增 `scripts/trial-operation/server-post-deploy-check.ps1`。
+   - 脚本可串起 remote smoke 和可选 SSH 只读检查。
+   - 真实运行通过：remote smoke 25 项通过、0 项失败、0 项跳过；SSH 部署检查通过。
+   - 报告路径：`project-logs/campus-relay/runtime/step-144-server-post-deploy-check/`。
+2. Step 145 建议进入内测运维最小监控 / 磁盘空间检查：
+   - 固化服务器磁盘空间检查命令。
+   - 固化 Docker 日志占用查看命令。
+   - 固化备份目录占用查看命令。
+   - 不引入完整监控系统，不接告警平台。
 3. 当前仍未处理：
    - 当前没有 HTTPS、域名、证书、正式监控告警。
    - SSH `22` 当前可达，长期内测建议在云安全组限制来源 IP。
    - password login 仍保留，关闭前必须确认 key 登录和安全组回滚路径。
-4. Step 144 继续禁止：
+4. Step 145 继续禁止：
    - 不改 bridge。
    - 不改 `request.js`。
    - 不改 token 附着逻辑。

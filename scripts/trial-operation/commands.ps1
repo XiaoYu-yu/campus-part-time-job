@@ -68,8 +68,13 @@ Write-Host "docker inspect --format='{{json .HostConfig.LogConfig}}' campus-tria
 Write-Host "Expected: json-file with max-size=20m and max-file=5 unless overridden in .env."
 Write-Host ""
 
+Write-Host "12. Server post-deploy wrapper"
+Write-Host "Runs remote smoke and optional read-only SSH checks. Use placeholders in docs; do not commit real hosts:"
+Write-Host 'powershell -ExecutionPolicy Bypass -File scripts\trial-operation\server-post-deploy-check.ps1 -ApiBase http://your-host/api -FrontendBase http://your-host/ -SshHost your-host -SshIdentity "$env:USERPROFILE\.ssh\campus_trial_ed25519"'
+Write-Host ""
+
 if ($Full) {
-    Write-Host "12. Browser entrypoints"
+    Write-Host "13. Browser entrypoints"
     Write-Host "Frontend: http://localhost:5173"
     Write-Host "Backend:  http://localhost:8080"
     Write-Host "Customer onboarding: /user/campus/courier-onboarding"

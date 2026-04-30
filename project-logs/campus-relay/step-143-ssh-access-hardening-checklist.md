@@ -114,3 +114,9 @@ Step 144 建议二选一：
 
 1. 由 owner 在云控制台按 `docs/deployment/internal-trial-ssh-hardening.md` 限制 SSH `22` 来源 IP，然后复核显式 key 登录。
 2. 如果暂不动云安全组，转入“服务器部署后验证清单脚本化”，把 backup、pull、compose rebuild、health、remote smoke、LogConfig 检查固定成可重复执行步骤。
+
+Step 144 已完成补充：
+
+1. 新增 `scripts/trial-operation/server-post-deploy-check.ps1`。
+2. 该脚本已真实串起 remote smoke 与 key-based SSH 只读检查。
+3. 当前不修改云安全组、不关闭 password login。

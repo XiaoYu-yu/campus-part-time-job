@@ -56,6 +56,14 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps
 
 The remote smoke script uses the same fixed trial-operation sample accounts as the local smoke baseline. It checks admin / customer / parttime login, key protected API reads, and optional frontend SPA shell reachability. Reports are written under `project-logs/campus-relay/runtime/step-134-remote-smoke/` and redact host names by default. Do not commit reports that intentionally use `-NoRedact` or include real server addresses.
 
+Run the post-deploy wrapper when you want remote smoke plus optional key-based SSH deployment checks in one read-only step:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\server-post-deploy-check.ps1 -ApiBase http://your-host/api -FrontendBase http://your-host/ -SshHost your-host -SshIdentity "$env:USERPROFILE\.ssh\campus_trial_ed25519"
+```
+
+The wrapper calls `remote-smoke.ps1`, optionally checks the server commit and Docker `LogConfig` through SSH, writes redacted reports, and does not modify server state. Do not commit reports generated with real host values unless they are redacted.
+
 If a deployed frontend requires screenshot-level validation, reuse the local browser smoke script with explicit bases and an untracked runtime directory:
 
 ```powershell

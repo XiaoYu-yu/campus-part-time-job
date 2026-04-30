@@ -2173,3 +2173,17 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是 SSH 运维入口硬化清单轮：确认默认 SSH 未自动选择项目专用 key，但显式使用 `~/.ssh/campus_trial_ed25519` 与 `IdentitiesOnly=yes` 可完成 key-based 登录；服务器 `authorized_keys` 已包含项目专用公钥。新增 SSH 硬化文档，固化安全组限制来源 IP、关闭 password login 前置条件和回滚策略。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库、旧兼容模块或服务器 `sshd_config`，也没有关闭 password login。
+
+## Step 144 - 服务器部署后验证清单脚本化
+
+- [scripts/trial-operation/server-post-deploy-check.ps1](../../scripts/trial-operation/server-post-deploy-check.ps1)
+- [scripts/trial-operation/README.md](../../scripts/trial-operation/README.md)
+- [scripts/trial-operation/commands.ps1](../../scripts/trial-operation/commands.ps1)
+- [project-logs/campus-relay/runtime/step-144-server-post-deploy-check/remote-smoke-report.json](runtime/step-144-server-post-deploy-check/remote-smoke-report.json)
+- [project-logs/campus-relay/runtime/step-144-server-post-deploy-check/server-post-deploy-check-report.json](runtime/step-144-server-post-deploy-check/server-post-deploy-check-report.json)
+- [project-logs/campus-relay/step-144-server-post-deploy-check-wrapper.md](step-144-server-post-deploy-check-wrapper.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是服务器部署后验证清单脚本化轮：新增只读 `server-post-deploy-check.ps1`，用于串联 remote smoke 和可选 key-based SSH 部署检查；真实运行通过，remote smoke 25 项通过、0 项失败、0 项跳过，SSH 检查确认部署提交读取与三个核心容器 LogConfig 检查通过。报告已脱敏。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库、旧兼容模块或服务器 SSH 配置。

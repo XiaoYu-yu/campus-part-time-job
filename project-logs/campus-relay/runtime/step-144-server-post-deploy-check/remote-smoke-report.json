@@ -1,0 +1,162 @@
+﻿{
+    "generatedAt":  "2026-04-30T23:32:53",
+    "apiBase":  "http://\u003credacted\u003e/api",
+    "frontendBase":  "http://\u003credacted\u003e/",
+    "urlsRedacted":  true,
+    "tokensRedacted":  true,
+    "pass":  25,
+    "fail":  0,
+    "skip":  0,
+    "results":  [
+                    {
+                        "name":  "public health",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/campus/public/health"
+                    },
+                    {
+                        "name":  "admin login",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/employees/login"
+                    },
+                    {
+                        "name":  "customer login",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/users/login"
+                    },
+                    {
+                        "name":  "parttime token",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/campus/courier/auth/token"
+                    },
+                    {
+                        "name":  "admin employee list",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/employees?page=1\u0026size=10"
+                    },
+                    {
+                        "name":  "admin settlements list",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/campus/admin/settlements?page=1\u0026pageSize=5"
+                    },
+                    {
+                        "name":  "admin settlement summary",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/campus/admin/settlements/reconcile-summary"
+                    },
+                    {
+                        "name":  "admin after-sale executions",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/campus/admin/orders/after-sale-executions?page=1\u0026pageSize=5"
+                    },
+                    {
+                        "name":  "admin couriers list",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/campus/admin/couriers?page=1\u0026pageSize=5"
+                    },
+                    {
+                        "name":  "admin exception history list",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/campus/admin/exceptions?page=1\u0026pageSize=5"
+                    },
+                    {
+                        "name":  "customer onboarding profile",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/campus/customer/courier-onboarding/profile"
+                    },
+                    {
+                        "name":  "customer token eligibility",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/campus/customer/courier-onboarding/token-eligibility"
+                    },
+                    {
+                        "name":  "customer completed order detail",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/campus/customer/orders/CR202604060001"
+                    },
+                    {
+                        "name":  "parttime profile",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/campus/courier/profile"
+                    },
+                    {
+                        "name":  "parttime review status",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/campus/courier/review-status"
+                    },
+                    {
+                        "name":  "parttime available orders",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/campus/courier/orders/available?page=1\u0026pageSize=5"
+                    },
+                    {
+                        "name":  "parttime completed order detail",
+                        "status":  "PASS",
+                        "message":  "code=200",
+                        "endpoint":  "http://\u003credacted\u003e/api/campus/courier/orders/CR202604060001"
+                    },
+                    {
+                        "name":  "frontend shell home",
+                        "status":  "PASS",
+                        "message":  "status=200, spa-shell=true",
+                        "endpoint":  "http://\u003credacted\u003e/"
+                    },
+                    {
+                        "name":  "frontend shell admin login",
+                        "status":  "PASS",
+                        "message":  "status=200, spa-shell=true",
+                        "endpoint":  "http://\u003credacted\u003e/login"
+                    },
+                    {
+                        "name":  "frontend shell admin dashboard",
+                        "status":  "PASS",
+                        "message":  "status=200, spa-shell=true",
+                        "endpoint":  "http://\u003credacted\u003e/dashboard"
+                    },
+                    {
+                        "name":  "frontend shell admin settlements",
+                        "status":  "PASS",
+                        "message":  "status=200, spa-shell=true",
+                        "endpoint":  "http://\u003credacted\u003e/campus/settlements"
+                    },
+                    {
+                        "name":  "frontend shell admin after-sale",
+                        "status":  "PASS",
+                        "message":  "status=200, spa-shell=true",
+                        "endpoint":  "http://\u003credacted\u003e/campus/after-sale-executions"
+                    },
+                    {
+                        "name":  "frontend shell admin exceptions",
+                        "status":  "PASS",
+                        "message":  "status=200, spa-shell=true",
+                        "endpoint":  "http://\u003credacted\u003e/campus/exceptions"
+                    },
+                    {
+                        "name":  "frontend shell customer result",
+                        "status":  "PASS",
+                        "message":  "status=200, spa-shell=true",
+                        "endpoint":  "http://\u003credacted\u003e/user/campus/order-result?orderId=CR202604060001"
+                    },
+                    {
+                        "name":  "frontend shell parttime workbench",
+                        "status":  "PASS",
+                        "message":  "status=200, spa-shell=true",
+                        "endpoint":  "http://\u003credacted\u003e/parttime/workbench"
+                    }
+                ]
+}
