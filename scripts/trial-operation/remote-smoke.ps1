@@ -138,6 +138,8 @@ if (-not $ApiBase.EndsWith('/api')) {
 
 $Results = @()
 
+Invoke-Api 'public health' 'Get' "$ApiBase/campus/public/health" | Out-Null
+
 $adminLogin = Invoke-Api 'admin login' 'Post' "$ApiBase/employees/login" @{ phone = '13800138000'; password = '123456' }
 $customerLogin = Invoke-Api 'customer login' 'Post' "$ApiBase/users/login" @{ phone = '13900139000'; password = '123456' }
 $courierLogin = Invoke-Api 'parttime token' 'Post' "$ApiBase/campus/courier/auth/token" @{ phone = '13900139001'; password = '123456' }

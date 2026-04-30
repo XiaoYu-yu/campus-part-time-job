@@ -61,22 +61,23 @@ project-logs/campus-relay/runtime/step-134-remote-smoke/remote-smoke-report.json
 
 脚本会使用固定内测账号调用：
 
-1. admin login
-2. customer login
-3. parttime token
-4. admin employee list
-5. admin settlements list
-6. admin settlement summary
-7. admin after-sale executions
-8. admin couriers list
-9. admin exception history list
-10. customer onboarding profile
-11. customer token eligibility
-12. customer completed order detail `CR202604060001`
-13. parttime profile
-14. parttime review status
-15. parttime available orders
-16. parttime completed order detail `CR202604060001`
+1. public health
+2. admin login
+3. customer login
+4. parttime token
+5. admin employee list
+6. admin settlements list
+7. admin settlement summary
+8. admin after-sale executions
+9. admin couriers list
+10. admin exception history list
+11. customer onboarding profile
+12. customer token eligibility
+13. customer completed order detail `CR202604060001`
+14. parttime profile
+15. parttime review status
+16. parttime available orders
+17. parttime completed order detail `CR202604060001`
 
 ### frontend SPA shell smoke
 

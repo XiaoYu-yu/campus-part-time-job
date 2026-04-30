@@ -119,3 +119,13 @@ bridge 主线继续保持 `Phase A no-op` 冻结态：
 2. 如果新增，建议只返回应用存活状态，不读取用户、订单或资金数据。
 3. 如果不新增，则继续明确只能用 remote smoke 作为部署后健康证据。
 4. 继续保持 bridge、展示 polish、媒体线、旧兼容模块冻结口径不变。
+
+## Step 140 后续结果回填
+
+Step 140 已选择并实现最小 backend health endpoint：
+
+1. 新增 `GET /api/campus/public/health`。
+2. 复用既有 `/api/campus/public/**` 公开前缀，不改 `JwtInterceptor`。
+3. health 只返回应用存活信息，不读取数据库或业务数据。
+4. `remote-smoke.ps1` 已新增 `public health` 检查。
+5. 服务器验证待 Step 140 完成。

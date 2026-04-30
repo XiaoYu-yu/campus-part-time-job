@@ -72,6 +72,18 @@ curl -I http://127.0.0.1/
 1. 返回 `HTTP/1.1 200`
 2. 或等价 `200` 响应
 
+backend health 检查：
+
+```bash
+curl -s http://127.0.0.1/api/campus/public/health
+```
+
+期望：
+
+1. 返回业务 JSON。
+2. `code=200`。
+3. `data.status=UP`。
+
 本机 backend 检查：
 
 ```bash

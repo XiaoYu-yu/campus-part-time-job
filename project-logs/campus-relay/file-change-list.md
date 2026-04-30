@@ -2118,3 +2118,19 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是单机内测安全边界固化轮：新增安全边界文档，明确业务公网入口只走 frontend `80`，backend `8080` 与 MySQL `3306` 只绑定服务器本机，SSH `22` 仅作为运维入口并建议在云安全组限制来源 IP；同步 runbook、部署后 smoke checklist、远端 smoke 文档和命令索引。已复核当前服务器监听与公网探测：`22 / 80` 可达，`8080 / 3306` 不可达。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、后端业务、旧兼容模块或新增页面。
+
+## Step 140 - backend health endpoint 最小实现
+
+- [backend/src/main/java/com/cangqiong/takeaway/campus/controller/CampusPublicController.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/controller/CampusPublicController.java)
+- [scripts/trial-operation/remote-smoke.ps1](../../scripts/trial-operation/remote-smoke.ps1)
+- [scripts/trial-operation/commands.ps1](../../scripts/trial-operation/commands.ps1)
+- [docs/deployment/internal-trial-ops-runbook.md](../../docs/deployment/internal-trial-ops-runbook.md)
+- [docs/deployment/internal-trial-security-boundary.md](../../docs/deployment/internal-trial-security-boundary.md)
+- [docs/deployment/post-deploy-smoke-checklist.md](../../docs/deployment/post-deploy-smoke-checklist.md)
+- [docs/deployment/remote-internal-trial-smoke.md](../../docs/deployment/remote-internal-trial-smoke.md)
+- [project-logs/campus-relay/step-140-backend-health-endpoint.md](step-140-backend-health-endpoint.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是 backend health endpoint 最小实现轮：新增 `GET /api/campus/public/health`，复用既有 campus public 放行前缀，不改 `JwtInterceptor`；接口只返回应用存活、服务名和检查时间，不读取用户、订单、资金、地图或数据库数据。remote smoke 已新增 `public health` 检查，并同步 runbook、安全边界、部署后 smoke checklist、远端 smoke 文档和命令索引。本轮没有改 bridge、`request.js`、token 附着逻辑、鉴权主链路、前端页面、路由或旧兼容模块。

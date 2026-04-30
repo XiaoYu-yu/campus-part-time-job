@@ -55,8 +55,13 @@ Write-Host '$hostName = "your-host"; foreach ($port in @(22,80,8080,3306)) { $re
 Write-Host "Expected: 80 reachable, 8080/3306 not reachable. SSH 22 should be limited by security group where possible."
 Write-Host ""
 
+Write-Host "10. Backend health"
+Write-Host "Local via nginx:  curl http://127.0.0.1/api/campus/public/health"
+Write-Host "Remote via nginx: curl http://your-host/api/campus/public/health"
+Write-Host ""
+
 if ($Full) {
-    Write-Host "10. Browser entrypoints"
+    Write-Host "11. Browser entrypoints"
     Write-Host "Frontend: http://localhost:5173"
     Write-Host "Backend:  http://localhost:8080"
     Write-Host "Customer onboarding: /user/campus/courier-onboarding"

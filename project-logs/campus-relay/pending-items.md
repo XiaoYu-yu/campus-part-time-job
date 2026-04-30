@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 140 待处理 / 建议
+## Step 140 待处理 / 进行中
 
 1. Step 139 已完成单机内测安全边界固化：
    - 新增 `docs/deployment/internal-trial-security-boundary.md`。
@@ -12,15 +12,25 @@
    - 服务器监听显示 `22 / 80` 为公网监听。
    - 服务器监听显示 `8080 / 3306` 仅为 `127.0.0.1`。
    - 本地公网探测显示 `22 / 80` 可达，`8080 / 3306` 不可达。
-3. Step 140 建议进入 backend health endpoint go / no-go：
-   - 先评估是否新增一个无业务副作用的最小健康检查接口。
-   - 如果新增，应只表达应用存活，不读取用户、订单、资金或地图数据。
-   - 如果不新增，应继续明确 remote smoke 是部署后健康证据。
-4. 当前仍未处理：
+3. Step 140 已完成本地最小实现：
+   - 新增 `GET /api/campus/public/health`。
+   - 接口只返回 `status/service/checkedAt`。
+   - 不读取用户、订单、资金、地图或数据库数据。
+   - 不改 `JwtInterceptor`，复用既有 `/api/campus/public/**` 公开前缀。
+   - remote smoke 已新增 `public health` 检查。
+4. Step 140 本地验证已完成：
+   - `.\mvnw.cmd -DskipTests compile` 通过。
+   - `npm run build` 通过。
+   - `commands.ps1` 可执行。
+5. Step 140 仍需完成：
+   - 推送本地提交。
+   - 服务器拉取最新代码并重建 compose。
+   - 验证 `http://<redacted>/api/campus/public/health`。
+   - 用新版 remote smoke 复跑远端验证。
+6. 当前仍未处理：
    - 当前没有 HTTPS、域名、证书、正式监控告警。
-   - backend 暂无独立健康检查接口，仍依赖业务 smoke。
    - SSH `22` 当前可达，长期内测建议在云安全组限制来源 IP。
-5. Step 140 继续禁止：
+7. Step 140 继续禁止：
    - 不改 bridge。
    - 不改 `request.js`。
    - 不改 token 附着逻辑。

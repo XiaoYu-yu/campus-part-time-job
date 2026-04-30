@@ -121,6 +121,22 @@ http://your-host:8080/api
 
 除非你明确临时开放了 8080 做诊断，并且诊断后立即关闭。
 
+### Backend health
+
+最小健康检查入口：
+
+```bash
+curl -s http://127.0.0.1/api/campus/public/health
+```
+
+公网等价入口：
+
+```bash
+curl -s http://your-host/api/campus/public/health
+```
+
+该接口只表达应用存活，不读取用户、订单、资金、地图或数据库数据。
+
 ## 当前实测摘要
 
 Step 139 已基于当前内测服务器做脱敏验证：
@@ -159,7 +175,7 @@ Step 139 已基于当前内测服务器做脱敏验证：
 ## 明确不做
 
 1. 不配置 HTTPS、域名或证书。
-2. 不新增后端 health endpoint。
+2. 不把 health endpoint 当成完整业务验收。
 3. 不改 bridge。
 4. 不改 `request.js`。
 5. 不改 token 附着逻辑。

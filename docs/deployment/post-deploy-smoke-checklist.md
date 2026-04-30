@@ -62,8 +62,9 @@
 
 ### 后端访问
 
-当前项目没有单独新增生产健康检查接口。部署后 smoke 可以用真实业务入口确认：
+部署后 smoke 可以先用最小 health 接口确认应用存活，再用真实业务入口确认鉴权和主链路：
 
+- [ ] backend health 接口可用：`GET /api/campus/public/health`。
 - [ ] customer 登录接口可用。
 - [ ] admin 登录接口可用。
 - [ ] 受保护接口未带 token 时不会误放行。
