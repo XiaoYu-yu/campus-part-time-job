@@ -2129,8 +2129,9 @@
 - [docs/deployment/post-deploy-smoke-checklist.md](../../docs/deployment/post-deploy-smoke-checklist.md)
 - [docs/deployment/remote-internal-trial-smoke.md](../../docs/deployment/remote-internal-trial-smoke.md)
 - [project-logs/campus-relay/step-140-backend-health-endpoint.md](step-140-backend-health-endpoint.md)
+- [project-logs/campus-relay/runtime/step-140-remote-smoke/remote-smoke-report.json](runtime/step-140-remote-smoke/remote-smoke-report.json)
 - [project-logs/campus-relay/summary.md](summary.md)
 - [project-logs/campus-relay/pending-items.md](pending-items.md)
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
-本轮是 backend health endpoint 最小实现轮：新增 `GET /api/campus/public/health`，复用既有 campus public 放行前缀，不改 `JwtInterceptor`；接口只返回应用存活、服务名和检查时间，不读取用户、订单、资金、地图或数据库数据。remote smoke 已新增 `public health` 检查，并同步 runbook、安全边界、部署后 smoke checklist、远端 smoke 文档和命令索引。本轮没有改 bridge、`request.js`、token 附着逻辑、鉴权主链路、前端页面、路由或旧兼容模块。
+本轮是 backend health endpoint 最小实现轮：新增 `GET /api/campus/public/health`，复用既有 campus public 放行前缀，不改 `JwtInterceptor`；接口只返回应用存活、服务名和检查时间，不读取用户、订单、资金、地图或数据库数据。remote smoke 已新增 `public health` 检查，并同步 runbook、安全边界、部署后 smoke checklist、远端 smoke 文档和命令索引。服务器已拉取重建，health 返回 `UP`，新版远端 smoke 25 项通过、0 项失败、0 项跳过。本轮没有改 bridge、`request.js`、token 附着逻辑、鉴权主链路、前端页面、路由或旧兼容模块。

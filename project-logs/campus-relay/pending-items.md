@@ -1,6 +1,35 @@
 # 校园代送待处理事项
 
-## Step 140 待处理 / 进行中
+## Step 141 待处理 / 建议
+
+1. Step 140 已完成 backend health endpoint 最小实现：
+   - 新增 `GET /api/campus/public/health`。
+   - 接口只返回 `status/service/checkedAt`。
+   - 不读取用户、订单、资金、地图或数据库数据。
+   - 不改 `JwtInterceptor`，复用既有 `/api/campus/public/**` 公开前缀。
+   - remote smoke 已新增 `public health` 检查。
+2. Step 140 已完成本地与服务器验证：
+   - `.\mvnw.cmd -DskipTests compile` 通过。
+   - `npm run build` 通过。
+   - `commands.ps1` 可执行。
+   - 服务器已备份、拉取最新代码并重建 compose。
+   - 服务器 health 返回 `code=200`、`status=UP`。
+   - 新版远端 smoke：25 项通过、0 项失败、0 项跳过。
+3. Step 141 建议二选一：
+   - A. 固化服务器最小日志留存 / 轮转策略说明，避免后续内测日志无限增长或定位困难。
+   - B. 固化 SSH `22` 安全组来源限制操作清单，由 owner 在云控制台手动执行。
+4. 当前仍未处理：
+   - 当前没有 HTTPS、域名、证书、正式监控告警。
+   - SSH `22` 当前可达，长期内测建议在云安全组限制来源 IP。
+   - 当前没有系统级日志轮转/留存策略文档。
+5. Step 141 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不删除旧兼容模块。
+   - 不提交真实密钥、公网 IP、服务器密码、GitHub token 或腾讯地图 key。
+
+## Step 140 历史待处理记录
 
 1. Step 139 已完成单机内测安全边界固化：
    - 新增 `docs/deployment/internal-trial-security-boundary.md`。
@@ -12,30 +41,20 @@
    - 服务器监听显示 `22 / 80` 为公网监听。
    - 服务器监听显示 `8080 / 3306` 仅为 `127.0.0.1`。
    - 本地公网探测显示 `22 / 80` 可达，`8080 / 3306` 不可达。
-3. Step 140 已完成本地最小实现：
+3. Step 140 建议：
+   - 先评估是否新增一个无业务副作用的最小健康检查接口。
+   - 如果新增，应只表达应用存活，不读取用户、订单、资金或地图数据。
+   - 如果不新增，应继续明确 remote smoke 是部署后健康证据。
+4. Step 140 已完成本地最小实现：
    - 新增 `GET /api/campus/public/health`。
    - 接口只返回 `status/service/checkedAt`。
    - 不读取用户、订单、资金、地图或数据库数据。
    - 不改 `JwtInterceptor`，复用既有 `/api/campus/public/**` 公开前缀。
    - remote smoke 已新增 `public health` 检查。
-4. Step 140 本地验证已完成：
+5. Step 140 本地验证已完成：
    - `.\mvnw.cmd -DskipTests compile` 通过。
    - `npm run build` 通过。
    - `commands.ps1` 可执行。
-5. Step 140 仍需完成：
-   - 推送本地提交。
-   - 服务器拉取最新代码并重建 compose。
-   - 验证 `http://<redacted>/api/campus/public/health`。
-   - 用新版 remote smoke 复跑远端验证。
-6. 当前仍未处理：
-   - 当前没有 HTTPS、域名、证书、正式监控告警。
-   - SSH `22` 当前可达，长期内测建议在云安全组限制来源 IP。
-7. Step 140 继续禁止：
-   - 不改 bridge。
-   - 不改 `request.js`。
-   - 不改 token 附着逻辑。
-   - 不删除旧兼容模块。
-   - 不提交真实密钥、公网 IP、服务器密码、GitHub token 或腾讯地图 key。
 
 ## Step 139 历史待处理记录
 

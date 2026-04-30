@@ -101,11 +101,24 @@ scripts/trial-operation/remote-smoke.ps1
 2. `npm run build` 通过。
 3. `powershell -ExecutionPolicy Bypass -File scripts\trial-operation\commands.ps1` 通过。
 
-待服务器部署后完成：
+## 服务器验证
 
-1. 服务器拉取最新提交并重建 compose。
-2. 通过 nginx `/api/campus/public/health` 验证 health。
-3. 用新版 `remote-smoke.ps1` 复跑远端 smoke。
+已完成：
+
+1. 推送 Step 140 提交到 GitHub。
+2. 服务器更新前已执行 `backup-stack.sh`。
+3. 服务器已 `git pull --ff-only origin main` 拉取 Step 140 提交。
+4. 服务器已重建 compose，`backend / frontend / mysql` 均为 running。
+5. 通过 nginx `/api/campus/public/health` 验证 health：
+   - `code=200`。
+   - `data.status=UP`。
+   - `data.service=campus-part-time-job`。
+6. 已用新版 `remote-smoke.ps1` 复跑远端 smoke：
+   - 报告路径：`project-logs/campus-relay/runtime/step-140-remote-smoke/remote-smoke-report.json`。
+   - PASS：25。
+   - FAIL：0。
+   - SKIP：0。
+   - 报告已脱敏 host、endpoint 和 token。
 
 ## 当前 bridge 结论
 
@@ -118,12 +131,10 @@ bridge 主线继续保持 `Phase A no-op` 冻结态：
 
 ## Step 141 建议
 
-待 Step 140 服务器验证完成后再确定。
+Step 140 health 与新版远端 smoke 已通过。
 
-如果 health 与新版远端 smoke 通过，Step 141 建议进入：
+Step 141 建议进入：
 
 1. 服务器最小日志留存 / 轮转策略说明。
 2. 或 SSH `22` 安全组来源限制操作清单。
 3. 或内测部署回滚入口再验证。
-
-如果 health 或远端 smoke 失败，Step 141 必须先修部署入口，不进入新功能开发。

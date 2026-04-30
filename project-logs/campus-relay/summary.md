@@ -149,7 +149,7 @@
 - 当前已完成：`Step 137 - GitHub / 服务器同步与远端 smoke 复核`
 - 当前已完成：`Step 138 - 内测服务器端口边界与备份告警加固`
 - 当前已完成：`Step 139 - 单机内测安全边界固化`
-- 当前进行中：`Step 140 - backend health endpoint 最小实现`
+- 当前已完成：`Step 140 - backend health endpoint 最小实现`
 - 当前日期：`2026-04-30`
 - Step 125 补充：已完成旧外卖模块删除前审计与 AI 协作交接文件建立。新增 `agent-collaboration.md`、`legacy-takeaway-removal-readiness.md`，审计覆盖 10 个旧前端页面、13 个旧 API 文件、14 个旧 Controller 等，明确标记每个模块的 campus 依赖关系。本轮仅做文档，未改任何业务代码。
 - Step 126 补充：已完成前端视觉优化优先轮：MainLayout 菜单"旧店铺状态"→"店铺状态兼容"，5 个旧兼容页面标题更新为"X 兼容管理"并新增兼容提示 banner，mock.js 旧词替换。本轮仅改前端可见文案，未删除任何旧模块代码。
@@ -166,7 +166,7 @@
 - Step 137 补充：已将本地 `main` 推送到 GitHub，并把服务器从 `1a2329e` fast-forward 到 `3bf59cb`；服务器更新前完成备份，更新后完成 compose 重建，backend / frontend / mysql 均为 running。已配置本机专用 SSH key 免密登录，私钥未进入仓库。远端 smoke 24 项通过、0 项失败、0 项跳过，报告路径为 `project-logs/campus-relay/runtime/step-137-remote-smoke/remote-smoke-report.json`。最新备份已通过非破坏性 restore drill；当前剩余风险是公网仍暴露 backend 8080 与 MySQL 3306，且 backup 脚本仍有 MySQL 8 tablespace 权限 warning。
 - Step 138 补充：已完成内测服务器端口边界与备份告警加固。服务器已拉取最新提交并重建 compose，公网 `80` 可访问，公网 `8080 / 3306` 不可访问；远端 smoke 已通过 nginx `/api` 入口复跑，24 项通过、0 项失败、0 项跳过，报告路径为 `project-logs/campus-relay/runtime/step-138-remote-smoke/remote-smoke-report.json`。`backup-stack.sh` 增加 `--no-tablespaces` 后备份成功，最新备份已通过非破坏性 restore drill，恢复出 7 笔订单，关键订单 `CR202604070002` 和 `CR202604060001` 均存在。本轮未改业务代码、bridge、接口、鉴权、路由或旧兼容模块。
 - Step 139 补充：已新增 `docs/deployment/internal-trial-security-boundary.md`，将单机内测端口策略固化为业务公网只走 frontend `80`、backend `8080` 与 MySQL `3306` 仅本机绑定、SSH `22` 仅作运维入口且建议安全组限制来源 IP；同步更新 runbook、部署后 smoke checklist、远端 smoke 文档和命令索引。已复核服务器监听和本地公网端口探测：`80 / 22` 可达，`8080 / 3306` 不可达。本轮未改业务代码、bridge、接口、鉴权、路由或旧兼容模块。
-- Step 140 进行中：已新增 `GET /api/campus/public/health` 最小 backend health endpoint，复用既有 campus public 放行前缀，不改 `JwtInterceptor`；接口只返回 `status/service/checkedAt`，不读数据库、不读用户/订单/资金/地图数据。已更新 remote smoke 先检查 public health，并同步 runbook、安全边界、部署后 smoke checklist、远端 smoke 文档和命令索引。本地 backend compile、frontend build 和命令索引验证已通过，待服务器拉取重建后做远端 health 与新版 smoke 验证。
+- Step 140 补充：已新增 `GET /api/campus/public/health` 最小 backend health endpoint，复用既有 campus public 放行前缀，不改 `JwtInterceptor`；接口只返回 `status/service/checkedAt`，不读数据库、不读用户/订单/资金/地图数据。已更新 remote smoke 先检查 public health，并同步 runbook、安全边界、部署后 smoke checklist、远端 smoke 文档和命令索引。本地 backend compile、frontend build 和命令索引验证均通过；服务器已拉取重建，health 返回 `UP`，新版远端 smoke 25 项通过、0 项失败、0 项跳过，报告路径为 `project-logs/campus-relay/runtime/step-140-remote-smoke/remote-smoke-report.json`。
 - Step 102 补充：已把 admin 主框架、仪表盘和运营人员页从旧外卖后台视觉收敛到校园兼职运营风格；本轮只改展示层和全局主题变量，未改 bridge、接口、鉴权、路由、API 调用顺序或后端业务。已通过 `npm run build`、`npm run test -- text.spec.js` 和 `git diff --check`；本地 admin seed 登录与员工列表复核返回 `管理员 / 技术部`。
 - Step 103 补充：已把登录页改为 `校内兼职运营台`，并将 admin 外壳 / dashboard 进一步按深色玻璃拟态方向重基线；同时补齐旧 session / localStorage / in-memory 场景的 admin 文本归一化兜底，覆盖顶部用户名、dashboard 欢迎语和 Employee 页姓名 / 职位 / 部门显示。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
 - Step 104 补充：根据 owner 反馈，已把 Step 103 的深色玻璃方向回调为浅色校园兼职运营风格；登录页、admin 主框架、dashboard 和 Employee 高曝光区域均切回浅色玻璃，同时修正 Element Plus `light-*` 主题变量映射，并修复 `/campus/courier-ops` 窄屏下配送员列表表格裁切导致“审核状态”列显示一半的问题。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
