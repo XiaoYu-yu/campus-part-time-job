@@ -2104,3 +2104,17 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是内测服务器端口边界与备份告警加固轮：将 compose 中 backend 8080 与 MySQL 3306 收敛为服务器本机 `127.0.0.1` 绑定，公网默认只保留 frontend 80；远端 smoke 推荐入口改为 nginx `/api` 反向代理；`backup-stack.sh` 增加 `--no-tablespaces`，用于消除 MySQL 8 tablespace 权限 warning。服务器已拉取最新提交并重建 compose，公网 `8080 / 3306` 已不可访问；远端 smoke 24 项通过、0 项失败、0 项跳过；最新备份已通过非破坏性 restore drill。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、后端业务、旧兼容模块或新增页面。
+
+## Step 139 - 单机内测安全边界固化
+
+- [docs/deployment/internal-trial-security-boundary.md](../../docs/deployment/internal-trial-security-boundary.md)
+- [docs/deployment/internal-trial-ops-runbook.md](../../docs/deployment/internal-trial-ops-runbook.md)
+- [docs/deployment/post-deploy-smoke-checklist.md](../../docs/deployment/post-deploy-smoke-checklist.md)
+- [docs/deployment/remote-internal-trial-smoke.md](../../docs/deployment/remote-internal-trial-smoke.md)
+- [scripts/trial-operation/commands.ps1](../../scripts/trial-operation/commands.ps1)
+- [project-logs/campus-relay/step-139-internal-trial-security-boundary.md](step-139-internal-trial-security-boundary.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是单机内测安全边界固化轮：新增安全边界文档，明确业务公网入口只走 frontend `80`，backend `8080` 与 MySQL `3306` 只绑定服务器本机，SSH `22` 仅作为运维入口并建议在云安全组限制来源 IP；同步 runbook、部署后 smoke checklist、远端 smoke 文档和命令索引。已复核当前服务器监听与公网探测：`22 / 80` 可达，`8080 / 3306` 不可达。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、后端业务、旧兼容模块或新增页面。

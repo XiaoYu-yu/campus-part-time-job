@@ -49,8 +49,14 @@ Write-Host "Legacy direct backend form, only if 8080 is intentionally public:"
 Write-Host "powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host:8080/api -FrontendBase http://your-host/"
 Write-Host ""
 
+Write-Host "9. Remote/internal-trial port boundary probe"
+Write-Host "Use a real host only at execution time; do not commit it to docs or reports:"
+Write-Host '$hostName = "your-host"; foreach ($port in @(22,80,8080,3306)) { $result = Test-NetConnection -ComputerName $hostName -Port $port -InformationLevel Quiet -WarningAction SilentlyContinue; [pscustomobject]@{ Port = $port; TcpReachable = $result } }'
+Write-Host "Expected: 80 reachable, 8080/3306 not reachable. SSH 22 should be limited by security group where possible."
+Write-Host ""
+
 if ($Full) {
-    Write-Host "9. Browser entrypoints"
+    Write-Host "10. Browser entrypoints"
     Write-Host "Frontend: http://localhost:5173"
     Write-Host "Backend:  http://localhost:8080"
     Write-Host "Customer onboarding: /user/campus/courier-onboarding"

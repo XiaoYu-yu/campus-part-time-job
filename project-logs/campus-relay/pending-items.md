@@ -1,6 +1,33 @@
 # 校园代送待处理事项
 
-## Step 139 待处理 / 建议
+## Step 140 待处理 / 建议
+
+1. Step 139 已完成单机内测安全边界固化：
+   - 新增 `docs/deployment/internal-trial-security-boundary.md`。
+   - 明确业务公网入口只走 frontend `80`。
+   - backend `8080` 和 MySQL `3306` 仅绑定 `127.0.0.1`。
+   - SSH `22` 仅作为运维入口，建议在云安全组限制来源 IP。
+   - 已同步 runbook、部署后 smoke checklist、远端 smoke 文档和命令索引。
+2. Step 139 已完成真实边界复核：
+   - 服务器监听显示 `22 / 80` 为公网监听。
+   - 服务器监听显示 `8080 / 3306` 仅为 `127.0.0.1`。
+   - 本地公网探测显示 `22 / 80` 可达，`8080 / 3306` 不可达。
+3. Step 140 建议进入 backend health endpoint go / no-go：
+   - 先评估是否新增一个无业务副作用的最小健康检查接口。
+   - 如果新增，应只表达应用存活，不读取用户、订单、资金或地图数据。
+   - 如果不新增，应继续明确 remote smoke 是部署后健康证据。
+4. 当前仍未处理：
+   - 当前没有 HTTPS、域名、证书、正式监控告警。
+   - backend 暂无独立健康检查接口，仍依赖业务 smoke。
+   - SSH `22` 当前可达，长期内测建议在云安全组限制来源 IP。
+5. Step 140 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不删除旧兼容模块。
+   - 不提交真实密钥、公网 IP、服务器密码、GitHub token 或腾讯地图 key。
+
+## Step 139 历史待处理记录
 
 1. Step 138 已完成内测服务器端口边界与备份告警加固：
    - `mysql` 端口改为 `127.0.0.1:${MYSQL_PORT:-3306}:3306`。
@@ -18,16 +45,6 @@
 3. Step 139 建议二选一：
    - A. 固化单机内测安全组 / 防火墙说明，明确服务器侧只开放 80，其余端口仅本机或 SSH tunnel 诊断。
    - B. 评估是否补一个最小 backend health endpoint，用于替代对业务登录接口的存活探测。
-4. 当前仍未处理：
-   - 当前没有 HTTPS、域名、证书、正式监控告警。
-   - backend 暂无独立健康检查接口，仍依赖业务 smoke。
-   - restore drill 第一次曾短暂出现临时 MySQL root 登录失败，复跑已通过；若后续复现，再加固 SQL readiness 检测。
-5. Step 139 继续禁止：
-   - 不改 bridge。
-   - 不改 `request.js`。
-   - 不改 token 附着逻辑。
-   - 不删除旧兼容模块。
-   - 不提交真实密钥、公网 IP、服务器密码、GitHub token 或腾讯地图 key。
 
 ## Step 138 历史待处理记录
 

@@ -164,3 +164,13 @@ Step 139 建议进入：
 1. 单机内测安全组 / 防火墙说明固化。
 2. 或补最小 backend health endpoint go / no-go。
 3. 或继续做服务器监控 / 日志留存最小方案。
+
+## Step 139 后续结果回填
+
+Step 139 已优先执行“单机内测安全组 / 防火墙说明固化”：
+
+1. 已新增 `docs/deployment/internal-trial-security-boundary.md`。
+2. 已明确业务公网入口只走 frontend `80`。
+3. 已明确 backend `8080` 与 MySQL `3306` 仅绑定服务器本机。
+4. 已复核当前服务器监听与公网端口探测，`8080 / 3306` 均不可公网访问。
+5. backend health endpoint 未在 Step 139 实现，建议 Step 140 单独做 go / no-go。

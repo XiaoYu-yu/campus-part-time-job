@@ -36,6 +36,10 @@
 5. API 访问：`http://<server-ip>/api`
 6. backend 8080 与 MySQL 3306 默认只绑定服务器本机 `127.0.0.1`，用于本机诊断或 SSH tunnel，不作为公网入口。
 
+端口与安全组边界详见：
+
+- [单机内测安全边界说明](internal-trial-security-boundary.md)
+
 注意：
 
 1. GitHub `main` 是源码真相来源。
@@ -75,6 +79,18 @@ curl -I http://127.0.0.1:8080/
 ```
 
 注意：backend 8080 默认不再作为公网入口。远端访问统一通过 frontend nginx 的 `/api` 反向代理。
+
+公网端口边界检查：
+
+```powershell
+$hostName = "your-host"
+foreach ($port in @(22, 80, 8080, 3306)) {
+  $result = Test-NetConnection -ComputerName $hostName -Port $port -InformationLevel Quiet -WarningAction SilentlyContinue
+  [pscustomobject]@{ Port = $port; TcpReachable = $result }
+}
+```
+
+期望：`80` 可访问，`8080 / 3306` 不可访问；`22` 只作为运维入口，建议在安全组限制来源 IP。
 
 ## 查看日志
 

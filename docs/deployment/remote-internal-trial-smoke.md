@@ -23,6 +23,10 @@
 5. 真实服务器 IP、域名、密码、JWT secret、腾讯地图 key 不写入仓库。
 6. bridge 仍处于 `Phase A no-op` 冻结态。
 
+端口边界检查详见：
+
+- [单机内测安全边界说明](internal-trial-security-boundary.md)
+
 ## 推荐命令
 
 在本地仓库根目录执行：
