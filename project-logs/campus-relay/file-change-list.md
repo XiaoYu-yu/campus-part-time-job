@@ -2077,3 +2077,13 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是服务器内测运维检查与恢复演练轮：通过 SSH 执行 runbook 中的 compose 状态检查、基础 HTTP 检查、备份脚本、非破坏性 restore drill 和日志查看流程。backend / frontend / mysql 均为 Up；备份与 restore drill 均通过，关键订单可恢复校验。当前主要风险是服务器部署 hash 不是本地最新提交，且公网仍暴露 backend 8080 和 mysql 3306。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、后端业务、旧兼容模块或新增页面。
+
+## Step 137 - GitHub / 服务器同步与远端 smoke 复核
+
+- [project-logs/campus-relay/step-137-github-server-sync-and-remote-smoke.md](step-137-github-server-sync-and-remote-smoke.md)
+- [project-logs/campus-relay/runtime/step-137-remote-smoke/remote-smoke-report.json](runtime/step-137-remote-smoke/remote-smoke-report.json)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是 GitHub / 服务器同步与远端 smoke 复核轮：将本地 `main` 推送到 GitHub，把服务器部署从 `1a2329e` fast-forward 到 `3bf59cb`，更新前完成备份，更新后完成 compose 重建与远端 smoke。远端 smoke 24 项通过、0 项失败、0 项跳过，报告已脱敏。另配置本机专用 SSH key 免密登录服务器，私钥未写入仓库。最新备份已通过非破坏性 restore drill。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、后端业务、旧兼容模块或新增页面。

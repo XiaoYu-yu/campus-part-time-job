@@ -146,6 +146,7 @@
 - 当前已完成：`Step 134 - 远端内测 smoke 准备`
 - 当前已完成：`Step 135 - 远端内测 smoke 真实验证`
 - 当前已完成：`Step 136 - 服务器内测运维检查与恢复演练`
+- 当前已完成：`Step 137 - GitHub / 服务器同步与远端 smoke 复核`
 - 当前日期：`2026-04-30`
 - Step 125 补充：已完成旧外卖模块删除前审计与 AI 协作交接文件建立。新增 `agent-collaboration.md`、`legacy-takeaway-removal-readiness.md`，审计覆盖 10 个旧前端页面、13 个旧 API 文件、14 个旧 Controller 等，明确标记每个模块的 campus 依赖关系。本轮仅做文档，未改任何业务代码。
 - Step 126 补充：已完成前端视觉优化优先轮：MainLayout 菜单"旧店铺状态"→"店铺状态兼容"，5 个旧兼容页面标题更新为"X 兼容管理"并新增兼容提示 banner，mock.js 旧词替换。本轮仅改前端可见文案，未删除任何旧模块代码。
@@ -159,6 +160,7 @@
 - Step 134 补充：已新增 `scripts/trial-operation/remote-smoke.ps1` 与 `docs/deployment/remote-internal-trial-smoke.md`，把服务器内测 API / SPA shell smoke 做成可参数化、默认脱敏的执行入口；同步更新部署后 smoke checklist、内测运维 runbook 和试运营命令索引。本轮没有改业务代码、bridge、接口、鉴权、路由或旧兼容模块。
 - Step 135 补充：已使用 Step 134 的 `remote-smoke.ps1` 对 owner 提供的内测服务器完成真实远端 smoke，API + frontend shell 共 24 项通过、0 项失败；报告默认脱敏 host 与 endpoint，未提交真实公网 IP、服务器密码、token 或地图 key。本轮没有改业务代码、bridge、接口、鉴权、路由或旧兼容模块。
 - Step 136 补充：已完成服务器内测运维检查与恢复演练。compose 中 backend / frontend / mysql 均为 Up；备份脚本成功生成 MySQL dump、uploads、env backup 和 manifest；非破坏性 restore drill 成功恢复最近备份并校验关键订单。当前主要风险是服务器部署 hash 仍停在 `1a2329e`，不是本地最新提交，且公网仍暴露 backend 8080 与 mysql 3306。本轮没有改业务代码、bridge、接口、鉴权、路由或旧兼容模块。
+- Step 137 补充：已将本地 `main` 推送到 GitHub，并把服务器从 `1a2329e` fast-forward 到 `3bf59cb`；服务器更新前完成备份，更新后完成 compose 重建，backend / frontend / mysql 均为 running。已配置本机专用 SSH key 免密登录，私钥未进入仓库。远端 smoke 24 项通过、0 项失败、0 项跳过，报告路径为 `project-logs/campus-relay/runtime/step-137-remote-smoke/remote-smoke-report.json`。最新备份已通过非破坏性 restore drill；当前剩余风险是公网仍暴露 backend 8080 与 MySQL 3306，且 backup 脚本仍有 MySQL 8 tablespace 权限 warning。
 - Step 102 补充：已把 admin 主框架、仪表盘和运营人员页从旧外卖后台视觉收敛到校园兼职运营风格；本轮只改展示层和全局主题变量，未改 bridge、接口、鉴权、路由、API 调用顺序或后端业务。已通过 `npm run build`、`npm run test -- text.spec.js` 和 `git diff --check`；本地 admin seed 登录与员工列表复核返回 `管理员 / 技术部`。
 - Step 103 补充：已把登录页改为 `校内兼职运营台`，并将 admin 外壳 / dashboard 进一步按深色玻璃拟态方向重基线；同时补齐旧 session / localStorage / in-memory 场景的 admin 文本归一化兜底，覆盖顶部用户名、dashboard 欢迎语和 Employee 页姓名 / 职位 / 部门显示。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
 - Step 104 补充：根据 owner 反馈，已把 Step 103 的深色玻璃方向回调为浅色校园兼职运营风格；登录页、admin 主框架、dashboard 和 Employee 高曝光区域均切回浅色玻璃，同时修正 Element Plus `light-*` 主题变量映射，并修复 `/campus/courier-ops` 窄屏下配送员列表表格裁切导致“审核状态”列显示一半的问题。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
@@ -2394,6 +2396,7 @@
 - [Step 134 日志](step-134-remote-internal-trial-smoke-prep.md)
 - [Step 135 日志](step-135-remote-internal-trial-smoke-validation.md)
 - [Step 136 日志](step-136-server-ops-check-and-restore-drill.md)
+- [Step 137 日志](step-137-github-server-sync-and-remote-smoke.md)
 - [远端内测 Smoke 执行说明](../../docs/deployment/remote-internal-trial-smoke.md)
 - [旧外卖模块删除前审计与分阶段收口计划](legacy-takeaway-removal-readiness.md)
 - [AI 协作交接文件](agent-collaboration.md)

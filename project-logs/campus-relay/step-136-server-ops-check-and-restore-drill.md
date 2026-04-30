@@ -176,3 +176,20 @@ bridge 主线继续保持 `Phase A no-op` 冻结态：
 4. 评估是否立即收紧公网端口，至少优先考虑不再公网暴露 MySQL 3306。
 
 如果暂时不更新服务器代码，下一轮至少应记录“服务器当前部署 hash 与本地最新提交不同”的风险，并暂停继续扩功能。
+
+## Step 137 后续结果回填
+
+Step 137 已按本建议执行：
+
+1. 本地 `main` 已推送到 GitHub。
+2. 服务器已从 `1a2329e` 更新到 `3bf59cb`。
+3. 更新前已执行备份。
+4. 更新后 compose 已重建，backend / frontend / mysql 均为 running。
+5. 远端 smoke 24 项通过、0 项失败、0 项跳过。
+6. 最新备份已通过非破坏性 restore drill。
+
+仍需后续处理：
+
+1. 公网 backend 8080 和 MySQL 3306 暴露边界。
+2. MySQL 8 dump tablespace 权限 warning。
+3. 独立 backend health endpoint 或等价健康检查能力。

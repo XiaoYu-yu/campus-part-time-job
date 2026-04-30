@@ -1,6 +1,33 @@
 # 校园代送待处理事项
 
-## Step 137 待处理
+## Step 138 待处理
+
+1. Step 137 已完成 GitHub / 服务器同步与远端 smoke 复核：
+   - 本地 `main` 已推送到 GitHub。
+   - 服务器已从 `1a2329e` 更新到 `3bf59cb`。
+   - 更新前已执行 `backup-stack.sh`。
+   - 更新后已重建 compose，backend / frontend / mysql 均为 running。
+   - 已配置本机专用 SSH key 免密登录，私钥未进入仓库。
+   - 远端 smoke 24 项通过、0 项失败、0 项跳过。
+   - 最新备份已通过非破坏性 restore drill。
+2. 当前主要风险：
+   - 服务器公网仍暴露 backend 8080 和 mysql 3306，不适合长期外部试用。
+   - backup 脚本在 MySQL 8 下仍有 tablespace 权限 warning，虽然本轮 restore drill 已验证最新备份可恢复。
+   - backend 暂无独立健康检查接口，仍依赖业务 smoke。
+   - 当前没有 HTTPS、域名、证书、正式反向代理、安全组收敛或监控告警。
+3. Step 138 建议：
+   - 优先评估是否关闭公网 MySQL 3306，只保留 compose 内网访问。
+   - 评估 backend 8080 是否继续公网暴露，或改成 frontend nginx 代理 `/api` 后只开放 80。
+   - 评估 `backup-stack.sh` 是否增加 `--no-tablespaces`，或给备份账号补最小权限。
+   - 继续使用 `remote-smoke.ps1` 做变更后的回归。
+4. Step 138 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不删除旧兼容模块。
+   - 不提交真实密钥、公网 IP、服务器密码、GitHub token 或腾讯地图 key。
+
+## Step 137 历史待处理记录
 
 1. Step 136 已完成服务器内测运维检查与恢复演练：
    - 服务器部署目录存在，工作区干净。
@@ -9,21 +36,11 @@
    - `backup-stack.sh` 已成功生成 MySQL dump、uploads 归档、env 备份和 manifest。
    - `restore-drill.sh` 已成功完成非破坏性恢复演练，关键订单 `CR202604070002` 和 `CR202604060001` 均存在。
    - 日志查看流程可用。
-2. 当前主要风险：
-   - 服务器部署 hash 仍停在 `1a2329e`，不是本地最新提交。
-   - 服务器公网仍暴露 backend 8080 和 mysql 3306，不适合长期正式外部试用。
-   - backend 暂无独立健康检查接口，仍依赖业务 smoke。
-3. Step 137 建议：
+2. Step 137 建议：
    - 先把本地领先提交推送到 GitHub。
    - 服务器先备份，再 `git pull --ff-only origin main`，再重建 compose。
    - 重建后重新执行 `remote-smoke.ps1`。
    - 评估是否先收紧公网端口，至少不要长期公网暴露 mysql 3306。
-4. Step 137 继续禁止：
-   - 不改 bridge。
-   - 不改 `request.js`。
-   - 不改 token 附着逻辑。
-   - 不删除旧兼容模块。
-   - 不提交真实密钥、公网 IP、服务器密码、GitHub token 或腾讯地图 key。
 
 ## Step 136 历史待处理记录
 
