@@ -2087,3 +2087,19 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是 GitHub / 服务器同步与远端 smoke 复核轮：将本地 `main` 推送到 GitHub，把服务器部署从 `1a2329e` fast-forward 到 `3bf59cb`，更新前完成备份，更新后完成 compose 重建与远端 smoke。远端 smoke 24 项通过、0 项失败、0 项跳过，报告已脱敏。另配置本机专用 SSH key 免密登录服务器，私钥未写入仓库。最新备份已通过非破坏性 restore drill。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、后端业务、旧兼容模块或新增页面。
+
+## Step 138 - 内测服务器端口边界与备份告警加固
+
+- [deploy/internal-trial/docker-compose.yml](../../deploy/internal-trial/docker-compose.yml)
+- [deploy/internal-trial/.env.example](../../deploy/internal-trial/.env.example)
+- [deploy/internal-trial/backup-stack.sh](../../deploy/internal-trial/backup-stack.sh)
+- [docs/deployment/internal-trial-ops-runbook.md](../../docs/deployment/internal-trial-ops-runbook.md)
+- [docs/deployment/remote-internal-trial-smoke.md](../../docs/deployment/remote-internal-trial-smoke.md)
+- [docs/deployment/post-deploy-smoke-checklist.md](../../docs/deployment/post-deploy-smoke-checklist.md)
+- [scripts/trial-operation/commands.ps1](../../scripts/trial-operation/commands.ps1)
+- [project-logs/campus-relay/step-138-internal-trial-port-hardening.md](step-138-internal-trial-port-hardening.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是内测服务器端口边界与备份告警加固轮：将 compose 中 backend 8080 与 MySQL 3306 收敛为服务器本机 `127.0.0.1` 绑定，公网默认只保留 frontend 80；远端 smoke 推荐入口改为 nginx `/api` 反向代理；`backup-stack.sh` 增加 `--no-tablespaces`，用于消除 MySQL 8 tablespace 权限 warning。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、后端业务、旧兼容模块或新增页面。

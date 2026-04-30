@@ -67,6 +67,12 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps
 
 该脚本默认脱敏报告中的 host；不要把真实公网 IP、域名或 token 写入仓库。
 
+单机内测服务器默认应只公网开放 frontend 80，backend 8080 和 MySQL 3306 仅绑定服务器本机 `127.0.0.1`。因此远端 smoke 推荐通过 nginx 反向代理访问：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host/api -FrontendBase http://your-host/
+```
+
 ## 三、customer smoke
 
 - [ ] 使用 customer 账号登录成功。

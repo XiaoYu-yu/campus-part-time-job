@@ -33,7 +33,8 @@
 2. Compose 文件：`deploy/internal-trial/docker-compose.yml`
 3. 真实环境变量：`deploy/internal-trial/.env`
 4. 前端访问：`http://<server-ip>/`
-5. backend 访问：`http://<server-ip>:8080/`
+5. API 访问：`http://<server-ip>/api`
+6. backend 8080 与 MySQL 3306 默认只绑定服务器本机 `127.0.0.1`，用于本机诊断或 SSH tunnel，不作为公网入口。
 
 注意：
 
@@ -66,6 +67,14 @@ curl -I http://127.0.0.1/
 
 1. 返回 `HTTP/1.1 200`
 2. 或等价 `200` 响应
+
+本机 backend 检查：
+
+```bash
+curl -I http://127.0.0.1:8080/
+```
+
+注意：backend 8080 默认不再作为公网入口。远端访问统一通过 frontend nginx 的 `/api` 反向代理。
 
 ## 查看日志
 
@@ -208,6 +217,12 @@ bash deploy/internal-trial/restore-drill.sh
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host:8080/api -FrontendBase http://your-host/
+```
+
+端口收敛后推荐使用：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host/api -FrontendBase http://your-host/
 ```
 
 具体说明见：

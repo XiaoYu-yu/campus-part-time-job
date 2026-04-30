@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 138 待处理
+## Step 138 待处理 / 进行中
 
 1. Step 137 已完成 GitHub / 服务器同步与远端 smoke 复核：
    - 本地 `main` 已推送到 GitHub。
@@ -15,12 +15,19 @@
    - backup 脚本在 MySQL 8 下仍有 tablespace 权限 warning，虽然本轮 restore drill 已验证最新备份可恢复。
    - backend 暂无独立健康检查接口，仍依赖业务 smoke。
    - 当前没有 HTTPS、域名、证书、正式反向代理、安全组收敛或监控告警。
-3. Step 138 建议：
-   - 优先评估是否关闭公网 MySQL 3306，只保留 compose 内网访问。
-   - 评估 backend 8080 是否继续公网暴露，或改成 frontend nginx 代理 `/api` 后只开放 80。
-   - 评估 `backup-stack.sh` 是否增加 `--no-tablespaces`，或给备份账号补最小权限。
-   - 继续使用 `remote-smoke.ps1` 做变更后的回归。
-4. Step 138 继续禁止：
+3. Step 138 已完成本地配置改动：
+   - `mysql` 端口改为 `127.0.0.1:${MYSQL_PORT:-3306}:3306`。
+   - `backend` 端口改为 `127.0.0.1:${BACKEND_PORT:-8080}:8080`。
+   - frontend 继续对外开放 80，并通过 nginx 代理 `/api`。
+   - `backup-stack.sh` 增加 `--no-tablespaces`。
+   - 远端 smoke 文档推荐入口切换为 `http://your-host/api`。
+4. Step 138 仍需完成：
+   - 推送本地配置到 GitHub。
+   - 服务器拉取最新代码并重建 compose。
+   - 确认公网 8080 / 3306 不可访问。
+   - 使用 `http://<redacted>/api` 重跑远端 smoke。
+   - 重新执行 backup + restore drill。
+5. Step 138 继续禁止：
    - 不改 bridge。
    - 不改 `request.js`。
    - 不改 token 附着逻辑。

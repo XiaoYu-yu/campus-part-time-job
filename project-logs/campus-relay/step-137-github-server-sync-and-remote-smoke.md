@@ -185,3 +185,13 @@ bridge 主线继续保持 `Phase A no-op` 冻结态：
 2. 评估 backend `8080` 是否继续公网暴露，或只保留 frontend `80` 对外并通过 nginx 代理 `/api`。
 3. 评估备份脚本 MySQL 8 tablespace warning 的处理方式：`--no-tablespaces` 或权限最小补齐。
 4. 继续保持 bridge 冻结，不借运维加固改业务。
+
+## Step 138 后续结果回填
+
+Step 138 已开始执行本建议：
+
+1. compose 中 backend 8080 与 MySQL 3306 已改为服务器本机 `127.0.0.1` 绑定。
+2. frontend 80 继续作为默认公网入口。
+3. 远端 smoke 推荐入口已切换为 `http://your-host/api`。
+4. `backup-stack.sh` 已增加 `--no-tablespaces`。
+5. 服务器侧重建、端口收敛验证和远端 smoke 待 Step 138 完成。

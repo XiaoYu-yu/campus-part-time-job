@@ -35,7 +35,7 @@ UPLOADS_VOLUME="${COMPOSE_PROJECT_NAME}_uploads-data"
 
 echo "[$(date '+%F %T')] Backing up MySQL to ${MYSQL_BACKUP_FILE}"
 docker compose --env-file "${ENV_FILE}" -f "${COMPOSE_FILE}" exec -T mysql \
-  sh -lc "exec mysqldump --single-transaction --quick --routines --triggers --default-character-set=utf8mb4 -u'${DB_USERNAME}' -p'${DB_PASSWORD}' '${DB_NAME}'" \
+  sh -lc "exec mysqldump --single-transaction --quick --routines --triggers --no-tablespaces --default-character-set=utf8mb4 -u'${DB_USERNAME}' -p'${DB_PASSWORD}' '${DB_NAME}'" \
   | gzip > "${MYSQL_BACKUP_FILE}"
 
 echo "[$(date '+%F %T')] Backing up uploads volume ${UPLOADS_VOLUME} to ${UPLOADS_BACKUP_FILE}"

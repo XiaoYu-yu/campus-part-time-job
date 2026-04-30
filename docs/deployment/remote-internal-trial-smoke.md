@@ -18,22 +18,23 @@
 
 1. 服务器已启动 backend、frontend 和数据库。
 2. 目标 API base 以 `/api` 结尾。
-3. 后端已包含当前内测样本账号和样本订单。
-4. 真实服务器 IP、域名、密码、JWT secret、腾讯地图 key 不写入仓库。
-5. bridge 仍处于 `Phase A no-op` 冻结态。
+3. 单机内测服务器默认只公网开放 frontend 80；backend 8080 和 MySQL 3306 应只绑定服务器本机 `127.0.0.1`。
+4. 后端已包含当前内测样本账号和样本订单。
+5. 真实服务器 IP、域名、密码、JWT secret、腾讯地图 key 不写入仓库。
+6. bridge 仍处于 `Phase A no-op` 冻结态。
 
 ## 推荐命令
 
 在本地仓库根目录执行：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host:8080/api -FrontendBase http://your-host/
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host/api -FrontendBase http://your-host/
 ```
 
 只检查 API 时：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host:8080/api
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host/api
 ```
 
 输出报告默认写入：
@@ -45,7 +46,7 @@ project-logs/campus-relay/runtime/step-134-remote-smoke/remote-smoke-report.json
 报告默认脱敏 host：
 
 ```json
-"apiBase": "http://<redacted>:8080/api"
+"apiBase": "http://<redacted>/api"
 ```
 
 不要在正常提交中使用 `-NoRedact`。如果临时需要完整 URL 留痕，把报告保存到未跟踪目录。
