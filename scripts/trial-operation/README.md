@@ -64,6 +64,14 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\server-post-dep
 
 The wrapper calls `remote-smoke.ps1`, optionally checks the server commit and Docker `LogConfig` through SSH, writes redacted reports, and does not modify server state. Do not commit reports generated with real host values unless they are redacted.
 
+Run the read-only server ops health check when you need disk, Docker, container log, and backup directory visibility:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\server-ops-health.ps1 -SshHost your-host -SshIdentity "$env:USERPROFILE\.ssh\campus_trial_ed25519"
+```
+
+This script reads `df`, `docker system df`, compose status, current container log sizes, and backup directory usage through SSH. It writes a redacted report and does not modify server state.
+
 If a deployed frontend requires screenshot-level validation, reuse the local browser smoke script with explicit bases and an untracked runtime directory:
 
 ```powershell

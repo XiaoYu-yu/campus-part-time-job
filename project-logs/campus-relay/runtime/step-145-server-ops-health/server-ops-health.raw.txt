@@ -1,0 +1,27 @@
+﻿timestamp=2026-04-30T23:38:08+08:00
+hostname=xiaoyu
+deploy_commit=1f343ce
+__SECTION__ df
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/vda3        40G  9.3G   28G  25% /
+/dev/vda3        40G  9.3G   28G  25% /
+__SECTION__ docker_system_df
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          4         3         3.39GB    3.384GB (99%)
+Containers      3         3         233.5kB   0B (0%)
+Local Volumes   8         2         1.54GB    1.318GB (85%)
+Build Cache     60        0         2.564GB   2.056GB
+__SECTION__ compose_ps
+NAME                      IMAGE                   COMMAND                  SERVICE    CREATED       STATUS       PORTS
+campus-trial-backend-1    campus-trial-backend    "java -jar /app/app.…"   backend    2 hours ago   Up 2 hours   127.0.0.1:8080->8080/tcp
+campus-trial-frontend-1   campus-trial-frontend   "/docker-entrypoint.…"   frontend   2 hours ago   Up 2 hours   0.0.0.0:80->80/tcp, [::]:80->80/tcp
+campus-trial-mysql-1      mysql:8.4               "docker-entrypoint.s…"   mysql      2 hours ago   Up 2 hours   127.0.0.1:3306->3306/tcp, 33060/tcp
+__SECTION__ container_log_sizes
+campus-trial-backend-1 log_size=16K log_config={"Type":"json-file","Config":{"max-file":"5","max-size":"20m"}}
+campus-trial-frontend-1 log_size=28K log_config={"Type":"json-file","Config":{"max-file":"5","max-size":"20m"}}
+campus-trial-mysql-1 log_size=4.0K log_config={"Type":"json-file","Config":{"max-file":"5","max-size":"20m"}}
+__SECTION__ backup_usage
+184K	/opt/campus-part-time-job/deploy/internal-trial/backups
+meta
+mysql
+uploads

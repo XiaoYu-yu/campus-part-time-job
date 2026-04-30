@@ -1,0 +1,15 @@
+﻿{
+    "generatedAt":  "2026-04-30T23:38:09",
+    "sshHost":  "\u003credacted-host\u003e",
+    "hostRedacted":  true,
+    "status":  "PASS",
+    "message":  "read-only server ops health checks completed",
+    "rawOutputPath":  "server-ops-health.raw.txt",
+    "checks":  {
+                   "sshExitCode":  0,
+                   "dfSection":  true,
+                   "dockerSystemDfSection":  true,
+                   "containerLogSizeSection":  true,
+                   "backupUsageSection":  true
+               }
+}

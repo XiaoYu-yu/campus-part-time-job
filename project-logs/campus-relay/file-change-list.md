@@ -2187,3 +2187,17 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是服务器部署后验证清单脚本化轮：新增只读 `server-post-deploy-check.ps1`，用于串联 remote smoke 和可选 key-based SSH 部署检查；真实运行通过，remote smoke 25 项通过、0 项失败、0 项跳过，SSH 检查确认部署提交读取与三个核心容器 LogConfig 检查通过。报告已脱敏。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库、旧兼容模块或服务器 SSH 配置。
+
+## Step 145 - 内测服务器运维健康检查
+
+- [scripts/trial-operation/server-ops-health.ps1](../../scripts/trial-operation/server-ops-health.ps1)
+- [scripts/trial-operation/README.md](../../scripts/trial-operation/README.md)
+- [scripts/trial-operation/commands.ps1](../../scripts/trial-operation/commands.ps1)
+- [project-logs/campus-relay/runtime/step-145-server-ops-health/server-ops-health-report.json](runtime/step-145-server-ops-health/server-ops-health-report.json)
+- [project-logs/campus-relay/runtime/step-145-server-ops-health/server-ops-health.raw.txt](runtime/step-145-server-ops-health/server-ops-health.raw.txt)
+- [project-logs/campus-relay/step-145-server-ops-health-check.md](step-145-server-ops-health-check.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是内测服务器运维健康检查轮：新增只读 `server-ops-health.ps1`，通过 key-based SSH 读取磁盘、Docker 占用、compose 状态、容器日志大小和备份目录占用；真实运行通过，根分区约 25% 使用，核心容器日志均为 KB 级，备份目录约 184K。本轮没有执行 Docker prune、没有删除日志或备份，也没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库或旧兼容模块。

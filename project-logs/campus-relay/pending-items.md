@@ -1,22 +1,25 @@
 # 校园代送待处理事项
 
-## Step 145 待处理 / 建议
+## Step 146 待处理 / 建议
 
-1. Step 144 已完成服务器部署后验证清单脚本化：
-   - 新增 `scripts/trial-operation/server-post-deploy-check.ps1`。
-   - 脚本可串起 remote smoke 和可选 SSH 只读检查。
-   - 真实运行通过：remote smoke 25 项通过、0 项失败、0 项跳过；SSH 部署检查通过。
-   - 报告路径：`project-logs/campus-relay/runtime/step-144-server-post-deploy-check/`。
-2. Step 145 建议进入内测运维最小监控 / 磁盘空间检查：
-   - 固化服务器磁盘空间检查命令。
-   - 固化 Docker 日志占用查看命令。
-   - 固化备份目录占用查看命令。
-   - 不引入完整监控系统，不接告警平台。
+1. Step 145 已完成内测服务器运维健康检查：
+   - 新增 `scripts/trial-operation/server-ops-health.ps1`。
+   - 真实运行通过。
+   - 根分区约 25% 使用。
+   - 三个核心容器日志均为 KB 级。
+   - 备份目录约 184K。
+   - Docker image / build cache 存在可回收空间，但本轮未执行清理。
+   - 报告路径：`project-logs/campus-relay/runtime/step-145-server-ops-health/`。
+2. Step 146 建议进入“内测服务器清理与留存策略 go / no-go”：
+   - 评估 Docker image / build cache 是否需要手动清理。
+   - 评估备份目录是否需要保留最近 N 份。
+   - 不默认执行 `docker system prune`。
+   - 不默认删除备份。
 3. 当前仍未处理：
    - 当前没有 HTTPS、域名、证书、正式监控告警。
    - SSH `22` 当前可达，长期内测建议在云安全组限制来源 IP。
    - password login 仍保留，关闭前必须确认 key 登录和安全组回滚路径。
-4. Step 145 继续禁止：
+4. Step 146 继续禁止：
    - 不改 bridge。
    - 不改 `request.js`。
    - 不改 token 附着逻辑。

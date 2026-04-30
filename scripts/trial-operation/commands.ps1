@@ -73,8 +73,13 @@ Write-Host "Runs remote smoke and optional read-only SSH checks. Use placeholder
 Write-Host 'powershell -ExecutionPolicy Bypass -File scripts\trial-operation\server-post-deploy-check.ps1 -ApiBase http://your-host/api -FrontendBase http://your-host/ -SshHost your-host -SshIdentity "$env:USERPROFILE\.ssh\campus_trial_ed25519"'
 Write-Host ""
 
+Write-Host "13. Server ops health"
+Write-Host "Read-only SSH check for disk, Docker usage, container log sizes, and backup directory usage:"
+Write-Host 'powershell -ExecutionPolicy Bypass -File scripts\trial-operation\server-ops-health.ps1 -SshHost your-host -SshIdentity "$env:USERPROFILE\.ssh\campus_trial_ed25519"'
+Write-Host ""
+
 if ($Full) {
-    Write-Host "13. Browser entrypoints"
+    Write-Host "14. Browser entrypoints"
     Write-Host "Frontend: http://localhost:5173"
     Write-Host "Backend:  http://localhost:8080"
     Write-Host "Customer onboarding: /user/campus/courier-onboarding"
