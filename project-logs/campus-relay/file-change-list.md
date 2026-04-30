@@ -2050,8 +2050,6 @@
 - [docs/deployment/remote-internal-trial-smoke.md](../../docs/deployment/remote-internal-trial-smoke.md)
 - [docs/deployment/post-deploy-smoke-checklist.md](../../docs/deployment/post-deploy-smoke-checklist.md)
 - [docs/deployment/internal-trial-ops-runbook.md](../../docs/deployment/internal-trial-ops-runbook.md)
-- [project-logs/campus-relay/runtime/step-134-remote-smoke/backend.log](runtime/step-134-remote-smoke/backend.log)
-- [project-logs/campus-relay/runtime/step-134-remote-smoke/frontend.log](runtime/step-134-remote-smoke/frontend.log)
 - [project-logs/campus-relay/runtime/step-134-remote-smoke/local-remote-smoke-report.json](runtime/step-134-remote-smoke/local-remote-smoke-report.json)
 - [project-logs/campus-relay/step-133-local-internal-trial-rc-review.md](step-133-local-internal-trial-rc-review.md)
 - [project-logs/campus-relay/step-134-remote-internal-trial-smoke-prep.md](step-134-remote-internal-trial-smoke-prep.md)
