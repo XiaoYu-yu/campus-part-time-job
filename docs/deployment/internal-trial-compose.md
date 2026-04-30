@@ -26,7 +26,7 @@
 
 1. Docker Engine
 2. Docker Compose Plugin
-3. 可用的 80 / 8080 / 3306 端口，或你自己在 `.env` 中改端口映射
+3. 可用的 80 端口；8080 / 3306 默认只绑定服务器本机 `127.0.0.1`
 4. 一个真实但未提交到仓库的腾讯地图 JS SDK key
 
 如果你暂时不演示地图，仍然建议保留 `VITE_TENCENT_MAP_KEY` 配置位，但可以在演示口径中明确该能力属于只读预览。
@@ -59,6 +59,18 @@ docker compose \
 ```
 
 ## 组件说明
+
+### 日志轮转
+
+三类容器统一使用 Docker `json-file` 日志轮转：
+
+1. 默认单文件 `20m`
+2. 默认保留 `5` 个文件
+3. 可通过 `.env` 中的 `DOCKER_LOG_MAX_SIZE / DOCKER_LOG_MAX_FILE` 调整
+
+详细策略见：
+
+- [单机内测日志留存与轮转策略](internal-trial-log-retention.md)
 
 ### MySQL
 
@@ -132,10 +144,10 @@ bash deploy/internal-trial/restore-drill.sh
 默认端口映射：
 
 1. frontend: `http://<server-ip>:${FRONTEND_PORT}`
-2. backend: `http://<server-ip>:${BACKEND_PORT}`
-3. mysql: `<server-ip>:${MYSQL_PORT}`
+2. backend: `127.0.0.1:${BACKEND_PORT}`，仅服务器本机诊断或 SSH tunnel 使用
+3. mysql: `127.0.0.1:${MYSQL_PORT}`，仅服务器本机诊断或 SSH tunnel 使用
 
-如不希望暴露 backend / mysql，可在内网环境里自行改 compose 端口映射。
+远端访问 API 应通过 frontend nginx 的 `/api` 反向代理，不再默认暴露 backend 8080 或 MySQL 3306。
 
 ## 回滚与重置
 

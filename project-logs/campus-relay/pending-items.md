@@ -1,6 +1,34 @@
 # 校园代送待处理事项
 
-## Step 141 待处理 / 建议
+## Step 142 待处理 / 建议
+
+1. Step 141 已完成单机内测日志留存 / 轮转策略：
+   - `deploy/internal-trial/docker-compose.yml` 已给 `mysql / backend / frontend` 加 Docker `json-file` 日志轮转。
+   - 默认 `DOCKER_LOG_MAX_SIZE=20m`、`DOCKER_LOG_MAX_FILE=5`。
+   - `deploy/internal-trial/.env.example` 已补可调参数。
+   - 新增 `docs/deployment/internal-trial-log-retention.md`。
+   - 已同步 runbook、compose 部署说明、部署后 smoke checklist 和命令索引。
+2. Step 141 本地验证已完成：
+   - `powershell -ExecutionPolicy Bypass -File scripts\trial-operation\commands.ps1` 通过。
+   - `.\mvnw.cmd -DskipTests compile` 通过。
+   - `npm run build` 通过。
+   - `git diff --check` 通过。
+   - 本机当前没有 Docker CLI，因此 `docker compose config` 与 `LogConfig` 生效验证后置到 Step 142 的服务器部署验证。
+3. Step 142 建议二选一：
+   - A. 将 Step 141 日志轮转配置部署到服务器，重建 compose 后验证 `LogConfig`，再跑 health + remote smoke。
+   - B. 如果暂不动服务器，固化 SSH `22` 安全组来源限制操作清单，由 owner 在云控制台手动执行。
+4. 当前仍未处理：
+   - 当前没有 HTTPS、域名、证书、正式监控告警。
+   - SSH `22` 当前可达，长期内测建议在云安全组限制来源 IP。
+   - Step 141 的 compose 日志轮转配置需要在下一次服务器 `git pull + compose up -d` 后才会在运行容器中生效。
+5. Step 142 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不删除旧兼容模块。
+   - 不提交真实密钥、公网 IP、服务器密码、GitHub token 或腾讯地图 key。
+
+## Step 141 历史待处理记录
 
 1. Step 140 已完成 backend health endpoint 最小实现：
    - 新增 `GET /api/campus/public/health`。
@@ -18,16 +46,9 @@
 3. Step 141 建议二选一：
    - A. 固化服务器最小日志留存 / 轮转策略说明，避免后续内测日志无限增长或定位困难。
    - B. 固化 SSH `22` 安全组来源限制操作清单，由 owner 在云控制台手动执行。
-4. 当前仍未处理：
-   - 当前没有 HTTPS、域名、证书、正式监控告警。
-   - SSH `22` 当前可达，长期内测建议在云安全组限制来源 IP。
-   - 当前没有系统级日志轮转/留存策略文档。
-5. Step 141 继续禁止：
-   - 不改 bridge。
-   - 不改 `request.js`。
-   - 不改 token 附着逻辑。
-   - 不删除旧兼容模块。
-   - 不提交真实密钥、公网 IP、服务器密码、GitHub token 或腾讯地图 key。
+4. Step 141 已选择 A 并完成：
+   - Compose 中 `mysql / backend / frontend` 统一启用 Docker `json-file` 日志轮转。
+   - 新增日志留存文档和部署后检查入口。
 
 ## Step 140 历史待处理记录
 

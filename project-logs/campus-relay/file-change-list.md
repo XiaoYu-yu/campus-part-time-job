@@ -2135,3 +2135,20 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是 backend health endpoint 最小实现轮：新增 `GET /api/campus/public/health`，复用既有 campus public 放行前缀，不改 `JwtInterceptor`；接口只返回应用存活、服务名和检查时间，不读取用户、订单、资金、地图或数据库数据。remote smoke 已新增 `public health` 检查，并同步 runbook、安全边界、部署后 smoke checklist、远端 smoke 文档和命令索引。服务器已拉取重建，health 返回 `UP`，新版远端 smoke 25 项通过、0 项失败、0 项跳过。本轮没有改 bridge、`request.js`、token 附着逻辑、鉴权主链路、前端页面、路由或旧兼容模块。
+
+## Step 141 - 单机内测日志留存与轮转策略
+
+- [deploy/internal-trial/docker-compose.yml](../../deploy/internal-trial/docker-compose.yml)
+- [deploy/internal-trial/.env.example](../../deploy/internal-trial/.env.example)
+- [docs/deployment/internal-trial-log-retention.md](../../docs/deployment/internal-trial-log-retention.md)
+- [docs/deployment/internal-trial-ops-runbook.md](../../docs/deployment/internal-trial-ops-runbook.md)
+- [docs/deployment/internal-trial-compose.md](../../docs/deployment/internal-trial-compose.md)
+- [docs/deployment/post-deploy-smoke-checklist.md](../../docs/deployment/post-deploy-smoke-checklist.md)
+- [scripts/trial-operation/commands.ps1](../../scripts/trial-operation/commands.ps1)
+- [project-logs/campus-relay/step-140-backend-health-endpoint.md](step-140-backend-health-endpoint.md)
+- [project-logs/campus-relay/step-141-internal-trial-log-retention.md](step-141-internal-trial-log-retention.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是单机内测日志留存与轮转策略轮：为 compose 中 `mysql / backend / frontend` 统一启用 Docker `json-file` 日志轮转，默认 `20m / 5`；`.env.example` 新增可调参数；新增日志留存文档并同步 runbook、compose 部署说明、部署后 smoke checklist 和命令索引。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库或旧兼容模块。

@@ -60,8 +60,16 @@ Write-Host "Local via nginx:  curl http://127.0.0.1/api/campus/public/health"
 Write-Host "Remote via nginx: curl http://your-host/api/campus/public/health"
 Write-Host ""
 
+Write-Host "11. Internal-trial Docker log rotation check"
+Write-Host "Run on the server after compose is up. Replace container names if COMPOSE_PROJECT_NAME differs:"
+Write-Host "docker inspect --format='{{json .HostConfig.LogConfig}}' campus-trial-backend-1"
+Write-Host "docker inspect --format='{{json .HostConfig.LogConfig}}' campus-trial-frontend-1"
+Write-Host "docker inspect --format='{{json .HostConfig.LogConfig}}' campus-trial-mysql-1"
+Write-Host "Expected: json-file with max-size=20m and max-file=5 unless overridden in .env."
+Write-Host ""
+
 if ($Full) {
-    Write-Host "11. Browser entrypoints"
+    Write-Host "12. Browser entrypoints"
     Write-Host "Frontend: http://localhost:5173"
     Write-Host "Backend:  http://localhost:8080"
     Write-Host "Customer onboarding: /user/campus/courier-onboarding"

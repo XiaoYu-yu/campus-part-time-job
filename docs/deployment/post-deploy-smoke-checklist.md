@@ -60,6 +60,23 @@
 - [ ] MySQL `3306` 不可公网访问。
 - [ ] 远端 smoke 使用 `http://your-host/api`，不再默认使用 `http://your-host:8080/api`。
 
+### 单机内测日志轮转
+
+单机内测服务器应先阅读 [单机内测日志留存与轮转策略](internal-trial-log-retention.md)。
+
+- [ ] `backend` 容器启用 Docker `json-file` 日志轮转。
+- [ ] `frontend` 容器启用 Docker `json-file` 日志轮转。
+- [ ] `mysql` 容器启用 Docker `json-file` 日志轮转。
+- [ ] 默认或当前 `.env` 生效的 `max-size / max-file` 已记录。
+
+推荐检查命令：
+
+```bash
+docker inspect --format='{{json .HostConfig.LogConfig}}' campus-trial-backend-1
+docker inspect --format='{{json .HostConfig.LogConfig}}' campus-trial-frontend-1
+docker inspect --format='{{json .HostConfig.LogConfig}}' campus-trial-mysql-1
+```
+
 ### 后端访问
 
 部署后 smoke 可以先用最小 health 接口确认应用存活，再用真实业务入口确认鉴权和主链路：

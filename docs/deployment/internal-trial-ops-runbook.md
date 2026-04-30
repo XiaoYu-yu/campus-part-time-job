@@ -40,6 +40,10 @@
 
 - [单机内测安全边界说明](internal-trial-security-boundary.md)
 
+日志留存与轮转策略详见：
+
+- [单机内测日志留存与轮转策略](internal-trial-log-retention.md)
+
 注意：
 
 1. GitHub `main` 是源码真相来源。
@@ -124,6 +128,34 @@ docker compose --env-file deploy/internal-trial/.env -f deploy/internal-trial/do
 ```bash
 docker compose --env-file deploy/internal-trial/.env -f deploy/internal-trial/docker-compose.yml logs mysql --tail=200
 ```
+
+## 日志留存与轮转
+
+当前 compose 已对 `mysql`、`backend`、`frontend` 三个容器启用 Docker `json-file` 日志轮转。
+
+默认配置：
+
+1. `DOCKER_LOG_MAX_SIZE=20m`
+2. `DOCKER_LOG_MAX_FILE=5`
+3. 单个容器理论日志上限约 `100m`
+
+查看实际生效配置：
+
+```bash
+docker inspect --format='{{json .HostConfig.LogConfig}}' campus-trial-backend-1
+docker inspect --format='{{json .HostConfig.LogConfig}}' campus-trial-frontend-1
+docker inspect --format='{{json .HostConfig.LogConfig}}' campus-trial-mysql-1
+```
+
+如果容器名和示例不一致，先执行：
+
+```bash
+docker compose --env-file deploy/internal-trial/.env -f deploy/internal-trial/docker-compose.yml ps
+```
+
+详细策略见：
+
+- [单机内测日志留存与轮转策略](internal-trial-log-retention.md)
 
 ## 启动或重建
 
