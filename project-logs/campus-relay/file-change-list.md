@@ -2222,3 +2222,13 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是内测入口状态复盘轮：确认本地 `main` 与 GitHub `origin/main` 一致，服务器运行态 remote smoke 25 项通过、0 项失败、0 项跳过，key SSH 与 Docker LogConfig 只读检查通过。当前结论为“本地 / 内测型试运营可用，但不是完整产品级正式上线”。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库或旧兼容模块。
+
+## Step 148 - 内测用户试用说明与账号发放边界
+
+- [docs/deployment/internal-trial-user-test-guide.md](../../docs/deployment/internal-trial-user-test-guide.md)
+- [project-logs/campus-relay/step-148-internal-trial-user-test-guide.md](step-148-internal-trial-user-test-guide.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是内测用户试用说明与账号发放边界轮：新增内测用户说明，明确 owner-controlled 内测参与范围、三类账号发放边界、各端可测和不要测范围、反馈记录格式与测试前检查。本轮没有提交真实账号密码、公网 IP、服务器密码、私钥、GitHub token 或腾讯地图 key；没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库或旧兼容模块。

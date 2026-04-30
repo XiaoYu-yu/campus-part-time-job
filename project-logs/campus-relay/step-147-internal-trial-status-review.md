@@ -157,3 +157,9 @@ Step 148 建议二选一：
 2. 若继续运维：把服务器部署目录也 fast-forward 到最新文档 / 脚本提交，但不重建容器，随后用 `server-post-deploy-check.ps1` 复核。
 
 默认建议选择 1，因为当前真正缺的是内测使用边界，而不是继续堆运维脚本。
+
+Step 148 已完成补充：
+
+1. 新增 `docs/deployment/internal-trial-user-test-guide.md`。
+2. 已明确内测参与范围、账号发放边界、可测范围、不要测范围和反馈记录格式。
+3. 未提交真实账号密码或任何密钥。
