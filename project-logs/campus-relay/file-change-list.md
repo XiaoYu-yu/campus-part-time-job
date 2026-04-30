@@ -2211,3 +2211,14 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是内测服务器清理与留存策略 go / no-go 轮：基于 Step 145 真实读数，当前磁盘、日志、备份均无清理压力，最终选择 no-go；不执行 Docker prune、不删除备份、不删除日志。新增清理与留存策略文档，固化触发条件、Docker 清理边界、备份留存边界和容器日志边界。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库或旧兼容模块。
+
+## Step 147 - 内测入口状态复盘
+
+- [project-logs/campus-relay/runtime/step-147-internal-trial-status-review/remote-smoke-report.json](runtime/step-147-internal-trial-status-review/remote-smoke-report.json)
+- [project-logs/campus-relay/runtime/step-147-internal-trial-status-review/server-post-deploy-check-report.json](runtime/step-147-internal-trial-status-review/server-post-deploy-check-report.json)
+- [project-logs/campus-relay/step-147-internal-trial-status-review.md](step-147-internal-trial-status-review.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是内测入口状态复盘轮：确认本地 `main` 与 GitHub `origin/main` 一致，服务器运行态 remote smoke 25 项通过、0 项失败、0 项跳过，key SSH 与 Docker LogConfig 只读检查通过。当前结论为“本地 / 内测型试运营可用，但不是完整产品级正式上线”。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库或旧兼容模块。
