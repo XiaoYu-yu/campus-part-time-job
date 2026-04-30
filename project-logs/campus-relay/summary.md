@@ -158,6 +158,7 @@
 - 当前已完成：`Step 146 - 内测服务器清理与留存策略 go / no-go`
 - 当前已完成：`Step 147 - 内测入口状态复盘`
 - 当前已完成：`Step 148 - 内测用户试用说明与账号发放边界`
+- 当前已完成：`Step 149 - 内测反馈记录模板与分级规则`
 - 当前日期：`2026-04-30`
 - Step 125 补充：已完成旧外卖模块删除前审计与 AI 协作交接文件建立。新增 `agent-collaboration.md`、`legacy-takeaway-removal-readiness.md`，审计覆盖 10 个旧前端页面、13 个旧 API 文件、14 个旧 Controller 等，明确标记每个模块的 campus 依赖关系。本轮仅做文档，未改任何业务代码。
 - Step 126 补充：已完成前端视觉优化优先轮：MainLayout 菜单"旧店铺状态"→"店铺状态兼容"，5 个旧兼容页面标题更新为"X 兼容管理"并新增兼容提示 banner，mock.js 旧词替换。本轮仅改前端可见文案，未删除任何旧模块代码。
@@ -183,6 +184,7 @@
 - Step 146 补充：已完成内测服务器清理与留存策略 go / no-go。基于 Step 145 的真实读数，当前根分区使用率低、容器日志和备份目录都很小，Docker 可回收空间未形成部署阻塞，因此结论为 no-go：不执行 `docker system prune`、不删备份、不删日志。新增 `docs/deployment/internal-trial-cleanup-retention.md` 固化清理触发条件、Docker 清理边界、备份留存边界和日志边界。本轮未改业务代码、bridge、接口、鉴权、路由、前端页面或旧兼容模块。
 - Step 147 补充：已完成内测入口状态复盘。本地 `main` 与 GitHub `origin/main` 均指向 `f06d837`；服务器运行态通过 `server-post-deploy-check.ps1` 复核，remote smoke 25 项通过、0 项失败、0 项跳过，key SSH 与 LogConfig 只读检查通过。服务器部署目录当前仍为运行态提交 `1f343ce`，Step 142 之后的提交主要是本地文档、日志和运维脚本，不影响当前容器运行。当前结论是“本地 / 内测型试运营可用，但不是完整产品级正式上线”。
 - Step 148 补充：已新增 `docs/deployment/internal-trial-user-test-guide.md`，明确 owner-controlled 内测参与范围、admin / customer / parttime 三类账号发放边界、各端可测 / 不要测范围、反馈记录格式和测试前检查。文档不写真实账号密码、服务器 IP、服务器密码、私钥、GitHub token 或腾讯地图 key。本轮未改业务代码、bridge、接口、鉴权、路由、前端页面或旧兼容模块。
+- Step 149 补充：已新增 `docs/deployment/internal-trial-feedback-triage.md`，固化内测反馈记录模板、阻塞 / 主要 / 次要 / 建议四类严重程度定义、进入修复的条件、不会进入当前修复的反馈类型和敏感信息禁止项。本轮未改业务代码、bridge、接口、鉴权、路由、前端页面或旧兼容模块。
 - Step 102 补充：已把 admin 主框架、仪表盘和运营人员页从旧外卖后台视觉收敛到校园兼职运营风格；本轮只改展示层和全局主题变量，未改 bridge、接口、鉴权、路由、API 调用顺序或后端业务。已通过 `npm run build`、`npm run test -- text.spec.js` 和 `git diff --check`；本地 admin seed 登录与员工列表复核返回 `管理员 / 技术部`。
 - Step 103 补充：已把登录页改为 `校内兼职运营台`，并将 admin 外壳 / dashboard 进一步按深色玻璃拟态方向重基线；同时补齐旧 session / localStorage / in-memory 场景的 admin 文本归一化兜底，覆盖顶部用户名、dashboard 欢迎语和 Employee 页姓名 / 职位 / 部门显示。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
 - Step 104 补充：根据 owner 反馈，已把 Step 103 的深色玻璃方向回调为浅色校园兼职运营风格；登录页、admin 主框架、dashboard 和 Employee 高曝光区域均切回浅色玻璃，同时修正 Element Plus `light-*` 主题变量映射，并修复 `/campus/courier-ops` 窄屏下配送员列表表格裁切导致“审核状态”列显示一半的问题。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。

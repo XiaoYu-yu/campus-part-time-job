@@ -2232,3 +2232,13 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是内测用户试用说明与账号发放边界轮：新增内测用户说明，明确 owner-controlled 内测参与范围、三类账号发放边界、各端可测和不要测范围、反馈记录格式与测试前检查。本轮没有提交真实账号密码、公网 IP、服务器密码、私钥、GitHub token 或腾讯地图 key；没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库或旧兼容模块。
+
+## Step 149 - 内测反馈记录模板与分级规则
+
+- [docs/deployment/internal-trial-feedback-triage.md](../../docs/deployment/internal-trial-feedback-triage.md)
+- [project-logs/campus-relay/step-149-internal-trial-feedback-triage.md](step-149-internal-trial-feedback-triage.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是内测反馈记录模板与分级规则轮：新增反馈 triage 文档，明确反馈记录模板、阻塞 / 主要 / 次要 / 建议四类严重程度、进入修复的条件、不会进入当前修复的反馈类型和敏感信息禁止项。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库或旧兼容模块。
