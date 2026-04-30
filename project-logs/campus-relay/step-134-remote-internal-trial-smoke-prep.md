@@ -163,3 +163,13 @@ bridge 主线继续保持 `Phase A no-op` 冻结态：
 
 1. 先按 `docs/deployment/internal-trial-ops-runbook.md` 完成服务启动、备份和状态检查。
 2. 不继续堆业务功能。
+
+## Step 135 跟进结果
+
+Step 135 已使用本轮新增的 `remote-smoke.ps1` 对 owner 提供的内测服务器完成真实远端验证：
+
+1. API + frontend shell smoke：24 项通过，0 项失败。
+2. 报告路径：`project-logs/campus-relay/runtime/step-135-remote-smoke/remote-smoke-report.json`。
+3. 报告默认脱敏 host 与 endpoint。
+4. 本次没有提交真实公网 IP、服务器密码、token 或腾讯地图 key。
+5. 本次没有改业务代码、bridge、`request.js`、API 运行时行为、路由、后端业务或旧兼容模块。

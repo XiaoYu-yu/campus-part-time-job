@@ -2058,3 +2058,13 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是远端/服务器内测 smoke 准备轮：新增 `remote-smoke.ps1`，支持传入远端 API 和前端 base，默认脱敏 host 与 token，覆盖 admin / customer / parttime 登录、关键受保护接口和可选 SPA shell 检查。新增远端内测 smoke 文档，并同步部署后 smoke checklist、内测运维 runbook、试运营脚本 README 与命令索引。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、后端业务、旧兼容模块或新增页面。
+
+## Step 135 - 远端内测 smoke 真实验证
+
+- [project-logs/campus-relay/runtime/step-135-remote-smoke/remote-smoke-report.json](runtime/step-135-remote-smoke/remote-smoke-report.json)
+- [project-logs/campus-relay/step-135-remote-internal-trial-smoke-validation.md](step-135-remote-internal-trial-smoke-validation.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是远端内测 smoke 真实验证轮：使用 Step 134 新增的 `remote-smoke.ps1` 对 owner 提供的内测服务器完成 API + frontend shell smoke，24 项通过、0 项失败。报告默认脱敏 host 与 endpoint，未提交真实公网 IP、服务器密码、token 或腾讯地图 key。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、后端业务、旧兼容模块或新增页面。

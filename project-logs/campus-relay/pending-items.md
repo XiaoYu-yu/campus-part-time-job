@@ -1,6 +1,24 @@
 # 校园代送待处理事项
 
-## Step 135 待处理
+## Step 136 待处理
+
+1. Step 135 已完成远端内测 smoke 真实验证：
+   - 使用 `scripts/trial-operation/remote-smoke.ps1` 对 owner 提供的内测服务器完成 API + frontend shell smoke。
+   - 24 项通过，0 项失败，0 项跳过。
+   - 报告路径：`project-logs/campus-relay/runtime/step-135-remote-smoke/remote-smoke-report.json`。
+   - 报告默认脱敏 host 和 endpoint，未提交真实公网 IP、服务器密码、token 或腾讯地图 key。
+2. Step 136 建议二选一：
+   - A. 若继续验证服务器真实体验：执行远端浏览器截图 smoke，证据保存在未跟踪目录或确保脱敏后再归档。
+   - B. 若进入内测运维加固：检查服务器 compose 状态、备份脚本、restore drill 和日志查看流程是否可执行。
+3. Step 136 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不改后端接口和路由。
+   - 不删除旧兼容模块。
+   - 不提交真实密钥、公网 IP、服务器密码、GitHub token 或腾讯地图 key。
+
+## Step 135 历史待处理记录
 
 1. Step 134 已完成远端/服务器内测 smoke 准备：
    - 新增 `scripts/trial-operation/remote-smoke.ps1`。
