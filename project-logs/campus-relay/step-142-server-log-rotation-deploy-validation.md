@@ -145,3 +145,10 @@ Step 143 建议优先处理 SSH 运维入口硬化，但仍先做清单和安全
 4. 记录回滚方式，避免把服务器锁死。
 
 如果暂不处理 SSH，则建议补一个“服务器部署后验证清单”小文档，把 backup、pull、compose rebuild、health、remote smoke、LogConfig 检查顺序固定下来。
+
+Step 143 已完成补充：
+
+1. 显式 identity key 登录已验证可用。
+2. 新增 `docs/deployment/internal-trial-ssh-hardening.md`。
+3. password login 未关闭，服务器 `sshd_config` 未修改。
+4. 后续如需继续硬化，应由 owner 先在云控制台限制 SSH `22` 来源 IP，再决定是否关闭 password login。

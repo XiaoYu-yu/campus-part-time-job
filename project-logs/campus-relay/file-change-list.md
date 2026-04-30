@@ -2163,3 +2163,13 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是服务器日志轮转部署与远端验证轮：服务器更新前完成备份，从旧提交 `9cc8d13` fast-forward 到 `1f343ce` 并重建 compose；`mysql / backend / frontend` 均验证 Docker `json-file max-size=20m max-file=5` 生效。health endpoint 在重建 warm-up 后返回 `UP`，远端 smoke 25 项通过、0 项失败、0 项跳过，报告已脱敏。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库或旧兼容模块。
+
+## Step 143 - SSH 运维入口硬化清单
+
+- [docs/deployment/internal-trial-ssh-hardening.md](../../docs/deployment/internal-trial-ssh-hardening.md)
+- [project-logs/campus-relay/step-143-ssh-access-hardening-checklist.md](step-143-ssh-access-hardening-checklist.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是 SSH 运维入口硬化清单轮：确认默认 SSH 未自动选择项目专用 key，但显式使用 `~/.ssh/campus_trial_ed25519` 与 `IdentitiesOnly=yes` 可完成 key-based 登录；服务器 `authorized_keys` 已包含项目专用公钥。新增 SSH 硬化文档，固化安全组限制来源 IP、关闭 password login 前置条件和回滚策略。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库、旧兼容模块或服务器 `sshd_config`，也没有关闭 password login。

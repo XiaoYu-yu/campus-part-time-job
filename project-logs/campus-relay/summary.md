@@ -152,6 +152,7 @@
 - 当前已完成：`Step 140 - backend health endpoint 最小实现`
 - 当前已完成：`Step 141 - 单机内测日志留存与轮转策略`
 - 当前已完成：`Step 142 - 服务器日志轮转部署与远端验证`
+- 当前已完成：`Step 143 - SSH 运维入口硬化清单`
 - 当前日期：`2026-04-30`
 - Step 125 补充：已完成旧外卖模块删除前审计与 AI 协作交接文件建立。新增 `agent-collaboration.md`、`legacy-takeaway-removal-readiness.md`，审计覆盖 10 个旧前端页面、13 个旧 API 文件、14 个旧 Controller 等，明确标记每个模块的 campus 依赖关系。本轮仅做文档，未改任何业务代码。
 - Step 126 补充：已完成前端视觉优化优先轮：MainLayout 菜单"旧店铺状态"→"店铺状态兼容"，5 个旧兼容页面标题更新为"X 兼容管理"并新增兼容提示 banner，mock.js 旧词替换。本轮仅改前端可见文案，未删除任何旧模块代码。
@@ -171,6 +172,7 @@
 - Step 140 补充：已新增 `GET /api/campus/public/health` 最小 backend health endpoint，复用既有 campus public 放行前缀，不改 `JwtInterceptor`；接口只返回 `status/service/checkedAt`，不读数据库、不读用户/订单/资金/地图数据。已更新 remote smoke 先检查 public health，并同步 runbook、安全边界、部署后 smoke checklist、远端 smoke 文档和命令索引。本地 backend compile、frontend build 和命令索引验证均通过；服务器已拉取重建，health 返回 `UP`，新版远端 smoke 25 项通过、0 项失败、0 项跳过，报告路径为 `project-logs/campus-relay/runtime/step-140-remote-smoke/remote-smoke-report.json`。
 - Step 141 补充：已为单机内测 compose 增加 Docker `json-file` 日志轮转配置，`mysql / backend / frontend` 默认按 `20m / 5` 留存；`.env.example` 新增 `DOCKER_LOG_MAX_SIZE / DOCKER_LOG_MAX_FILE`；新增 `docs/deployment/internal-trial-log-retention.md`，并同步 runbook、compose 部署说明、部署后 smoke checklist 和命令索引。本轮未改业务代码、bridge、接口、鉴权、路由、前端页面或旧兼容模块。
 - Step 142 补充：已将 Step 141 的日志轮转配置部署到单机内测服务器；服务器更新前完成备份，从旧提交 `9cc8d13` fast-forward 到 `1f343ce` 并重建 compose。`mysql / backend / frontend` 三个容器均验证为 Docker `json-file max-size=20m max-file=5`；health endpoint 在重建 warm-up 后返回 `UP`；远端 smoke 25 项通过、0 项失败、0 项跳过，报告路径为 `project-logs/campus-relay/runtime/step-142-remote-smoke/remote-smoke-report.json`。本轮未改业务代码、bridge、接口、鉴权、路由、前端页面或旧兼容模块。
+- Step 143 补充：已完成 SSH 运维入口硬化清单。默认 `ssh root@host` 未自动选择项目专用 key，显式使用 `~/.ssh/campus_trial_ed25519` 可完成 key-based SSH 登录；服务器 `authorized_keys` 已包含项目专用公钥。本轮新增 `docs/deployment/internal-trial-ssh-hardening.md`，明确安全组限制 SSH `22` 来源 IP、关闭 password login 前置条件和回滚策略；未修改服务器 `sshd_config`，未关闭 password login，未改业务代码、bridge、接口、鉴权、路由或旧兼容模块。
 - Step 102 补充：已把 admin 主框架、仪表盘和运营人员页从旧外卖后台视觉收敛到校园兼职运营风格；本轮只改展示层和全局主题变量，未改 bridge、接口、鉴权、路由、API 调用顺序或后端业务。已通过 `npm run build`、`npm run test -- text.spec.js` 和 `git diff --check`；本地 admin seed 登录与员工列表复核返回 `管理员 / 技术部`。
 - Step 103 补充：已把登录页改为 `校内兼职运营台`，并将 admin 外壳 / dashboard 进一步按深色玻璃拟态方向重基线；同时补齐旧 session / localStorage / in-memory 场景的 admin 文本归一化兜底，覆盖顶部用户名、dashboard 欢迎语和 Employee 页姓名 / 职位 / 部门显示。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
 - Step 104 补充：根据 owner 反馈，已把 Step 103 的深色玻璃方向回调为浅色校园兼职运营风格；登录页、admin 主框架、dashboard 和 Employee 高曝光区域均切回浅色玻璃，同时修正 Element Plus `light-*` 主题变量映射，并修复 `/campus/courier-ops` 窄屏下配送员列表表格裁切导致“审核状态”列显示一半的问题。本轮未改 bridge、接口、鉴权、路由、API 调用顺序、后端业务或数据库。
