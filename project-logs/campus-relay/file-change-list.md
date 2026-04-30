@@ -2201,3 +2201,13 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是内测服务器运维健康检查轮：新增只读 `server-ops-health.ps1`，通过 key-based SSH 读取磁盘、Docker 占用、compose 状态、容器日志大小和备份目录占用；真实运行通过，根分区约 25% 使用，核心容器日志均为 KB 级，备份目录约 184K。本轮没有执行 Docker prune、没有删除日志或备份，也没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库或旧兼容模块。
+
+## Step 146 - 内测服务器清理与留存策略 go / no-go
+
+- [docs/deployment/internal-trial-cleanup-retention.md](../../docs/deployment/internal-trial-cleanup-retention.md)
+- [project-logs/campus-relay/step-146-cleanup-retention-go-no-go.md](step-146-cleanup-retention-go-no-go.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是内测服务器清理与留存策略 go / no-go 轮：基于 Step 145 真实读数，当前磁盘、日志、备份均无清理压力，最终选择 no-go；不执行 Docker prune、不删除备份、不删除日志。新增清理与留存策略文档，固化触发条件、Docker 清理边界、备份留存边界和容器日志边界。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库或旧兼容模块。

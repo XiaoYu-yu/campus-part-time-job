@@ -126,3 +126,9 @@ Step 146 建议做“内测服务器清理与留存策略 go / no-go”：
 3. 不自动执行 prune。
 4. 不自动删除备份。
 5. 如果风险和收益不匹配，则继续保持只读健康检查，不做清理动作。
+
+Step 146 已完成补充：
+
+1. 新增 `docs/deployment/internal-trial-cleanup-retention.md`。
+2. 结论为 no-go：当前不执行 Docker prune、不删除备份、不删除日志。
+3. 清理触发条件和回滚边界已固化。

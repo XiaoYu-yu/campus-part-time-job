@@ -1,25 +1,23 @@
 # 校园代送待处理事项
 
-## Step 146 待处理 / 建议
+## Step 147 待处理 / 建议
 
-1. Step 145 已完成内测服务器运维健康检查：
-   - 新增 `scripts/trial-operation/server-ops-health.ps1`。
-   - 真实运行通过。
-   - 根分区约 25% 使用。
-   - 三个核心容器日志均为 KB 级。
-   - 备份目录约 184K。
-   - Docker image / build cache 存在可回收空间，但本轮未执行清理。
-   - 报告路径：`project-logs/campus-relay/runtime/step-145-server-ops-health/`。
-2. Step 146 建议进入“内测服务器清理与留存策略 go / no-go”：
-   - 评估 Docker image / build cache 是否需要手动清理。
-   - 评估备份目录是否需要保留最近 N 份。
-   - 不默认执行 `docker system prune`。
-   - 不默认删除备份。
+1. Step 146 已完成内测服务器清理与留存策略 go / no-go：
+   - 当前磁盘、日志、备份均无清理压力。
+   - 结论为 no-go，不执行 prune、不删备份、不删日志。
+   - 新增 `docs/deployment/internal-trial-cleanup-retention.md`。
+2. Step 147 建议做一次“内测入口状态复盘”：
+   - 本地仓库状态。
+   - GitHub 状态。
+   - 服务器运行状态。
+   - 远端 smoke 状态。
+   - 运维脚本状态。
+   - 当前还差什么才能让少量真实用户试用。
 3. 当前仍未处理：
    - 当前没有 HTTPS、域名、证书、正式监控告警。
    - SSH `22` 当前可达，长期内测建议在云安全组限制来源 IP。
    - password login 仍保留，关闭前必须确认 key 登录和安全组回滚路径。
-4. Step 146 继续禁止：
+4. Step 147 继续禁止：
    - 不改 bridge。
    - 不改 `request.js`。
    - 不改 token 附着逻辑。
