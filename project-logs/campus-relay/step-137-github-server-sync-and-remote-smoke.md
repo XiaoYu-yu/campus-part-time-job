@@ -185,4 +185,3 @@ bridge 主线继续保持 `Phase A no-op` 冻结态：
 2. 评估 backend `8080` 是否继续公网暴露，或只保留 frontend `80` 对外并通过 nginx 代理 `/api`。
 3. 评估备份脚本 MySQL 8 tablespace warning 的处理方式：`--no-tablespaces` 或权限最小补齐。
 4. 继续保持 bridge 冻结，不借运维加固改业务。
-
