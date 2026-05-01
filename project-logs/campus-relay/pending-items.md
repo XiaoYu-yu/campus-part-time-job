@@ -2,24 +2,29 @@
 
 ## 下一步待处理 / 建议
 
-1. Step 150 已完成内测试运行状态总收口：
-   - Step 142 到 Step 149 的运维、内测说明和反馈规则已覆盖。
-   - 当前已具备 owner-controlled 内测条件。
-   - 当前不建议继续无反馈地新增文档、脚本或功能。
-2. 下一步建议：
-   - 先发放少量测试账号。
-   - 按 `docs/deployment/internal-trial-user-test-guide.md` 控制测试范围。
-   - 按 `docs/deployment/internal-trial-feedback-triage.md` 记录真实反馈。
-   - 只修阻塞 / 主要问题。
-3. 如果必须继续推进工程事项，优先级为：
+1. Step 151 已完成 Android 用户端 / 兼职端稳定性复核：
+   - 两端 public Web 构建通过。
+   - 两端 Capacitor 同步通过。
+   - 两端 Debug APK 在 JDK 21 下构建通过。
+   - Android WebView public 聚合 smoke 默认等待参数已加固并复跑通过。
+2. 当前 Android 结论：
+   - 可作为 owner-controlled 模拟器内测 smoke 基线。
+   - 不能直接宣称真机长期内测稳定。
+   - 不适合在 HTTP cleartext 状态下发给外部用户长期使用。
+3. 下一步建议二选一：
+   - A. 若继续 Android 线：进入真机 smoke 准备或 release 包准备，但先不对外分发。
+   - B. 若进入真实内测：先以 Web / 管理端为主，Android 只作为 owner-controlled 模拟器验证证据。
+4. 如果必须继续推进工程事项，优先级为：
+   - 真机 smoke 准备或 Android release 包准备。
    - owner 在云控制台限制 SSH `22` 来源 IP。
-   - 服务器目录 fast-forward 到最新文档 / 脚本提交，但不重建容器。
    - HTTPS / 域名 / 证书专项。
-4. 当前仍未处理但不阻塞 owner-controlled 内测：
+5. 当前仍未处理但不阻塞 owner-controlled Web 内测：
    - 当前没有 HTTPS、域名、证书、正式监控告警。
    - SSH `22` 当前可达，长期内测建议在云安全组限制来源 IP。
    - password login 仍保留，关闭前必须确认 key 登录和安全组回滚路径。
-5. 继续禁止：
+   - Android 真机 smoke 未执行。
+   - Android release 签名包未固化。
+6. 继续禁止：
    - 不改 bridge。
    - 不改 `request.js`。
    - 不改 token 附着逻辑。

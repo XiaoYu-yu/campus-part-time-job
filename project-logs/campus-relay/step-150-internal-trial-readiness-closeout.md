@@ -177,3 +177,13 @@ bridge 主线继续保持 `Phase A no-op` 冻结态。
 4. HTTPS / 域名 / 证书专项。
 
 不要继续凭空新增业务功能或页面。
+
+## Step 151 补充
+
+Step 151 已根据 owner 质疑补做 Android 双端稳定性复核：
+
+1. Android 用户端 / 兼职端 public Web 构建通过。
+2. 两端 Capacitor 同步通过。
+3. 两端 Debug APK 在 JDK 21 下构建通过。
+4. Android WebView public 聚合 smoke 默认等待参数已加固并复跑通过。
+5. 当前 Android 结论修正为：双端已达到 owner-controlled 模拟器内测 smoke 可用，但仍未达到外部用户真机长期内测 / 正式试运营稳定标准。

@@ -2251,3 +2251,16 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是内测试运行状态总收口轮：汇总 Step 142 到 Step 149 的运维与内测准备成果，确认当前已具备 owner-controlled 内测条件；建议暂停继续无反馈地新增文档、脚本或功能，转入真实反馈等待期。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库或旧兼容模块。
+
+## Step 151 - Android 用户端 / 兼职端稳定性复核
+
+- [scripts/trial-operation/android-webview-public-smoke.ps1](../../scripts/trial-operation/android-webview-public-smoke.ps1)
+- [scripts/trial-operation/android-webview-user-public-smoke.ps1](../../scripts/trial-operation/android-webview-user-public-smoke.ps1)
+- [scripts/trial-operation/android-webview-parttime-public-smoke.ps1](../../scripts/trial-operation/android-webview-parttime-public-smoke.ps1)
+- [project-logs/campus-relay/runtime/step-151-android-dual-app-stability/default-after-timeout-hardening/android-public-webview-readiness-summary.json](runtime/step-151-android-dual-app-stability/default-after-timeout-hardening/android-public-webview-readiness-summary.json)
+- [project-logs/campus-relay/step-151-android-dual-app-stability-review.md](step-151-android-dual-app-stability-review.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是 Android 用户端 / 兼职端稳定性复核轮：两端 public Web 构建、Capacitor 同步和 JDK 21 下 Debug APK 构建均通过；首次聚合 WebView smoke 暴露默认等待时间偏紧，已加固 3 个 Android WebView smoke 脚本默认等待参数并复跑通过。本轮没有改 Vue 页面、后端接口、bridge、`request.js`、token 附着逻辑、路由、数据库或旧兼容模块。

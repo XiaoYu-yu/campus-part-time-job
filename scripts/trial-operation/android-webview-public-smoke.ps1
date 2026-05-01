@@ -9,8 +9,8 @@ param(
     [switch]$ClearData,
     [int]$UserPort = 9222,
     [int]$ParttimePort = 9223,
-    [int]$LaunchWaitSeconds = 8,
-    [int]$WaitTimeoutSeconds = 35,
+    [int]$LaunchWaitSeconds = 12,
+    [int]$WaitTimeoutSeconds = 90,
     [string]$OutputDirectory = ""
 )
 

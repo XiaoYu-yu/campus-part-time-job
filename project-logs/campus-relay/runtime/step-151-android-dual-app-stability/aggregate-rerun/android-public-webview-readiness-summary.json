@@ -1,0 +1,49 @@
+﻿{
+    "step":  "Step 124",
+    "date":  "2026-05-01",
+    "purpose":  "Repeatable Android public WebView readiness smoke for user and parttime apps",
+    "passed":  true,
+    "outputDirectory":  "project-logs\\campus-relay\\runtime\\step-151-android-dual-app-stability\\aggregate-rerun",
+    "checks":  [
+                   {
+                       "name":  "user",
+                       "script":  "D:\\20278\\code\\Campus part-time job\\scripts\\trial-operation\\android-webview-user-public-smoke.ps1",
+                       "exitCode":  0,
+                       "passed":  true,
+                       "startedAt":  "2026-05-01T12:03:38",
+                       "finishedAt":  "2026-05-01T12:04:00",
+                       "durationSeconds":  21.62,
+                       "reportPath":  "project-logs\\campus-relay\\runtime\\step-151-android-dual-app-stability\\aggregate-rerun\\user-public-webview-smoke.json",
+                       "screenshotPath":  "project-logs\\campus-relay\\runtime\\step-151-android-dual-app-stability\\aggregate-rerun\\user-campus-orders-public-webview.png",
+                       "summary":  {
+                                       "passed":  true,
+                                       "createdOrderId":  "CR202605010403542020",
+                                       "finalOrderStatus":  "BUILDING_PRIORITY_PENDING",
+                                       "finalPaymentStatus":  "PAID"
+                                   }
+                   },
+                   {
+                       "name":  "parttime",
+                       "script":  "D:\\20278\\code\\Campus part-time job\\scripts\\trial-operation\\android-webview-parttime-public-smoke.ps1",
+                       "exitCode":  0,
+                       "passed":  true,
+                       "startedAt":  "2026-05-01T12:04:00",
+                       "finishedAt":  "2026-05-01T12:04:20",
+                       "durationSeconds":  19.75,
+                       "reportPath":  "project-logs\\campus-relay\\runtime\\step-151-android-dual-app-stability\\aggregate-rerun\\parttime-public-webview-smoke.json",
+                       "screenshotPath":  "project-logs\\campus-relay\\runtime\\step-151-android-dual-app-stability\\aggregate-rerun\\parttime-workbench-public-webview.png",
+                       "summary":  {
+                                       "passed":  true,
+                                       "courierProfileId":  2,
+                                       "reviewStatus":  "APPROVED",
+                                       "availableOrders":  5
+                                   }
+                   }
+               ],
+    "notes":  [
+                  "Child reports redact the real public API base.",
+                  "The smoke drives Android WebView through DevTools/CDP instead of host-only curl.",
+                  "This wrapper does not change bridge behavior, token attachment logic, routes, backend state machine, or old takeaway modules.",
+                  "HTTP public API is acceptable for owner-controlled smoke only; external user trial should move to HTTPS/domain/cert and cleartext tightening."
+              ]
+}

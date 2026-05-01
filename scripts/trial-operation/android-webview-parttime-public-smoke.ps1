@@ -7,8 +7,8 @@ param(
     [string]$AvdName = "campus_api35",
     [int]$EmulatorBootTimeoutSeconds = 360,
     [int]$Port = 9223,
-    [int]$LaunchWaitSeconds = 8,
-    [int]$WaitTimeoutSeconds = 35,
+    [int]$LaunchWaitSeconds = 12,
+    [int]$WaitTimeoutSeconds = 90,
     [switch]$ClearData,
     [string]$OutputPath = "",
     [string]$ScreenshotPath = ""
