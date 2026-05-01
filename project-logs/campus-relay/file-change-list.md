@@ -2264,3 +2264,19 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是 Android 用户端 / 兼职端稳定性复核轮：两端 public Web 构建、Capacitor 同步和 JDK 21 下 Debug APK 构建均通过；首次聚合 WebView smoke 暴露默认等待时间偏紧，已加固 3 个 Android WebView smoke 脚本默认等待参数并复跑通过。本轮没有改 Vue 页面、后端接口、bridge、`request.js`、token 附着逻辑、路由、数据库或旧兼容模块。
+
+## Step 152 - Android 双端 QA APK 打包与安装启动 smoke
+
+- [.gitignore](../../.gitignore)
+- [docs/mobile/android-qa-apk-handoff.md](../../docs/mobile/android-qa-apk-handoff.md)
+- [scripts/trial-operation/build-android-qa-apks.ps1](../../scripts/trial-operation/build-android-qa-apks.ps1)
+- [scripts/trial-operation/README.md](../../scripts/trial-operation/README.md)
+- [scripts/trial-operation/commands.ps1](../../scripts/trial-operation/commands.ps1)
+- [project-logs/campus-relay/runtime/android-smoke/20260501-182338-user-app-launch.png](runtime/android-smoke/20260501-182338-user-app-launch.png)
+- [project-logs/campus-relay/runtime/android-smoke/20260501-182353-parttime-app-launch.png](runtime/android-smoke/20260501-182353-parttime-app-launch.png)
+- [project-logs/campus-relay/step-152-android-qa-apk-package-and-install-smoke.md](step-152-android-qa-apk-package-and-install-smoke.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是 Android 双端 QA APK 打包与安装启动 smoke 轮：新增统一 QA APK 打包脚本，生成用户端和兼职端 Debug APK 到 git 忽略目录并输出 SHA256 manifest；新增 Android QA APK 交付说明；模拟器 `campus_api35` 安装、清数据、启动双端并保存首屏截图通过。本轮没有改 Vue 页面业务行为、后端接口、bridge、`request.js`、token 附着逻辑、路由、数据库或旧兼容模块；没有生成 release 签名包，也没有提交 APK 二进制文件。

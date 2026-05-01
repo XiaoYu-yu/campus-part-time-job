@@ -212,3 +212,15 @@ bridge 主线继续保持 `Phase A no-op` 冻结态。
 2. **Android release 包准备轮**：整理签名、版本号、release 构建、安装包命名和分发边界，但仍不接 HTTPS 前不建议给外部用户长期使用。
 
 如果暂不推进 Android，当前可以继续 Web / 管理端 owner-controlled 内测，但文案必须写清 Android 仅为模拟器 smoke 通过。
+
+## Step 152 跟进结果
+
+Step 152 已选择继续 Android 线，并完成 QA Debug APK 准备：
+
+1. 新增统一打包脚本 `scripts/trial-operation/build-android-qa-apks.ps1`。
+2. 新增 Android QA APK 交付说明 `docs/mobile/android-qa-apk-handoff.md`。
+3. 双端 public Web 构建、Capacitor sync、JDK 21 Debug APK 构建已通过。
+4. 已生成用户端 / 兼职端本地 QA APK 和 SHA256 manifest，输出目录为 git 忽略目录。
+5. 已在 `campus_api35` 模拟器完成双端安装、清数据、启动和首屏截图 smoke。
+
+Step 151 的“未达到真机长期稳定 / release 包稳定 / HTTPS 收口”判断仍然有效。

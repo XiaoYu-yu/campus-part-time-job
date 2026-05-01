@@ -2,22 +2,22 @@
 
 ## 下一步待处理 / 建议
 
-1. Step 151 已完成 Android 用户端 / 兼职端稳定性复核：
-   - 两端 public Web 构建通过。
-   - 两端 Capacitor 同步通过。
-   - 两端 Debug APK 在 JDK 21 下构建通过。
-   - Android WebView public 聚合 smoke 默认等待参数已加固并复跑通过。
+1. Step 152 已完成 Android 双端 QA Debug APK 打包与安装启动 smoke：
+   - 新增 `scripts/trial-operation/build-android-qa-apks.ps1`。
+   - 新增 `docs/mobile/android-qa-apk-handoff.md`。
+   - 双端 public Web 构建、Capacitor sync、JDK 21 `assembleDebug` 已通过。
+   - 已生成本地 git 忽略目录中的用户端 / 兼职端 QA APK 与 SHA256 manifest。
+   - 已在 `campus_api35` 模拟器完成双端安装、清数据、启动和首屏截图。
 2. 当前 Android 结论：
-   - 可作为 owner-controlled 模拟器内测 smoke 基线。
-   - 不能直接宣称真机长期内测稳定。
-   - 不适合在 HTTP cleartext 状态下发给外部用户长期使用。
+   - 用户端和兼职端已具备 owner-controlled QA Debug APK 基线。
+   - 模拟器安装启动已通过。
+   - 仍不能宣称真机长期稳定、release 包稳定或外部分发可用。
 3. 下一步建议二选一：
-   - A. 若继续 Android 线：进入真机 smoke 准备或 release 包准备，但先不对外分发。
-   - B. 若进入真实内测：先以 Web / 管理端为主，Android 只作为 owner-controlled 模拟器验证证据。
-4. 如果必须继续推进工程事项，优先级为：
-   - 真机 smoke 准备或 Android release 包准备。
-   - owner 在云控制台限制 SSH `22` 来源 IP。
-   - HTTPS / 域名 / 证书专项。
+   - A. 若继续 Android 线：进入真机手工 smoke 轮，使用本轮 QA APK 在真实 Android 手机验证登录、页面、网络、返回键、输入框和关键动作。
+   - B. 若准备正式分发：进入 release 签名准备轮，但只整理版本号、签名边界和输出规范，不提交 keystore，不在 HTTPS 前对外分发。
+4. 如果暂时没有真机条件：
+   - Web / 管理端可以继续 owner-controlled 内测。
+   - Android 保持为模拟器 QA APK 基线。
 5. 当前仍未处理但不阻塞 owner-controlled Web 内测：
    - 当前没有 HTTPS、域名、证书、正式监控告警。
    - SSH `22` 当前可达，长期内测建议在云安全组限制来源 IP。

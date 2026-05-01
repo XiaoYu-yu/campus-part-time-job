@@ -127,6 +127,14 @@ They drive the real Android WebView through DevTools/CDP, log in through the vis
 
 Use the combined readiness script before owner-controlled Android public smoke or internal-trial handoff. If real external users will install the APK, do not treat HTTP cleartext as production-ready: move to a real domain, HTTPS certificate, reverse proxy, and then tighten Android cleartext settings in a separate release step.
 
+Build both Android QA Debug APKs for owner-controlled installation:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\build-android-qa-apks.ps1 -Mode public
+```
+
+This builds/syncs the user and part-time Capacitor shells, runs `assembleDebug` with JDK 21, copies both APKs into `project-logs/campus-relay/runtime/android-qa-apks/<timestamp>/`, and writes `android-qa-apk-manifest.json` with file sizes and SHA256 hashes. The APK output directory is git-ignored. These Debug APKs are only for owner-controlled smoke and should not be distributed as production releases before domain / HTTPS / certificate and Android cleartext hardening are completed.
+
 Treat closed ports as hard failures:
 
 ```powershell

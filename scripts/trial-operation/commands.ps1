@@ -78,8 +78,15 @@ Write-Host "Read-only SSH check for disk, Docker usage, container log sizes, and
 Write-Host 'powershell -ExecutionPolicy Bypass -File scripts\trial-operation\server-ops-health.ps1 -SshHost your-host -SshIdentity "$env:USERPROFILE\.ssh\campus_trial_ed25519"'
 Write-Host ""
 
+Write-Host "14. Android QA Debug APK package"
+Write-Host "Builds both Android shells, copies Debug APKs to a git-ignored runtime directory, and writes SHA256 manifest:"
+Write-Host "powershell -ExecutionPolicy Bypass -File scripts\trial-operation\build-android-qa-apks.ps1 -Mode public"
+Write-Host "Output: project-logs\campus-relay\runtime\android-qa-apks\<timestamp>\"
+Write-Host "Boundary: owner-controlled smoke only; not a production release before HTTPS/domain/certificate and cleartext hardening."
+Write-Host ""
+
 if ($Full) {
-    Write-Host "14. Browser entrypoints"
+    Write-Host "15. Browser entrypoints"
     Write-Host "Frontend: http://localhost:5173"
     Write-Host "Backend:  http://localhost:8080"
     Write-Host "Customer onboarding: /user/campus/courier-onboarding"
