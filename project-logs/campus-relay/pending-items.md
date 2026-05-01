@@ -1,22 +1,25 @@
 # 校园代送待处理事项
 
-## Step 150 待处理 / 建议
+## 下一步待处理 / 建议
 
-1. Step 149 已完成内测反馈记录模板与分级规则：
-   - 新增 `docs/deployment/internal-trial-feedback-triage.md`。
-   - 明确反馈记录模板。
-   - 明确阻塞 / 主要 / 次要 / 建议四类优先级。
-   - 明确进入修复的条件和后续规划边界。
-2. Step 150 建议进入“内测试运行状态总收口 / 暂停继续堆文档判断”：
-   - 汇总 Step 142 到 Step 149 的运维与内测准备成果。
-   - 判断当前是否应该暂停继续新增文档。
-   - 如果继续开发，应等待真实内测反馈，而不是继续凭空扩需求。
-   - 如必须继续，可转入 owner 手动安全组限制 SSH 来源 IP。
-3. 当前仍未处理：
+1. Step 150 已完成内测试运行状态总收口：
+   - Step 142 到 Step 149 的运维、内测说明和反馈规则已覆盖。
+   - 当前已具备 owner-controlled 内测条件。
+   - 当前不建议继续无反馈地新增文档、脚本或功能。
+2. 下一步建议：
+   - 先发放少量测试账号。
+   - 按 `docs/deployment/internal-trial-user-test-guide.md` 控制测试范围。
+   - 按 `docs/deployment/internal-trial-feedback-triage.md` 记录真实反馈。
+   - 只修阻塞 / 主要问题。
+3. 如果必须继续推进工程事项，优先级为：
+   - owner 在云控制台限制 SSH `22` 来源 IP。
+   - 服务器目录 fast-forward 到最新文档 / 脚本提交，但不重建容器。
+   - HTTPS / 域名 / 证书专项。
+4. 当前仍未处理但不阻塞 owner-controlled 内测：
    - 当前没有 HTTPS、域名、证书、正式监控告警。
    - SSH `22` 当前可达，长期内测建议在云安全组限制来源 IP。
    - password login 仍保留，关闭前必须确认 key 登录和安全组回滚路径。
-4. Step 150 继续禁止：
+5. 继续禁止：
    - 不改 bridge。
    - 不改 `request.js`。
    - 不改 token 附着逻辑。

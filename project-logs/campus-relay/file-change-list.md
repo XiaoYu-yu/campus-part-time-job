@@ -2242,3 +2242,12 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是内测反馈记录模板与分级规则轮：新增反馈 triage 文档，明确反馈记录模板、阻塞 / 主要 / 次要 / 建议四类严重程度、进入修复的条件、不会进入当前修复的反馈类型和敏感信息禁止项。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库或旧兼容模块。
+
+## Step 150 - 内测试运行状态总收口
+
+- [project-logs/campus-relay/step-150-internal-trial-readiness-closeout.md](step-150-internal-trial-readiness-closeout.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是内测试运行状态总收口轮：汇总 Step 142 到 Step 149 的运维与内测准备成果，确认当前已具备 owner-controlled 内测条件；建议暂停继续无反馈地新增文档、脚本或功能，转入真实反馈等待期。本轮没有改业务代码、bridge、`request.js`、API 运行时行为、路由、前端页面、后端业务、数据库或旧兼容模块。
