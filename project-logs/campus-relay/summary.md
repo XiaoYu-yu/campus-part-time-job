@@ -161,6 +161,12 @@
 - 当前已完成：`Step 149 - 内测反馈记录模板与分级规则`
 - 当前已完成：`Step 150 - 内测试运行状态总收口`
 - 当前已完成：`Step 151 - Android 用户端 / 兼职端稳定性复核`
+- 当前已完成：`Step 152 - Android QA 打包与安装 smoke`
+- 当前已完成：`Step 153 - 移动端原型视觉对齐第一轮`
+- 当前已完成：`Step 154 - 移动端原型视觉对齐第二轮`
+- 当前已完成：`Step 155 - 双端移动原型结构对齐评估`
+- 当前已完成：`Step 156 - 用户端订单主链路原型对齐第一轮`
+- 当前已完成：`Step 157 - 当前本地工作树服务器部署与远端 smoke`
 - 当前日期：`2026-04-30`
 - Step 125 补充：已完成旧外卖模块删除前审计与 AI 协作交接文件建立。新增 `agent-collaboration.md`、`legacy-takeaway-removal-readiness.md`，审计覆盖 10 个旧前端页面、13 个旧 API 文件、14 个旧 Controller 等，明确标记每个模块的 campus 依赖关系。本轮仅做文档，未改任何业务代码。
 - Step 126 补充：已完成前端视觉优化优先轮：MainLayout 菜单"旧店铺状态"→"店铺状态兼容"，5 个旧兼容页面标题更新为"X 兼容管理"并新增兼容提示 banner，mock.js 旧词替换。本轮仅改前端可见文案，未删除任何旧模块代码。
@@ -2440,6 +2446,11 @@
 - [Step 150 日志](step-150-internal-trial-readiness-closeout.md)
 - [Step 151 日志](step-151-android-dual-app-stability-review.md)
 - [Step 152 日志](step-152-android-qa-apk-package-and-install-smoke.md)
+- [Step 153 日志](step-153-mobile-prototype-visual-alignment.md)
+- [Step 154 日志](step-154-mobile-prototype-visual-alignment-round-2.md)
+- [Step 155 日志](step-155-mobile-prototype-gap-assessment.md)
+- [Step 156 日志](step-156-user-order-main-chain-prototype-alignment.md)
+- [Step 157 日志](step-157-current-server-deploy-and-smoke.md)
 - [单机内测安全边界说明](../../docs/deployment/internal-trial-security-boundary.md)
 - [单机内测日志留存与轮转策略](../../docs/deployment/internal-trial-log-retention.md)
 - [远端内测 Smoke 执行说明](../../docs/deployment/remote-internal-trial-smoke.md)

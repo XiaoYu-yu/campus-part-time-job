@@ -2280,3 +2280,71 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是 Android 双端 QA APK 打包与安装启动 smoke 轮：新增统一 QA APK 打包脚本，生成用户端和兼职端 Debug APK 到 git 忽略目录并输出 SHA256 manifest；新增 Android QA APK 交付说明；模拟器 `campus_api35` 安装、清数据、启动双端并保存首屏截图通过。本轮没有改 Vue 页面业务行为、后端接口、bridge、`request.js`、token 附着逻辑、路由、数据库或旧兼容模块；没有生成 release 签名包，也没有提交 APK 二进制文件。
+
+## Step 153 - 用户端 / 兼职端移动原型视觉对齐第一轮
+
+- [frontend/index.html](../../frontend/index.html)
+- [frontend/src/App.vue](../../frontend/src/App.vue)
+- [frontend/src/main.js](../../frontend/src/main.js)
+- [frontend/src/style.css](../../frontend/src/style.css)
+- [frontend/src/layout/UserLayout.vue](../../frontend/src/layout/UserLayout.vue)
+- [frontend/src/layout/ParttimeLayout.vue](../../frontend/src/layout/ParttimeLayout.vue)
+- [frontend/src/views/user/Home.vue](../../frontend/src/views/user/Home.vue)
+- [frontend/src/views/user/Login.vue](../../frontend/src/views/user/Login.vue)
+- [frontend/src/views/user/CampusRelayOrders.vue](../../frontend/src/views/user/CampusRelayOrders.vue)
+- [frontend/src/views/user/CampusOrderResult.vue](../../frontend/src/views/user/CampusOrderResult.vue)
+- [frontend/src/views/user/CourierOnboarding.vue](../../frontend/src/views/user/CourierOnboarding.vue)
+- [frontend/src/views/courier/Login.vue](../../frontend/src/views/courier/Login.vue)
+- [frontend/src/views/courier/CourierWorkbench.vue](../../frontend/src/views/courier/CourierWorkbench.vue)
+- [project-logs/campus-relay/step-153-mobile-prototype-visual-alignment.md](step-153-mobile-prototype-visual-alignment.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是用户端 / 兼职端移动原型视觉对齐第一轮：基于 `frontend/prototype/customer-h5-prototype/` 和 `frontend/prototype/parttime-app-prototype/` 的原型图，修复浏览器自动翻译导致的中文错译，统一用户端与兼职端移动壳、首页、登录、发布代送、结果回看、入驻页、兼职工作台的校园兼职视觉风格。兼职工作台可接任务改为手机端任务卡片展示，drawer 在手机视口下改为全宽。本轮没有改 bridge、`request.js`、token 附着逻辑、接口调用顺序、路由、后端、数据库或旧兼容模块；没有新增页面。
+
+## Step 154 - 移动端原型视觉对齐第二轮
+
+- [frontend/src/App.vue](../../frontend/src/App.vue)
+- [frontend/src/style.css](../../frontend/src/style.css)
+- [frontend/src/views/user/CampusOrderResult.vue](../../frontend/src/views/user/CampusOrderResult.vue)
+- [frontend/src/views/user/CampusRelayOrders.vue](../../frontend/src/views/user/CampusRelayOrders.vue)
+- [frontend/src/views/user/CourierOnboarding.vue](../../frontend/src/views/user/CourierOnboarding.vue)
+- [frontend/src/views/courier/CourierWorkbench.vue](../../frontend/src/views/courier/CourierWorkbench.vue)
+- [project-logs/campus-relay/step-154-mobile-prototype-visual-alignment-round-2.md](step-154-mobile-prototype-visual-alignment-round-2.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是用户端 / 兼职端移动原型视觉对齐第二轮：对 4 个核心页面做真实数据态 / 错误态 / 空态视觉修正，以及移动端间距和交互细节优化。CampusOrderResult 修复 loading spinner、增加 COMPLETED/AWAITING_CONFIRMATION 状态图标和异常提示区块；CampusRelayOrders 修复小屏双列坍缩、增加订单列表错误态、增强费用卡片和表单验证可见性；CourierOnboarding 增加页面加载态、alert 突出和 token 区域高亮；CourierWorkbench 美化无 token 空态、增强 drawer 分区标题和滚动。全局增加 overscroll-behavior 和移动端专用卡片点击反馈。本轮没有改 bridge、`request.js`、token 附着逻辑、接口调用顺序、路由、后端、数据库或旧兼容模块；没有新增页面。
+
+## Step 155 - 双端移动原型结构对齐评估
+
+- [project-logs/campus-relay/step-155-mobile-prototype-gap-assessment.md](step-155-mobile-prototype-gap-assessment.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是双端移动原型结构对齐评估：对照用户端和兼职端两张原型总览图，评估现有页面与原型的差距。用户端 P0 差距为订单状态时间轴、确认收货功能、订单列表 tab 筛选；兼职端 P1 差距为工作台今日统计数据。推荐下一轮执行包 A：用户端订单发布+模拟支付+订单结果三页联动视觉对齐。本轮只做评估，不改代码，没有改 bridge、`request.js`、token 附着逻辑、接口、路由、后端或旧兼容模块。
+
+## Step 156 - 用户端订单主链路原型对齐第一轮
+
+- [frontend/src/api/campus-customer.js](../../frontend/src/api/campus-customer.js)
+- [frontend/src/views/user/CampusRelayOrders.vue](../../frontend/src/views/user/CampusRelayOrders.vue)
+- [frontend/src/views/user/CampusOrderResult.vue](../../frontend/src/views/user/CampusOrderResult.vue)
+- [project-logs/campus-relay/step-156-user-order-main-chain-prototype-alignment.md](step-156-user-order-main-chain-prototype-alignment.md)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是用户端订单主链路原型对齐第一轮：执行 Step 155 推荐方案 A，覆盖 P0 全部 3 项。CampusRelayOrders 将 el-select 下拉筛选替换为横滑 tab 状态筛选栏，订单卡片重构为路线展示风格（取餐点→送达地、取餐码标签、金额醒目）。CampusOrderResult 新增订单状态时间轴组件（已接单→已取餐→配送中→已送达→已完成），AWAITING_CONFIRMATION 状态时显示确认收货按钮，调用 POST /api/campus/customer/orders/{id}/confirm 后自动刷新进入 COMPLETED 回读。campus-customer.js 新增 confirmCampusCustomerOrder API 封装。没有新增后端接口，没有改状态机、bridge、request.js、token 附着逻辑、路由或旧兼容模块。
+
+## Step 157 - 当前本地工作树服务器部署与远端 smoke
+
+- [project-logs/campus-relay/step-157-current-server-deploy-and-smoke.md](step-157-current-server-deploy-and-smoke.md)
+- [project-logs/campus-relay/runtime/step-157-server-deploy/remote-smoke-report-rerun.json](runtime/step-157-server-deploy/remote-smoke-report-rerun.json)
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+
+本轮是当前本地工作树服务器部署与远端 smoke 轮：部署前执行服务器备份，随后上传当前本地工作树并通过单机内测 Docker Compose 重建 `mysql / backend / frontend`。公网 frontend 80 可访问，backend 8080 与 MySQL 3306 继续仅本机绑定。远端 smoke 复跑 25 项通过、0 项失败、0 项跳过。本轮没有改业务代码、bridge、`request.js`、token 附着逻辑、后端鉴权、路由、数据库结构或旧兼容模块。

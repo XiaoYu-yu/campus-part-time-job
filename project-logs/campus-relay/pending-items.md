@@ -2,29 +2,25 @@
 
 ## 下一步待处理 / 建议
 
-1. Step 152 已完成 Android 双端 QA Debug APK 打包与安装启动 smoke：
-   - 新增 `scripts/trial-operation/build-android-qa-apks.ps1`。
-   - 新增 `docs/mobile/android-qa-apk-handoff.md`。
-   - 双端 public Web 构建、Capacitor sync、JDK 21 `assembleDebug` 已通过。
-   - 已生成本地 git 忽略目录中的用户端 / 兼职端 QA APK 与 SHA256 manifest。
-   - 已在 `campus_api35` 模拟器完成双端安装、清数据、启动和首屏截图。
-2. 当前 Android 结论：
-   - 用户端和兼职端已具备 owner-controlled QA Debug APK 基线。
-   - 模拟器安装启动已通过。
-   - 仍不能宣称真机长期稳定、release 包稳定或外部分发可用。
-3. 下一步建议二选一：
-   - A. 若继续 Android 线：进入真机手工 smoke 轮，使用本轮 QA APK 在真实 Android 手机验证登录、页面、网络、返回键、输入框和关键动作。
-   - B. 若准备正式分发：进入 release 签名准备轮，但只整理版本号、签名边界和输出规范，不提交 keystore，不在 HTTPS 前对外分发。
-4. 如果暂时没有真机条件：
-   - Web / 管理端可以继续 owner-controlled 内测。
-   - Android 保持为模拟器 QA APK 基线。
-5. 当前仍未处理但不阻塞 owner-controlled Web 内测：
-   - 当前没有 HTTPS、域名、证书、正式监控告警。
-   - SSH `22` 当前可达，长期内测建议在云安全组限制来源 IP。
-   - password login 仍保留，关闭前必须确认 key 登录和安全组回滚路径。
+1. Step 157 已完成当前本地工作树服务器部署：
+   - 服务器 `mysql / backend / frontend` 容器均已启动。
+   - 公网 frontend `80` 可访问。
+   - backend `8080` 与 MySQL `3306` 继续仅绑定服务器本机。
+   - `GET /api/campus/public/health` 返回 `code=200`、`status=UP`。
+   - 远端完整 smoke 复跑结果：25 项通过、0 项失败、0 项跳过。
+2. 下一步最高优先级：
+   - A. 使用公网入口做一次浏览器人工巡检，重点看 admin / user / parttime 三端关键页面真实样式。
+   - B. 重跑 Android 双端公网 API / WebView smoke，并按当前公网入口重新打 QA APK。
+3. 若准备给他人内测：
+   - 补“公网内测访问说明 + 测试账号发放边界”。
+   - 明确当前仍是 owner-controlled 单机内测，不是正式生产上线。
+4. 当前仍未处理但不阻塞本次部署：
+   - 没有 HTTPS、域名、证书。
+   - 没有正式监控告警。
    - Android 真机 smoke 未执行。
    - Android release 签名包未固化。
-6. 继续禁止：
+   - 当前部署来自本地工作树，不等同于远端 main 已完全同步。
+5. 继续禁止：
    - 不改 bridge。
    - 不改 `request.js`。
    - 不改 token 附着逻辑。

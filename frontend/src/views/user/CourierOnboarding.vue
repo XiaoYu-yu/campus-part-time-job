@@ -1,6 +1,6 @@
 <template>
   <UserLayout>
-    <div class="onboarding-page">
+    <div v-loading="pageLoading" element-loading-text="正在加载入驻信息..." class="onboarding-page">
       <section class="card status-card">
         <div>
           <div class="title-row">
@@ -59,7 +59,7 @@
         </div>
       </section>
 
-      <section class="card">
+      <section class="card" :class="{ 'token-section-eligible': eligibility.eligible }">
         <div class="section-heading">
           <div>
             <h3>兼职端 token 申请</h3>
@@ -137,8 +137,8 @@
               <strong>{{ tokenResult.courierProfile?.reviewStatus || '暂无' }}</strong>
             </div>
             <div class="summary-item">
-      <span>本地存储</span>
-      <strong>courier_token / courier_profile 已更新</strong>
+              <span>本地存储</span>
+              <strong>courier_token / courier_profile 已更新</strong>
             </div>
           </div>
           <el-form label-position="top" class="token-form">
@@ -256,6 +256,7 @@ const eligibility = ref({
   message: ''
 })
 
+const pageLoading = ref(true)
 const tokenApplying = ref(false)
 const tokenResult = reactive({
   token: '',
@@ -295,14 +296,19 @@ const fillForm = (profile) => {
 }
 
 const loadAll = async () => {
-  const [profileRes, reviewRes, eligibilityRes] = await Promise.all([
-    getCourierOnboardingProfile(),
-    getCourierOnboardingReviewStatus(),
-    getCourierTokenEligibility()
-  ])
-  fillForm(profileRes)
-  reviewStatus.value = reviewRes
-  eligibility.value = eligibilityRes
+  pageLoading.value = true
+  try {
+    const [profileRes, reviewRes, eligibilityRes] = await Promise.all([
+      getCourierOnboardingProfile(),
+      getCourierOnboardingReviewStatus(),
+      getCourierTokenEligibility()
+    ])
+    fillForm(profileRes)
+    reviewStatus.value = reviewRes
+    eligibility.value = eligibilityRes
+  } finally {
+    pageLoading.value = false
+  }
 }
 
 const goToCourierWorkbench = () => {
@@ -370,13 +376,13 @@ onMounted(() => loadAll())
 
 <style scoped lang="scss">
 .onboarding-page {
-  padding: 16px;
+  padding: 14px 14px 24px;
 }
 
 .card {
   background: rgba(255, 255, 255, 0.88);
   border: 1px solid rgba(15, 118, 110, 0.1);
-  border-radius: 22px;
+  border-radius: 24px;
   padding: 18px;
   margin-bottom: 16px;
   box-shadow: 0 16px 36px rgba(15, 118, 110, 0.08);
@@ -384,10 +390,32 @@ onMounted(() => loadAll())
 }
 
 .status-card {
+  position: relative;
+  overflow: hidden;
   display: flex;
   justify-content: space-between;
   gap: 12px;
   align-items: center;
+  background:
+    radial-gradient(circle at 92% 14%, rgba(45, 212, 191, 0.24), transparent 32%),
+    linear-gradient(135deg, rgba(226, 250, 255, 0.95), rgba(255, 255, 255, 0.88));
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: -40px;
+    bottom: -44px;
+    width: 150px;
+    height: 150px;
+    border-radius: 48px;
+    background: rgba(20, 184, 166, 0.1);
+    transform: rotate(14deg);
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 .status-card h2 {
@@ -424,6 +452,21 @@ onMounted(() => loadAll())
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   margin-bottom: 14px;
+}
+
+.onboarding-form :deep(.el-form-item__label),
+.token-form :deep(.el-form-item__label) {
+  font-weight: 800;
+  color: #26364d;
+}
+
+.onboarding-form :deep(.el-input__wrapper),
+.onboarding-form :deep(.el-select__wrapper),
+.onboarding-form :deep(.el-textarea__inner),
+.token-form :deep(.el-input__wrapper),
+.token-form :deep(.el-textarea__inner) {
+  min-height: 44px;
+  border-radius: 15px;
 }
 
 .flow-step {
@@ -606,6 +649,25 @@ onMounted(() => loadAll())
   gap: 12px;
 }
 
+.token-section-eligible {
+  border: 2px solid rgba(16, 185, 129, 0.2);
+  background:
+    radial-gradient(circle at 90% 10%, rgba(16, 185, 129, 0.08), transparent 40%),
+    rgba(255, 255, 255, 0.88);
+}
+
+.onboarding-page :deep(.el-alert--info) {
+  border-radius: 14px;
+  border: 1px solid rgba(14, 165, 233, 0.2);
+  background: rgba(236, 248, 255, 0.9);
+}
+
+.onboarding-page :deep(.el-alert--success) {
+  border-radius: 14px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  background: rgba(236, 253, 245, 0.9);
+}
+
 @media (max-width: 640px) {
   .status-card {
     flex-direction: column;
@@ -619,6 +681,21 @@ onMounted(() => loadAll())
 
   .form-actions {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 420px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 380px) {
+  .status-card::after {
+    width: 100px;
+    height: 100px;
+    right: -30px;
+    bottom: -30px;
   }
 }
 </style>

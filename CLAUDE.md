@@ -59,6 +59,14 @@ npm run cap:sync:public
 - 默认模拟器 API base 使用 `10.0.2.2`；局域网真机和公网内测分别使用 ignored 的 `.env.android-*-lan` / `.env.android-*-public`。
 - Android Gradle 本地构建需要 JDK 21；后端普通开发仍按 JDK 17。
 
+运行单个后端测试类：
+```powershell
+cd backend
+.\mvnw.cmd -Dtest=CampusCustomerOrderIntegrationTest test
+```
+- 测试类命名约定：`*IntegrationTest.java` 或 `*Test.java`，位于 `backend/src/test/java/com/cangqiong/takeaway/`。
+- H2 schema 与 seed data：`backend/src/main/resources/db/schema-h2.sql`、`data-h2.sql`。
+
 试运营脚本（维护模式，不随意新增）：
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\trial-operation\preflight.ps1
@@ -91,7 +99,7 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\commands.ps1 -F
 - JWT 拦截器按 URI 前缀判断角色：`/api/campus/admin/**` 需要 employee，`/api/campus/customer/**` 需要 customer，`/api/campus/courier/**` 需要 courier。
 - 公开接口绕过鉴权：`/api/campus/public/**`、`/api/campus/courier/auth/token`、登录接口、`GET /api/public/**`。
 - `/api/campus/courier/profile` 与 `/api/campus/courier/review-status` 是 onboarding 兼容桥路径，可接受 customer / courier token，不要随意收紧。
-- 测试 profile 的 H2 schema 覆盖旧表和 campus 表；新增 DB 结构时同步维护 `backend/db/init.sql`、`backend/db/migrations/`、H2 schema/data 以及 `docs/db-overview.md`。
+- 测试 profile 的 H2 schema 覆盖旧表和 campus 表；新增 DB 结构时同步维护 `backend/db/init.sql`、`backend/db/migrations/`、H2 schema/data（`backend/src/main/resources/db/schema-h2.sql`、`data-h2.sql`）以及 `docs/db-overview.md`。
 
 ## 前端架构
 
@@ -153,6 +161,8 @@ API 封装位于 `src/api/`：
 - `project-logs/campus-relay/summary.md`：当前 campus 主线总览。
 - `project-logs/campus-relay/pending-items.md`：待处理事项。
 - `project-logs/campus-relay/global-working-memory.md`：快速恢复上下文。
+- `docs/campus-relay/domain-refactor-plan.md`：校园代送领域改造规划。
+- `docs/campus-relay/legacy-to-campus-mapping.md`：旧表到 campus 表的映射关系。
 - `docs/legacy-takeaway/` 与 `project-logs/legacy-takeaway/`：旧外卖阶段归档，仅作历史参考。
 
 ## 本地工具

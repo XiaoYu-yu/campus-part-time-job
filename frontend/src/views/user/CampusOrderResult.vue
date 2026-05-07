@@ -41,7 +41,7 @@
         </div>
       </section>
 
-      <section v-if="showInitialHint" class="card state-card">
+      <section v-if="showInitialHint" class="card state-card hint-state">
         <div class="state-icon">ID</div>
         <div>
           <h3>等待输入订单号</h3>
@@ -51,7 +51,7 @@
       </section>
 
       <section v-if="loading" class="card state-card">
-        <div class="state-icon loading-state">...</div>
+        <div class="state-icon loading-state"><span class="spinner-ring"></span></div>
         <div>
           <h3>正在读取结果</h3>
           <p>正在查询订单 {{ queryingOrderId || orderId || '...' }} 的当前结果，请稍候。</p>
@@ -153,6 +153,11 @@
           </div>
         </div>
 
+        <div v-if="result.exceptionType" class="exception-notice">
+          <strong>异常信息提示</strong>
+          <p>当前订单存在异常记录，请关注售后处理结果。如有疑问请联系平台客服。</p>
+        </div>
+
         <div class="section-block">
           <div class="section-block__header">
             <h4>时间信息</h4>
@@ -193,7 +198,6 @@ const result = ref(null)
 const loading = ref(false)
 const errorMessage = ref('')
 const queryingOrderId = ref('')
-
 const showInitialHint = computed(() => !loading.value && !result.value && !errorMessage.value && !orderId.value?.trim())
 
 const loadOrderResult = async () => {
@@ -272,6 +276,7 @@ const resultSummaryTitle = (status) => {
   return '处理中'
 }
 
+
 onMounted(() => {
   if (orderId.value) {
     loadOrderResult()
@@ -281,17 +286,42 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .order-result-page {
-  padding: 16px;
+  padding: 14px 14px 24px;
 }
 
 .card {
   background: rgba(255, 255, 255, 0.88);
   border: 1px solid rgba(15, 118, 110, 0.1);
-  border-radius: 22px;
+  border-radius: 24px;
   padding: 18px;
   margin-bottom: 16px;
   box-shadow: 0 16px 36px rgba(15, 118, 110, 0.08);
   backdrop-filter: blur(18px);
+}
+
+.hero-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 92% 10%, rgba(45, 212, 191, 0.26), transparent 30%),
+    linear-gradient(135deg, rgba(226, 250, 255, 0.98), rgba(255, 255, 255, 0.88));
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: -46px;
+    bottom: -58px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: rgba(20, 184, 166, 0.1);
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 .state-card {
@@ -342,6 +372,93 @@ onMounted(() => {
   color: #64748b;
 }
 
+.spinner-ring {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(100, 116, 139, 0.2);
+  border-top-color: #64748b;
+  border-radius: 50%;
+  animation: campus-spin 0.7s linear infinite;
+}
+
+@keyframes campus-spin {
+  to { transform: rotate(360deg); }
+}
+
+.hint-state {
+  background:
+    radial-gradient(circle at 88% 16%, rgba(45, 212, 191, 0.12), transparent 36%),
+    rgba(240, 253, 250, 0.86);
+  border-color: rgba(20, 184, 166, 0.12);
+}
+
+.result-header__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-hero-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.completed-icon {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(16, 185, 129, 0.24);
+}
+
+.waiting-icon {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(14, 165, 233, 0.24);
+  position: relative;
+}
+
+.pulse-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(14, 165, 233, 0.25);
+  animation: campus-pulse 2s ease-in-out infinite;
+}
+
+@keyframes campus-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.12); opacity: 0.4; }
+}
+
+.exception-notice {
+  margin-top: 16px;
+  border-radius: 14px;
+  background: rgba(254, 243, 199, 0.55);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  padding: 14px 16px;
+
+  strong {
+    display: block;
+    color: #92400e;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  p {
+    margin: 0;
+    color: #a16207;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+}
+
 .state-icon.error-icon {
   background: rgba(254, 226, 226, 0.86);
   color: #ef4444;
@@ -385,7 +502,13 @@ onMounted(() => {
   .el-button--primary {
     border-radius: 14px;
     font-weight: 700;
+    min-height: 44px;
   }
+}
+
+.search-row :deep(.el-input__wrapper) {
+  min-height: 44px;
+  border-radius: 15px;
 }
 
 .guide-strip {
@@ -552,6 +675,182 @@ onMounted(() => {
 .label {
   color: #94a3b8;
   font-size: 13px;
+}
+
+.timeline-section {
+  margin-top: 18px;
+
+  h4 {
+    margin: 0 0 12px;
+    color: #0f172a;
+    font-size: 15px;
+  }
+}
+
+.timeline {
+  position: relative;
+  padding-left: 28px;
+}
+
+.timeline-step {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 20px;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  &:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 18px;
+    bottom: 0;
+    width: 2px;
+    background: #e2e8f0;
+  }
+
+  &.done:not(:last-child)::before {
+    background: linear-gradient(180deg, #14b8a6, #0f766e);
+  }
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -28px;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.marker-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #14b8a6, #0f766e);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+  display: grid;
+  place-items: center;
+}
+
+.marker-pulse {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 2px solid rgba(14, 165, 233, 0.25);
+    animation: campus-pulse 2s ease-in-out infinite;
+  }
+}
+
+.marker-empty {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  border: 2px solid #f1f5f9;
+}
+
+.timeline-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  strong {
+    color: #0f172a;
+    font-size: 14px;
+  }
+
+  span {
+    color: #94a3b8;
+    font-size: 12px;
+  }
+}
+
+.timeline-step.done .timeline-content strong {
+  color: #0f766e;
+}
+
+.timeline-step.current .timeline-content strong {
+  color: #0284c7;
+}
+
+.confirm-section {
+  margin-top: 20px;
+}
+
+.confirm-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.06), rgba(20, 184, 166, 0.06));
+  border: 1px solid rgba(14, 165, 233, 0.15);
+  border-radius: 18px;
+  padding: 16px;
+  flex-wrap: wrap;
+}
+
+.confirm-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: #fff;
+  font-size: 20px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.pulse-ring-sm {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid rgba(14, 165, 233, 0.2);
+  animation: campus-pulse 2s ease-in-out infinite;
+}
+
+.confirm-body {
+  flex: 1;
+  min-width: 140px;
+
+  strong {
+    display: block;
+    color: #0f172a;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+}
+
+.confirm-button {
+  min-height: 44px;
+  border-radius: 14px;
+  font-weight: 800;
+  padding: 0 24px;
 }
 
 @media (max-width: 640px) {

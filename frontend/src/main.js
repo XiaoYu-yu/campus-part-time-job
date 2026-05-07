@@ -8,6 +8,8 @@ import 'element-plus/dist/index.css'
 import './styles/variables.scss'
 import './styles/element-plus.scss'
 import './styles/global.scss'
+import './styles/mobile-app.scss'
+import './style.css'
 
 const app = createApp(App)
 

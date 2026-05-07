@@ -103,18 +103,20 @@ onMounted(() => loadCart())
 
 <style scoped lang="scss">
 .cart-page {
-  padding: 16px 16px 96px;
+  padding: 16px 16px 100px;
 }
 
 .page-title {
   margin: 0 0 16px;
+  font-size: 20px;
 }
 
 .cart-list,
 .empty-cart {
-  background: white;
-  border-radius: 16px;
+  background: #ffffff;
+  border-radius: 14px;
   padding: 16px;
+  border: 1px solid #e4e4e7;
 }
 
 .cart-item {
@@ -123,7 +125,7 @@ onMounted(() => loadCart())
   gap: 12px;
   align-items: center;
   padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f4f4f5;
 }
 
 .cart-item:last-child {
@@ -139,11 +141,12 @@ onMounted(() => loadCart())
 
 .cart-item-info h3 {
   margin: 0 0 6px;
+  font-size: 15px;
 }
 
 .cart-item-info p {
   margin: 0 0 10px;
-  color: #909399;
+  color: #a1a1aa;
   font-size: 13px;
 }
 
@@ -154,7 +157,7 @@ onMounted(() => loadCart())
 }
 
 .price {
-  color: #ff7d00;
+  color: #f59e0b;
   font-weight: 700;
 }
 
@@ -175,15 +178,19 @@ onMounted(() => loadCart())
 }
 
 .quantity-box button {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
+  background: #f4f4f5;
+  color: #18181b;
+  font-size: 16px;
 }
 
 .delete-btn,
 .clear-btn {
-  background: #fef0f0;
-  color: #f56c6c;
+  background: #fef2f2;
+  color: #ef4444;
   padding: 8px 14px;
+  font-size: 13px;
 }
 
 .checkout-bar {
@@ -195,8 +202,10 @@ onMounted(() => loadCart())
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background: white;
-  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  background: #ffffff;
+  border-top: 1px solid #e4e4e7;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .actions {
@@ -205,14 +214,15 @@ onMounted(() => loadCart())
 }
 
 .checkout-btn {
-  background: #ff7d00;
-  color: white;
+  background: #0f9f8f;
+  color: #ffffff;
   padding: 10px 18px;
+  font-weight: 600;
 }
 
 .total {
   margin-top: 8px;
-  color: #ff7d00;
+  color: #f59e0b;
   font-weight: 700;
 }
 
@@ -223,8 +233,9 @@ onMounted(() => loadCart())
 
 .empty-cart button {
   margin-top: 12px;
-  background: #ff7d00;
-  color: white;
+  background: #0f9f8f;
+  color: #ffffff;
   padding: 10px 20px;
+  font-weight: 600;
 }
 </style>

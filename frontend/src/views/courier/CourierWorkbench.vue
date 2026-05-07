@@ -24,22 +24,22 @@
       />
 
       <template v-if="hasCourierToken">
-        <section class="flow-strip">
-          <div class="flow-step">
-            <span>身份</span>
-            <strong>profile / review-status</strong>
+        <section class="status-tiles">
+          <div class="status-tile available">
+            <span>可接任务</span>
+            <strong>{{ availableOrders.length }}</strong>
           </div>
-          <div class="flow-step">
-            <span>订单</span>
-            <strong>可接单预览 / 详情</strong>
+          <div class="status-tile progress">
+            <span>资料状态</span>
+            <strong>{{ displayText(reviewStatus.reviewStatus || profile.reviewStatus) }}</strong>
           </div>
-          <div class="flow-step">
-            <span>动作</span>
-            <strong>接单 / 取餐 / 送达</strong>
+          <div class="status-tile done">
+            <span>启用状态</span>
+            <strong>{{ Number(reviewStatus.enabled ?? profile.enabled) === 1 ? '可工作' : '待启用' }}</strong>
           </div>
-          <div class="flow-step">
-            <span>结果</span>
-            <strong>异常 / 确认 / 完成</strong>
+          <div class="status-tile issue">
+            <span>Token</span>
+            <strong>有效</strong>
           </div>
         </section>
 
@@ -90,41 +90,44 @@
           </div>
 
           <div class="table-note">
-            <strong>演示提示</strong>
-            <span>列表只展示当前可接单记录；为空时不代表链路失败，可通过下方订单号回读入口查看已完成样本。</span>
+            <strong>接单提示</strong>
+            <span>可接任务会以卡片展示；为空时可通过下方订单号回读入口查看已完成样本。</span>
           </div>
 
-          <el-table
+          <div
             v-loading="loading"
-            :data="availableOrders"
-            border
-            empty-text="当前没有可接单记录，可能是暂时无单或当前筛选结果为空"
+            class="task-list"
           >
-            <el-table-column prop="id" label="订单号" min-width="180" />
-            <el-table-column prop="pickupPointName" label="取餐点" min-width="150" />
-            <el-table-column prop="deliveryBuilding" label="配送楼栋" min-width="140" />
-            <el-table-column label="配送费用" width="120" align="right">
-              <template #default="{ row }">
-                {{ formatAmount(row.totalAmount) }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="status" label="订单状态" width="150" />
-            <el-table-column label="操作" width="120" align="center">
-              <template #default="{ row }">
-                <el-button type="primary" link @click="openOrderDetail(row.id)">
-                  详情
-                </el-button>
+            <el-empty
+              v-if="!loading && availableOrders.length === 0"
+              description="当前暂无可接任务，稍后刷新或用订单号回读样本"
+            />
+
+            <article v-for="order in availableOrders" :key="order.id" class="task-card">
+              <div class="task-card__top">
+                <div>
+                  <span class="task-id">#{{ order.id }}</span>
+                  <h4>{{ displayText(order.pickupPointName) }} → {{ displayText(order.deliveryBuilding) }}</h4>
+                  <p>{{ displayText(order.deliveryDetail) }}</p>
+                </div>
+                <strong class="task-price">{{ formatAmount(order.totalAmount) }}</strong>
+              </div>
+              <div class="task-meta">
+                <span>状态：{{ displayText(order.status) }}</span>
+                <span>当前可接</span>
+              </div>
+              <div class="task-actions">
+                <el-button @click="openOrderDetail(order.id)">查看详情</el-button>
                 <el-button
                   type="primary"
-                  link
-                  :loading="acceptingOrderId === row.id"
-                  @click="acceptOrder(row.id)"
+                  :loading="acceptingOrderId === order.id"
+                  @click="acceptOrder(order.id)"
                 >
                   接单
                 </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
+              </div>
+            </article>
+          </div>
         </section>
 
         <section class="card">
@@ -158,7 +161,7 @@
         <el-drawer
           v-model="detailVisible"
           title="订单详情"
-          size="420px"
+          :size="drawerSize"
           destroy-on-close
         >
           <div v-loading="detailLoading" class="detail-content">
@@ -448,7 +451,7 @@
         </el-drawer>
       </template>
 
-      <section v-else class="card">
+      <section v-else class="card no-token-card">
         <el-empty description="当前浏览器还没有兼职 token，暂时无法进入兼职工作台。">
           <el-button type="primary" @click="goToParttimeLogin">前往兼职端登录</el-button>
           <el-button @click="goToOnboarding">返回入驻页面</el-button>
@@ -497,7 +500,7 @@ const profile = reactive({
 const reviewStatus = reactive({
   reviewStatus: '',
   reviewComment: '',
-  enabled: 0
+  enabled: null
 })
 
 const orderDetail = reactive({
@@ -536,6 +539,7 @@ const exceptionForm = reactive({
 })
 
 const hasCourierToken = computed(() => Boolean(localStorage.getItem('courier_token')))
+const drawerSize = computed(() => (window.innerWidth <= 640 ? '100%' : '420px'))
 const canPickupOrder = computed(() => orderDetail.status === 'ACCEPTED')
 const canDeliverOrder = computed(() => ['PICKED_UP', 'DELIVERING'].includes(orderDetail.status))
 const canReportException = computed(() => ['ACCEPTED', 'PICKED_UP', 'DELIVERING', 'AWAITING_CONFIRMATION'].includes(orderDetail.status))
@@ -643,7 +647,7 @@ const loadWorkbench = async () => {
 
     reviewStatus.reviewStatus = reviewRes.reviewStatus || ''
     reviewStatus.reviewComment = reviewRes.reviewComment || ''
-    reviewStatus.enabled = reviewRes.enabled ?? 0
+    reviewStatus.enabled = reviewRes.enabled ?? null
 
     availableOrders.value = ordersRes.records || []
   } finally {
@@ -806,29 +810,51 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .workbench-page {
-  padding: 16px;
+  padding: 2px 0 16px;
 }
 
 .card {
   background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(15, 118, 110, 0.1);
-  border-radius: 22px;
+  border: 1px solid rgba(21, 184, 166, 0.12);
+  border-radius: 24px;
   padding: 18px;
-  margin-bottom: 16px;
-  box-shadow: 0 16px 36px rgba(15, 118, 110, 0.08);
+  margin-bottom: 14px;
+  box-shadow: 0 16px 38px rgba(26, 106, 128, 0.1);
   backdrop-filter: blur(18px);
 }
 
 .hero-card {
+  position: relative;
+  overflow: hidden;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(45, 212, 191, 0.28), transparent 32%),
+    linear-gradient(135deg, rgba(236, 254, 255, 0.96), rgba(255, 255, 255, 0.86));
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: -38px;
+    bottom: -36px;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: rgba(20, 184, 166, 0.1);
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 .hero-card h2 {
   margin: 0 0 6px;
   color: #0f172a;
+  font-size: 26px;
 }
 
 .hero-card p {
@@ -876,39 +902,51 @@ onMounted(() => {
   margin-bottom: 14px;
 }
 
-.flow-strip {
+.status-tiles {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  gap: 10px;
   margin-bottom: 14px;
 }
 
-.flow-step {
-  background: rgba(255, 255, 255, 0.82);
-  border-radius: 16px;
-  padding: 14px;
-  border: 1px solid rgba(15, 118, 110, 0.1);
-  box-shadow: 0 8px 20px rgba(15, 118, 110, 0.05);
+.status-tile {
+  min-height: 78px;
+  border-radius: 20px;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: 0 10px 26px rgba(26, 106, 128, 0.08);
 }
 
-.flow-step span {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #14b8a6, #38bdf8);
-  color: #fff;
-  font-size: 11px;
-  font-weight: 800;
-  margin-bottom: 8px;
+.status-tile span {
+  color: #6b7a90;
+  font-size: 12px;
+  font-weight: 700;
 }
 
-.flow-step strong {
-  display: block;
+.status-tile strong {
   color: #0f172a;
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.status-tile.available {
+  background: linear-gradient(180deg, #eefbff, #ffffff);
+}
+
+.status-tile.progress {
+  background: linear-gradient(180deg, #f0fdf4, #ffffff);
+}
+
+.status-tile.done {
+  background: linear-gradient(180deg, #ecfeff, #ffffff);
+}
+
+.status-tile.issue {
+  background: linear-gradient(180deg, #fff7ed, #ffffff);
 }
 
 .section-header {
@@ -945,6 +983,78 @@ onMounted(() => {
 .table-note strong {
   color: #0f766e;
   white-space: nowrap;
+}
+
+.task-list {
+  min-height: 120px;
+  display: grid;
+  gap: 12px;
+}
+
+.task-card {
+  border: 1px solid rgba(21, 184, 166, 0.12);
+  border-radius: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 28px rgba(26, 106, 128, 0.08);
+}
+
+.task-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+
+  h4 {
+    margin: 4px 0 5px;
+    color: #0f172a;
+    font-size: 16px;
+  }
+
+  p {
+    margin: 0;
+    color: #6b7a90;
+    line-height: 1.5;
+  }
+}
+
+.task-id {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.task-price {
+  color: #ff5c22;
+  font-size: 20px;
+  font-weight: 800;
+  white-space: nowrap;
+  background: rgba(255, 92, 34, 0.08);
+  padding: 4px 10px;
+  border-radius: 10px;
+}
+
+.task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+
+  span {
+    border-radius: 999px;
+    padding: 6px 10px;
+    background: rgba(20, 184, 166, 0.1);
+    color: #0f766e;
+    font-size: 12px;
+    font-weight: 800;
+  }
+}
+
+.task-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
 }
 
 .summary-grid {
@@ -985,6 +1095,8 @@ onMounted(() => {
 
 .detail-content {
   min-height: 160px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .detail-status-card {
@@ -1030,28 +1142,29 @@ onMounted(() => {
   margin-bottom: 2px;
 }
 
-.pickup-section {
-  margin-top: 18px;
-  border-top: 1px solid rgba(15, 118, 110, 0.08);
-  padding-top: 16px;
-}
-
-.deliver-section {
-  margin-top: 18px;
-  border-top: 1px solid rgba(15, 118, 110, 0.08);
-  padding-top: 16px;
-}
-
-.exception-section {
-  margin-top: 18px;
-  border-top: 1px solid rgba(15, 118, 110, 0.08);
-  padding-top: 16px;
-}
-
+.pickup-section,
+.deliver-section,
+.exception-section,
 .confirm-visual-section {
-  margin-top: 18px;
-  border-top: 1px solid rgba(15, 118, 110, 0.08);
-  padding-top: 16px;
+  margin-top: 20px;
+  border-top: 1px solid rgba(15, 118, 110, 0.12);
+  padding-top: 18px;
+
+  h4 {
+    position: relative;
+    padding-left: 12px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 2px;
+      bottom: 2px;
+      width: 3px;
+      border-radius: 2px;
+      background: linear-gradient(180deg, #14b8a6, #38bdf8);
+    }
+  }
 }
 
 .exception-grid {
@@ -1128,14 +1241,34 @@ onMounted(() => {
     flex-direction: column;
   }
 
-  .flow-strip {
-    grid-template-columns: 1fr;
+  .status-tiles {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .table-note,
   .detail-status-card {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+.no-token-card {
+  text-align: center;
+  padding: 32px 18px;
+
+  .el-empty {
+    padding: 24px 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .status-tile {
+    min-height: 64px;
+    padding: 10px;
+  }
+
+  .status-tile strong {
+    font-size: 16px;
   }
 }
 </style>

@@ -176,10 +176,11 @@ onMounted(() => loadProfile())
 .profile-card,
 .stats-card,
 .card {
-  background: white;
-  border-radius: 16px;
+  background: #ffffff;
+  border-radius: 14px;
   padding: 16px;
   margin-bottom: 14px;
+  border: 1px solid #e4e4e7;
 }
 
 .profile-card {
@@ -215,7 +216,8 @@ onMounted(() => loadProfile())
 
 .address-item {
   padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f4f4f5;
+  font-size: 14px;
 }
 
 .address-item:last-child {
@@ -229,18 +231,31 @@ onMounted(() => loadProfile())
 }
 
 .default-tag {
-  color: #ff7d00;
+  color: #f59e0b;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .section-tip {
-  color: #909399;
+  color: #a1a1aa;
   font-size: 12px;
 }
 
 .menu-item {
   padding: 14px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f4f4f5;
   cursor: pointer;
+  font-size: 14px;
+
+  &::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-top: 2px solid #a1a1aa;
+    border-right: 2px solid #a1a1aa;
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
 }
 
 .menu-item:last-child {
@@ -255,18 +270,24 @@ onMounted(() => loadProfile())
 
 .logout-btn {
   width: 100%;
-  background: #f56c6c;
-  color: white;
-  border-radius: 999px;
-  padding: 12px 0;
+  background: #ef4444;
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 14px 0;
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 8px;
 }
 
 .text-btn {
   background: transparent;
-  color: #ff7d00;
+  color: #0f9f8f;
+  font-weight: 600;
+  font-size: 13px;
 }
 
 .empty-tip {
-  color: #909399;
+  color: #a1a1aa;
+  font-size: 14px;
 }
 </style>

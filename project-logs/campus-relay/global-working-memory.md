@@ -322,3 +322,34 @@
 3. 试运营稳定性
 
 为主，而不是回到“继续补页面”。
+
+## 2026-05-07 补充：Step 153-157 同步与服务器部署状态
+
+1. Step 153-156 已由其他 AI / 本地协作轮次完成移动端原型视觉和用户端订单主链路对齐：
+   - 用户端 / 兼职端移动壳与核心页面已按原型做第一轮和第二轮视觉调整。
+   - 用户端订单列表已从下拉筛选改为横滑 tab。
+   - 用户端订单结果页已增加状态时间轴和 `AWAITING_CONFIRMATION` 确认收货入口。
+   - `campus-customer.js` 已新增 `confirmCampusCustomerOrder`，复用既有 customer confirm 后端接口。
+2. Step 157 已完成当前本地工作树服务器部署：
+   - 服务器单机内测 compose 中 `mysql / backend / frontend` 均已启动。
+   - 公网入口只开放 frontend `80`。
+   - backend `8080` 与 MySQL `3306` 继续仅绑定服务器本机。
+   - `GET /api/campus/public/health` 返回 `code=200`、`status=UP`。
+   - 远端完整 smoke 复跑结果为 25 项通过、0 项失败、0 项跳过。
+3. 当前服务器部署使用的是“当前本地工作树”。
+   - 若后续查看 GitHub 是否包含同样内容，必须先确认本地改动是否已经提交并推送。
+   - 不要把服务器部署成功误解为 GitHub 已同步。
+4. 当前敏感信息处理口径：
+   - 不在仓库记录服务器密码、GitHub token、腾讯地图 key、JWT secret、数据库密码。
+   - 远端 smoke 报告中的 URL 已脱敏。
+5. 下一步恢复工作时优先检查：
+   - `git status --short`
+   - `git log --oneline -5`
+   - `project-logs/campus-relay/step-157-current-server-deploy-and-smoke.md`
+   - `project-logs/campus-relay/runtime/step-157-server-deploy/remote-smoke-report-rerun.json`
+
+默认下一步建议：
+
+1. 若目标是同步 GitHub：先提交并推送 Step 153-157 及移动端视觉/Android 壳/部署日志相关文件，排除 `target/` 等本地临时产物。
+2. 若目标是继续产品化：先做公网入口浏览器人工巡检，再重打 Android 双端 QA APK 并跑公网 API / WebView smoke。
+3. 若目标是继续前端：先让 owner 提供新原型或明确页面范围，不再机械 polish。

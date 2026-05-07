@@ -234,3 +234,39 @@ Phase 2：清理前端残留文件（HelloWorld.vue、vue.svg、vite.svg、Compo
 - 是否改了后端 Java 代码：否
 - frontend build 是否通过：是（1.00s）
 - backend compile 是否通过：本轮未改后端代码，非必须
+
+---
+
+## 轮次记录 2026-05-07 (Step 157 / GitHub 同步前上下文维护)
+
+### 本轮目标
+
+整理本地 Step 153-157 以来的移动端视觉、用户端订单主链路、Android 壳、服务器部署与远端 smoke 留痕，并准备同步到 GitHub。
+
+### 实际改动
+
+- 新增 Step 157 服务器部署与远端 smoke 日志。
+- 更新 `summary.md`、`pending-items.md`、`file-change-list.md`。
+- 更新 `global-working-memory.md`，记录当前服务器部署状态、远端 smoke 结果和恢复工作入口。
+- 将根目录临时截图归档到对应 runtime 目录。
+- 将根目录 `target/` 加入 `.gitignore`，避免本地临时运行产物进入仓库。
+
+### 未改动内容
+
+- 没有改 bridge。
+- 没有改后端鉴权。
+- 没有改 `request.js`。
+- 没有改 token 附着逻辑。
+- 没有删除旧外卖兼容模块。
+- 没有提交真实密钥、服务器密码、GitHub token 或腾讯地图 key。
+
+### 风险
+
+- 当前服务器部署来自本地工作树，必须提交并推送后 GitHub 才能体现同一份成果。
+- 当前仍是 HTTP 单机内测，不是 HTTPS / 域名 / 正式生产上线。
+
+### 下一轮建议
+
+1. 提交并推送当前本地有效成果。
+2. 推送后核对 `origin/main` 与本地 `HEAD` 是否一致。
+3. 若继续试运营准备，优先跑浏览器人工巡检和 Android 双端公网 smoke。

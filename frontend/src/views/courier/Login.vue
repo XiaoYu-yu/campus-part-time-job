@@ -133,102 +133,107 @@ const goToUserLogin = () => {
 <style scoped lang="scss">
 .parttime-login-page {
   min-height: 100vh;
-  padding: 24px;
+  padding: 22px 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background:
-    radial-gradient(circle at top left, rgba(19, 152, 173, 0.12), transparent 36%),
-    radial-gradient(circle at bottom right, rgba(91, 192, 190, 0.14), transparent 30%),
-    linear-gradient(180deg, #f5fbfc 0%, #eef7f7 100%);
+  background: #f5f5f5;
 }
 
 .login-shell {
-  width: min(1040px, 100%);
-  display: grid;
-  grid-template-columns: minmax(320px, 1.1fr) minmax(320px, 0.9fr);
-  gap: 18px;
+  width: min(430px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .brand-panel,
 .form-panel {
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.82);
-  border-radius: 28px;
-  box-shadow: 0 18px 44px rgba(26, 87, 100, 0.1);
-  backdrop-filter: blur(18px);
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .brand-panel {
-  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  padding: 28px 22px 24px;
+  min-height: auto;
+  background: linear-gradient(135deg, #eefdfa, #f0fdfa);
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 .entry-badge {
   display: inline-flex;
   align-items: center;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(33, 166, 180, 0.12);
-  color: #0f7f8e;
+  padding: 5px 12px;
+  border-radius: 6px;
+  background: rgba(15, 159, 143, 0.1);
+  color: #0f9f8f;
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.04em;
 }
 
 .brand-panel h1 {
-  margin: 16px 0 10px;
-  font-size: 40px;
-  line-height: 1.1;
-  color: #102a43;
+  margin: 14px 0 8px;
+  font-size: 26px;
+  line-height: 1.15;
+  color: #18181b;
 }
 
 .brand-panel > p {
   margin: 0;
-  color: #486581;
-  line-height: 1.8;
-  font-size: 15px;
+  color: #52525b;
+  line-height: 1.7;
+  font-size: 14px;
 }
 
 .guide-grid {
-  margin-top: 28px;
+  margin-top: 20px;
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 .guide-item {
-  border-radius: 18px;
-  padding: 16px 18px;
-  background: rgba(255, 255, 255, 0.76);
-  border: 1px solid rgba(180, 216, 220, 0.86);
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .guide-item span {
-  color: #7b8794;
+  color: #71717a;
   font-size: 13px;
 }
 
 .guide-item strong {
-  color: #102a43;
-  font-size: 16px;
+  color: #18181b;
+  font-size: 14px;
 }
 
 .form-panel {
-  padding: 28px;
+  padding: 22px;
 }
 
 .panel-heading h2 {
   margin: 0 0 8px;
-  font-size: 24px;
-  color: #102a43;
+  font-size: 20px;
+  color: #18181b;
 }
 
 .panel-heading p {
   margin: 0 0 18px;
-  color: #7b8794;
-  line-height: 1.7;
+  color: #71717a;
+  line-height: 1.6;
+  font-size: 14px;
 }
 
 .page-alert {
@@ -239,19 +244,20 @@ const goToUserLogin = () => {
   width: 100%;
   margin-top: 8px;
   border: none;
-  border-radius: 16px;
-  min-height: 44px;
-  font-weight: 800;
-  background: linear-gradient(135deg, #0f766e 0%, #0ea5e9 100%);
-  box-shadow: 0 14px 28px rgba(14, 165, 233, 0.2);
+  border-radius: 12px;
+  min-height: 48px;
+  font-weight: 700;
+  background: #0f9f8f;
+  font-size: 15px;
 }
 
 .tips {
   margin-top: 18px;
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 14px 16px;
-  background: #f6fbfb;
-  color: #486581;
+  background: #fafafa;
+  border: 1px solid #e4e4e7;
+  color: #52525b;
   line-height: 1.8;
   font-size: 13px;
 }
@@ -263,16 +269,6 @@ const goToUserLogin = () => {
   margin-top: 18px;
 }
 
-@media (max-width: 900px) {
-  .login-shell {
-    grid-template-columns: 1fr;
-  }
-
-  .brand-panel h1 {
-    font-size: 32px;
-  }
-}
-
 @media (max-width: 640px) {
   .parttime-login-page {
     padding: 16px;
@@ -280,8 +276,8 @@ const goToUserLogin = () => {
 
   .brand-panel,
   .form-panel {
-    padding: 22px;
-    border-radius: 22px;
+    padding: 20px;
+    border-radius: 14px;
   }
 
   .secondary-actions {

@@ -3,8 +3,8 @@
     <div class="relay-orders-page">
       <section class="hero-card">
         <div class="hero-kicker">校园代送</div>
-        <h1>发布代送单，继续查看我的订单</h1>
-        <p>复用现有 customer 代送接口，创建后可手动触发模拟支付；本页不接真实支付，也不改变旧兼容模块。</p>
+        <h1>发布代送需求</h1>
+        <p>填写取件点、送达楼栋和备注，创建后可执行模拟支付进入待接单。</p>
         <div class="hero-meta">
           <span>基础代送 {{ formatAmount(deliveryRules.baseFee) }}</span>
           <span>加急窗口 {{ deliveryRules.priorityWindowMinutes || 5 }} 分钟</span>
@@ -32,7 +32,7 @@
       <section class="card form-card">
         <div class="section-heading">
           <div>
-            <span>发布代送</span>
+            <span>代送信息</span>
             <h2>创建校园代送单</h2>
           </div>
           <button class="text-button" type="button" @click="resetForm">重填</button>
@@ -133,12 +133,12 @@
             </el-form-item>
           </div>
 
-          <div class="fee-card">
+        <div class="fee-card">
             <div>
               <span>费用预览</span>
-              <strong>{{ formatAmount(amountPreview.total) }}</strong>
-            </div>
-            <p>基础 {{ formatAmount(amountPreview.base) }} + 加急 {{ formatAmount(amountPreview.priority) }} + 打赏 {{ formatAmount(amountPreview.tip) }}</p>
+            <strong>{{ formatAmount(amountPreview.total) }}</strong>
+          </div>
+          <p>基础 {{ formatAmount(amountPreview.base) }} + 加急 {{ formatAmount(amountPreview.priority) }} + 打赏 {{ formatAmount(amountPreview.tip) }}</p>
             <el-switch
               v-model="form.urgent"
               active-text="加急"
@@ -152,7 +152,7 @@
           </el-form-item>
 
           <el-button type="primary" class="wide-button" :loading="createLoading" @click="handleCreate">
-            创建代送单
+            提交订单
           </el-button>
         </el-form>
 
@@ -163,7 +163,7 @@
             <p>可先模拟支付进入待接单，也可去结果回看页只读查看。</p>
           </div>
           <div class="created-actions">
-            <el-button type="primary" :loading="payingOrderId === createdOrderId" @click="handleMockPay(createdOrderId)">模拟支付</el-button>
+            <el-button type="primary" :loading="payingOrderId === createdOrderId" @click="handleMockPay(createdOrderId)">去模拟支付</el-button>
             <el-button @click="openResult(createdOrderId)">结果回看</el-button>
           </div>
         </div>
@@ -178,25 +178,34 @@
           <button class="text-button" type="button" @click="loadOrders">刷新</button>
         </div>
 
+        <div class="status-tabs">
+          <button
+            v-for="tab in statusTabs"
+            :key="tab.value"
+            class="status-tab"
+            :class="{ active: filters.status === tab.value }"
+            @click="handleTabChange(tab.value)"
+          >{{ tab.label }}</button>
+        </div>
+
         <div class="filter-row">
           <el-input v-model="filters.orderNo" placeholder="按订单号筛选" clearable @keyup.enter="handleSearch" />
-          <el-select v-model="filters.status" placeholder="状态" clearable>
-            <el-option label="待支付" value="PENDING_PAYMENT" />
-            <el-option label="待接单" value="WAITING_ACCEPT" />
-            <el-option label="已接单" value="ACCEPTED" />
-            <el-option label="配送中" value="DELIVERING" />
-            <el-option label="待确认" value="AWAITING_CONFIRMATION" />
-            <el-option label="已完成" value="COMPLETED" />
-            <el-option label="已取消" value="CANCELLED" />
-          </el-select>
           <el-button type="primary" @click="handleSearch">查询</el-button>
         </div>
 
         <div v-if="ordersLoading" class="state-card">
-          <div class="state-icon">...</div>
+          <div class="state-icon"><span class="spinner-ring"></span></div>
           <div>
             <strong>正在读取我的代送单</strong>
             <p>调用 customer 订单分页接口读取最近订单。</p>
+          </div>
+        </div>
+
+        <div v-else-if="ordersError" class="state-card error-state">
+          <div class="state-icon error-icon">!</div>
+          <div>
+            <strong>订单加载失败</strong>
+            <p>{{ ordersError }}</p>
           </div>
         </div>
 
@@ -205,41 +214,48 @@
         <div v-else class="order-list">
           <article v-for="order in orders" :key="order.id" class="order-card">
             <div class="order-head">
-              <div>
-                <span>订单号</span>
-                <strong>{{ order.id }}</strong>
+              <div class="order-head__left">
+                <span class="order-head__label">订单号</span>
+                <strong class="order-head__id">{{ order.id }}</strong>
               </div>
-              <el-tag :type="statusTagType(order.status)">{{ statusText(order.status) }}</el-tag>
+              <el-tag :type="statusTagType(order.status)" size="small">{{ statusText(order.status) }}</el-tag>
             </div>
-            <div class="order-detail-grid">
-              <div>
-                <span>取餐点</span>
-                <strong>{{ displayText(order.pickupPointName) }}</strong>
+
+            <div class="order-route">
+              <div class="route-point">
+                <span class="route-dot pickup-dot"></span>
+                <div>
+                  <span class="route-label">取餐点</span>
+                  <strong>{{ displayText(order.pickupPointName) }}</strong>
+                </div>
               </div>
-              <div>
-                <span>送达位置</span>
-                <strong>{{ displayText(order.deliveryBuilding) }} / {{ displayText(order.deliveryDetail) }}</strong>
-              </div>
-              <div>
-                <span>支付状态</span>
-                <strong>{{ paymentText(order.paymentStatus) }}</strong>
-              </div>
-              <div>
-                <span>金额</span>
-                <strong>{{ formatAmount(order.totalAmount) }}</strong>
+              <div class="route-line"></div>
+              <div class="route-point">
+                <span class="route-dot deliver-dot"></span>
+                <div>
+                  <span class="route-label">送达地</span>
+                  <strong>{{ displayText(order.deliveryBuilding) }} {{ displayText(order.deliveryDetail) }}</strong>
+                </div>
               </div>
             </div>
-            <div class="order-actions">
-              <el-button
-                v-if="canMockPay(order)"
-                type="primary"
-                size="small"
-                :loading="payingOrderId === order.id"
-                @click="handleMockPay(order.id)"
-              >
-                模拟支付
-              </el-button>
-              <el-button size="small" @click="openResult(order.id)">结果回看</el-button>
+
+            <div class="order-foot">
+              <div class="order-foot__info">
+                <span v-if="order.pickupCode" class="pickup-code-tag">取餐码 {{ order.pickupCode }}</span>
+                <span class="order-amount">{{ formatAmount(order.totalAmount) }}</span>
+              </div>
+              <div class="order-actions">
+                <el-button
+                  v-if="canMockPay(order)"
+                  type="primary"
+                  size="small"
+                  :loading="payingOrderId === order.id"
+                  @click="handleMockPay(order.id)"
+                >
+                  模拟支付
+                </el-button>
+                <el-button size="small" @click="openResult(order.id)">结果回看</el-button>
+              </div>
             </div>
           </article>
         </div>
@@ -277,6 +293,7 @@ const router = useRouter()
 const pickupLoading = ref(false)
 const createLoading = ref(false)
 const ordersLoading = ref(false)
+const ordersError = ref('')
 const payingOrderId = ref('')
 const pickupPoints = ref([])
 const deliveryRules = ref({})
@@ -338,6 +355,20 @@ const formatAmount = (value) => {
   return `¥${Number(value).toFixed(2)}`
 }
 
+const statusTabs = [
+  { label: '全部', value: '' },
+  { label: '待支付', value: 'PENDING_PAYMENT' },
+  { label: '待接单', value: 'WAITING_ACCEPT' },
+  { label: '配送中', value: 'DELIVERING' },
+  { label: '已完成', value: 'COMPLETED' }
+]
+
+const handleTabChange = (value) => {
+  filters.status = value
+  pagination.page = 1
+  loadOrders()
+}
+
 const statusText = (status) => ({
   PENDING_PAYMENT: '待支付',
   BUILDING_PRIORITY_PENDING: '楼栋优先',
@@ -395,6 +426,7 @@ const loadPickupPoints = async () => {
 
 const loadOrders = async () => {
   ordersLoading.value = true
+  ordersError.value = ''
   try {
     const response = await getCampusCustomerOrders({
       page: pagination.page,
@@ -404,6 +436,8 @@ const loadOrders = async () => {
     })
     orders.value = response.records || []
     pagination.total = response.total || 0
+  } catch (error) {
+    ordersError.value = error?.response?.data?.msg || error?.message || '加载订单列表失败'
   } finally {
     ordersLoading.value = false
   }
@@ -531,7 +565,7 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 .relay-orders-page {
-  padding: 16px 14px 24px;
+  padding: 14px 14px 24px;
 }
 
 .hero-card,
@@ -543,15 +577,29 @@ onMounted(async () => {
 }
 
 .hero-card {
+  position: relative;
   overflow: hidden;
   border-radius: 28px;
   padding: 24px 22px;
   margin-bottom: 16px;
   background:
-    radial-gradient(circle at 92% 12%, rgba(56, 189, 248, 0.24), transparent 28%),
-    linear-gradient(135deg, rgba(240, 253, 250, 0.98), rgba(255, 255, 255, 0.88));
+    radial-gradient(circle at 92% 10%, rgba(45, 212, 191, 0.28), transparent 30%),
+    linear-gradient(135deg, rgba(226, 250, 255, 0.98), rgba(255, 255, 255, 0.88));
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: -36px;
+    bottom: -32px;
+    width: 132px;
+    height: 132px;
+    border-radius: 50%;
+    background: rgba(20, 184, 166, 0.1);
+  }
 
   h1 {
+    position: relative;
+    z-index: 1;
     margin: 8px 0 10px;
     font-size: 27px;
     line-height: 1.18;
@@ -560,6 +608,8 @@ onMounted(async () => {
   }
 
   p {
+    position: relative;
+    z-index: 1;
     margin: 0;
     color: #475569;
     line-height: 1.65;
@@ -575,6 +625,8 @@ onMounted(async () => {
 }
 
 .hero-meta {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -594,6 +646,28 @@ onMounted(async () => {
   border-radius: 24px;
   padding: 18px;
   margin-bottom: 16px;
+}
+
+.form-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.86));
+  padding-bottom: 24px;
+}
+
+.order-form :deep(.el-form-item__label) {
+  font-weight: 800;
+  color: #26364d;
+}
+
+.order-form :deep(.el-input__wrapper),
+.order-form :deep(.el-select__wrapper),
+.order-form :deep(.el-textarea__inner) {
+  min-height: 44px;
+  border-radius: 15px;
+}
+
+.order-form :deep(.el-textarea__inner) {
+  min-height: 88px;
 }
 
 .guide-card {
@@ -669,7 +743,9 @@ onMounted(async () => {
 .created-card,
 .state-card {
   border-radius: 18px;
-  background: rgba(240, 253, 250, 0.78);
+  background:
+    radial-gradient(circle at right, rgba(45, 212, 191, 0.18), transparent 34%),
+    rgba(240, 253, 250, 0.78);
   padding: 14px;
   margin-bottom: 18px;
 }
@@ -677,6 +753,7 @@ onMounted(async () => {
 .fee-card {
   display: grid;
   gap: 8px;
+  border: 1px solid rgba(20, 184, 166, 0.16);
 
   div {
     display: flex;
@@ -696,15 +773,17 @@ onMounted(async () => {
 
   strong {
     color: #0f766e;
-    font-size: 20px;
+    font-size: 32px;
+    letter-spacing: -0.04em;
   }
 }
 
 .wide-button {
   width: 100%;
-  min-height: 44px;
+  min-height: 48px;
   border-radius: 16px;
   font-weight: 800;
+  margin-bottom: 8px;
 }
 
 .created-card {
@@ -740,9 +819,39 @@ onMounted(async () => {
   flex-shrink: 0;
 }
 
+.status-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.status-tab {
+  flex-shrink: 0;
+  border: 1px solid rgba(15, 118, 110, 0.12);
+  border-radius: 999px;
+  padding: 7px 16px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+
+  &.active {
+    background: linear-gradient(135deg, #0f766e, #14b8a6);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(15, 118, 110, 0.2);
+  }
+}
+
 .filter-row {
   display: grid;
-  grid-template-columns: 1fr 130px auto;
+  grid-template-columns: 1fr auto;
   gap: 10px;
   margin-bottom: 14px;
 }
@@ -771,6 +880,30 @@ onMounted(async () => {
   background: #ecfeff;
   color: #0891b2;
   font-weight: 900;
+}
+
+.spinner-ring {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2.5px solid rgba(100, 116, 139, 0.2);
+  border-top-color: #64748b;
+  border-radius: 50%;
+  animation: campus-spin 0.7s linear infinite;
+}
+
+@keyframes campus-spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-state {
+  border-color: rgba(239, 68, 68, 0.15);
+  background: rgba(254, 242, 242, 0.86);
+}
+
+.error-icon {
+  background: rgba(254, 226, 226, 0.86);
+  color: #ef4444;
 }
 
 .order-list {
@@ -804,36 +937,95 @@ onMounted(async () => {
   }
 }
 
-.order-detail-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+.order-route {
+  background: rgba(255, 255, 255, 0.78);
+  border-radius: 14px;
+  padding: 12px;
+  margin: 8px 0;
+}
+
+.route-point {
+  display: flex;
+  align-items: flex-start;
   gap: 10px;
-
-  div {
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.78);
-    padding: 10px;
-  }
-
-  span {
-    display: block;
-    color: #64748b;
-    font-size: 12px;
-  }
 
   strong {
     display: block;
-    margin-top: 4px;
     color: #0f172a;
-    line-height: 1.45;
+    font-size: 14px;
+    line-height: 1.4;
   }
+}
+
+.route-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.pickup-dot {
+  background: #14b8a6;
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+}
+
+.deliver-dot {
+  background: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
+.route-line {
+  width: 2px;
+  height: 18px;
+  margin: 2px 0 2px 4px;
+  background: linear-gradient(180deg, #14b8a6, #f59e0b);
+  border-radius: 1px;
+}
+
+.route-label {
+  display: block;
+  color: #94a3b8;
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.order-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.order-foot__info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pickup-code-tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 8px;
+  background: rgba(14, 165, 233, 0.1);
+  color: #0284c7;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.order-amount {
+  font-size: 20px;
+  font-weight: 900;
+  color: #0f766e;
+  letter-spacing: -0.03em;
 }
 
 .order-actions {
   display: flex;
-  justify-content: flex-end;
   gap: 8px;
-  margin-top: 12px;
 }
 
 .pagination-row {
@@ -844,8 +1036,7 @@ onMounted(async () => {
 
 @media (max-width: 640px) {
   .two-column,
-  .filter-row,
-  .order-detail-grid {
+  .filter-row {
     grid-template-columns: 1fr;
   }
 
@@ -857,6 +1048,27 @@ onMounted(async () => {
   .created-actions {
     flex-direction: row;
   }
+
+  .order-foot {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .order-actions {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 420px) {
+  .two-column {
+    grid-template-columns: 1fr;
+  }
+}
+
+.order-form :deep(.el-form-item__error) {
+  font-weight: 700;
+  font-size: 13px;
+  padding-top: 4px;
 }
 
 @media (min-width: 768px) {

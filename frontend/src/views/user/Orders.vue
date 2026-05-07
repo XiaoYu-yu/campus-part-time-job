@@ -116,6 +116,7 @@ onMounted(() => loadOrders())
 
 .page-title {
   margin: 0 0 16px;
+  font-size: 20px;
 }
 
 .order-filter {
@@ -123,6 +124,7 @@ onMounted(() => loadOrders())
   gap: 8px;
   overflow-x: auto;
   margin-bottom: 14px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .filter-btn,
@@ -133,24 +135,30 @@ onMounted(() => loadOrders())
 }
 
 .filter-btn {
-  background: white;
+  background: #ffffff;
   padding: 8px 14px;
+  font-size: 13px;
+  color: #52525b;
+  border: 1px solid #e4e4e7;
 
   &.active {
-    background: #ff7d00;
-    color: white;
+    background: #0f9f8f;
+    color: #ffffff;
+    border-color: #0f9f8f;
   }
 }
 
 .order-list {
   display: grid;
-  gap: 14px;
+  gap: 12px;
 }
 
 .order-card {
-  background: white;
-  border-radius: 16px;
+  background: #ffffff;
+  border-radius: 14px;
   padding: 16px;
+  border: 1px solid #e4e4e7;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .order-header,
@@ -161,13 +169,19 @@ onMounted(() => loadOrders())
   align-items: center;
 }
 
+.order-header {
+  font-size: 13px;
+  color: #71717a;
+}
+
 .order-items {
   margin: 14px 0;
 }
 
 .order-item {
   padding: 8px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f4f4f5;
+  font-size: 14px;
 }
 
 .order-item:last-child {
@@ -180,22 +194,26 @@ onMounted(() => loadOrders())
 }
 
 .actions button {
-  background: #fff1e6;
-  color: #ff7d00;
-  padding: 8px 12px;
+  background: rgba(15, 159, 143, 0.1);
+  color: #0f9f8f;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
-.pending { color: #e6a23c; }
-.processing { color: #409eff; }
-.delivery { color: #337ecc; }
-.completed { color: #67c23a; }
-.cancelled { color: #909399; }
+.pending { color: #f59e0b; }
+.processing { color: #3b82f6; }
+.delivery { color: #0f9f8f; }
+.completed { color: #10b981; }
+.cancelled { color: #a1a1aa; }
 
 .empty-state {
-  background: white;
-  border-radius: 16px;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e4e4e7;
   padding: 40px 16px;
   text-align: center;
-  color: #909399;
+  color: #a1a1aa;
+  font-size: 14px;
 }
 </style>

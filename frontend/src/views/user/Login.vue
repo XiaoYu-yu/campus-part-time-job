@@ -1,9 +1,14 @@
 <template>
   <div class="user-login-page">
+    <div class="campus-scene" aria-hidden="true">
+      <span class="scene-building"></span>
+      <span class="scene-pin"></span>
+      <span class="scene-box"></span>
+    </div>
     <div class="login-card">
       <div class="brand-pill">校内兼职用户端</div>
       <h1>用户端登录</h1>
-      <p class="subtitle">进入校园代送结果回看、兼职入驻和旧模块兼容入口。</p>
+      <p class="subtitle">进入校园代送、订单回看、兼职入驻申请入口。</p>
       <el-form ref="formRef" :model="form" :rules="rules" label-position="top">
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入手机号" />
@@ -14,8 +19,9 @@
         <el-button type="primary" class="login-btn" :loading="loading" @click="handleLogin">登录进入校园兼职</el-button>
       </el-form>
       <div class="tips">
-        <p><span>测试账号</span>13900139000</p>
-        <p><span>测试密码</span>123456</p>
+        <strong>测试账号</strong>
+        <p><span>手机号</span>13900139000</p>
+        <p><span>密码</span>123456</p>
       </div>
     </div>
   </div>
@@ -71,28 +77,32 @@ const handleLogin = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background:
-    radial-gradient(circle at 18% 12%, rgba(45, 212, 191, 0.28), transparent 30%),
-    linear-gradient(180deg, #f0fdfa 0%, #f8fafc 100%);
+  position: relative;
+  background: #f5f5f5;
   padding: 24px;
 }
 
+.campus-scene {
+  display: none;
+}
+
 .login-card {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 420px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(15, 118, 110, 0.12);
-  border-radius: 28px;
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 16px;
   padding: 32px 28px;
-  box-shadow: 0 24px 56px rgba(15, 118, 110, 0.14);
-  backdrop-filter: blur(18px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 
   .brand-pill {
     display: inline-flex;
     margin-bottom: 14px;
-    padding: 7px 12px;
-    border-radius: 999px;
-    background: rgba(20, 184, 166, 0.12);
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: rgba(15, 159, 143, 0.1);
     color: #0f766e;
     font-size: 12px;
     font-weight: 800;
@@ -100,37 +110,48 @@ const handleLogin = async () => {
 
   h1 {
     margin: 0 0 8px;
-    font-size: 28px;
-    color: #0f172a;
+    font-size: 24px;
+    color: #18181b;
   }
 
   .subtitle {
     margin: 0 0 24px;
-    color: #64748b;
+    color: #71717a;
     line-height: 1.6;
+    font-size: 14px;
   }
 
   .login-btn {
     width: 100%;
     margin-top: 8px;
     border: none;
-    background: linear-gradient(135deg, #0f766e 0%, #0ea5e9 100%);
-    box-shadow: 0 14px 28px rgba(14, 165, 233, 0.2);
+    min-height: 48px;
+    border-radius: 12px;
+    background: #0f9f8f;
+    font-size: 15px;
+    font-weight: 700;
   }
 
   .tips {
     margin-top: 20px;
-    border-radius: 16px;
-    background: rgba(240, 253, 250, 0.7);
+    border-radius: 12px;
+    background: #fafafa;
     padding: 14px 16px;
     font-size: 13px;
-    color: #475569;
+    color: #52525b;
     line-height: 2;
+    border: 1px solid #e4e4e7;
+
+    strong {
+      display: block;
+      margin-bottom: 2px;
+      color: #18181b;
+    }
 
     span {
       display: inline-block;
       width: 70px;
-      color: #0f766e;
+      color: #0f9f8f;
       font-weight: 700;
     }
   }
