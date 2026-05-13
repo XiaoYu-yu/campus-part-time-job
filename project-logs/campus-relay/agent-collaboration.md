@@ -522,3 +522,38 @@ Phase 2：清理前端残留文件（HelloWorld.vue、vue.svg、vite.svg、Compo
 ### 下一轮建议
 
 优先补内测分发材料和 Android 双端真机小回归矩阵；不要在这些材料未齐之前扩大到公开公测。
+
+## Step 163 协作记录 - 内测分发材料收口
+
+### 本轮目标
+
+在 Step 162 服务器同步与远端 smoke 通过之后，补齐小范围内测分发材料。
+
+### 实际改动
+
+- 新增 `docs/deployment/internal-trial-distribution-pack.md`。
+- 新增 Step 163 日志。
+- 更新 summary / pending / file-change-list / global-working-memory。
+- 分发文档覆盖 APK 生成、Android 安装、账号私下发放、建议测试链路、已知限制、反馈模板和 owner 发包前检查。
+
+### 未改动内容
+
+- 未改业务代码。
+- 未改前端页面。
+- 未改后端代码。
+- 未改 bridge。
+- 未改 `request.js`。
+- 未改 token 附着逻辑。
+- 未改接口、路由或鉴权。
+- 未删除旧兼容模块。
+- 未提交账号密码、公网地址、服务器密码、GitHub token、腾讯地图 key 或 `.env` 内容。
+
+### 风险
+
+- 当前材料只支撑 owner-controlled 小范围内测，不支撑公开公测。
+- APK 仍是 QA / Debug 内测包，release 签名包未固化。
+- HTTPS / 域名 / 证书 / 隐私说明仍未完成。
+
+### 下一轮建议
+
+做 Android 双端真机小回归矩阵；如果通过，再生成一轮 QA APK 分发包并记录 manifest。

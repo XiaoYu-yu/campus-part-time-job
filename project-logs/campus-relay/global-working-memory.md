@@ -492,3 +492,20 @@
    - 先补内测分发材料：APK 安装说明、测试账号、已知限制、反馈模板。
    - 再做 Android 双端真机小回归矩阵。
    - 公开公测前再补 release 签名包、HTTPS / 域名 / 证书和最低限度安全说明。
+
+## 2026-05-13 补充：Step 163 内测分发材料已补齐
+
+1. 新增文档：
+   - `docs/deployment/internal-trial-distribution-pack.md`
+2. 文档用途：
+   - 作为 owner-controlled 小范围内测分发总入口。
+   - 覆盖 APK 生成、Android 安装、测试账号发放、用户端 / 兼职端 / 管理后台建议测试链路、已知限制、反馈模板和 owner 发包前检查。
+3. 安全边界：
+   - 没有把测试账号密码写入公开仓库。
+   - 没有写入公网地址、服务器密码、GitHub token、腾讯地图 key 或 `.env` 内容。
+4. 未改内容：
+   - 未改业务代码、前端页面、后端代码、bridge、`request.js`、token 附着逻辑、接口、路由、鉴权或旧兼容模块。
+5. 下一步建议：
+   - 做 Android 双端真机小回归矩阵。
+   - 若小回归通过，生成一轮 QA APK 分发包并记录 manifest。
+   - 若要扩大内测人群，再补 release 签名包和 HTTPS / 域名 / 证书。

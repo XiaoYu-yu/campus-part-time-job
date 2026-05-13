@@ -2520,3 +2520,10 @@
   - 远端 smoke 报告：`runtime/step-162-server-sync/remote-smoke-report.json`，URL 已脱敏。
   - 本轮未改业务代码、bridge、鉴权、路由、token 附着逻辑或旧兼容模块。
   - [Step 162 日志](step-162-github-and-server-sync.md)
+
+- 当前已完成：`Step 163 - 内测分发材料收口`
+  - 新增 `docs/deployment/internal-trial-distribution-pack.md` 作为小范围内测分发总入口。
+  - 文档覆盖 APK 生成、Android 安装、测试账号私下发放、用户端 / 兼职端 / 管理后台建议测试链路、已知限制、反馈模板和 owner 发包前检查。
+  - 本轮没有把账号密码、公网地址、服务器密码、GitHub token、腾讯地图 key 或 `.env` 内容写入仓库。
+  - 本轮没有改业务代码、bridge、鉴权、接口、路由、token 附着逻辑或旧兼容模块。
+  - [Step 163 日志](step-163-internal-trial-distribution-pack.md)

@@ -1,5 +1,29 @@
 # 校园代送待处理事项
 
+## Step 163 收口记录
+
+1. Step 163 已完成内测分发材料收口：
+   - 新增 `docs/deployment/internal-trial-distribution-pack.md`。
+   - 覆盖 APK 生成、Android 安装、测试账号发放、测试链路、已知限制、反馈模板和 owner 发包前检查。
+   - 账号密码、公网地址、服务器密码、GitHub token、腾讯地图 key 和 `.env` 内容均未写入仓库。
+2. 本轮未改动：
+   - 未改前端页面。
+   - 未改后端代码。
+   - 未改 bridge。
+   - 未改 `request.js`。
+   - 未改 token 附着逻辑。
+   - 未改接口、路由或鉴权。
+   - 未删除旧兼容模块。
+3. 下一轮最高优先级：
+   - A. 做 Android 双端真机小回归矩阵：用户端登录 / 发单 / 查单 / 确认，兼职端登录 / 接单 / 取餐 / 送达 / 异常，后台查看订单 / 异常 / 售后 / 结算。
+   - B. 如果真机小回归通过，生成一轮 QA APK 分发包并记录 manifest。
+   - C. 如果要扩大到非 owner 测试者，再补 release 签名包、HTTPS / 域名 / 证书和最低限度隐私 / 安全说明。
+4. 继续禁止：
+   - 不提交真实密钥、公网地址、服务器密码、GitHub token、腾讯地图 key 或 `.env` 内容。
+   - 不重开 bridge。
+   - 不改鉴权、token 附着逻辑或 `request.js`。
+   - 不删除旧兼容模块。
+
 ## Step 162 收口记录
 
 1. Step 162 已完成 GitHub 与内测服务器同步确认：

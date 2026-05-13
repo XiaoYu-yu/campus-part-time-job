@@ -2471,3 +2471,15 @@
 - [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
 
 本轮是 GitHub 与内测服务器同步确认轮：先将本地主线提交 `1d68c534d091c533d82ded13d3b3b924eb00db91` 推送到 `origin/main`，再用本地 HEAD 归档同步到内测服务器，保留服务器 `.env` 与数据卷，部署前完成 MySQL / uploads / `.env` 备份，随后 Docker Compose 重建并启动。远端 smoke 结果为 25 PASS / 0 FAIL / 0 SKIP。本轮没有改业务代码、接口、路由、bridge、鉴权、`request.js`、token 附着逻辑或旧兼容模块。
+
+## Step 163 - 内测分发材料收口
+
+- [docs/deployment/internal-trial-distribution-pack.md](../../docs/deployment/internal-trial-distribution-pack.md)（新增）
+- [project-logs/campus-relay/step-163-internal-trial-distribution-pack.md](step-163-internal-trial-distribution-pack.md)（新增）
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+
+本轮是内测分发材料收口轮：新增一份小范围内测分发总入口，覆盖 APK 生成、Android 安装、测试账号私下发放、用户端 / 兼职端 / 管理后台建议测试链路、已知限制、反馈模板和 owner 发包前检查。本轮没有改业务代码、接口、路由、bridge、鉴权、`request.js`、token 附着逻辑或旧兼容模块，也没有写入账号密码、公网地址、服务器密码、GitHub token、腾讯地图 key 或 `.env` 内容。
