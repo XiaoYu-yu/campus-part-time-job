@@ -487,3 +487,38 @@ Phase 2：清理前端残留文件（HelloWorld.vue、vue.svg、vite.svg、Compo
 ### 下一轮建议
 
 先手动看手机桌面显示名是否刷新；随后做一轮 Android 双端真机小回归，再整理 release 签名包和内测分发说明。
+
+## Step 162 协作记录 - GitHub 与内测服务器同步确认
+
+### 本轮目标
+
+把本地最新主线同步到 GitHub 和内测服务器，并用远端 smoke 证明服务器可运行。
+
+### 实际改动
+
+- 本地提交已推送到 `origin/main`。
+- 服务器部署目录已同步当前主线代码。
+- 部署前已执行服务器备份脚本，生成 MySQL / uploads / `.env` 备份。
+- 服务器 Docker Compose 已重建并启动 `mysql / backend / frontend`。
+- 远端 smoke 已完成，结果为 25 PASS / 0 FAIL / 0 SKIP。
+- 新增 Step 162 日志和远端 smoke 报告。
+
+### 未改动内容
+
+- 未改业务代码。
+- 未改 bridge。
+- 未改 `request.js`。
+- 未改 token 附着逻辑。
+- 未改接口、路由或鉴权。
+- 未删除旧兼容模块。
+- 未提交真实密钥、公网地址、服务器密码、GitHub token、腾讯地图 key 或 `.env` 内容。
+
+### 风险
+
+- 当前仍是 owner-controlled 内测环境，不是公开公测环境。
+- HTTPS / 域名 / 证书 / 正式监控告警仍未收口。
+- Android release 签名包、安装说明、测试账号说明、反馈模板仍需补齐。
+
+### 下一轮建议
+
+优先补内测分发材料和 Android 双端真机小回归矩阵；不要在这些材料未齐之前扩大到公开公测。

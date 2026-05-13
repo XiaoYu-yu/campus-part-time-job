@@ -2510,3 +2510,13 @@
   - `aapt dump badging` 已确认 APK label 与 package 均符合预期。
   - 未改后端、接口、路由、bridge、`request.js`、token 附着逻辑或管理后台。
   - [Step 161 日志](step-161-android-app-display-name-rename.md)
+
+- 当前已完成：`Step 162 - GitHub 与内测服务器同步确认`
+  - 本地最新主线提交 `1d68c534d091c533d82ded13d3b3b924eb00db91` 已推送到 `origin/main`。
+  - 内测服务器已用本地 HEAD 归档同步到 `/opt/campus-part-time-job`。
+  - 部署前已完成 MySQL / uploads / `.env` 备份，服务器真实配置未写入仓库。
+  - Docker Compose 已重建并启动 `mysql / backend / frontend`。
+  - 远端 smoke 已完成：25 PASS / 0 FAIL / 0 SKIP。
+  - 远端 smoke 报告：`runtime/step-162-server-sync/remote-smoke-report.json`，URL 已脱敏。
+  - 本轮未改业务代码、bridge、鉴权、路由、token 附着逻辑或旧兼容模块。
+  - [Step 162 日志](step-162-github-and-server-sync.md)

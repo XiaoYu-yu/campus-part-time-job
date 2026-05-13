@@ -468,3 +468,27 @@
    - 手动确认手机桌面图标文字是否刷新。
    - 再做 Android 双端真机小回归。
    - 若准备内测分发，再整理 release 签名包、安装说明和反馈模板。
+
+## 2026-05-13 补充：Step 162 GitHub 与内测服务器已同步
+
+1. 本地最新主线提交已经推送到 `origin/main`：
+   - `1d68c534d091c533d82ded13d3b3b924eb00db91`
+2. 内测服务器同步方式：
+   - 使用本地 HEAD 生成源码归档。
+   - 上传到内测服务器后展开到 `/opt/campus-part-time-job`。
+   - 服务器原 `.env` 保留，不写入仓库。
+   - 旧部署目录保留为上一版目录，便于必要时人工回滚。
+3. 部署前备份：
+   - 已执行 `deploy/internal-trial/backup-stack.sh`。
+   - 已生成 MySQL、uploads 和 `.env` 备份。
+4. 远端验证：
+   - Docker Compose 已重建并启动 `mysql / backend / frontend`。
+   - `scripts/trial-operation/remote-smoke.ps1` 已执行。
+   - 远端 smoke 结果：25 PASS / 0 FAIL / 0 SKIP。
+   - 报告位置：`project-logs/campus-relay/runtime/step-162-server-sync/remote-smoke-report.json`，URL 已脱敏。
+5. 未改内容：
+   - 未改业务代码、bridge、`request.js`、token 附着逻辑、接口、路由、鉴权或旧兼容模块。
+6. 下一步建议：
+   - 先补内测分发材料：APK 安装说明、测试账号、已知限制、反馈模板。
+   - 再做 Android 双端真机小回归矩阵。
+   - 公开公测前再补 release 签名包、HTTPS / 域名 / 证书和最低限度安全说明。

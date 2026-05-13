@@ -2459,3 +2459,15 @@
 - [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
 
 本轮只调整 Android 双端桌面显示名：用户端显示为 `用户端`，兼职端显示为 `兼职端`。真实 `applicationId` 保持 `com.xiaoyu.campus.user` / `com.xiaoyu.campus.parttime` 不变。双端 Capacitor sync、Debug APK 构建、ADB 安装和 `aapt dump badging` 标签核验均通过。本轮没有改后端、接口、路由、bridge、`request.js`、token 附着逻辑或管理后台。
+
+## Step 162 - GitHub 与内测服务器同步确认
+
+- [project-logs/campus-relay/step-162-github-and-server-sync.md](step-162-github-and-server-sync.md)（新增）
+- [project-logs/campus-relay/runtime/step-162-server-sync/remote-smoke-report.json](runtime/step-162-server-sync/remote-smoke-report.json)（新增）
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+
+本轮是 GitHub 与内测服务器同步确认轮：先将本地主线提交 `1d68c534d091c533d82ded13d3b3b924eb00db91` 推送到 `origin/main`，再用本地 HEAD 归档同步到内测服务器，保留服务器 `.env` 与数据卷，部署前完成 MySQL / uploads / `.env` 备份，随后 Docker Compose 重建并启动。远端 smoke 结果为 25 PASS / 0 FAIL / 0 SKIP。本轮没有改业务代码、接口、路由、bridge、鉴权、`request.js`、token 附着逻辑或旧兼容模块。
