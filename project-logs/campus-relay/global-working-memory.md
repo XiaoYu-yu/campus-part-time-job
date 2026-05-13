@@ -509,3 +509,41 @@
    - 做 Android 双端真机小回归矩阵。
    - 若小回归通过，生成一轮 QA APK 分发包并记录 manifest。
    - 若要扩大内测人群，再补 release 签名包和 HTTPS / 域名 / 证书。
+
+## 2026-05-13 补充：Step 164 Android 双端真机小回归矩阵已通过
+
+1. 本轮真实设备：
+   - ADB 设备：`10AE221PGA003Y5`
+2. 脚本修正：
+   - `android-webview-public-smoke.ps1`
+   - `android-webview-user-public-smoke.ps1`
+   - `android-webview-parttime-public-smoke.ps1`
+   - 修正旧 Step 元数据，避免后续 runtime JSON 误标。
+3. Android 用户端 WebView smoke：
+   - 登录通过。
+   - 取餐点读取通过。
+   - 配送规则读取通过。
+   - 订单列表读取通过。
+   - 创建订单通过。
+   - 模拟支付通过。
+   - 详情回读通过。
+   - 创建订单：`CR202605131052401467`
+   - 回读状态：`BUILDING_PRIORITY_PENDING / PAID`
+4. Android 兼职端 WebView smoke：
+   - 登录通过。
+   - 资料读取通过。
+   - 审核状态读取通过。
+   - 可接任务读取通过。
+   - `courierProfileId = 2`
+   - 审核状态：`APPROVED`
+   - 可接任务数：`5`
+5. 远端 smoke：
+   - 25 PASS / 0 FAIL / 0 SKIP
+   - 报告路径：`project-logs/campus-relay/runtime/step-164-android-regression-clear/remote-smoke-report.json`
+6. 当前结论：
+   - owner-controlled 小范围内测可继续推进。
+   - 公开公测仍未就绪。
+7. 下一步建议：
+   - 补 Android 兼职端接单 / 取餐 / 送达 / 异常上报动作链。
+   - 补用户端确认完成和 `COMPLETED` 回读。
+   - 通过后再生成 QA APK 分发包 manifest。

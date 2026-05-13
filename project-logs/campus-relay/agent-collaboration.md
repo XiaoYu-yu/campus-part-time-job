@@ -557,3 +557,38 @@ Phase 2：清理前端残留文件（HelloWorld.vue、vue.svg、vite.svg、Compo
 ### 下一轮建议
 
 做 Android 双端真机小回归矩阵；如果通过，再生成一轮 QA APK 分发包并记录 manifest。
+
+## Step 164 协作记录 - Android 双端真机小回归矩阵
+
+### 本轮目标
+
+在真实 Android 设备和内测服务器上做一轮小回归，确认用户端、兼职端和远端管理/API 基线可运行。
+
+### 实际改动
+
+- 修正 Android WebView smoke 脚本旧 Step 元数据，避免生成报告误标。
+- 使用 `-ClearData` 跑通 Android 双端 WebView smoke。
+- 用户端 smoke 通过，自动化创建订单 `CR202605131052401467`，模拟支付后回读为 `BUILDING_PRIORITY_PENDING / PAID`。
+- 兼职端 smoke 通过，资料为 `APPROVED`，可接任务数为 `5`。
+- 远端 smoke 通过：25 PASS / 0 FAIL / 0 SKIP。
+- 新增 Step 164 日志和 runtime 证据。
+
+### 未改动内容
+
+- 未改业务代码。
+- 未改后端接口、数据库、鉴权或路由。
+- 未改 bridge。
+- 未改 `request.js`。
+- 未改 token 附着逻辑。
+- 未删除旧兼容模块。
+- 未提交真实密钥、公网地址、服务器密码、GitHub token、腾讯地图 key 或 `.env` 内容。
+
+### 风险
+
+- 本轮验证的是小回归矩阵，不是完整公开公测验收。
+- 兼职端接单、取餐、送达、异常上报和用户端确认完成尚未在 Step 164 自动化中覆盖。
+- APK release 签名包、HTTPS / 域名 / 证书和隐私说明仍未收口。
+
+### 下一轮建议
+
+优先补 Android 双端动作链矩阵；如果按钮级自动化成本高，先做手工矩阵和截图留痕，再进入 QA APK 分发包 manifest。

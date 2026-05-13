@@ -2527,3 +2527,15 @@
   - 本轮没有把账号密码、公网地址、服务器密码、GitHub token、腾讯地图 key 或 `.env` 内容写入仓库。
   - 本轮没有改业务代码、bridge、鉴权、接口、路由、token 附着逻辑或旧兼容模块。
   - [Step 163 日志](step-163-internal-trial-distribution-pack.md)
+
+- 当前已完成：`Step 164 - Android 双端真机小回归矩阵`
+  - 修正 Android WebView smoke 脚本旧 Step 元数据，避免后续证据误标。
+  - ADB 真机 `10AE221PGA003Y5` 在线。
+  - 用户端 Android WebView smoke 通过：登录、取餐点读取、配送规则读取、订单列表读取、创建订单、模拟支付、详情回读均通过。
+  - 本轮用户端自动化创建订单：`CR202605131052401467`，状态 `BUILDING_PRIORITY_PENDING`，支付状态 `PAID`。
+  - 兼职端 Android WebView smoke 通过：登录、资料读取、审核状态读取、可接任务读取均通过。
+  - 兼职端关键结果：`courierProfileId = 2`，审核状态 `APPROVED`，可接任务数 `5`。
+  - 远端 smoke 通过：25 PASS / 0 FAIL / 0 SKIP。
+  - 本轮未改业务代码、bridge、鉴权、接口、路由、token 附着逻辑或旧兼容模块。
+  - 当前足够支撑 owner-controlled 小范围内测继续推进，但公开公测前仍需补 Android 动作链、release 签名、HTTPS / 域名 / 证书和隐私说明。
+  - [Step 164 日志](step-164-android-dual-end-regression-matrix.md)

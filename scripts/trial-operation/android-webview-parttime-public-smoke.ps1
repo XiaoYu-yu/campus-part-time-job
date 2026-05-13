@@ -23,10 +23,10 @@ if (-not $ApiBaseEnvFile) {
     $ApiBaseEnvFile = Join-Path $repoRoot "frontend\.env.android-parttime-public"
 }
 if (-not $OutputPath) {
-    $OutputPath = Join-Path $repoRoot "project-logs\campus-relay\runtime\step-123-android-public-webview\parttime-public-webview-smoke.json"
+    $OutputPath = Join-Path $repoRoot "project-logs\campus-relay\runtime\android-public-webview\parttime-public-webview-smoke.json"
 }
 if (-not $ScreenshotPath) {
-    $ScreenshotPath = Join-Path $repoRoot "project-logs\campus-relay\runtime\step-123-android-public-webview\parttime-workbench-public-webview.png"
+    $ScreenshotPath = Join-Path $repoRoot "project-logs\campus-relay\runtime\android-public-webview\parttime-workbench-public-webview.png"
 }
 
 function Resolve-ApiBase {
@@ -235,7 +235,7 @@ function Save-Screenshot {
     param([string]$Path)
     $dir = Split-Path -Parent $Path
     New-Item -ItemType Directory -Path $dir -Force | Out-Null
-    $remoteFile = "/sdcard/step123-parttime-public-webview.png"
+    $remoteFile = "/sdcard/android-parttime-public-webview.png"
     Invoke-Adb -CommandArgs @("shell", "screencap", "-p", $remoteFile) | Out-Null
     Invoke-Adb -CommandArgs @("pull", $remoteFile, $Path) | Out-Null
     Invoke-Adb -CommandArgs @("shell", "rm", $remoteFile) | Out-Null
@@ -325,7 +325,7 @@ try {
     Save-Screenshot -Path $ScreenshotPath
 
     $result = [ordered]@{
-        step = "Step 123"
+        name = "Android public WebView parttime smoke"
         date = (Get-Date -Format "yyyy-MM-dd")
         purpose = "Android public WebView parttime smoke for login, profile/review-status, available orders"
         apiBase = Redact-ApiBase $script:normalizedApiBase

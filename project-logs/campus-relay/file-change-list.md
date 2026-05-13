@@ -2483,3 +2483,26 @@
 - [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
 
 本轮是内测分发材料收口轮：新增一份小范围内测分发总入口，覆盖 APK 生成、Android 安装、测试账号私下发放、用户端 / 兼职端 / 管理后台建议测试链路、已知限制、反馈模板和 owner 发包前检查。本轮没有改业务代码、接口、路由、bridge、鉴权、`request.js`、token 附着逻辑或旧兼容模块，也没有写入账号密码、公网地址、服务器密码、GitHub token、腾讯地图 key 或 `.env` 内容。
+
+## Step 164 - Android 双端真机小回归矩阵
+
+- [scripts/trial-operation/android-webview-public-smoke.ps1](../../scripts/trial-operation/android-webview-public-smoke.ps1)
+  - 将默认输出目录和 JSON 元数据从旧 Step 编号改为中性 Android WebView smoke 命名。
+- [scripts/trial-operation/android-webview-user-public-smoke.ps1](../../scripts/trial-operation/android-webview-user-public-smoke.ps1)
+  - 将默认输出目录、报告字段和手机临时截图文件名从旧 Step 编号改为中性命名。
+- [scripts/trial-operation/android-webview-parttime-public-smoke.ps1](../../scripts/trial-operation/android-webview-parttime-public-smoke.ps1)
+  - 将默认输出目录、报告字段和手机临时截图文件名从旧 Step 编号改为中性命名。
+- [project-logs/campus-relay/step-164-android-dual-end-regression-matrix.md](step-164-android-dual-end-regression-matrix.md)（新增）
+- [project-logs/campus-relay/runtime/step-164-android-regression-clear/android-public-webview-readiness-summary.json](runtime/step-164-android-regression-clear/android-public-webview-readiness-summary.json)（新增）
+- [project-logs/campus-relay/runtime/step-164-android-regression-clear/user-public-webview-smoke.json](runtime/step-164-android-regression-clear/user-public-webview-smoke.json)（新增）
+- [project-logs/campus-relay/runtime/step-164-android-regression-clear/user-campus-orders-public-webview.png](runtime/step-164-android-regression-clear/user-campus-orders-public-webview.png)（新增）
+- [project-logs/campus-relay/runtime/step-164-android-regression-clear/parttime-public-webview-smoke.json](runtime/step-164-android-regression-clear/parttime-public-webview-smoke.json)（新增）
+- [project-logs/campus-relay/runtime/step-164-android-regression-clear/parttime-workbench-public-webview.png](runtime/step-164-android-regression-clear/parttime-workbench-public-webview.png)（新增）
+- [project-logs/campus-relay/runtime/step-164-android-regression-clear/remote-smoke-report.json](runtime/step-164-android-regression-clear/remote-smoke-report.json)（新增）
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+
+本轮是 Android 双端真机小回归矩阵轮：用户端和兼职端 WebView smoke 均在真实手机上通过，远端 smoke 结果为 25 PASS / 0 FAIL / 0 SKIP。本轮没有改业务代码、接口、路由、bridge、鉴权、`request.js`、token 附着逻辑或旧兼容模块。当前仍未把兼职端接单 / 取餐 / 送达 / 异常上报和用户端确认完成做成本轮自动化通过项，下一轮应继续补动作链矩阵。

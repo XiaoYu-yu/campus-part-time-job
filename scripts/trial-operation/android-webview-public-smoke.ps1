@@ -18,7 +18,7 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 if (-not $OutputDirectory) {
-    $OutputDirectory = Join-Path $repoRoot "project-logs\campus-relay\runtime\step-124-android-public-webview-readiness"
+    $OutputDirectory = Join-Path $repoRoot "project-logs\campus-relay\runtime\android-public-webview-readiness"
 }
 
 function Add-OptionalArg {
@@ -125,7 +125,7 @@ foreach ($result in $results) {
 
 $summaryPath = Join-Path $OutputDirectory "android-public-webview-readiness-summary.json"
 $summary = [ordered]@{
-    step = "Step 124"
+    name = "Android public WebView readiness smoke"
     date = (Get-Date -Format "yyyy-MM-dd")
     purpose = "Repeatable Android public WebView readiness smoke for user and parttime apps"
     passed = $passed
