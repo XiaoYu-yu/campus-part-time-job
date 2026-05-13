@@ -592,3 +592,46 @@ Phase 2：清理前端残留文件（HelloWorld.vue、vue.svg、vite.svg、Compo
 ### 下一轮建议
 
 优先补 Android 双端动作链矩阵；如果按钮级自动化成本高，先做手工矩阵和截图留痕，再进入 QA APK 分发包 manifest。
+
+## Step 165 协作记录 - Python Android 双端动作链矩阵
+
+### 本轮目标
+
+把 Step 164 未覆盖的 Android 双端完整动作链做成可重复执行的 Python 验证脚本。
+
+### 实际改动
+
+- 新增 `scripts/trial-operation/android_action_matrix.py`。
+- 新增 Step 165 日志。
+- 新增 runtime 证据：
+  - `project-logs/campus-relay/runtime/step-165-android-action-matrix/android-action-matrix-report.json`
+  - `user-launch.png`
+  - `parttime-launch.png`
+  - `user-after-action-chain.png`
+  - `parttime-after-action-chain.png`
+- 更新 summary / pending / file-change-list / global-working-memory。
+- 真实手机 `10AE221PGA003Y5` 上跑通动作链。
+- 本轮订单：`CR202605131124021644`。
+- 最终用户端和兼职端均回读 `COMPLETED`。
+
+### 未改动内容
+
+- 未改业务代码。
+- 未改前端页面。
+- 未改后端接口、数据库、鉴权或路由。
+- 未改 Android 原生配置。
+- 未改 bridge。
+- 未改 `request.js`。
+- 未改 token 附着逻辑。
+- 未删除旧兼容模块。
+- 未提交真实密钥、公网地址、服务器密码、GitHub token、腾讯地图 key 或 `.env` 内容。
+
+### 风险
+
+- 本轮不是坐标级 UI 点击自动化，而是 ADB 启动/截图 + 公开 API 状态机动作链。
+- 当前仍是 owner-controlled 小范围内测准备，不是公开公测完成态。
+- QA APK manifest、release 签名、HTTPS / 域名 / 证书和隐私说明仍未完成。
+
+### 下一轮建议
+
+进入 QA APK 分发包 manifest 与安装复核：记录双端 APK 文件名、包名、显示名、版本号、构建时间、对应 Git commit 和安装验证结果。

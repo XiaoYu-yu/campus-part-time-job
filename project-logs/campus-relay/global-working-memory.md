@@ -547,3 +547,50 @@
    - 补 Android 兼职端接单 / 取餐 / 送达 / 异常上报动作链。
    - 补用户端确认完成和 `COMPLETED` 回读。
    - 通过后再生成 QA APK 分发包 manifest。
+
+## 2026-05-13 补充：Step 165 Python Android 双端动作链矩阵已通过
+
+1. 新增脚本：
+   - `scripts/trial-operation/android_action_matrix.py`
+2. 脚本用途：
+   - 用 Python 标准库和 ADB 跑 Android 双端动作链。
+   - ADB 负责真实手机启动与截图。
+   - 公开 API 负责驱动订单状态机。
+   - JSON 报告脱敏 API host，不保存 token。
+3. 本轮真实设备：
+   - ADB 设备：`10AE221PGA003Y5`
+4. 本轮订单：
+   - `CR202605131124021644`
+5. 已验证动作链：
+   - 用户端登录。
+   - 创建订单。
+   - 模拟支付。
+   - 兼职端登录。
+   - 资料与审核状态读取。
+   - 可接任务读取。
+   - 接单。
+   - 确认取餐。
+   - 开始配送。
+   - 异常上报。
+   - 确认送达。
+   - 用户确认。
+   - 用户端和兼职端 completed 回读。
+6. 最终状态：
+   - 用户端：`COMPLETED`
+   - 兼职端：`COMPLETED`
+   - 支付：`PAID`
+   - 异常摘要：`联系不上`
+7. 证据位置：
+   - `project-logs/campus-relay/runtime/step-165-android-action-matrix/android-action-matrix-report.json`
+   - `project-logs/campus-relay/runtime/step-165-android-action-matrix/user-launch.png`
+   - `project-logs/campus-relay/runtime/step-165-android-action-matrix/parttime-launch.png`
+   - `project-logs/campus-relay/runtime/step-165-android-action-matrix/user-after-action-chain.png`
+   - `project-logs/campus-relay/runtime/step-165-android-action-matrix/parttime-after-action-chain.png`
+8. 未改内容：
+   - 未改业务代码、前端页面、后端接口、Android 原生配置、bridge、`request.js`、token 附着逻辑、接口、路由、鉴权或旧兼容模块。
+9. 当前结论：
+   - owner-controlled 小范围内测可继续推进。
+   - 公开公测仍未就绪。
+10. 下一步建议：
+   - 进入 QA APK 分发包 manifest 与安装复核。
+   - 继续避免把公网地址、服务器密码、GitHub token、腾讯地图 key 或 `.env` 内容写入仓库。

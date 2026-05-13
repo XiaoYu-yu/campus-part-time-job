@@ -1,26 +1,21 @@
 # 校园代送待处理事项
 
-## Step 165 最高优先级 - Android 双端动作链补测与 QA 包准备
+## Step 166 最高优先级 - QA APK 分发包 manifest 与安装复核
 
 ### 当前依据
 
-- Step 164 已完成 Android 双端 WebView 小回归：
-  - 用户端登录、取餐点读取、配送规则读取、订单列表读取、创建订单、模拟支付、详情回读通过。
-  - 兼职端登录、资料读取、审核状态读取、可接任务读取通过。
-  - 远端 smoke 通过：25 PASS / 0 FAIL / 0 SKIP。
-- Step 164 尚未完整自动化兼职端按钮级动作链：
-  - 接单
-  - 取餐
-  - 送达
-  - 异常上报
-  - 用户确认完成
+- Step 164 已完成 Android 双端 WebView 小回归和远端 smoke。
+- Step 165 已新增 `scripts/trial-operation/android_action_matrix.py`，并在真实 Android 设备上跑通用户端 + 兼职端完整动作链。
+- Step 165 本轮订单：`CR202605131124021644`，最终用户端和兼职端均回读 `COMPLETED`。
+- Step 165 已覆盖：创建订单、模拟支付、可接单读取、接单、取餐、配送、异常上报、送达、用户确认、completed 回读。
+- 证据位置：`project-logs/campus-relay/runtime/step-165-android-action-matrix/android-action-matrix-report.json`。
 
 ### 下一轮建议
 
-1. 优先补 Android 真机上的动作链验证。
-2. 如果脚本级按钮点击成本过高，先做手工矩阵和截图留痕，不要假装自动化通过。
-3. 补用户端确认完成和 `COMPLETED` 回读。
-4. 若 Step 165 通过，再生成一轮 QA APK 分发包 manifest。
+1. 基于当前通过的 Android 动作链，确认或重新生成一轮用户端 / 兼职端 QA APK。
+2. 记录 APK 文件名、包名、显示名、版本号、构建时间、对应 Git commit 和安装验证结果。
+3. 补一份不含敏感信息的 QA APK manifest，方便内测发包和回滚定位。
+4. 若 manifest 完成，再评估 release 签名包、HTTPS / 域名 / 证书和隐私说明。
 
 ### 继续冻结项
 

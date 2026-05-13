@@ -2539,3 +2539,16 @@
   - 本轮未改业务代码、bridge、鉴权、接口、路由、token 附着逻辑或旧兼容模块。
   - 当前足够支撑 owner-controlled 小范围内测继续推进，但公开公测前仍需补 Android 动作链、release 签名、HTTPS / 域名 / 证书和隐私说明。
   - [Step 164 日志](step-164-android-dual-end-regression-matrix.md)
+
+- 当前已完成：`Step 165 - Python Android 双端动作链矩阵`
+  - 新增 `scripts/trial-operation/android_action_matrix.py`，用 Python 标准库 + ADB 跑真实设备动作链。
+  - ADB 真机 `10AE221PGA003Y5` 在线，用户端和兼职端均完成启动截图。
+  - 本轮自动化创建订单：`CR202605131124021644`。
+  - 动作链已覆盖：创建订单 -> 模拟支付 -> 可接单读取 -> 接单 -> 取餐 -> 配送 -> 异常上报 -> 送达 -> 用户确认 -> completed 回读。
+  - 最终用户端状态：`COMPLETED`。
+  - 最终兼职端状态：`COMPLETED`。
+  - 异常留痕：`exceptionType = 联系不上`。
+  - 证据报告：`project-logs/campus-relay/runtime/step-165-android-action-matrix/android-action-matrix-report.json`，API host 已脱敏且不保存 token。
+  - 本轮未改业务代码、前端页面、后端接口、Android 原生配置、bridge、鉴权、路由、`request.js`、token 附着逻辑或旧兼容模块。
+  - 当前足够支撑 owner-controlled 小范围内测继续推进；公开公测前仍需 QA APK manifest、release 签名、HTTPS / 域名 / 证书和隐私说明。
+  - [Step 165 日志](step-165-python-android-action-matrix.md)

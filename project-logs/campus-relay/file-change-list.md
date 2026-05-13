@@ -2506,3 +2506,24 @@
 - [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
 
 本轮是 Android 双端真机小回归矩阵轮：用户端和兼职端 WebView smoke 均在真实手机上通过，远端 smoke 结果为 25 PASS / 0 FAIL / 0 SKIP。本轮没有改业务代码、接口、路由、bridge、鉴权、`request.js`、token 附着逻辑或旧兼容模块。当前仍未把兼职端接单 / 取餐 / 送达 / 异常上报和用户端确认完成做成本轮自动化通过项，下一轮应继续补动作链矩阵。
+
+## Step 165 - Python Android 双端动作链矩阵
+
+- [scripts/trial-operation/android_action_matrix.py](../../scripts/trial-operation/android_action_matrix.py)（新增）
+  - 新增 Python 标准库动作链矩阵脚本。
+  - 通过 ADB 启动用户端和兼职端并采集截图。
+  - 通过公开 API 用测试账号跑完整订单状态链。
+  - 输出脱敏 JSON 报告，不保存 token。
+- [project-logs/campus-relay/step-165-python-android-action-matrix.md](step-165-python-android-action-matrix.md)（新增）
+- [project-logs/campus-relay/runtime/step-165-android-action-matrix/android-action-matrix-report.json](runtime/step-165-android-action-matrix/android-action-matrix-report.json)（新增）
+- [project-logs/campus-relay/runtime/step-165-android-action-matrix/user-launch.png](runtime/step-165-android-action-matrix/user-launch.png)（新增）
+- [project-logs/campus-relay/runtime/step-165-android-action-matrix/parttime-launch.png](runtime/step-165-android-action-matrix/parttime-launch.png)（新增）
+- [project-logs/campus-relay/runtime/step-165-android-action-matrix/user-after-action-chain.png](runtime/step-165-android-action-matrix/user-after-action-chain.png)（新增）
+- [project-logs/campus-relay/runtime/step-165-android-action-matrix/parttime-after-action-chain.png](runtime/step-165-android-action-matrix/parttime-after-action-chain.png)（新增）
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+
+本轮是 Python Android 双端动作链矩阵轮：真实手机启动用户端和兼职端，通过公开 API 跑通创建订单、模拟支付、接单、取餐、配送、异常上报、送达、用户确认和 completed 双端回读。本轮创建订单 `CR202605131124021644`，最终用户端和兼职端均回读 `COMPLETED`。本轮没有改业务代码、前端页面、后端接口、Android 原生配置、bridge、鉴权、路由、`request.js`、token 附着逻辑或旧兼容模块。

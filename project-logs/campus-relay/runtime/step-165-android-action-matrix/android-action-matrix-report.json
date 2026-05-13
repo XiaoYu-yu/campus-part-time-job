@@ -1,0 +1,203 @@
+{
+  "name": "Android dual-end action matrix",
+  "date": "2026-05-13T19:24:46",
+  "apiBase": "http://<redacted>/api",
+  "deviceId": "10AE221PGA003Y5",
+  "packages": {
+    "user": "com.xiaoyu.campus.user",
+    "parttime": "com.xiaoyu.campus.parttime"
+  },
+  "summary": {
+    "passed": true,
+    "orderId": "CR202605131124021644",
+    "finalCustomerStatus": "COMPLETED",
+    "finalCourierStatus": "COMPLETED",
+    "paymentStatus": "PAID",
+    "exceptionType": "联系不上"
+  },
+  "events": [
+    {
+      "name": "adb device",
+      "status": "PASS",
+      "message": "online device 10AE221PGA003Y5",
+      "time": "2026-05-13T19:23:50"
+    },
+    {
+      "name": "user app launch",
+      "status": "PASS",
+      "message": "user app launched and screenshot captured",
+      "time": "2026-05-13T19:23:56"
+    },
+    {
+      "name": "customer login",
+      "status": "PASS",
+      "message": "customer token acquired",
+      "time": "2026-05-13T19:23:58"
+    },
+    {
+      "name": "pickup points",
+      "status": "PASS",
+      "message": "pickup points loaded",
+      "time": "2026-05-13T19:24:00",
+      "data": {
+        "count": 2,
+        "firstPointId": 1
+      }
+    },
+    {
+      "name": "delivery rules",
+      "status": "PASS",
+      "message": "delivery rules loaded",
+      "time": "2026-05-13T19:24:01",
+      "data": {
+        "platformName": "重庆工信职业学院渝中校区校园代送平台"
+      }
+    },
+    {
+      "name": "create order",
+      "status": "PASS",
+      "message": "created CR202605131124021644",
+      "time": "2026-05-13T19:24:03"
+    },
+    {
+      "name": "mock pay",
+      "status": "PASS",
+      "message": "order paid and waiting for accept",
+      "time": "2026-05-13T19:24:05",
+      "data": {
+        "orderId": "CR202605131124021644",
+        "status": "WAITING_ACCEPT",
+        "paymentStatus": "PAID"
+      }
+    },
+    {
+      "name": "parttime app launch",
+      "status": "PASS",
+      "message": "parttime app launched and screenshot captured",
+      "time": "2026-05-13T19:24:11"
+    },
+    {
+      "name": "parttime login",
+      "status": "PASS",
+      "message": "courier token acquired",
+      "time": "2026-05-13T19:24:13"
+    },
+    {
+      "name": "parttime profile",
+      "status": "PASS",
+      "message": "profile and review loaded",
+      "time": "2026-05-13T19:24:16",
+      "data": {
+        "profileId": 2,
+        "reviewStatus": "APPROVED"
+      }
+    },
+    {
+      "name": "available orders",
+      "status": "PASS",
+      "message": "available orders loaded",
+      "time": "2026-05-13T19:24:17",
+      "data": {
+        "total": 11,
+        "records": 11,
+        "createdOrderInFirstPage": true
+      }
+    },
+    {
+      "name": "accept order",
+      "status": "PASS",
+      "message": "order accepted",
+      "time": "2026-05-13T19:24:20",
+      "data": {
+        "status": "ACCEPTED"
+      }
+    },
+    {
+      "name": "pickup order",
+      "status": "PASS",
+      "message": "order picked up",
+      "time": "2026-05-13T19:24:22",
+      "data": {
+        "status": "PICKED_UP",
+        "proof": "/api/files/android-action-matrix-proof.png"
+      }
+    },
+    {
+      "name": "start delivering",
+      "status": "PASS",
+      "message": "order delivering",
+      "time": "2026-05-13T19:24:26",
+      "data": {
+        "status": "DELIVERING"
+      }
+    },
+    {
+      "name": "report exception",
+      "status": "PASS",
+      "message": "exception summary populated",
+      "time": "2026-05-13T19:24:28",
+      "data": {
+        "exceptionType": "联系不上",
+        "exceptionRemark": "Python动作链测试异常留痕"
+      }
+    },
+    {
+      "name": "mark delivered",
+      "status": "PASS",
+      "message": "order awaiting customer confirmation",
+      "time": "2026-05-13T19:24:30",
+      "data": {
+        "status": "AWAITING_CONFIRMATION"
+      }
+    },
+    {
+      "name": "customer awaiting confirmation",
+      "status": "PASS",
+      "message": "customer can read awaiting confirmation",
+      "time": "2026-05-13T19:24:31",
+      "data": {
+        "status": "AWAITING_CONFIRMATION"
+      }
+    },
+    {
+      "name": "customer confirm",
+      "status": "PASS",
+      "message": "order completed and readable by both sides",
+      "time": "2026-05-13T19:24:34",
+      "data": {
+        "customerStatus": "COMPLETED",
+        "courierStatus": "COMPLETED"
+      }
+    },
+    {
+      "name": "post-chain screenshots",
+      "status": "PASS",
+      "message": "captured user and parttime app screenshots after action chain",
+      "time": "2026-05-13T19:24:46"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "project-logs/campus-relay/runtime/step-165-android-action-matrix/user-launch.png",
+      "description": "campus-user-action-matrix.png"
+    },
+    {
+      "path": "project-logs/campus-relay/runtime/step-165-android-action-matrix/parttime-launch.png",
+      "description": "campus-parttime-action-matrix.png"
+    },
+    {
+      "path": "project-logs/campus-relay/runtime/step-165-android-action-matrix/user-after-action-chain.png",
+      "description": "campus-user-after-action-chain.png"
+    },
+    {
+      "path": "project-logs/campus-relay/runtime/step-165-android-action-matrix/parttime-after-action-chain.png",
+      "description": "campus-parttime-after-action-chain.png"
+    }
+  ],
+  "notes": [
+    "The report redacts the real API host and never stores tokens.",
+    "ADB is used for real-device launch/screenshot evidence.",
+    "Business state transitions are driven through public APIs with test accounts.",
+    "The script does not modify bridge behavior, token attachment logic, routes, backend state machine, or old takeaway modules."
+  ]
+}
