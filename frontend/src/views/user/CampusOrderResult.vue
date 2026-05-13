@@ -5,10 +5,10 @@
         <div class="section-header">
           <div>
             <div class="title-row">
-              <h2>校园代送结果回看</h2>
-              <span class="readonly-badge">只读回看</span>
+              <h2>代送单结果</h2>
+              <span class="readonly-badge">订单结果</span>
             </div>
-            <p>输入校园代送订单号，查看确认送达前后的当前结果，不新增写操作。</p>
+            <p>输入订单号就能看进度。配送员送达后，你也可以在这里确认收货。</p>
           </div>
         </div>
 
@@ -26,17 +26,17 @@
           <div class="guide-item">
             <span>1</span>
             <strong>输入订单号</strong>
-            <p>支持从 URL query 自动带入，也可手工输入。</p>
+            <p>从订单列表跳转会自动带入，也可以手动输入。</p>
           </div>
           <div class="guide-item">
             <span>2</span>
             <strong>查看确认状态</strong>
-            <p>重点区分等待确认与已完成两种演示状态。</p>
+            <p>看清楚现在是等你确认，还是已经完成。</p>
           </div>
           <div class="guide-item">
             <span>3</span>
-            <strong>核对结果字段</strong>
-            <p>只读展示现有 customer 订单详情可返回字段。</p>
+            <strong>查看配送信息</strong>
+            <p>取餐点、送达位置、金额和备注都会列出来。</p>
           </div>
         </div>
       </section>
@@ -45,26 +45,26 @@
         <div class="state-icon">ID</div>
         <div>
           <h3>等待输入订单号</h3>
-          <p>输入校园代送订单号后，可回看等待确认或已完成状态下的当前结果。</p>
-          <p class="sub-tip">示例：`CR202604070002`，也可通过 `?orderId=` 直接打开结果回看。</p>
+          <p>输入订单号后，可以查看配送进度，也能确认已经送到的订单。</p>
+          <p class="sub-tip">示例：CR202604070002。也可以从订单列表直接点进来。</p>
         </div>
       </section>
 
       <section v-if="loading" class="card state-card">
         <div class="state-icon loading-state"><span class="spinner-ring"></span></div>
         <div>
-          <h3>正在读取结果</h3>
-          <p>正在查询订单 {{ queryingOrderId || orderId || '...' }} 的当前结果，请稍候。</p>
-          <p class="sub-tip">本页只调用 customer 订单详情读取接口，不会触发确认或写操作。</p>
+          <h3>正在查询订单</h3>
+          <p>正在查看 {{ queryingOrderId || orderId || '...' }} 的最新进度，请稍等。</p>
+          <p class="sub-tip">放心，查询不会自动确认收货，只有你点确认按钮才会提交。</p>
         </div>
       </section>
 
       <section v-if="errorMessage" class="card state-card error-state">
         <div class="state-icon error-icon">!</div>
         <div>
-          <h3>结果读取失败</h3>
+          <h3>没查到订单</h3>
           <p>{{ errorMessage }}</p>
-          <p class="sub-tip">请检查订单号是否正确、当前账号是否有权限查看该订单，或稍后重试。</p>
+          <p class="sub-tip">检查一下订单号和登录账号是否正确，或者稍后再试。</p>
         </div>
       </section>
 
@@ -82,6 +82,27 @@
         <div class="message-box" :class="statusClass(result.status)">
           <strong>{{ statusTitle(result.status) }}</strong>
           <span>{{ statusMessage(result) }}</span>
+        </div>
+
+        <div v-if="result.status === 'AWAITING_CONFIRMATION'" class="confirm-section">
+          <div class="confirm-card">
+            <div class="confirm-icon">
+              ✓
+              <span class="pulse-ring-sm"></span>
+            </div>
+            <div class="confirm-body">
+              <strong>确认已经收到</strong>
+              <p>确认后这单会变成已完成，页面会自动刷新最新结果。</p>
+            </div>
+            <el-button
+              type="primary"
+              class="confirm-button"
+              :loading="confirming"
+              @click="confirmOrderResult"
+            >
+              确认已收到
+            </el-button>
+          </div>
         </div>
 
         <div class="summary-grid">
@@ -130,7 +151,7 @@
               <strong>{{ formatAmount(result.totalAmount) }}</strong>
             </div>
             <div class="detail-item">
-              <span>customer 备注</span>
+            <span>下单备注</span>
               <strong>{{ result.remark || '暂无' }}</strong>
             </div>
           </div>
@@ -139,7 +160,7 @@
         <div class="section-block">
           <div class="section-block__header">
             <h4>异常信息摘要</h4>
-            <span>{{ result.exceptionType ? '存在异常记录' : '暂无异常记录' }}</span>
+          <span>{{ result.exceptionType ? '有异常记录' : '没有异常记录' }}</span>
           </div>
           <div class="detail-grid">
             <div class="detail-item">
@@ -154,14 +175,14 @@
         </div>
 
         <div v-if="result.exceptionType" class="exception-notice">
-          <strong>异常信息提示</strong>
-          <p>当前订单存在异常记录，请关注售后处理结果。如有疑问请联系平台客服。</p>
+          <strong>这单有异常记录</strong>
+          <p>可以留意后续售后处理结果。有疑问的话，联系平台处理就行。</p>
         </div>
 
         <div class="section-block">
           <div class="section-block__header">
             <h4>时间信息</h4>
-            <span>按现有接口可读字段展示</span>
+            <span>配送过程中的关键时间</span>
           </div>
           <div class="detail-grid">
             <div class="detail-item">
@@ -188,7 +209,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import UserLayout from '../../layout/UserLayout.vue'
-import { getCampusCustomerOrderDetail } from '../../api/campus-customer'
+import { confirmCampusCustomerOrder, getCampusCustomerOrderDetail } from '../../api/campus-customer'
 
 const route = useRoute()
 const router = useRouter()
@@ -196,6 +217,7 @@ const router = useRouter()
 const orderId = ref(route.query.orderId || '')
 const result = ref(null)
 const loading = ref(false)
+const confirming = ref(false)
 const errorMessage = ref('')
 const queryingOrderId = ref('')
 const showInitialHint = computed(() => !loading.value && !result.value && !errorMessage.value && !orderId.value?.trim())
@@ -225,9 +247,28 @@ const loadOrderResult = async () => {
     })
   } catch (error) {
     result.value = null
-    errorMessage.value = error?.response?.data?.msg || error?.message || '读取校园代送结果失败'
+    errorMessage.value = error?.response?.data?.msg || error?.message || '订单查询失败，请稍后再试'
   } finally {
     loading.value = false
+  }
+}
+
+const confirmOrderResult = async () => {
+  const targetOrderId = result.value?.id || orderId.value?.trim()
+  if (!targetOrderId) {
+    ElMessage.warning('请先查询订单后再确认')
+    return
+  }
+  confirming.value = true
+  try {
+    await confirmCampusCustomerOrder(targetOrderId)
+    ElMessage.success('已确认收货')
+    orderId.value = targetOrderId
+    await loadOrderResult()
+  } catch (error) {
+    ElMessage.error(error?.response?.data?.msg || error?.message || '确认失败，请稍后再试')
+  } finally {
+    confirming.value = false
   }
 }
 
@@ -258,12 +299,12 @@ const statusClass = (status) => ({
 
 const statusMessage = (order) => {
   if (order.status === 'AWAITING_CONFIRMATION') {
-    return '配送员已送达，当前正在等待你确认送达结果。确认前这里会持续展示最新的送达结果。'
+    return '配送员已经送到，等你确认收货。确认前，这里会一直显示最新进度。'
   }
   if (order.status === 'COMPLETED') {
-    return '订单已完成。这里展示的是确认送达后的最终结果回看，可直接用于核对本次配送结果。'
+    return '订单已完成。你可以在这里核对送达时间、金额和备注。'
   }
-  return '当前订单仍在处理中，这里展示的是现有接口可读取到的最新结果。'
+  return '这单还在处理中，页面会展示目前能查到的最新进度。'
 }
 
 const resultSummaryTitle = (status) => {
@@ -287,36 +328,23 @@ onMounted(() => {
 <style scoped lang="scss">
 .order-result-page {
   padding: 14px 14px 24px;
+  overflow-x: hidden;
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(15, 118, 110, 0.1);
-  border-radius: 24px;
-  padding: 18px;
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 14px;
+  padding: 16px;
   margin-bottom: 16px;
-  box-shadow: 0 16px 36px rgba(15, 118, 110, 0.08);
-  backdrop-filter: blur(18px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .hero-card {
   position: relative;
   overflow: hidden;
-  border-radius: 28px;
-  background:
-    radial-gradient(circle at 92% 10%, rgba(45, 212, 191, 0.26), transparent 30%),
-    linear-gradient(135deg, rgba(226, 250, 255, 0.98), rgba(255, 255, 255, 0.88));
-
-  &::after {
-    content: "";
-    position: absolute;
-    right: -46px;
-    bottom: -58px;
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    background: rgba(20, 184, 166, 0.1);
-  }
+  border-radius: 16px;
+  background: linear-gradient(135deg, #eefdfa, #f0fdfa);
 
   > * {
     position: relative;
@@ -344,7 +372,7 @@ onMounted(() => {
 
 .error-state {
   border-color: rgba(239, 68, 68, 0.18);
-  background: rgba(254, 242, 242, 0.88);
+  background: #fef2f2;
 }
 
 .sub-tip {
@@ -356,8 +384,8 @@ onMounted(() => {
 .state-icon {
   width: 44px;
   height: 44px;
-  border-radius: 16px;
-  background: rgba(240, 253, 250, 0.86);
+  border-radius: 12px;
+  background: #f0fdfa;
   color: #0f766e;
   display: inline-flex;
   align-items: center;
@@ -368,7 +396,7 @@ onMounted(() => {
 }
 
 .state-icon.loading-state {
-  background: rgba(241, 245, 249, 0.86);
+  background: #f1f5f9;
   color: #64748b;
 }
 
@@ -387,9 +415,7 @@ onMounted(() => {
 }
 
 .hint-state {
-  background:
-    radial-gradient(circle at 88% 16%, rgba(45, 212, 191, 0.12), transparent 36%),
-    rgba(240, 253, 250, 0.86);
+  background: #f0fdfa;
   border-color: rgba(20, 184, 166, 0.12);
 }
 
@@ -413,13 +439,13 @@ onMounted(() => {
 .completed-icon {
   background: linear-gradient(135deg, #10b981, #059669);
   color: #fff;
-  box-shadow: 0 10px 24px rgba(16, 185, 129, 0.24);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.18);
 }
 
 .waiting-icon {
   background: linear-gradient(135deg, #0ea5e9, #0284c7);
   color: #fff;
-  box-shadow: 0 10px 24px rgba(14, 165, 233, 0.24);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.18);
   position: relative;
 }
 
@@ -438,8 +464,8 @@ onMounted(() => {
 
 .exception-notice {
   margin-top: 16px;
-  border-radius: 14px;
-  background: rgba(254, 243, 199, 0.55);
+  border-radius: 12px;
+  background: #fef9ee;
   border: 1px solid rgba(245, 158, 11, 0.15);
   padding: 14px 16px;
 
@@ -460,7 +486,7 @@ onMounted(() => {
 }
 
 .state-icon.error-icon {
-  background: rgba(254, 226, 226, 0.86);
+  background: #fee2e2;
   color: #ef4444;
 }
 
@@ -500,7 +526,7 @@ onMounted(() => {
   margin-top: 16px;
 
   .el-button--primary {
-    border-radius: 14px;
+    border-radius: 10px;
     font-weight: 700;
     min-height: 44px;
   }
@@ -508,7 +534,7 @@ onMounted(() => {
 
 .search-row :deep(.el-input__wrapper) {
   min-height: 44px;
-  border-radius: 15px;
+  border-radius: 10px;
 }
 
 .guide-strip {
@@ -519,8 +545,8 @@ onMounted(() => {
 }
 
 .guide-item {
-  background: rgba(248, 250, 252, 0.82);
-  border-radius: 14px;
+  background: #f8fafc;
+  border-radius: 12px;
   padding: 14px;
 }
 
@@ -530,7 +556,7 @@ onMounted(() => {
   justify-content: center;
   width: 24px;
   height: 24px;
-  border-radius: 10px;
+  border-radius: 8px;
   background: linear-gradient(135deg, #14b8a6, #38bdf8);
   color: #fff;
   font-size: 12px;
@@ -592,7 +618,7 @@ onMounted(() => {
 }
 
 .message-box {
-  border-radius: 14px;
+  border-radius: 12px;
   padding: 14px 16px;
   margin-bottom: 16px;
   line-height: 1.6;
@@ -624,13 +650,13 @@ onMounted(() => {
 
 .summary-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 12px;
   margin-bottom: 16px;
 }
 
 .highlight-item {
-  background: linear-gradient(180deg, rgba(240, 253, 250, 0.86) 0%, rgba(236, 254, 255, 0.78) 100%);
+  background: #f0fdfa;
   border: 1px solid rgba(15, 118, 110, 0.08);
 }
 
@@ -658,13 +684,13 @@ onMounted(() => {
 
 .detail-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 12px;
 }
 
 .detail-item {
-  background: rgba(248, 250, 252, 0.82);
-  border-radius: 14px;
+  background: #f8fafc;
+  border-radius: 10px;
   padding: 14px;
   display: flex;
   flex-direction: column;
@@ -801,7 +827,7 @@ onMounted(() => {
   gap: 14px;
   background: linear-gradient(135deg, rgba(14, 165, 233, 0.06), rgba(20, 184, 166, 0.06));
   border: 1px solid rgba(14, 165, 233, 0.15);
-  border-radius: 18px;
+  border-radius: 14px;
   padding: 16px;
   flex-wrap: wrap;
 }
@@ -848,12 +874,12 @@ onMounted(() => {
 
 .confirm-button {
   min-height: 44px;
-  border-radius: 14px;
+  border-radius: 10px;
   font-weight: 800;
   padding: 0 24px;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 480px) {
   .search-row {
     grid-template-columns: 1fr;
   }
@@ -869,6 +895,14 @@ onMounted(() => {
 
   .state-card {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 360px) {
+  .summary-grid,
+  .detail-grid,
+  .guide-strip {
+    grid-template-columns: 1fr;
   }
 }
 </style>

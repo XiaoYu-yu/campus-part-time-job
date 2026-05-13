@@ -1,0 +1,15 @@
+--------- beginning of main
+05-12 16:50:11.505 10529 10529 E cmd     : BBinder_init Processname  cmd  
+05-12 16:50:11.506 10529 10529 E cmd     : BBinder_init hasGetProcessName  cmd
+05-12 16:50:14.672 10547 10547 E screencap: BBinder_init Processname  screencap  
+05-12 16:50:14.672 10547 10547 E screencap: BBinder_init hasGetProcessName  screencap
+05-12 16:50:14.684 10547 10547 W screencap: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: SurfaceFlingerAIDL
+05-12 16:50:14.685 10547 10547 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+05-12 16:50:14.687 10547 10547 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+05-12 16:50:14.728 10547 10547 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_mm
+05-12 16:50:14.728 10547 10547 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_mm-uncached
+05-12 16:50:14.728 10547 10547 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_svp_page-uncached
+05-12 16:50:14.728 10547 10547 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_prot_region
+05-12 16:50:14.729 10547 10547 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_2d_fr_region
+05-12 16:50:14.729 10547 10547 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_wfd_page-uncached
+05-12 16:50:15.023 10547 10547 W RefBase : RefBase: Explicit destruction, weak count = 0 (in 0x73049fe948). Use sp<> to manage this object. Note - if weak count is 0, this leaks mRefs (weakref_impl).

@@ -1,13 +1,19 @@
 <template>
   <MainLayout>
     <div class="campus-admin-page">
-      <div class="page-header">
+      <section class="page-hero">
         <div>
-          <h2>校园结算批次详情</h2>
-          <p>只读查看批次汇总与 settlement 明细，不提供编辑写入。</p>
+          <span class="eyebrow">Campus Ops</span>
+          <h2>结算批次详情</h2>
+          <p>查看单个结算批次的详细信息，包含结算明细和操作历史。</p>
         </div>
-        <el-button @click="router.push('/campus/settlement-batches')">返回列表</el-button>
-      </div>
+        <div class="hero-actions">
+          <el-button @click="goBack">
+            <el-icon><ArrowLeft /></el-icon>
+            返回列表
+          </el-button>
+        </div>
+      </section>
 
       <section class="summary-card" v-loading="loading">
         <template v-if="detail">
@@ -56,13 +62,14 @@
       </section>
 
       <section class="table-card">
-        <div class="section-heading">
+        <div class="table-heading">
           <div>
+            <span class="section-kicker">结算明细</span>
             <h3>批次结算明细</h3>
             <p>来源于当前批次下的 settlement 记录，继续只读展示单笔打款与核对摘要。</p>
           </div>
         </div>
-        <el-table v-loading="loading" :data="detail?.records || []" border>
+        <el-table v-loading="loading" :data="detail?.records || []" class="campus-table" style="width: 100%;">
           <el-table-column prop="id" label="结算ID" width="100" />
           <el-table-column prop="relayOrderId" label="订单号" min-width="200" />
           <el-table-column prop="courierProfileId" label="配送员ID" width="110" align="center" />
@@ -98,8 +105,9 @@
       </section>
 
       <section class="table-card">
-        <div class="section-heading">
+        <div class="table-heading">
           <div>
+            <span class="section-kicker">操作审计</span>
             <h3>批次操作历史</h3>
             <p>只读展示 review / withdraw 操作审计，不改变打款状态、批次号或核对结果。</p>
           </div>
@@ -118,7 +126,8 @@
         <el-table
           v-loading="operationLoading"
           :data="operationRecords"
-          border
+          class="campus-table"
+          style="width: 100%;"
           empty-text="暂无批次操作记录"
         >
           <el-table-column prop="id" label="记录ID" width="100" />
@@ -165,6 +174,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { ArrowLeft } from '@element-plus/icons-vue'
 import MainLayout from '../layout/MainLayout.vue'
 import {
   getCampusSettlementBatchOperations,
@@ -182,6 +192,10 @@ const operationError = ref('')
 
 const formatAmount = (value) => `¥${Number(value || 0).toFixed(2)}`
 const formatDateTime = (value) => value || '暂无'
+
+const goBack = () => {
+  router.push('/campus/settlement-batches')
+}
 
 const payoutTagType = (status) => ({
   PAID: 'success',
@@ -249,126 +263,227 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .campus-admin-page {
-  padding: 20px;
-}
-
-.page-header,
-.summary-card,
-.table-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  h2 {
-    margin: 0 0 8px;
-    font-size: 24px;
-    color: #18181b;
-  }
-
-  p {
-    margin: 0;
-    color: #71717a;
-  }
-}
-
-.summary-top {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.summary-title,
-.summary-amount {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-}
+  gap: 22px;
 
-.summary-title h3,
-.summary-amount strong {
-  margin: 0;
-  font-size: 24px;
-  color: #18181b;
-}
+  .page-hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    min-height: 170px;
+    padding: 34px 40px;
+    border: 1px solid rgba(15, 118, 110, 0.12);
+    border-radius: 28px;
+    background:
+      radial-gradient(circle at 86% 18%, rgba(132, 204, 22, 0.28), transparent 28%),
+      radial-gradient(circle at 16% 20%, rgba(14, 165, 233, 0.16), transparent 32%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(236, 253, 245, 0.86) 54%, rgba(224, 242, 254, 0.86) 100%);
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.09);
+    color: #0f172a;
 
-.label {
-  color: #71717a;
-  font-size: 13px;
-}
+    &::after {
+      content: '';
+      position: absolute;
+      right: -80px;
+      bottom: -110px;
+      width: 270px;
+      height: 270px;
+      border-radius: 50%;
+      border: 38px solid rgba(15, 118, 110, 0.07);
+    }
 
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
-}
+    h2 {
+      position: relative;
+      margin: 8px 0 10px;
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
 
-.summary-item {
-  background: #f8fafc;
-  border-radius: 12px;
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-  span {
-    color: #71717a;
-    font-size: 13px;
+    p {
+      position: relative;
+      max-width: 560px;
+      margin: 0;
+      color: #475569;
+      font-size: 15px;
+      line-height: 1.8;
+    }
   }
 
-  strong {
-    color: #18181b;
-  }
-}
-
-.section-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 16px;
-
-  h3 {
-    margin: 0 0 6px;
-    font-size: 18px;
-    color: #18181b;
+  .eyebrow,
+  .section-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #0f766e;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
 
-  p {
-    margin: 0;
-    color: #71717a;
-    font-size: 13px;
+  .hero-actions {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+
+    .el-button {
+      border: 1px solid rgba(15, 118, 110, 0.2);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(14px);
+      color: #0f766e;
+      font-weight: 700;
+      padding: 10px 20px;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.9);
+        border-color: rgba(15, 118, 110, 0.3);
+      }
+    }
   }
-}
 
-.section-alert {
-  margin-bottom: 14px;
-}
+  .summary-card,
+  .table-card {
+    border: 1px solid rgba(15, 118, 110, 0.1);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+    padding: 22px 24px;
+  }
 
-.operation-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 12px;
-  color: #71717a;
-  font-size: 13px;
-}
+  .summary-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
 
-@media (max-width: 768px) {
-  .page-header,
-  .summary-top,
-  .section-heading,
-  .operation-footer {
+  .summary-title,
+  .summary-amount {
+    display: flex;
     flex-direction: column;
+    gap: 6px;
+  }
+
+  .summary-title h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 900;
+    color: #0f172a;
+  }
+
+  .summary-amount strong {
+    font-size: 24px;
+    color: #0f766e;
+  }
+
+  .label {
+    color: #64748b;
+    font-size: 13px;
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  .summary-item {
+    background: #f8fafc;
+    border: 1px solid rgba(15, 118, 110, 0.06);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    span {
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    strong {
+      color: #0f172a;
+      font-size: 16px;
+      font-weight: 800;
+    }
+  }
+
+  .table-heading {
+    display: flex;
+    justify-content: space-between;
     align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+
+    h3 {
+      margin: 6px 0 6px;
+      color: #0f172a;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    p {
+      margin: 0;
+      color: #64748b;
+      font-size: 13px;
+    }
+  }
+
+  .campus-table {
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+
+    :deep(.el-table__header-wrapper th) {
+      background: #f8fafc;
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    :deep(.el-table__row) {
+      color: #334155;
+    }
+
+    :deep(.el-table__cell) {
+      border-bottom-color: #edf2f7;
+    }
+  }
+
+  .section-alert {
+    margin-bottom: 14px;
+  }
+
+  .operation-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+    color: #64748b;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 900px) {
+  .campus-admin-page {
+    .page-hero,
+    .summary-top,
+    .table-heading {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .operation-footer {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
   }
 }
 </style>

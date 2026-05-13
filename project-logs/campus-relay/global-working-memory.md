@@ -353,3 +353,118 @@
 1. 若目标是同步 GitHub：先提交并推送 Step 153-157 及移动端视觉/Android 壳/部署日志相关文件，排除 `target/` 等本地临时产物。
 2. 若目标是继续产品化：先做公网入口浏览器人工巡检，再重打 Android 双端 QA APK 并跑公网 API / WebView smoke。
 3. 若目标是继续前端：先让 owner 提供新原型或明确页面范围，不再机械 polish。
+
+## 2026-05-07 补充：Step 158 安卓双端前端视觉重构
+
+1. Step 158 已完成安卓双端前端视觉与移动端交互重构：
+   - 新增 `frontend/src/styles/mobile-theme.css` 移动端视觉基线，仅在 UserLayout / ParttimeLayout 内生效，不影响后台管理端。
+   - UserLayout.vue 和 ParttimeLayout.vue 已重构为移动 App 风格页面壳（sticky 顶部栏 + fixed 底部导航 + 可滚动内容区）。
+   - 用户端 7 个页面和兼职端 3 个页面的视觉布局已重构，统一卡片/按钮/状态标签/空态/错误态/loading 态样式。
+   - 适配 360px/390px/430px 宽度，添加 overflow-x: hidden。
+   - 去掉重 backdrop-filter（blur(18px)），保留轻量 blur(16px) 或纯白背景。
+   - 去掉装饰性 ::after 伪元素和复杂 radial-gradient。
+   - npm run build / build:android:user / build:android:parttime 均通过。
+2. Step 158 未改内容：
+   - 未改后台管理端页面、request.js、api/*、router、token、bridge、后端 Java、数据库、Android 原生壳。
+3. Step 158 仍需验证：
+   - 真机/模拟器 360px/390px/430px 宽度下的实际视觉验证。
+   - Drawer 内长内容滚动在真机 WebView 中的表现。
+   - 中文显示在真机 WebView 中的表现。
+
+## 2026-05-11 补充：Step 159 公测 P0 收口复核与 Android 安全区修复
+
+1. Step 159 已处理 Android WebView 安全区与构建 warning：
+   - `frontend/index.html` viewport 增加 `viewport-fit=cover`。
+   - 用户端 / 兼职端移动壳顶部栏增加 `env(safe-area-inset-top)` 支持。
+   - 用户端 / 兼职端登录页增加顶部和底部 safe-area padding。
+   - `CampusCourierOpsView.vue` 拉平嵌套 `:deep(...)` 表格选择器，消除 `lightningcss` 构建 warning。
+2. Step 159 验证结果：
+   - `npm run build` 通过。
+   - `npm run build:android:user:public` 通过。
+   - `npm run build:android:parttime:public` 通过。
+   - 用户端 / 兼职端 `cap:sync:public` 通过。
+   - 用户端 / 兼职端 Debug APK 构建通过。
+   - `git diff --check` 通过，仅 CRLF 提示。
+3. 当前真实缺口：
+   - 2026-05-12 手机重新连接后，本轮新 APK 已完成双端安装、启动和登录 smoke。
+   - 用户端登录成功进入首页。
+   - 兼职端登录成功进入工作台。
+   - Step 158 真机截图中兼职端曾出现 `网络连接失败，请检查网络` toast，本轮未复现。
+   - 当前仍未完成真机完整业务链路：发布订单、模拟支付、接单、取餐、送达、用户确认、结果回读。
+   - 工作树仍有多轮未提交改动和未跟踪文件，提交前需要确认哪些属于本次成果、哪些应归档或忽略。
+4. 下一步恢复工作建议：
+   - 先继续真机完整业务链路验证。
+   - 每个关键节点保存截图和必要 logcat。
+   - 若完整链路通过，再整理工作树提交边界。
+   - 不要在完整真机链路未通过前扩大到公开公测。
+
+## 2026-05-12 补充：Step 159 真机公网主链路已闭环
+
+1. 手机真机和公网服务器验证：
+   - ADB 设备：`10AE221PGA003Y5`
+   - 公网服务器：已验证可达，真实地址不写入仓库。
+   - 手机到公网服务器 ping 成功。
+   - 用户端和兼职端 APK 均已安装并可启动。
+2. 兼职端真机链路：
+   - 订单 `CR202605010405291760` 在兼职端工作台可见。
+   - 接单成功，进入 `ACCEPTED`。
+   - 取餐凭证 `/api/files/android-smoke-pickup.jpg` 提交成功，进入 `PICKED_UP`。
+   - 开始配送成功，进入 `DELIVERING`。
+   - 确认送达成功，进入 `AWAITING_CONFIRMATION`。
+3. 用户端真机链路：
+   - 用户端结果页可查询订单 `CR202605010405291760`。
+   - 本轮发现 `AWAITING_CONFIRMATION` 结果页缺少确认按钮。
+   - 已补回 `confirmCampusCustomerOrder(orderId)` 和结果页 `确认已收到` 最小承接。
+   - 修复后重新构建、同步并安装用户端 APK。
+   - 真机点击 `确认已收到` 后，订单回读为 `已完成 / COMPLETED`。
+4. 证据位置：
+   - `project-logs/campus-relay/runtime/step-159-android-device/campus-user-confirm-visible-step159.png`
+   - `project-logs/campus-relay/runtime/step-159-android-device/window-user-confirm-visible.xml`
+   - `project-logs/campus-relay/runtime/step-159-android-device/campus-user-confirm-after-step159.png`
+   - `project-logs/campus-relay/runtime/step-159-android-device/window-user-confirm-after.xml`
+   - `project-logs/campus-relay/runtime/step-159-android-device/campus-user-confirm-logcat.txt`
+5. 当前判断：
+   - 真机公网主链路已真实闭环，不再是“完整链路未完成”状态。
+   - 当前可以进入 owner-controlled 小范围内测准备。
+   - 仍不建议公开公测；公开公测前至少补：工作树提交边界、release 签名包、内测说明、反馈模板、弱网 / 后台切回 / 多账号回归。
+
+## 2026-05-12 补充：Step 160 移动端可见文案已自然化
+
+1. 本轮根据用户反馈“界面文字太僵硬”，完成用户端和兼职端核心页面文案优化。
+2. 改动范围：
+   - 用户端：`Home.vue`、`Login.vue`、`Profile.vue`、`CampusRelayOrders.vue`、`CampusOrderResult.vue`、`CourierOnboarding.vue`、`AfterSaleResult.vue`
+   - 兼职端：`Login.vue`、`Profile.vue`、`CourierWorkbench.vue`
+3. 可见文案口径：
+   - 从 `token / 接口 / 字段 / 回读 / 最小承接` 等工程语言，改为“发单、查进度、报名、接单、确认取餐、确认送达、上报异常”等用户能直接理解的表达。
+4. 未改内容：
+   - 未改后端、接口、路由、bridge、`request.js`、token 附着逻辑或旧兼容模块。
+5. 验证：
+   - `npm run build` 通过。
+   - `npm run build:android:user:public` 通过。
+   - `npm run build:android:parttime:public` 通过。
+   - `git diff --check` 通过，仅 CRLF 提示。
+6. 下一步建议：
+   - 先在真机上快速验收文字是否被截断或挤压。
+   - 若准备给他人内测，优先补安装说明、账号说明、反馈模板和已知限制。
+
+## 2026-05-13 补充：Step 161 Android 双端显示名已调整
+
+1. 本轮把 Android 双端桌面显示名改成更清晰的中文端名：
+   - 用户端：`用户端`
+   - 兼职端：`兼职端`
+2. 注意：真实 Android `applicationId` 没有改，也不应改成中文：
+   - 用户端：`com.xiaoyu.campus.user`
+   - 兼职端：`com.xiaoyu.campus.parttime`
+3. 验证：
+   - 双端 Capacitor public sync 通过。
+   - 双端 Debug APK 构建通过。
+   - `aapt dump badging` 确认 package 和 application-label 正确。
+   - 手机 ADB 设备 `10AE221PGA003Y5` 在线。
+   - 双端 APK 均已 `adb install -r` 成功。
+   - 双端均可通过 launcher intent 启动。
+4. 未改内容：
+   - 未改后端、接口、路由、bridge、`request.js`、token 附着逻辑、管理后台或旧兼容模块。
+5. 下一步建议：
+   - 手动确认手机桌面图标文字是否刷新。
+   - 再做 Android 双端真机小回归。
+   - 若准备内测分发，再整理 release 签名包、安装说明和反馈模板。

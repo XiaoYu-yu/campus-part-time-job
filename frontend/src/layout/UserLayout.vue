@@ -53,6 +53,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import '../styles/mobile-theme.css'
 
 const router = useRouter()
 const route = useRoute()
@@ -68,10 +69,12 @@ const goToUser = () => {
 <style scoped lang="scss">
 .user-layout {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   background: #f5f5f5;
-  color: #102a43;
+  color: #18181b;
+  overflow-x: hidden;
 }
 
 .mobile-header {
@@ -81,7 +84,8 @@ const goToUser = () => {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
+  padding: env(safe-area-inset-top, 0px) 16px 0;
+  min-height: calc(56px + env(safe-area-inset-top, 0px));
   background: #ffffff;
   border-bottom: 1px solid #e4e4e7;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
@@ -93,10 +97,11 @@ const goToUser = () => {
   border-radius: 10px;
   display: grid;
   place-items: center;
-  background: #0f9f8f;
+  background: linear-gradient(135deg, #0f9f8f, #14b8a6);
   color: #fff;
   font-weight: 800;
   font-size: 16px;
+  flex-shrink: 0;
 }
 
 .brand-copy {
@@ -130,11 +135,19 @@ const goToUser = () => {
   font-weight: 700;
   padding: 6px 12px;
   cursor: pointer;
+  flex-shrink: 0;
+  min-height: 36px;
+  transition: background 0.15s ease;
+
+  &:active {
+    background: #f5f5f5;
+  }
 }
 
 .main-content {
   flex: 1;
   padding-bottom: 72px;
+  overflow-x: hidden;
 }
 
 .mobile-footer {
@@ -146,6 +159,7 @@ const goToUser = () => {
   border-top: 1px solid #e4e4e7;
   background: #ffffff;
   box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.04);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .footer-nav {
@@ -162,9 +176,10 @@ const goToUser = () => {
   gap: 2px;
   color: #71717a;
   text-decoration: none;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   padding: 4px 0;
+  transition: color 0.15s ease;
 
   &.active {
     color: #0f9f8f;
@@ -181,16 +196,21 @@ const goToUser = () => {
   display: grid;
   place-items: center;
   color: #71717a;
-  transition: color 0.2s ease;
+  transition: color 0.15s ease;
 
   svg {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
   }
 }
 
 @media (min-width: 768px) {
-  .mobile-header,
+  .mobile-header {
+    max-width: 520px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
   .main-content {
     max-width: 520px;
     width: 100%;

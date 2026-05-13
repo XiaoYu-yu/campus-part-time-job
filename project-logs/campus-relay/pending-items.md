@@ -1,5 +1,111 @@
 # 校园代送待处理事项
 
+## Step 161 收口记录
+
+1. Step 161 已完成 Android 双端显示名调整：
+   - 用户端显示为 `用户端`。
+   - 兼职端显示为 `兼职端`。
+   - 真实包名仍保持 `com.xiaoyu.campus.user` / `com.xiaoyu.campus.parttime`。
+2. 验证结果：
+   - 双端 Capacitor public sync 通过。
+   - 双端 Debug APK 构建通过。
+   - `aapt dump badging` 已确认 APK label 和 package 均正确。
+   - ADB 设备 `10AE221PGA003Y5` 在线。
+   - 双端 `adb install -r` 成功。
+   - 双端 launcher 启动验证通过。
+   - `git diff --check` 通过，仅 CRLF 提示。
+3. 下一轮最高优先级：
+   - A. 在手机桌面手动确认图标下方显示名是否刷新。
+   - B. 做一轮 Android 双端真机小回归：登录、发单、查单、兼职端接单、取餐、送达、用户确认。
+   - C. 若准备给别人试用，再整理 release 签名包、安装说明、测试账号说明和反馈模板。
+4. 继续禁止：
+   - 不把真实 `applicationId` 改成中文。
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不改后端鉴权、接口、路由或管理后台。
+
+## Step 160 收口记录
+
+1. Step 160 已完成移动端界面文案接地气优化：
+   - 用户端首页、登录页、个人中心、发单页、结果页、兼职报名页、售后结果页已减少工程化表达。
+   - 兼职端登录页、资料页、工作台已减少 `token / 接口 / 字段 / 回读 / 最小承接` 等面向开发的可见文案。
+   - 页面可见表达统一改向“发单、查进度、报名、接单、确认取餐、确认送达、上报异常”等普通用户能理解的口径。
+   - 本轮没有改接口、路由、bridge、鉴权、token 附着逻辑或后端代码。
+2. 验证结果：
+   - `npm run build` 通过。
+   - `npm run build:android:user:public` 通过。
+   - `npm run build:android:parttime:public` 通过。
+   - `git diff --check` 通过，仅 CRLF 提示。
+3. 下一轮最高优先级：
+   - A. 真机快速复测用户端 / 兼职端关键页面，确认文案没有截断、挤压或误导。
+   - B. 若给他人内测，补 APK 安装说明、测试账号说明、反馈模板和已知限制清单。
+   - C. 整理当前工作树提交边界，确认 `.trae/`、截图、runtime 留痕的保留策略。
+   - D. Android release 签名包仍未固化，若进入更广范围内测应优先补。
+4. 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不删除旧兼容模块。
+   - 不提交真实密钥、公网 IP、服务器密码、GitHub token 或腾讯地图 key。
+
+## Step 159 收口记录
+
+1. Step 159 已完成公测 P0 收口复核中的安全区与构建层修复：
+   - `frontend/index.html` 已增加 `viewport-fit=cover`。
+   - 用户端和兼职端移动壳顶部栏已增加 safe-area 支持。
+   - 用户端与兼职端登录页已增加顶部 / 底部 safe-area padding。
+   - `CampusCourierOpsView.vue` 已修复嵌套 `:deep(...)` 构建 warning。
+   - Web 构建、Android 用户端 public 构建、Android 兼职端 public 构建、双端 Capacitor sync、双端 Debug APK 构建均通过。
+   - `git diff --check` 通过，仅 CRLF 提示。
+2. Step 159 已完成真机公网主链路验证：
+   - 手机重新连接后已完成用户端 / 兼职端 APK 安装、启动和登录 smoke。
+   - 用户端已成功登录并进入首页。
+   - 兼职端已成功登录并进入工作台，`兼职 token 已就绪`、`资料状态 APPROVED`、`启用状态 可工作`、`Token 有效`、`可接任务 5`。
+   - Step 158 曾出现的兼职端 `网络连接失败，请检查网络` toast 本轮没有复现。
+   - 订单 `CR202605010405291760` 已在真机公网环境完成：兼职端接单 -> 取餐 -> 配送 -> 送达 -> 用户端确认 -> `COMPLETED` 回读。
+   - 用户端结果页补回 `AWAITING_CONFIRMATION` 下的 `确认已收到` 最小承接，复用既有 `POST /api/campus/customer/orders/{id}/confirm`。
+   - 本轮没有新增后端接口，没有改 bridge、鉴权、token 附着逻辑、路由或旧兼容模块。
+3. 当前真实缺口：
+   - 工作树仍包含多轮未提交改动和未跟踪文件，需要提交前做边界确认。
+   - 还没有 Android release 签名包固化。
+   - 还没有多用户账号矩阵、弱网 / 后台切回 / 重启恢复回归。
+   - 还没有面向外部 tester 的 APK 安装说明、账号说明、反馈模板和已知限制清单。
+   - 仍没有 HTTPS、域名、证书和正式监控告警；当前只适合 owner-controlled 小范围内测，不适合开放公测。
+4. 下一轮最高优先级：
+   - A. 整理当前工作树提交边界，确认 `.trae/`、根目录截图、runtime 截图 / logcat 的保留或归档策略。
+   - B. 补“内测账号 / APK 安装 / 已知限制 / 反馈模板”文档。
+   - C. 做 Android 小范围内测前的补充真机回归矩阵：重复下单、异常订单、后台切回、弱网、重启后 token 恢复。
+   - D. 若要给非 owner 用户测试，再考虑 release 签名包和最低限度隐私/安全说明。
+5. 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不改后端接口和路由。
+   - 不删除旧兼容模块。
+   - 不提交真实密钥、公网 IP、服务器密码、GitHub token 或腾讯地图 key。
+
+## Step 158 待处理记录
+
+1. Step 158 已完成安卓双端前端视觉与移动端交互重构：
+   - 新增 `frontend/src/styles/mobile-theme.css` 移动端视觉基线。
+   - 重构 UserLayout.vue 和 ParttimeLayout.vue 页面壳。
+   - 重构用户端 7 个页面和兼职端 3 个页面的视觉布局。
+   - 适配 360px/390px/430px 宽度，添加 overflow-x: hidden。
+   - npm run build / build:android:user / build:android:parttime 均通过。
+   - git diff --check 通过（仅 CRLF 警告）。
+2. Step 158 下一步建议：
+   - A. 在 Android 模拟器或真机上做 360px/390px/430px 宽度下的实际视觉验证。
+   - B. 如发现具体页面溢出或交互问题，只做 bug 级修复。
+   - C. 可考虑清理 Home.vue 中已隐藏的装饰 HTML 元素。
+3. Step 158 继续禁止：
+   - 不改 bridge。
+   - 不改 `request.js`。
+   - 不改 token 附着逻辑。
+   - 不改后端接口和路由。
+   - 不删除旧兼容模块。
+   - 不提交真实密钥、公网 IP、服务器密码、GitHub token 或腾讯地图 key。
+
 ## 下一步待处理 / 建议
 
 1. Step 157 已完成当前本地工作树服务器部署：
@@ -9,16 +115,16 @@
    - `GET /api/campus/public/health` 返回 `code=200`、`status=UP`。
    - 远端完整 smoke 复跑结果：25 项通过、0 项失败、0 项跳过。
 2. 下一步最高优先级：
-   - A. 使用公网入口做一次浏览器人工巡检，重点看 admin / user / parttime 三端关键页面真实样式。
-   - B. 重跑 Android 双端公网 API / WebView smoke，并按当前公网入口重新打 QA APK。
+   - A. 整理 Step 153-159 以来的工作树提交边界，确认哪些截图 / runtime 留痕需要提交，哪些应归档或忽略。
+   - B. 基于 Step 159 已跑通的真机公网主链路，补小范围内测说明：APK 安装、测试账号、已知限制、反馈格式。
+   - C. 继续补充 Android 真机回归矩阵：重复下单、异常订单、后台切回、弱网、重启后 token 恢复。
 3. 若准备给他人内测：
    - 补“公网内测访问说明 + 测试账号发放边界”。
    - 明确当前仍是 owner-controlled 单机内测，不是正式生产上线。
 4. 当前仍未处理但不阻塞本次部署：
    - 没有 HTTPS、域名、证书。
    - 没有正式监控告警。
-   - Android 真机 smoke 未执行。
-   - Android release 签名包未固化。
+   - Android Debug APK 已完成真机 smoke 和主链路闭环，但 release 签名包未固化。
    - 当前部署来自本地工作树，不等同于远端 main 已完全同步。
 5. 继续禁止：
    - 不改 bridge。

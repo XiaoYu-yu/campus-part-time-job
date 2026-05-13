@@ -4,7 +4,7 @@
       <section class="hero-card">
         <div class="hero-kicker">校园代送</div>
         <h1>发布代送需求</h1>
-        <p>填写取件点、送达楼栋和备注，创建后可执行模拟支付进入待接单。</p>
+        <p>填好取餐点和送达位置，模拟支付后就会进入待接单。</p>
         <div class="hero-meta">
           <span>基础代送 {{ formatAmount(deliveryRules.baseFee) }}</span>
           <span>加急窗口 {{ deliveryRules.priorityWindowMinutes || 5 }} 分钟</span>
@@ -14,18 +14,18 @@
       <section class="card guide-card">
         <div class="guide-item">
           <span>1</span>
-          <strong>填写取餐与送达信息</strong>
-          <p>取餐点来自 public 取餐点接口，楼栋来自配送规则。</p>
+          <strong>填写取餐和送达信息</strong>
+          <p>选择取餐点，写清楚送到哪栋楼、哪个门口。</p>
         </div>
         <div class="guide-item">
           <span>2</span>
-          <strong>创建待支付订单</strong>
-          <p>创建后状态为待支付，订单号可用于结果回看。</p>
+          <strong>生成待支付订单</strong>
+          <p>创建成功后会拿到订单号，后面查进度用它就行。</p>
         </div>
         <div class="guide-item">
           <span>3</span>
-          <strong>模拟支付进入待接单</strong>
-          <p>只调用 mock-pay，不接第三方真实支付。</p>
+          <strong>模拟支付后等人接单</strong>
+          <p>这里不会真的扣钱，只是把流程跑起来。</p>
         </div>
       </section>
 
@@ -39,7 +39,7 @@
         </div>
 
         <el-alert
-          title="本页创建校园代送单并支持模拟支付，不改旧模块语义。"
+          title="这里创建校园代送单，支付先走模拟流程，不会产生真实扣费。"
           type="info"
           :closable="false"
           show-icon
@@ -111,8 +111,8 @@
             <el-form-item label="平台">
               <el-input v-model="form.externalPlatformName" placeholder="美团 / 饿了么 / 其他" maxlength="30" />
             </el-form-item>
-            <el-form-item label="外部订单号">
-              <el-input v-model="form.externalOrderRef" placeholder="外部平台订单号" maxlength="40" />
+            <el-form-item label="平台订单号">
+              <el-input v-model="form.externalOrderRef" placeholder="美团 / 饿了么上的订单号" maxlength="40" />
             </el-form-item>
           </div>
 
@@ -158,13 +158,13 @@
 
         <div v-if="createdOrderId" class="created-card">
           <div>
-            <span>刚创建的订单</span>
+            <span>刚刚创建成功</span>
             <strong>{{ createdOrderId }}</strong>
-            <p>可先模拟支付进入待接单，也可去结果回看页只读查看。</p>
+            <p>可以先完成模拟支付，也可以直接去看订单进度。</p>
           </div>
           <div class="created-actions">
             <el-button type="primary" :loading="payingOrderId === createdOrderId" @click="handleMockPay(createdOrderId)">去模拟支付</el-button>
-            <el-button @click="openResult(createdOrderId)">结果回看</el-button>
+            <el-button @click="openResult(createdOrderId)">查看进度</el-button>
           </div>
         </div>
       </section>
@@ -173,7 +173,7 @@
         <div class="section-heading">
           <div>
             <span>我的代送单</span>
-            <h2>最近校园代送订单</h2>
+            <h2>最近的校园代送单</h2>
           </div>
           <button class="text-button" type="button" @click="loadOrders">刷新</button>
         </div>
@@ -196,8 +196,8 @@
         <div v-if="ordersLoading" class="state-card">
           <div class="state-icon"><span class="spinner-ring"></span></div>
           <div>
-            <strong>正在读取我的代送单</strong>
-            <p>调用 customer 订单分页接口读取最近订单。</p>
+            <strong>正在加载我的代送单</strong>
+            <p>正在同步最近的订单记录。</p>
           </div>
         </div>
 
@@ -209,7 +209,7 @@
           </div>
         </div>
 
-        <el-empty v-else-if="orders.length === 0" description="暂无校园代送单，先创建一笔用于试运营联调" />
+        <el-empty v-else-if="orders.length === 0" description="还没有校园代送单，先发一单试试" />
 
         <div v-else class="order-list">
           <article v-for="order in orders" :key="order.id" class="order-card">
@@ -254,7 +254,7 @@
                 >
                   模拟支付
                 </el-button>
-                <el-button size="small" @click="openResult(order.id)">结果回看</el-button>
+                <el-button size="small" @click="openResult(order.id)">查看进度</el-button>
               </div>
             </div>
           </article>
@@ -482,8 +482,8 @@ const validateForm = () => {
     ['contactName', '请填写联系人'],
     ['contactPhone', '请填写手机号'],
     ['foodDescription', '请填写代送内容'],
-    ['externalPlatformName', '请填写外部平台'],
-    ['externalOrderRef', '请填写外部订单号'],
+    ['externalPlatformName', '请填写平台名称'],
+    ['externalOrderRef', '请填写平台订单号'],
     ['pickupCode', '请填写取餐码']
   ]
   for (const [field, message] of requiredFields) {
@@ -532,7 +532,7 @@ const handleMockPay = async (orderId) => {
   if (!orderId) return
   try {
     await ElMessageBox.confirm(
-      '确认对该校园代送单执行模拟支付？这不会接入第三方真实支付。',
+      '确认使用模拟支付？这里只是走流程，不会产生真实扣费。',
       '模拟支付',
       { type: 'warning' }
     )
@@ -543,7 +543,7 @@ const handleMockPay = async (orderId) => {
   payingOrderId.value = orderId
   try {
     await mockPayCampusCustomerOrder(orderId)
-    ElMessage.success('模拟支付成功，订单已进入待接单链路')
+    ElMessage.success('支付成功，正在等待同学接单')
     await loadOrders()
   } finally {
     payingOrderId.value = ''
@@ -566,42 +566,29 @@ onMounted(async () => {
 <style scoped lang="scss">
 .relay-orders-page {
   padding: 14px 14px 24px;
+  overflow-x: hidden;
 }
 
 .hero-card,
 .card {
-  border: 1px solid rgba(15, 118, 110, 0.1);
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-  backdrop-filter: blur(18px);
+  border: 1px solid #e4e4e7;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .hero-card {
   position: relative;
   overflow: hidden;
-  border-radius: 28px;
-  padding: 24px 22px;
+  border-radius: 16px;
+  padding: 20px 18px;
   margin-bottom: 16px;
-  background:
-    radial-gradient(circle at 92% 10%, rgba(45, 212, 191, 0.28), transparent 30%),
-    linear-gradient(135deg, rgba(226, 250, 255, 0.98), rgba(255, 255, 255, 0.88));
-
-  &::after {
-    content: "";
-    position: absolute;
-    right: -36px;
-    bottom: -32px;
-    width: 132px;
-    height: 132px;
-    border-radius: 50%;
-    background: rgba(20, 184, 166, 0.1);
-  }
+  background: linear-gradient(135deg, #eefdfa, #f0fdfa);
 
   h1 {
     position: relative;
     z-index: 1;
     margin: 8px 0 10px;
-    font-size: 27px;
+    font-size: 24px;
     line-height: 1.18;
     letter-spacing: -0.8px;
     color: #0f172a;
@@ -643,14 +630,13 @@ onMounted(async () => {
 }
 
 .card {
-  border-radius: 24px;
+  border-radius: 14px;
   padding: 18px;
   margin-bottom: 16px;
 }
 
 .form-card {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.86));
+  background: #ffffff;
   padding-bottom: 24px;
 }
 
@@ -663,7 +649,7 @@ onMounted(async () => {
 .order-form :deep(.el-select__wrapper),
 .order-form :deep(.el-textarea__inner) {
   min-height: 44px;
-  border-radius: 15px;
+  border-radius: 10px;
 }
 
 .order-form :deep(.el-textarea__inner) {
@@ -679,8 +665,8 @@ onMounted(async () => {
   display: grid;
   grid-template-columns: 30px 1fr;
   column-gap: 10px;
-  border-radius: 18px;
-  background: rgba(248, 250, 252, 0.82);
+  border-radius: 12px;
+  background: #f8fafc;
   padding: 12px;
 
   span {
@@ -742,10 +728,8 @@ onMounted(async () => {
 .fee-card,
 .created-card,
 .state-card {
-  border-radius: 18px;
-  background:
-    radial-gradient(circle at right, rgba(45, 212, 191, 0.18), transparent 34%),
-    rgba(240, 253, 250, 0.78);
+  border-radius: 12px;
+  background: #f0fdfa;
   padding: 14px;
   margin-bottom: 18px;
 }
@@ -753,7 +737,7 @@ onMounted(async () => {
 .fee-card {
   display: grid;
   gap: 8px;
-  border: 1px solid rgba(20, 184, 166, 0.16);
+  border: 1px solid #e4e4e7;
 
   div {
     display: flex;
@@ -773,7 +757,7 @@ onMounted(async () => {
 
   strong {
     color: #0f766e;
-    font-size: 32px;
+    font-size: 24px;
     letter-spacing: -0.04em;
   }
 }
@@ -781,7 +765,7 @@ onMounted(async () => {
 .wide-button {
   width: 100%;
   min-height: 48px;
-  border-radius: 16px;
+  border-radius: 14px;
   font-weight: 800;
   margin-bottom: 8px;
 }
@@ -831,10 +815,10 @@ onMounted(async () => {
 
 .status-tab {
   flex-shrink: 0;
-  border: 1px solid rgba(15, 118, 110, 0.12);
+  border: 1px solid #e4e4e7;
   border-radius: 999px;
   padding: 7px 16px;
-  background: rgba(255, 255, 255, 0.8);
+  background: #ffffff;
   color: #64748b;
   font-size: 13px;
   font-weight: 600;
@@ -912,10 +896,10 @@ onMounted(async () => {
 }
 
 .order-card {
-  border: 1px solid rgba(15, 118, 110, 0.1);
-  border-radius: 20px;
+  border: 1px solid #e4e4e7;
+  border-radius: 14px;
   padding: 14px;
-  background: rgba(248, 250, 252, 0.86);
+  background: #ffffff;
 }
 
 .order-head {
@@ -938,8 +922,8 @@ onMounted(async () => {
 }
 
 .order-route {
-  background: rgba(255, 255, 255, 0.78);
-  border-radius: 14px;
+  background: #f8fafc;
+  border-radius: 12px;
   padding: 12px;
   margin: 8px 0;
 }
@@ -1034,7 +1018,13 @@ onMounted(async () => {
   margin-top: 16px;
 }
 
-@media (max-width: 640px) {
+.order-form :deep(.el-form-item__error) {
+  font-weight: 700;
+  font-size: 13px;
+  padding-top: 4px;
+}
+
+@media (max-width: 480px) {
   .two-column,
   .filter-row {
     grid-template-columns: 1fr;
@@ -1059,16 +1049,10 @@ onMounted(async () => {
   }
 }
 
-@media (max-width: 420px) {
-  .two-column {
-    grid-template-columns: 1fr;
+@media (max-width: 360px) {
+  .hero-card h1 {
+    font-size: 22px;
   }
-}
-
-.order-form :deep(.el-form-item__error) {
-  font-weight: 700;
-  font-size: 13px;
-  padding-top: 4px;
 }
 
 @media (min-width: 768px) {

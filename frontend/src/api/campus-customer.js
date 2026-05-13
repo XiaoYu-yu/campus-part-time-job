@@ -37,6 +37,11 @@ export const getCampusCustomerOrderDetail = (orderId) => request({
   method: 'get'
 })
 
+export const confirmCampusCustomerOrder = (orderId) => request({
+  url: `/campus/customer/orders/${orderId}/confirm`,
+  method: 'post'
+})
+
 export const submitCourierOnboardingProfile = (data) => request({
   url: '/campus/customer/courier-onboarding/profile',
   method: 'post',

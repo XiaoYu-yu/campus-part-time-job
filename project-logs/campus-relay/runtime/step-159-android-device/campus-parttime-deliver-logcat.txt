@@ -1,0 +1,39 @@
+--------- beginning of main
+05-12 16:59:39.474 12311 12311 E cmd     : BBinder_init Processname  cmd  
+05-12 16:59:39.474 12311 12311 E cmd     : BBinder_init hasGetProcessName  cmd
+05-12 16:59:40.633  6146 10522 W AppLinksAsyncVerifierV2: Error performing check:  [CONTEXT service_id=244 ]
+05-12 16:59:40.633  6146 10522 W AppLinksAsyncVerifierV2: jsnw: DEADLINE_EXCEEDED: CallOptions deadline exceeded after 7.997908924s. Name resolution delay 0.000000000 seconds. [closed=[], open=[[connecting_and_lb_delay=8010746539ns, was_still_waiting]]]
+05-12 16:59:40.633  6146 10522 W AppLinksAsyncVerifierV2: 	at bjpz.r(:com.google.android.gms@261631035@26.16.31 (260400-900800821):31)
+05-12 16:59:40.633  6146 10522 W AppLinksAsyncVerifierV2: 	at bjpz.G(:com.google.android.gms@261631035@26.16.31 (260400-900800821):55)
+05-12 16:59:40.633  6146 10522 W AppLinksAsyncVerifierV2: 	at flnq.a(:com.google.android.gms@261631035@26.16.31 (260400-900800821):45)
+05-12 16:59:40.633  6146 10522 W AppLinksAsyncVerifierV2: 	at flmv.c(:com.google.android.gms@261631035@26.16.31 (260400-900800821):20)
+05-12 16:59:40.633  6146 10522 W AppLinksAsyncVerifierV2: 	at flmv.c(:com.google.android.gms@261631035@26.16.31 (260400-900800821):195)
+05-12 16:59:40.633  6146 10522 W AppLinksAsyncVerifierV2: 	at flmv.c(:com.google.android.gms@261631035@26.16.31 (260400-900800821):195)
+05-12 16:59:40.633  6146 10522 W AppLinksAsyncVerifierV2: 	at flmv.a(:com.google.android.gms@261631035@26.16.31 (260400-900800821):3)
+05-12 16:59:40.633  6146 10522 W AppLinksAsyncVerifierV2: 	at bcsh.run(:com.google.android.gms@261631035@26.16.31 (260400-900800821):5)
+05-12 16:59:40.633  6146 10522 W AppLinksAsyncVerifierV2: 	at bjwm.c(:com.google.android.gms@261631035@26.16.31 (260400-900800821):50)
+05-12 16:59:40.633  6146 10522 W AppLinksAsyncVerifierV2: 	at bjwm.run(:com.google.android.gms@261631035@26.16.31 (260400-900800821):66)
+05-12 16:59:40.633  6146 10522 W AppLinksAsyncVerifierV2: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1156)
+05-12 16:59:40.633  6146 10522 W AppLinksAsyncVerifierV2: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:651)
+05-12 16:59:40.633  6146 10522 W AppLinksAsyncVerifierV2: 	at bkcd.run(:com.google.android.gms@261631035@26.16.31 (260400-900800821):8)
+05-12 16:59:40.633  6146 10522 W AppLinksAsyncVerifierV2: 	at java.lang.Thread.run(Thread.java:1149)
+05-12 16:59:40.639  6146 10522 W AppLinksAsyncVerifierV2: Check request failed: null [CONTEXT service_id=244 ]
+05-12 16:59:40.641  6146 24532 I AppLinksHostsVerifierV2: (REDACTED) Adding relation extensions for host: %s
+05-12 16:59:40.641  6146 24532 I AppLinksHostsVerifierV2: (REDACTED) Verification %s complete. Successful hosts: %s. Failed hosts: %s. Error hosts: %s.
+05-12 16:59:40.646  6146 24532 I AppLinksRequestHandler: (REDACTED) Added erroneous request into database for package %s
+05-12 16:59:40.647  6146 24532 I AppLinksRequestHandler: (REDACTED) Updating url filtering rules for %s: %s
+05-12 16:59:40.651  6146 24532 I AppLinksUtilsV1: Legacy cross-profile verification enabled [CONTEXT service_id=244 ]
+05-12 16:59:42.642 12320 12320 E screencap: BBinder_init Processname  screencap  
+05-12 16:59:42.642 12320 12320 E screencap: BBinder_init hasGetProcessName  screencap
+05-12 16:59:42.651 12320 12320 W screencap: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: SurfaceFlingerAIDL
+05-12 16:59:42.652 12320 12320 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+05-12 16:59:42.654 12320 12320 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+05-12 16:59:42.690 12320 12320 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_mm
+05-12 16:59:42.690 12320 12320 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_mm-uncached
+05-12 16:59:42.690 12320 12320 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_svp_page-uncached
+05-12 16:59:42.690 12320 12320 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_prot_region
+05-12 16:59:42.690 12320 12320 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_2d_fr_region
+05-12 16:59:42.690 12320 12320 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_wfd_page-uncached
+05-12 16:59:42.982 12326 12326 E cmd     : BBinder_init Processname  cmd  
+05-12 16:59:42.982 12326 12326 E cmd     : BBinder_init hasGetProcessName  cmd
+05-12 16:59:43.025 12320 12320 W RefBase : RefBase: Explicit destruction, weak count = 0 (in 0x75087f6948). Use sp<> to manage this object. Note - if weak count is 0, this leaks mRefs (weakref_impl).

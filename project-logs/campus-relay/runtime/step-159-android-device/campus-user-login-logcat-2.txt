@@ -1,0 +1,171 @@
+--------- beginning of main
+05-12 16:35:38.881  6571  6571 E cmd     : BBinder_init Processname  cmd  
+05-12 16:35:38.882  6571  6571 E cmd     : BBinder_init hasGetProcessName  cmd
+05-12 16:35:40.022  6581  6581 E cmd     : BBinder_init Processname  cmd  
+05-12 16:35:40.023  6581  6581 E cmd     : BBinder_init hasGetProcessName  cmd
+05-12 16:35:40.065  4355  4355 I ImeTracker: com.xiaoyu.campus.user:e92eabca: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+05-12 16:35:40.065  4355  4355 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=ImeCallback=ImeOnBackInvokedCallback@191212253 Callback=android.window.IOnBackInvokedCallback$Stub$Proxy@6fe0661
+05-12 16:35:40.074  6771  6771 I LateInitializer: [initialize] Start, processName = com.bytedance.android.doubaoime
+05-12 16:35:40.074  6771  6771 E droid.doubaoime: Invalid Idmap file: bad magic value (was 0x00000000, expected 0x504d4449)
+05-12 16:35:40.074  6771  6771 E droid.doubaoime: failed to load IDMAP /data/resource-cache/data@resource-cache@com.android.systemui-neutral-YPhS.frro@idmap
+05-12 16:35:40.075  6771  6771 W ResourcesManager: failed to preload asset path '/data/resource-cache/com.android.systemui-neutral-YPhS.frro'
+05-12 16:35:40.075  6771  6771 W ResourcesManager: java.io.IOException: Failed to load asset path /data/resource-cache/data@resource-cache@com.android.systemui-neutral-YPhS.frro@idmap
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.content.res.ApkAssets.nativeLoad(Native Method)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.content.res.ApkAssets.<init>(ApkAssets.java:322)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.content.res.ApkAssets.loadOverlayFromPath(ApkAssets.java:242)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ResourcesManager.loadApkAssets(ResourcesManager.java:631)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ResourcesManager$ApkAssetsSupplier.load(ResourcesManager.java:294)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ResourcesManager.createApkAssetsSupplierNotLocked(ResourcesManager.java:1220)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ResourcesManager.getResources(ResourcesManager.java:1339)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ContextImpl.createResources(ContextImpl.java:2796)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ContextImpl.createConfigurationContext(ContextImpl.java:2963)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.content.ContextWrapper.createConfigurationContext(ContextWrapper.java:1178)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.bytedance.android.input.basic.AppGlobalsImpl.g(SourceFile:7)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.bytedance.android.input.basic.AppGlobalsImpl.l(SourceFile:3)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.bytedance.android.input.basic.IAppGlobals$a.l(SourceFile:1)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.bytedance.android.input.keyboard.InputView.G(SourceFile:13)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.bytedance.android.doubaoime.ImeService.onStartInputView(SourceFile:50)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.inputmethodservice.InputMethodService.doStartInput(InputMethodService.java:3835)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.inputmethodservice.InputMethodService$InputMethodImpl.restartInput(InputMethodService.java:904)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.inputmethodservice.InputMethodService$InputMethodImpl.dispatchStartInput(InputMethodService.java:919)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.inputmethodservice.IInputMethodWrapper.executeMessage(IInputMethodWrapper.java:208)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.android.internal.os.HandlerCaller$MyHandler.handleMessage(HandlerCaller.java:44)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.os.Handler.dispatchMessage(Handler.java:114)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.os.Looper.loopOnce(Looper.java:266)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.os.Looper.loop(Looper.java:361)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ActivityThread.main(ActivityThread.java:10381)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at java.lang.reflect.Method.invoke(Native Method)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:675)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1002)
+05-12 16:35:40.075  6771  6771 E droid.doubaoime: Invalid Idmap file: bad magic value (was 0x00000000, expected 0x504d4449)
+05-12 16:35:40.075  6771  6771 E droid.doubaoime: failed to load IDMAP /data/resource-cache/data@resource-cache@com.android.systemui-accent-W6E4.frro@idmap
+05-12 16:35:40.075  6771  6771 W ResourcesManager: failed to preload asset path '/data/resource-cache/com.android.systemui-accent-W6E4.frro'
+05-12 16:35:40.075  6771  6771 W ResourcesManager: java.io.IOException: Failed to load asset path /data/resource-cache/data@resource-cache@com.android.systemui-accent-W6E4.frro@idmap
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.content.res.ApkAssets.nativeLoad(Native Method)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.content.res.ApkAssets.<init>(ApkAssets.java:322)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.content.res.ApkAssets.loadOverlayFromPath(ApkAssets.java:242)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ResourcesManager.loadApkAssets(ResourcesManager.java:631)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ResourcesManager$ApkAssetsSupplier.load(ResourcesManager.java:294)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ResourcesManager.createApkAssetsSupplierNotLocked(ResourcesManager.java:1220)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ResourcesManager.getResources(ResourcesManager.java:1339)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ContextImpl.createResources(ContextImpl.java:2796)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ContextImpl.createConfigurationContext(ContextImpl.java:2963)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.content.ContextWrapper.createConfigurationContext(ContextWrapper.java:1178)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.bytedance.android.input.basic.AppGlobalsImpl.g(SourceFile:7)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.bytedance.android.input.basic.AppGlobalsImpl.l(SourceFile:3)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.bytedance.android.input.basic.IAppGlobals$a.l(SourceFile:1)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.bytedance.android.input.keyboard.InputView.G(SourceFile:13)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.bytedance.android.doubaoime.ImeService.onStartInputView(SourceFile:50)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.inputmethodservice.InputMethodService.doStartInput(InputMethodService.java:3835)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.inputmethodservice.InputMethodService$InputMethodImpl.restartInput(InputMethodService.java:904)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.inputmethodservice.InputMethodService$InputMethodImpl.dispatchStartInput(InputMethodService.java:919)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.inputmethodservice.IInputMethodWrapper.executeMessage(IInputMethodWrapper.java:208)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.android.internal.os.HandlerCaller$MyHandler.handleMessage(HandlerCaller.java:44)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.os.Handler.dispatchMessage(Handler.java:114)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.os.Looper.loopOnce(Looper.java:266)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.os.Looper.loop(Looper.java:361)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ActivityThread.main(ActivityThread.java:10381)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at java.lang.reflect.Method.invoke(Native Method)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:675)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1002)
+05-12 16:35:40.075  6771  6771 E droid.doubaoime: Invalid Idmap file: bad magic value (was 0x00000000, expected 0x504d4449)
+05-12 16:35:40.075  6771  6771 E droid.doubaoime: failed to load IDMAP /data/resource-cache/data@resource-cache@com.android.systemui-dynamic-PiLW.frro@idmap
+05-12 16:35:40.075  6771  6771 W ResourcesManager: failed to preload asset path '/data/resource-cache/com.android.systemui-dynamic-PiLW.frro'
+05-12 16:35:40.075  6771  6771 W ResourcesManager: java.io.IOException: Failed to load asset path /data/resource-cache/data@resource-cache@com.android.systemui-dynamic-PiLW.frro@idmap
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.content.res.ApkAssets.nativeLoad(Native Method)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.content.res.ApkAssets.<init>(ApkAssets.java:322)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.content.res.ApkAssets.loadOverlayFromPath(ApkAssets.java:242)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ResourcesManager.loadApkAssets(ResourcesManager.java:631)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ResourcesManager$ApkAssetsSupplier.load(ResourcesManager.java:294)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ResourcesManager.createApkAssetsSupplierNotLocked(ResourcesManager.java:1220)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ResourcesManager.getResources(ResourcesManager.java:1339)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ContextImpl.createResources(ContextImpl.java:2796)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ContextImpl.createConfigurationContext(ContextImpl.java:2963)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.content.ContextWrapper.createConfigurationContext(ContextWrapper.java:1178)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.bytedance.android.input.basic.AppGlobalsImpl.g(SourceFile:7)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.bytedance.android.input.basic.AppGlobalsImpl.l(SourceFile:3)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.bytedance.android.input.basic.IAppGlobals$a.l(SourceFile:1)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.bytedance.android.input.keyboard.InputView.G(SourceFile:13)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.bytedance.android.doubaoime.ImeService.onStartInputView(SourceFile:50)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.inputmethodservice.InputMethodService.doStartInput(InputMethodService.java:3835)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.inputmethodservice.InputMethodService$InputMethodImpl.restartInput(InputMethodService.java:904)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.inputmethodservice.InputMethodService$InputMethodImpl.dispatchStartInput(InputMethodService.java:919)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.inputmethodservice.IInputMethodWrapper.executeMessage(IInputMethodWrapper.java:208)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.android.internal.os.HandlerCaller$MyHandler.handleMessage(HandlerCaller.java:44)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.os.Handler.dispatchMessage(Handler.java:114)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.os.Looper.loopOnce(Looper.java:266)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.os.Looper.loop(Looper.java:361)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at android.app.ActivityThread.main(ActivityThread.java:10381)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at java.lang.reflect.Method.invoke(Native Method)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:675)
+05-12 16:35:40.075  6771  6771 W ResourcesManager: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1002)
+05-12 16:35:40.090  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.091  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.091  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.091  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.091  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.091  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.101  7749  7950 I LateInitializer: [initialize] Start, processName = com.bytedance.android.doubaoime:upgrade
+05-12 16:35:40.114  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.114  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.114  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.114  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.117  4355  4355 I ImeTracker: com.xiaoyu.campus.user:af746760: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+05-12 16:35:40.162  6771  6771 I ImeTracker: com.xiaoyu.campus.user:e92eabca: onHidden
+05-12 16:35:40.217  6771  6801 I droid.doubaoime: Background concurrent copying GC freed 20MB AllocSpace bytes, 92(4576KB) LOS objects, 35% free, 43MB(37MB_168KB)/67MB, 2, itvl 166.652s, cpu 46.326ms, paused 49us,52us total 51.102ms
+05-12 16:35:40.549  4355  6349 I ANDR-VIVO-PERF: vivo inside perf_lock_rel of client
+05-12 16:35:40.664  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.677  6771  8590 I HWUI    : [destroy] CanvasContext will be destroyed.
+05-12 16:35:40.679  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.799  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.800  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.800  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.800  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.801  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.801  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.801  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.801  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.801  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.801  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.916  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.948  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.948  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.948  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:40.948  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:41.117  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:42.400  5855   957 I AOSP-MdnsDiscoveryManag: (REDACTED) %s
+05-12 16:35:42.403  5855   957 I AOSP-MdnsDiscoveryManag: (REDACTED) %s
+05-12 16:35:42.404  5855   955 I AOSP-MdnsDiscoveryManag: (REDACTED) %s
+05-12 16:35:42.405  5855   955 I AOSP-MdnsDiscoveryManag: (REDACTED) %s
+05-12 16:35:42.405  5855 10711 I AOSP-MdnsDiscoveryManag: (REDACTED) %s
+--------- beginning of system
+05-12 16:35:42.835  1542  2641 W BatteryStatsService: Unknown sensor handle 0 received in noteWakeupSensorEvent
+05-12 16:35:43.734  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 16:35:44.359  6146  5871 W AppLinksAsyncVerifierV2: Error performing check:  [CONTEXT service_id=244 ]
+05-12 16:35:44.359  6146  5871 W AppLinksAsyncVerifierV2: jsnw: DEADLINE_EXCEEDED: CallOptions deadline exceeded after 7.999684924s. Name resolution delay 0.000000000 seconds. [closed=[], open=[[connecting_and_lb_delay=8008981231ns, was_still_waiting]]]
+05-12 16:35:44.359  6146  5871 W AppLinksAsyncVerifierV2: 	at bjpz.r(:com.google.android.gms@261631035@26.16.31 (260400-900800821):31)
+05-12 16:35:44.359  6146  5871 W AppLinksAsyncVerifierV2: 	at bjpz.G(:com.google.android.gms@261631035@26.16.31 (260400-900800821):55)
+05-12 16:35:44.359  6146  5871 W AppLinksAsyncVerifierV2: 	at flnq.a(:com.google.android.gms@261631035@26.16.31 (260400-900800821):45)
+05-12 16:35:44.359  6146  5871 W AppLinksAsyncVerifierV2: 	at flmv.c(:com.google.android.gms@261631035@26.16.31 (260400-900800821):20)
+05-12 16:35:44.359  6146  5871 W AppLinksAsyncVerifierV2: 	at flmv.a(:com.google.android.gms@261631035@26.16.31 (260400-900800821):3)
+05-12 16:35:44.359  6146  5871 W AppLinksAsyncVerifierV2: 	at bcsh.run(:com.google.android.gms@261631035@26.16.31 (260400-900800821):5)
+05-12 16:35:44.359  6146  5871 W AppLinksAsyncVerifierV2: 	at bjwm.c(:com.google.android.gms@261631035@26.16.31 (260400-900800821):50)
+05-12 16:35:44.359  6146  5871 W AppLinksAsyncVerifierV2: 	at bjwm.run(:com.google.android.gms@261631035@26.16.31 (260400-900800821):66)
+05-12 16:35:44.359  6146  5871 W AppLinksAsyncVerifierV2: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1156)
+05-12 16:35:44.359  6146  5871 W AppLinksAsyncVerifierV2: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:651)
+05-12 16:35:44.359  6146  5871 W AppLinksAsyncVerifierV2: 	at bkcd.run(:com.google.android.gms@261631035@26.16.31 (260400-900800821):8)
+05-12 16:35:44.359  6146  5871 W AppLinksAsyncVerifierV2: 	at java.lang.Thread.run(Thread.java:1149)
+05-12 16:35:50.179  6615  6615 E screencap: BBinder_init Processname  screencap  
+05-12 16:35:50.180  6615  6615 E screencap: BBinder_init hasGetProcessName  screencap
+05-12 16:35:50.190  6615  6615 W screencap: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: SurfaceFlingerAIDL
+05-12 16:35:50.191  6615  6615 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+05-12 16:35:50.192  6615  6615 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+05-12 16:35:50.230  6615  6615 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_mm
+05-12 16:35:50.230  6615  6615 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_mm-uncached
+05-12 16:35:50.230  6615  6615 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_svp_page-uncached
+05-12 16:35:50.230  6615  6615 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_prot_region
+05-12 16:35:50.231  6615  6615 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_2d_fr_region
+05-12 16:35:50.231  6615  6615 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_wfd_page-uncached
+05-12 16:35:50.531  6623  6623 E cmd     : BBinder_init Processname  cmd  
+05-12 16:35:50.533  6623  6623 E cmd     : BBinder_init hasGetProcessName  cmd
+05-12 16:35:50.582  6615  6615 W RefBase : RefBase: Explicit destruction, weak count = 0 (in 0x76ac5fe948). Use sp<> to manage this object. Note - if weak count is 0, this leaks mRefs (weakref_impl).

@@ -1,14 +1,23 @@
 <template>
   <MainLayout>
     <div class="campus-admin-page">
-      <div class="page-header">
+      <section class="page-hero">
         <div>
+          <span class="eyebrow">Campus Ops</span>
           <h2>校园结算批次</h2>
-          <p>只读演示页，聚合展示当前 campus 结算批次与核对状态。</p>
+          <p>按批次维度查看结算数据，支持按状态和类型筛选。</p>
         </div>
-      </div>
+        <div class="hero-notes">
+          <span>运营模块</span>
+          <strong>batches</strong>
+        </div>
+      </section>
 
       <section class="filter-card">
+        <div class="filter-copy">
+          <span class="section-kicker">筛选条件</span>
+          <h3>按打款状态与核对状态筛选批次</h3>
+        </div>
         <el-form :inline="true" class="filter-form">
           <el-form-item label="打款状态">
             <el-select v-model="filters.payoutStatus" placeholder="全部" clearable style="width: 180px">
@@ -24,14 +33,22 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="handleSearch">查询</el-button>
+            <el-button type="primary" class="search-btn" @click="handleSearch">查询</el-button>
             <el-button @click="handleReset">重置</el-button>
           </el-form-item>
         </el-form>
       </section>
 
       <section class="table-card">
-        <el-table v-loading="loading" :data="records" border>
+        <div class="table-heading">
+          <div>
+            <span class="section-kicker">批次列表</span>
+            <h3>结算批次总览</h3>
+          </div>
+          <el-tag type="info" effect="plain">共 {{ pagination.total }} 条</el-tag>
+        </div>
+
+        <el-table v-loading="loading" :data="records" class="campus-table" style="width: 100%;">
           <el-table-column prop="payoutBatchNo" label="批次号" min-width="220" />
           <el-table-column prop="totalCount" label="总条数" width="90" align="center" />
           <el-table-column prop="paidCount" label="已打款" width="90" align="center" />
@@ -148,43 +165,178 @@ onMounted(() => loadBatches())
 
 <style scoped lang="scss">
 .campus-admin-page {
-  padding: 20px;
-}
-
-.page-header,
-.filter-card,
-.table-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
-}
-
-.page-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 22px;
 
-  h2 {
-    margin: 0 0 8px;
-    font-size: 24px;
-    color: #18181b;
+  .page-hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    min-height: 170px;
+    padding: 34px 40px;
+    border: 1px solid rgba(15, 118, 110, 0.12);
+    border-radius: 28px;
+    background:
+      radial-gradient(circle at 86% 18%, rgba(132, 204, 22, 0.28), transparent 28%),
+      radial-gradient(circle at 16% 20%, rgba(14, 165, 233, 0.16), transparent 32%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(236, 253, 245, 0.86) 54%, rgba(224, 242, 254, 0.86) 100%);
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.09);
+    color: #0f172a;
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: -80px;
+      bottom: -110px;
+      width: 270px;
+      height: 270px;
+      border-radius: 50%;
+      border: 38px solid rgba(15, 118, 110, 0.07);
+    }
+
+    h2 {
+      position: relative;
+      margin: 8px 0 10px;
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    p {
+      position: relative;
+      max-width: 560px;
+      margin: 0;
+      color: #475569;
+      font-size: 15px;
+      line-height: 1.8;
+    }
   }
 
-  p {
-    margin: 0;
-    color: #71717a;
+  .eyebrow,
+  .section-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #0f766e;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .hero-notes {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 4px;
+    min-width: 142px;
+    padding: 18px 20px;
+    border: 1px solid rgba(15, 118, 110, 0.12);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(14px);
+
+    span {
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    strong {
+      color: #0f172a;
+      font-size: 20px;
+      letter-spacing: 0.02em;
+    }
+  }
+
+  .filter-card,
+  .table-card {
+    border: 1px solid rgba(15, 118, 110, 0.1);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+    padding: 22px 24px;
+  }
+
+  .filter-card {
+    .filter-copy {
+      margin-bottom: 16px;
+
+      h3 {
+        margin: 6px 0 0;
+        color: #0f172a;
+        font-size: 18px;
+        font-weight: 900;
+      }
+    }
+
+    .filter-form {
+      margin-bottom: -18px;
+    }
+
+    .search-btn {
+      border: none;
+      background: linear-gradient(135deg, #0f766e, #0ea5e9);
+      box-shadow: 0 12px 24px rgba(14, 165, 233, 0.22);
+    }
+  }
+
+  .table-card {
+    padding-bottom: 16px;
+  }
+
+  .table-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+
+    h3 {
+      margin: 6px 0 0;
+      color: #0f172a;
+      font-size: 20px;
+      font-weight: 900;
+    }
+  }
+
+  .campus-table {
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+
+    :deep(.el-table__header-wrapper th) {
+      background: #f8fafc;
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    :deep(.el-table__row) {
+      color: #334155;
+    }
+
+    :deep(.el-table__cell) {
+      border-bottom-color: #edf2f7;
+    }
+  }
+
+  .pagination-wrapper {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
   }
 }
 
-.filter-form {
-  margin-bottom: -18px;
-}
-
-.pagination-wrapper {
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-end;
+@media (max-width: 900px) {
+  .campus-admin-page {
+    .page-hero,
+    .filter-card {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
 }
 </style>

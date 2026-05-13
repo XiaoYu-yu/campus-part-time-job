@@ -2463,3 +2463,50 @@
 - [bridge 联调/回归模板](bridge-regression-template.md)
 - [待处理事项](pending-items.md)
 - [文件改动清单](file-change-list.md)
+
+- 当前已完成：`Step 158 - 安卓双端前端视觉与移动端交互重构`
+  - 新增 mobile-theme.css 移动端视觉基线
+  - 重构 UserLayout.vue 和 ParttimeLayout.vue 页面壳
+  - 重构用户端 7 个页面（Login/Home/CampusRelayOrders/CampusOrderResult/CourierOnboarding/Profile/AfterSaleResult）
+  - 重构兼职端 3 个页面（Login/CourierWorkbench/Profile）
+  - 适配 360px/390px/430px 宽度
+  - 未改后台管理端、API、token、bridge、路由语义
+  - npm run build / build:android:user / build:android:parttime 均通过
+
+- 当前已完成：`Step 159 - 公测 P0 收口复核与 Android 安全区修复`
+  - 修复 Android WebView 安全区：viewport 增加 `viewport-fit=cover`
+  - 用户端和兼职端移动壳顶部栏增加 safe-area 支持
+  - 用户端和兼职端登录页增加顶部 / 底部 safe-area padding
+  - 修复 `CampusCourierOpsView.vue` 嵌套 `:deep(...)` 造成的构建 warning
+  - 补回用户端订单结果页 `AWAITING_CONFIRMATION` 下的 `确认已收到` 最小承接，复用既有 customer confirm 接口
+  - npm run build / build:android:user:public / build:android:parttime:public 均通过
+  - 双端 Capacitor sync 与 Debug APK 构建均通过
+  - git diff --check 通过，仅 CRLF 提示
+  - 手机重新连接后已完成双端 APK 安装、启动和登录 smoke
+  - 用户端登录成功进入首页
+  - 兼职端登录成功进入工作台，`兼职 token 已就绪`、`资料状态 APPROVED`、`启用状态 可工作`、`Token 有效`、`可接任务 5`
+  - Step 158 曾出现的兼职端网络失败 toast 本轮未复现
+  - 真机公网主链路已通过订单 `CR202605010405291760` 跑通：接单 -> 取餐 -> 配送 -> 送达 -> 用户确认 -> `COMPLETED` 回读
+  - 当前适合 owner-controlled 小范围内测继续验证；公开公测前仍需补提交边界、内测说明、弱网/后台/多账号回归和 release 签名包
+  - [Step 159 日志](step-159-public-beta-p0-closure-and-android-safe-area-fix.md)
+
+- 当前已完成：`Step 160 - 移动端界面文案接地气优化`
+  - 用户端首页、登录页、个人中心、发单页、结果页、兼职报名页、售后结果页已完成一轮可见文案自然化。
+  - 兼职端登录页、资料页、工作台已完成一轮可见文案自然化。
+  - 页面可见表达从 `token / 接口 / 字段 / 回读 / 最小承接` 等开发语境，收敛为“发单、查进度、报名、接单、确认取餐、确认送达、上报异常”等普通用户口径。
+  - 本轮没有改后端、接口、路由、bridge、`request.js`、token 附着逻辑或旧兼容模块。
+  - `npm run build`、`npm run build:android:user:public`、`npm run build:android:parttime:public` 均通过。
+  - `git diff --check` 通过，仅 CRLF 提示。
+  - 下一步建议先做真机页面文字截断 / 挤压复测，再决定是否继续 UI 小修。
+  - [Step 160 日志](step-160-ui-copy-natural-language-polish.md)
+
+- 当前已完成：`Step 161 - Android 双端显示名调整`
+  - 用户端 Android 桌面显示名改为 `用户端`。
+  - 兼职端 Android 桌面显示名改为 `兼职端`。
+  - 真实 `applicationId` 保持不变：`com.xiaoyu.campus.user` / `com.xiaoyu.campus.parttime`。
+  - 双端 Capacitor public sync 通过。
+  - 双端 Debug APK 构建通过。
+  - 双端 APK 已通过 ADB 安装到真机 `10AE221PGA003Y5`。
+  - `aapt dump badging` 已确认 APK label 与 package 均符合预期。
+  - 未改后端、接口、路由、bridge、`request.js`、token 附着逻辑或管理后台。
+  - [Step 161 日志](step-161-android-app-display-name-rename.md)

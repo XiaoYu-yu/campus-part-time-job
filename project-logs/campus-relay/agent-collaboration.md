@@ -270,3 +270,220 @@ Phase 2：清理前端残留文件（HelloWorld.vue、vue.svg、vite.svg、Compo
 1. 提交并推送当前本地有效成果。
 2. 推送后核对 `origin/main` 与本地 `HEAD` 是否一致。
 3. 若继续试运营准备，优先跑浏览器人工巡检和 Android 双端公网 smoke。
+
+---
+
+## 轮次记录 2026-05-07 (Step 158)
+
+### 本轮目标
+
+安卓双端前端视觉与移动端交互重构。统一用户端和兼职端的移动端视觉基线，让两端看起来像两个完整的移动 App。只改前端视觉和移动端交互层，不改后台管理端、API、token、bridge、路由语义。
+
+### 实际改动
+
+- 新增 `frontend/src/styles/mobile-theme.css` 移动端视觉基线
+- 重构 `frontend/src/layout/UserLayout.vue` 页面壳
+- 重构 `frontend/src/layout/ParttimeLayout.vue` 页面壳
+- 重构用户端 7 个页面视觉：Login/Home/CampusRelayOrders/CampusOrderResult/CourierOnboarding/Profile/AfterSaleResult
+- 重构兼职端 3 个页面视觉：Login/CourierWorkbench/Profile
+- 新增 `project-logs/campus-relay/step-158-android-dual-end-frontend-rebuild.md`
+- 更新 `summary.md`、`pending-items.md`、`file-change-list.md`、本文件
+
+### 未改动内容
+
+- 没有改后台管理端页面（MainLayout.vue / Dashboard.vue / Employee.vue 等）
+- 没有改 request.js
+- 没有改 api/* 的接口行为
+- 没有改 router 路由语义
+- 没有改 token 附着逻辑
+- 没有改 bridge 相关逻辑
+- 没有改后端 Java 代码
+- 没有改数据库
+- 没有改 Android 原生壳层逻辑
+
+### 风险
+
+- 低。所有改动仅限前端 CSS 视觉和纯展示容器/class，不改任何业务逻辑、条件判断或 API 调用。
+- 部分 Hero 卡片保留了轻量 backdrop-filter，在极低端 Android 设备上可能有轻微卡顿。
+
+### 下一轮建议
+
+1. 在 Android 模拟器或真机上做 360px/390px/430px 宽度下的实际视觉验证。
+2. 如发现具体页面溢出或交互问题，只做 bug 级修复。
+3. 可考虑清理 Home.vue 中已隐藏的装饰 HTML 元素。
+
+### 关键确认
+
+- 是否涉及 bridge：否
+- 是否涉及旧外卖删除：否
+- 是否改了鉴权：否
+- 是否改了路由：否
+- 是否改了 token 逻辑：否
+- 是否提交了密钥：否
+- 是否改了后端 Java 代码：否
+- frontend build 是否通过：是
+- build:android:user 是否通过：是
+- build:android:parttime 是否通过：是
+
+---
+
+## 轮次记录 2026-05-11 (Step 159)
+
+### 本轮目标
+
+公测 P0 收口复核与 Android 安全区修复。基于 Step 158 的安卓双端视觉重构结果，处理 WebView 安全区、顶部遮挡和构建 warning，并重新生成 public APK。
+
+### 实际改动
+
+- `frontend/index.html` viewport 增加 `viewport-fit=cover`。
+- `frontend/src/layout/UserLayout.vue` 顶部栏增加 safe-area top 支持。
+- `frontend/src/layout/ParttimeLayout.vue` 顶部栏增加 safe-area top 支持。
+- `frontend/src/views/user/Login.vue` 增加 safe-area top / bottom padding。
+- `frontend/src/views/courier/Login.vue` 增加 safe-area top / bottom padding。
+- `frontend/src/views/CampusCourierOpsView.vue` 拉平嵌套 `:deep(...)` 表格选择器，消除构建 warning。
+- 新增 `project-logs/campus-relay/step-159-public-beta-p0-closure-and-android-safe-area-fix.md`。
+- 更新 `summary.md`、`pending-items.md`、`file-change-list.md`、本文件和 `global-working-memory.md`。
+
+### 未改动内容
+
+- 没有改后端 Java 代码。
+- 没有改数据库。
+- 没有改 `request.js`。
+- 没有改 `api/*` 运行时行为。
+- 没有改 router。
+- 没有改 token 附着逻辑。
+- 没有改 bridge。
+- 没有删除旧外卖兼容模块。
+- 没有提交真实密钥、服务器密码、GitHub token 或腾讯地图 key。
+
+### 风险
+
+- ADB 当前无在线设备，本轮重新生成的 APK 尚未完成真机安装和截图复测。
+- Step 158 真机截图中兼职端曾出现 `网络连接失败，请检查网络` toast，仍需手机在线后用 logcat 定位。
+- 工作树仍有多轮未提交改动和未跟踪文件，提交前需要确认边界。
+
+### 下一轮建议
+
+1. 重新连接手机。
+2. 安装本轮新生成的用户端 / 兼职端 Debug APK。
+3. 真机复测用户端登录、首页、发布订单、订单列表、订单结果页。
+4. 真机复测兼职端登录、工作台、可接任务、详情 drawer。
+5. 若兼职端仍网络失败，用 ADB logcat 定位原因。
+
+### 关键确认
+
+- 是否涉及 bridge：否
+- 是否涉及旧外卖删除：否
+- 是否改了鉴权：否
+- 是否改了路由：否
+- 是否改了 token 逻辑：否
+- 是否提交了密钥：否
+- 是否改了后端 Java 代码：否
+- frontend build 是否通过：是
+- build:android:user:public 是否通过：是
+- build:android:parttime:public 是否通过：是
+- 双端 APK 是否重新构建：是
+- 本轮新 APK 是否已真机复测：是，2026-05-12 手机重新连接后已完成双端安装、启动和登录 smoke
+
+### 2026-05-12 补充
+
+- ADB 设备 `10AE221PGA003Y5` 已重新连接。
+- 用户端和兼职端 APK 均已 `adb install -r` 成功。
+- 手机到内测公网服务器 ping 成功，真实地址不写入仓库。
+- 用户端登录成功并进入首页。
+- 兼职端登录成功并进入工作台。
+- 兼职端工作台显示 token、资料状态、启用状态和可接任务均正常。
+- Step 158 曾出现的兼职端网络失败 toast 本轮未复现。
+- 兼职端已通过订单 `CR202605010405291760` 完成接单、取餐、配送和送达。
+- 用户端结果页发现真实缺口：`AWAITING_CONFIRMATION` 可回读但缺少确认按钮。
+- 已在用户端结果页补回 `确认已收到` 最小承接，复用既有 customer confirm 接口，不新增后端接口。
+- 修复后重新构建并安装用户端 APK，真机点击 `确认已收到` 成功，订单回读为 `已完成 / COMPLETED`。
+- 关键证据：
+  - `project-logs/campus-relay/runtime/step-159-android-device/campus-user-confirm-visible-step159.png`
+  - `project-logs/campus-relay/runtime/step-159-android-device/window-user-confirm-visible.xml`
+  - `project-logs/campus-relay/runtime/step-159-android-device/campus-user-confirm-after-step159.png`
+  - `project-logs/campus-relay/runtime/step-159-android-device/window-user-confirm-after.xml`
+  - `project-logs/campus-relay/runtime/step-159-android-device/campus-user-confirm-logcat.txt`
+- 当前判断：真机公网主链路已闭环到 `COMPLETED`，可以进入 owner-controlled 小范围内测准备；公开公测前仍需提交边界整理、内测说明、release 签名包和弱网 / 后台 / 多账号回归。
+
+### 2026-05-12 继续协作注意
+
+- 不要再把 Step 159 写成“完整真机链路未完成”；真实状态已经变为“主链路已闭环，仍缺内测材料与扩展回归”。
+- `frontend/src/api/campus-customer.js` 和 `frontend/src/views/user/CampusOrderResult.vue` 是本轮为了修复确认承接缺口新增的代码改动。
+- 下一轮优先级不是继续美化页面，而是整理工作树提交边界、内测说明、Android release / 安装分发准备和补充真机回归矩阵。
+
+## Step 160 协作记录 - 移动端界面文案接地气优化
+
+### 本轮目标
+
+用户反馈双端界面文字有些僵硬，本轮只做可见文案自然化，不重开业务开发。
+
+### 实际改动
+
+- 用户端：首页、登录页、个人中心、发单页、结果页、兼职报名页、售后结果页。
+- 兼职端：登录页、资料页、工作台。
+- 将 `token / 接口 / 字段 / 回读 / 最小承接 / customer / courier` 等工程语境，尽量替换为“登录、接单资格、订单进度、报名、接单、取餐、送达、上报异常”等普通用户口径。
+- 创建 Step 160 日志并更新 summary / pending / file-change-list / global-working-memory。
+
+### 未改动内容
+
+- 未改 bridge。
+- 未改 `request.js`。
+- 未改 token 附着逻辑。
+- 未改路由。
+- 未改后端 Java、数据库或接口路径。
+- 未删除旧外卖兼容模块。
+- 未新增页面。
+
+### 风险
+
+- 本轮未做真机逐页截图复核，后续仍需确认文字在 360px / 390px / 430px 宽度下不截断。
+- 代码内部变量和 class 仍保留 `token / courier / customer`，这是实现命名，不代表页面可见文案。
+
+### 验证
+
+- `npm run build` 通过。
+- `npm run build:android:user:public` 通过。
+- `npm run build:android:parttime:public` 通过。
+- `git diff --check` 通过，仅 CRLF 提示。
+
+### 下一轮建议
+
+优先做真机页面文字验收和小范围内测材料整理，不建议继续无目标扩文案或样式。
+
+## Step 161 协作记录 - Android 双端显示名调整
+
+### 本轮目标
+
+把 Android 双端手机桌面显示名称改成更直观的端名：用户端 / 兼职端。
+
+### 实际改动
+
+- 用户端 Capacitor `appName` 改为 `用户端`。
+- 用户端 Android `app_name` / `title_activity_main` 改为 `用户端`。
+- 兼职端 Capacitor `appName` 改为 `兼职端`。
+- 兼职端 Android `app_name` / `title_activity_main` 改为 `兼职端`。
+- 通过 Capacitor sync 同步生成 Android assets 下的 `capacitor.config.json`。
+
+### 未改动内容
+
+- 未改真实 `applicationId`：`com.xiaoyu.campus.user` / `com.xiaoyu.campus.parttime`。
+- 未改 bridge、`request.js`、token 附着逻辑、路由、后端、接口、管理后台或旧兼容模块。
+
+### 风险
+
+- 手机桌面可能缓存旧显示名；如未刷新，可卸载后重装或等待桌面刷新。
+- 不能把真实包名改成中文；中文只能用于显示名。
+
+### 验证
+
+- 双端 `npm run cap:sync:public` 通过。
+- 双端 Debug APK 构建通过。
+- `aapt dump badging` 确认 APK label 分别为 `用户端` / `兼职端`。
+- ADB 设备 `10AE221PGA003Y5` 在线，双端 `adb install -r` 成功。
+- 双端均已通过 `adb shell monkey ... LAUNCHER` 启动验证。
+- `git diff --check` 通过，仅 CRLF 提示。
+
+### 下一轮建议
+
+先手动看手机桌面显示名是否刷新；随后做一轮 Android 双端真机小回归，再整理 release 签名包和内测分发说明。

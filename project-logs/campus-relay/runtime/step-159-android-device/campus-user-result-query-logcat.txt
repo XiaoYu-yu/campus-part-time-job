@@ -1,0 +1,40 @@
+--------- beginning of main
+05-12 17:04:24.059 12960 12960 E cmd     : BBinder_init Processname  cmd  
+05-12 17:04:24.060 12960 12960 E cmd     : BBinder_init hasGetProcessName  cmd
+05-12 17:04:24.099  4355  4355 I ImeTracker: com.xiaoyu.campus.user:bdbaaed6: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+05-12 17:04:24.099  4355  4355 I ImeTracker: com.xiaoyu.campus.user:bdbaaed6: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+05-12 17:04:24.238  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 17:04:24.239  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 17:04:24.239  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 17:04:24.239  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 17:04:24.239  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 17:04:24.239  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 17:04:24.239  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 17:04:24.239  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 17:04:24.239  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 17:04:24.239  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 17:04:24.239  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 17:04:24.239  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 17:04:24.367  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 17:04:24.367  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 17:04:24.367  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 17:04:24.367  4355  4412 E GPUAUX  : [AUX]GuiExtAuxCheckAuxPath:682: Null anb
+05-12 17:04:24.419  5855   957 I AOSP-MdnsDiscoveryManag: (REDACTED) %s
+05-12 17:04:24.420  5855   957 I AOSP-MdnsDiscoveryManag: (REDACTED) %s
+05-12 17:04:24.420  5855   955 I AOSP-MdnsDiscoveryManag: (REDACTED) %s
+05-12 17:04:24.421  5855   955 I AOSP-MdnsDiscoveryManag: (REDACTED) %s
+05-12 17:04:24.421  5855 10711 I AOSP-MdnsDiscoveryManag: (REDACTED) %s
+05-12 17:04:27.237 12970 12970 E screencap: BBinder_init Processname  screencap  
+05-12 17:04:27.237 12970 12970 E screencap: BBinder_init hasGetProcessName  screencap
+05-12 17:04:27.245 12970 12970 W screencap: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: SurfaceFlingerAIDL
+05-12 17:04:27.247 12970 12970 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+05-12 17:04:27.247 12970 12970 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+05-12 17:04:27.288 12970 12970 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_mm
+05-12 17:04:27.288 12970 12970 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_mm-uncached
+05-12 17:04:27.288 12970 12970 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_svp_page-uncached
+05-12 17:04:27.288 12970 12970 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_prot_region
+05-12 17:04:27.288 12970 12970 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_2d_fr_region
+05-12 17:04:27.289 12970 12970 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_wfd_page-uncached
+05-12 17:04:27.518 12975 12975 E cmd     : BBinder_init Processname  cmd  
+05-12 17:04:27.518 12975 12975 E cmd     : BBinder_init hasGetProcessName  cmd
+05-12 17:04:27.571 12970 12970 W RefBase : RefBase: Explicit destruction, weak count = 0 (in 0x7814df4948). Use sp<> to manage this object. Note - if weak count is 0, this leaks mRefs (weakref_impl).

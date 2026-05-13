@@ -1,13 +1,13 @@
 <template>
   <UserLayout>
-    <div v-loading="pageLoading" element-loading-text="正在加载入驻信息..." class="onboarding-page">
+    <div v-loading="pageLoading" element-loading-text="正在加载报名信息..." class="onboarding-page">
       <section class="card status-card">
         <div>
           <div class="title-row">
             <h2>校园兼职入驻</h2>
-            <span class="entry-badge">用户端前置入口</span>
+            <span class="entry-badge">兼职报名入口</span>
           </div>
-          <p>通过用户端提交兼职资料，审核通过后可申请兼职端 token 进入工作台。</p>
+          <p>先在这里提交资料。审核通过后，就可以登录兼职端接单。</p>
         </div>
         <div class="status-pill" :class="statusClass(reviewStatus.reviewStatus)">
           {{ reviewStatus.reviewStatus || '未提交资料' }}
@@ -18,17 +18,17 @@
         <div class="flow-step">
           <span>1</span>
           <strong>提交资料</strong>
-          <p>使用当前 customer 登录态填写配送员资料。</p>
+          <p>填写姓名、手机号、学号和宿舍信息。</p>
         </div>
         <div class="flow-step">
           <span>2</span>
           <strong>等待审核</strong>
-          <p>查看审核状态、审核说明和 token 资格。</p>
+          <p>看看资料有没有通过，哪里还需要补。</p>
         </div>
         <div class="flow-step">
           <span>3</span>
-          <strong>申请 token</strong>
-          <p>审核通过且启用后，沿用现有 token 接口进入兼职端。</p>
+          <strong>开通接单资格</strong>
+          <p>通过审核后，用当前账号登录兼职端接单。</p>
         </div>
       </section>
 
@@ -36,7 +36,7 @@
         <div class="section-heading compact-heading">
           <div>
             <h3>审核与资格概览</h3>
-            <p>这里只读展示当前入驻资料的审核结果和 token 申请资格，便于演示前置状态。</p>
+            <p>这里能看到报名审核结果，以及现在能不能去兼职端接单。</p>
           </div>
         </div>
         <div class="summary-grid">
@@ -49,7 +49,7 @@
             <strong>{{ reviewStatus.reviewedAt || '暂无' }}</strong>
           </div>
           <div class="summary-item">
-            <span>token 资格</span>
+            <span>接单资格</span>
             <strong>{{ eligibility.eligible ? '已具备资格' : '暂不可申请' }}</strong>
           </div>
           <div class="summary-item">
@@ -62,8 +62,8 @@
       <section class="card" :class="{ 'token-section-eligible': eligibility.eligible }">
         <div class="section-heading">
           <div>
-            <h3>兼职端 token 申请</h3>
-            <p>沿用现有 `/api/campus/courier/auth/token`。仅在审核通过且启用后开放，仍使用当前登录账号手机号 + 密码申请。</p>
+            <h3>开通兼职端登录</h3>
+            <p>审核通过并启用后，输入当前账号密码，就能进入兼职工作台。</p>
           </div>
           <div class="status-pill" :class="eligibility.eligible ? 'approved' : 'pending'">
             {{ eligibility.eligible ? '可申请' : '暂不可申请' }}
@@ -71,7 +71,7 @@
         </div>
 
         <el-alert
-          :title="eligibility.eligible ? '已满足兼职端 token 申请条件' : '当前还不满足兼职端 token 申请条件'"
+          :title="eligibility.eligible ? '现在可以开通兼职端登录' : '暂时还不能开通兼职端登录'"
           :description="eligibility.message || '暂无提示'"
           :type="eligibility.eligible ? 'success' : 'info'"
           :closable="false"
@@ -84,12 +84,12 @@
             <strong>审核通过且账号已启用</strong>
           </div>
           <div class="guide-item">
-            <span>申请凭证</span>
+            <span>登录方式</span>
             <strong>当前手机号 + 登录密码</strong>
           </div>
           <div class="guide-item">
-            <span>成功后承接</span>
-            <strong>写入 courier_token 并跳转兼职工作台</strong>
+            <span>开通成功后</span>
+            <strong>直接进入兼职工作台</strong>
           </div>
         </div>
 
@@ -99,7 +99,7 @@
             <strong>{{ currentLoginPhone || '暂无' }}</strong>
           </div>
           <div class="summary-item">
-            <span>申请资格</span>
+            <span>当前资格</span>
             <strong>{{ eligibility.eligible ? '可直接申请' : '请先完成审核' }}</strong>
           </div>
         </div>
@@ -118,18 +118,18 @@
           </el-form>
 
           <div class="form-actions">
-            <el-button type="primary" :loading="tokenApplying" @click="applyToken">申请 courier token</el-button>
+            <el-button type="primary" :loading="tokenApplying" @click="applyToken">开通兼职端登录</el-button>
           </div>
         </template>
 
         <div v-if="tokenResult.token" class="token-result result-panel">
           <div class="summary-grid">
             <div class="summary-item">
-              <span>申请结果</span>
-              <strong>已成功获取兼职端 token</strong>
+              <span>开通结果</span>
+              <strong>兼职端登录已开通</strong>
             </div>
             <div class="summary-item">
-              <span>配送员资料ID</span>
+              <span>兼职资料编号</span>
               <strong>{{ tokenResult.courierProfile?.id || '暂无' }}</strong>
             </div>
             <div class="summary-item">
@@ -137,12 +137,12 @@
               <strong>{{ tokenResult.courierProfile?.reviewStatus || '暂无' }}</strong>
             </div>
             <div class="summary-item">
-              <span>本地存储</span>
-              <strong>courier_token / courier_profile 已更新</strong>
+              <span>登录状态</span>
+              <strong>已保存，可直接进入工作台</strong>
             </div>
           </div>
           <el-form label-position="top" class="token-form">
-            <el-form-item label="返回的 token">
+            <el-form-item label="登录凭证">
               <el-input :model-value="tokenResult.token" type="textarea" :rows="3" readonly />
             </el-form-item>
           </el-form>
@@ -156,13 +156,13 @@
         <div class="section-heading compact-heading">
           <div>
             <h3>资料表单</h3>
-            <p>提交或重提资料仍沿用现有 onboarding 接口；本轮只优化表单说明层级，不改变提交体和按钮行为。</p>
+            <p>资料有变化可以重新提交，管理员会按最新资料审核。</p>
           </div>
         </div>
         <el-form label-position="top" class="onboarding-form">
           <div class="form-section-title">
             <h4>基础与校区信息</h4>
-            <p>用于管理员审核和后续 workbench 身份展示。</p>
+            <p>用于管理员审核，也方便后续联系你。</p>
           </div>
           <div class="form-grid">
             <el-form-item label="真实姓名">
@@ -201,7 +201,7 @@
 
           <div class="form-section-title">
             <h4>接单偏好与备注</h4>
-            <p>只影响资料记录展示；`enabledWorkInOwnBuilding` 提交时仍按后端 DTO 期望转为 1 / 0。</p>
+            <p>告诉平台你更愿意接哪些单，后续安排会更清楚。</p>
           </div>
           <el-form-item label="优先接本楼栋订单">
             <el-switch v-model="form.enabledWorkInOwnBuildingSwitch" />
@@ -317,7 +317,7 @@ const goToCourierWorkbench = () => {
 
 const applyToken = async () => {
   if (!eligibility.value.eligible) {
-    ElMessage.warning(eligibility.value.message || '当前暂不具备申请兼职端 token 的资格')
+    ElMessage.warning(eligibility.value.message || '现在还不能开通兼职端登录')
     return
   }
   const password = courierAuth.password.trim()
@@ -326,7 +326,7 @@ const applyToken = async () => {
     return
   }
   if (!currentLoginPhone.value) {
-    ElMessage.error('当前登录手机号缺失，无法申请兼职端 token')
+    ElMessage.error('当前账号缺少手机号，暂时无法开通兼职端登录')
     return
   }
 
@@ -340,7 +340,7 @@ const applyToken = async () => {
     tokenResult.courierProfile = result.courierProfile || null
     courierStore.login(tokenResult.token, tokenResult.courierProfile || {})
     courierAuth.password = ''
-    ElMessage.success('兼职端 token 申请成功')
+    ElMessage.success('兼职端登录已开通')
   } finally {
     tokenApplying.value = false
   }
@@ -377,16 +377,16 @@ onMounted(() => loadAll())
 <style scoped lang="scss">
 .onboarding-page {
   padding: 14px 14px 24px;
+  overflow-x: hidden;
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(15, 118, 110, 0.1);
-  border-radius: 24px;
-  padding: 18px;
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 14px;
+  padding: 16px;
   margin-bottom: 16px;
-  box-shadow: 0 16px 36px rgba(15, 118, 110, 0.08);
-  backdrop-filter: blur(18px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .status-card {
@@ -396,26 +396,8 @@ onMounted(() => loadAll())
   justify-content: space-between;
   gap: 12px;
   align-items: center;
-  background:
-    radial-gradient(circle at 92% 14%, rgba(45, 212, 191, 0.24), transparent 32%),
-    linear-gradient(135deg, rgba(226, 250, 255, 0.95), rgba(255, 255, 255, 0.88));
-
-  &::after {
-    content: "";
-    position: absolute;
-    right: -40px;
-    bottom: -44px;
-    width: 150px;
-    height: 150px;
-    border-radius: 48px;
-    background: rgba(20, 184, 166, 0.1);
-    transform: rotate(14deg);
-  }
-
-  > * {
-    position: relative;
-    z-index: 1;
-  }
+  background: linear-gradient(135deg, #eefdfa, #f0fdfa);
+  border-radius: 16px;
 }
 
 .status-card h2 {
@@ -454,27 +436,12 @@ onMounted(() => loadAll())
   margin-bottom: 14px;
 }
 
-.onboarding-form :deep(.el-form-item__label),
-.token-form :deep(.el-form-item__label) {
-  font-weight: 800;
-  color: #26364d;
-}
-
-.onboarding-form :deep(.el-input__wrapper),
-.onboarding-form :deep(.el-select__wrapper),
-.onboarding-form :deep(.el-textarea__inner),
-.token-form :deep(.el-input__wrapper),
-.token-form :deep(.el-textarea__inner) {
-  min-height: 44px;
-  border-radius: 15px;
-}
-
 .flow-step {
-  background: rgba(255, 255, 255, 0.82);
-  border-radius: 16px;
+  background: #ffffff;
+  border-radius: 12px;
   padding: 14px;
-  border: 1px solid rgba(15, 118, 110, 0.1);
-  box-shadow: 0 8px 20px rgba(15, 118, 110, 0.05);
+  border: 1px solid #e4e4e7;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .flow-step span {
@@ -483,7 +450,7 @@ onMounted(() => loadAll())
   justify-content: center;
   width: 24px;
   height: 24px;
-  border-radius: 10px;
+  border-radius: 8px;
   background: linear-gradient(135deg, #14b8a6, #38bdf8);
   color: #fff;
   font-size: 12px;
@@ -534,7 +501,7 @@ onMounted(() => loadAll())
 .summary-grid,
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 12px;
 }
 
@@ -562,8 +529,8 @@ onMounted(() => loadAll())
 }
 
 .summary-item {
-  background: rgba(248, 250, 252, 0.82);
-  border-radius: 14px;
+  background: #f8fafc;
+  border-radius: 12px;
   padding: 14px;
   display: flex;
   flex-direction: column;
@@ -587,8 +554,8 @@ onMounted(() => loadAll())
 }
 
 .guide-item {
-  background: rgba(248, 250, 252, 0.82);
-  border-radius: 14px;
+  background: #f8fafc;
+  border-radius: 12px;
   padding: 14px;
 }
 
@@ -607,6 +574,21 @@ onMounted(() => loadAll())
   margin-top: 16px;
 }
 
+.onboarding-form :deep(.el-form-item__label),
+.token-form :deep(.el-form-item__label) {
+  font-weight: 800;
+  color: #26364d;
+}
+
+.onboarding-form :deep(.el-input__wrapper),
+.onboarding-form :deep(.el-select__wrapper),
+.onboarding-form :deep(.el-textarea__inner),
+.token-form :deep(.el-input__wrapper),
+.token-form :deep(.el-textarea__inner) {
+  min-height: 44px;
+  border-radius: 10px;
+}
+
 .token-form,
 .token-meta,
 .token-result {
@@ -614,16 +596,16 @@ onMounted(() => loadAll())
 }
 
 .result-panel {
-  border-radius: 16px;
+  border-radius: 12px;
   border: 1px solid rgba(16, 185, 129, 0.16);
-  background: rgba(240, 253, 250, 0.7);
+  background: #f0fdfa;
   padding: 16px;
 }
 
 .form-section-title {
   margin: 14px 0 12px;
   padding: 12px 14px;
-  border-radius: 14px;
+  border-radius: 12px;
   background: rgba(240, 253, 250, 0.58);
 }
 
@@ -651,9 +633,7 @@ onMounted(() => loadAll())
 
 .token-section-eligible {
   border: 2px solid rgba(16, 185, 129, 0.2);
-  background:
-    radial-gradient(circle at 90% 10%, rgba(16, 185, 129, 0.08), transparent 40%),
-    rgba(255, 255, 255, 0.88);
+  background: #ffffff;
 }
 
 .onboarding-page :deep(.el-alert--info) {
@@ -668,7 +648,7 @@ onMounted(() => loadAll())
   background: rgba(236, 253, 245, 0.9);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 480px) {
   .status-card {
     flex-direction: column;
     align-items: flex-start;
@@ -684,18 +664,10 @@ onMounted(() => loadAll())
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 360px) {
+  .summary-grid,
   .form-grid {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 380px) {
-  .status-card::after {
-    width: 100px;
-    height: 100px;
-    right: -30px;
-    bottom: -30px;
   }
 }
 </style>

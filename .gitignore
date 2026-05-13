@@ -39,3 +39,11 @@ project-logs/*.tmp
 .claude/
 .mcp.json
 frontend/public/prototype/
+
+# Local visual check screenshots kept out of commits unless moved into project-logs runtime evidence.
+/admin-dashboard.png
+/admin-login.png
+/dashboard-check.png
+/dashboard-teal-theme.png
+/verify-dashboard.png
+/verify-statistics.png

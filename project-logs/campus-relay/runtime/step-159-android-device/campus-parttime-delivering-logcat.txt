@@ -1,0 +1,22 @@
+--------- beginning of main
+05-12 16:56:43.365 11924 11924 E cmd     : BBinder_init Processname  cmd  
+05-12 16:56:43.366 11924 11924 E cmd     : BBinder_init hasGetProcessName  cmd
+05-12 16:56:43.911  5855   957 I AOSP-MdnsDiscoveryManag: (REDACTED) %s
+05-12 16:56:43.914  5855   955 I AOSP-MdnsDiscoveryManag: (REDACTED) %s
+05-12 16:56:43.915  5855   955 I AOSP-MdnsDiscoveryManag: (REDACTED) %s
+05-12 16:56:43.918  5855   957 I AOSP-MdnsDiscoveryManag: (REDACTED) %s
+05-12 16:56:43.920  5855 10711 I AOSP-MdnsDiscoveryManag: (REDACTED) %s
+05-12 16:56:44.525 14133 14626 E u4native: [InfoLevelMessage] [INFO:not_a_file.cc(0)] BrowserIOThread heartbeat, pid/tid: 14133/14626, interval/index: 30s/54, ucCoreSoImplVersion: 5.12.11.0_250212104355
+05-12 16:56:44.525 14133 14635 E u4native: [InfoLevelMessage] [INFO:not_a_file.cc(0)] NetworkServiceThread heartbeat, pid/tid: 14133/14635, interval/index: 30s/54
+05-12 16:56:46.530 11932 11932 E screencap: BBinder_init Processname  screencap  
+05-12 16:56:46.530 11932 11932 E screencap: BBinder_init hasGetProcessName  screencap
+05-12 16:56:46.541 11932 11932 W screencap: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: SurfaceFlingerAIDL
+05-12 16:56:46.542 11932 11932 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+05-12 16:56:46.543 11932 11932 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+05-12 16:56:46.583 11932 11932 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_mm
+05-12 16:56:46.583 11932 11932 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_mm-uncached
+05-12 16:56:46.583 11932 11932 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_svp_page-uncached
+05-12 16:56:46.584 11932 11932 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_prot_region
+05-12 16:56:46.584 11932 11932 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_2d_fr_region
+05-12 16:56:46.584 11932 11932 I DMABUFHEAPS: Using DMA-BUF heap named: mtk_wfd_page-uncached
+05-12 16:56:46.863 11932 11932 W RefBase : RefBase: Explicit destruction, weak count = 0 (in 0x7ef63fe948). Use sp<> to manage this object. Note - if weak count is 0, this leaks mRefs (weakref_impl).

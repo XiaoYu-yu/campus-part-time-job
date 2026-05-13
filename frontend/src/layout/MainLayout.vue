@@ -8,12 +8,12 @@
             <path d="M5 26L20 35L35 26" stroke="url(#logoGrad2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             <defs>
               <linearGradient id="logoGrad1" x1="5" y1="3" x2="35" y2="35" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#0b3b91"/>
-                <stop offset="1" stop-color="#1d6cf2"/>
+                <stop stop-color="#0f766e"/>
+                <stop offset="1" stop-color="#0ea5e9"/>
               </linearGradient>
               <linearGradient id="logoGrad2" x1="5" y1="26" x2="35" y2="26" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#0b3b91"/>
-                <stop offset="1" stop-color="#1d6cf2"/>
+                <stop stop-color="#0f766e"/>
+                <stop offset="1" stop-color="#0ea5e9"/>
               </linearGradient>
             </defs>
           </svg>
@@ -256,18 +256,18 @@ const logout = () => {
 
 <style lang="scss" scoped>
 .main-layout {
-  --admin-blue: #1d6cf2;
-  --admin-blue-dark: #1357d8;
-  --admin-blue-soft: #eaf2ff;
-  --admin-text: #13264d;
+  --admin-accent: #0f766e;
+  --admin-accent-light: #0ea5e9;
+  --admin-accent-soft: #f0fdfa;
+  --admin-text: #0f172a;
   --admin-muted: #64748b;
 
   display: flex;
   height: 100vh;
   overflow: hidden;
   background:
-    radial-gradient(circle at 90% 4%, rgba(29, 108, 242, 0.1), transparent 26%),
-    linear-gradient(135deg, #f8fbff 0%, #f3f7ff 54%, #ffffff 100%);
+    radial-gradient(circle at 90% 4%, rgba(15, 118, 110, 0.08), transparent 26%),
+    linear-gradient(135deg, #f8fffe 0%, #f0fdfa 54%, #ffffff 100%);
   color: var(--admin-text);
 }
 
@@ -279,7 +279,7 @@ const logout = () => {
   display: flex;
   flex-direction: column;
   transition: width 0.3s ease;
-  box-shadow: 18px 0 42px rgba(30, 64, 175, 0.06);
+  box-shadow: 18px 0 42px rgba(15, 118, 110, 0.06);
   backdrop-filter: blur(18px);
 
   &.is-collapsed {
@@ -315,7 +315,7 @@ const logout = () => {
   &:hover {
     .logo-icon {
       transform: translateY(-1px) scale(1.02);
-      box-shadow: 0 18px 38px rgba(29, 108, 242, 0.22);
+      box-shadow: 0 18px 38px rgba(15, 118, 110, 0.22);
     }
   }
 }
@@ -326,12 +326,12 @@ const logout = () => {
   flex-shrink: 0;
   padding: 9px;
   border-radius: 18px;
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 52%, #eef2ff 100%);
-  box-shadow: 0 14px 34px rgba(29, 108, 242, 0.15);
+  background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 52%, #ecfeff 100%);
+  box-shadow: 0 14px 34px rgba(15, 118, 110, 0.15);
   transition: all 0.2s ease;
 
   svg path:first-child {
-    fill: var(--admin-blue);
+    fill: var(--admin-accent);
   }
 }
 
@@ -347,7 +347,7 @@ const logout = () => {
 
   p {
     font-size: 11px;
-    color: var(--admin-blue);
+    color: var(--admin-accent);
     margin: 0;
     line-height: 1.2;
     text-transform: uppercase;
@@ -367,7 +367,7 @@ const logout = () => {
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(29, 108, 242, 0.24);
+    background: rgba(15, 118, 110, 0.24);
     border-radius: 2px;
   }
 
@@ -396,18 +396,18 @@ const logout = () => {
     }
 
     &:hover {
-      background-color: #f1f5ff;
-      color: var(--admin-blue);
+      background-color: #f0fdfa;
+      color: var(--admin-accent);
 
       .el-icon {
-        color: var(--admin-blue);
+        color: var(--admin-accent);
       }
     }
 
     &.is-active {
-      background: linear-gradient(135deg, #1d6cf2 0%, #0f5be8 100%);
+      background: linear-gradient(135deg, #0f766e 0%, #0ea5e9 100%);
       color: #ffffff;
-      box-shadow: 0 16px 34px rgba(29, 108, 242, 0.24);
+      box-shadow: 0 16px 34px rgba(15, 118, 110, 0.24);
 
       &::before {
         display: none;
@@ -432,12 +432,12 @@ const logout = () => {
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  color: var(--admin-blue);
+  color: var(--admin-accent);
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: rgba(29, 108, 242, 0.08);
-    color: var(--admin-blue);
+    background-color: rgba(15, 118, 110, 0.08);
+    color: var(--admin-accent);
   }
 
   .el-icon {
@@ -450,8 +450,8 @@ const logout = () => {
   display: flex;
   flex-direction: column;
   background:
-    linear-gradient(rgba(29, 108, 242, 0.028) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(29, 108, 242, 0.028) 1px, transparent 1px);
+    linear-gradient(rgba(15, 118, 110, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 118, 110, 0.022) 1px, transparent 1px);
   background-size: 52px 52px;
   min-width: 0;
 }
@@ -484,7 +484,7 @@ const logout = () => {
 
         &.is-link {
           &:hover {
-            color: var(--admin-blue);
+            color: var(--admin-accent);
           }
         }
 
@@ -525,7 +525,7 @@ const logout = () => {
   background: rgba(255, 255, 255, 0.86);
   color: #94a3b8;
   font-size: 13px;
-  box-shadow: 0 12px 28px rgba(30, 64, 175, 0.06);
+  box-shadow: 0 12px 28px rgba(15, 118, 110, 0.06);
 
   .el-icon {
     color: #64748b;
@@ -552,8 +552,8 @@ const logout = () => {
   position: relative;
 
   &:hover {
-    background-color: #eef4ff;
-    color: var(--admin-blue);
+    background-color: #f0fdfa;
+    color: var(--admin-accent);
   }
 
   .el-icon {
@@ -583,19 +583,19 @@ const logout = () => {
     padding: 6px 12px;
     border-radius: 12px;
     transition: all 0.2s ease;
-    border: 1px solid rgba(29, 108, 242, 0.14);
+    border: 1px solid rgba(15, 118, 110, 0.14);
     background: rgba(255, 255, 255, 0.82);
     color: #0f172a;
 
     &:hover {
-      background-color: rgba(239, 246, 255, 0.96);
+      background-color: rgba(240, 253, 250, 0.96);
     }
   }
 
   .user-avatar {
-    background: linear-gradient(135deg, #1d6cf2 0%, #60a5fa 100%);
+    background: linear-gradient(135deg, #0f766e 0%, #0ea5e9 100%);
     font-weight: 600;
-    box-shadow: 0 12px 24px rgba(29, 108, 242, 0.22);
+    box-shadow: 0 12px 24px rgba(15, 118, 110, 0.22);
   }
 
   .user-details {
@@ -612,7 +612,7 @@ const logout = () => {
 
   .user-role {
     font-size: 12px;
-    color: var(--admin-blue);
+    color: var(--admin-accent);
   }
 
   .dropdown-icon {

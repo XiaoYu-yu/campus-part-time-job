@@ -1,12 +1,17 @@
 <template>
   <MainLayout>
     <div class="campus-admin-page">
-      <div class="page-header">
+      <section class="page-hero">
         <div>
+          <span class="eyebrow">Campus Ops</span>
           <h2>校园配送运营</h2>
-          <p>只读演示页，联动查看配送员最近异常、低频位置记录和腾讯地图预览，不做实时刷新。</p>
+          <p>实时监控配送员状态、位置轨迹和异常情况，优化配送调度。</p>
         </div>
-      </div>
+        <div class="hero-notes">
+          <span>运营模块</span>
+          <strong>courier-ops</strong>
+        </div>
+      </section>
 
       <el-alert
         title="该页聚焦配送员维度的异常与低频位置联动查看，只读展示后端当前最小运营模型，并补最小腾讯地图预览承接。"
@@ -547,43 +552,121 @@ onMounted(() => loadCourierList())
 
 <style scoped lang="scss">
 .campus-admin-page {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
   padding: 20px;
 }
 
-.page-header,
-.panel-card {
-  background: rgba(255, 255, 255, 0.86);
-  border: 1px solid rgba(15, 118, 110, 0.08);
-  border-radius: 18px;
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
-  backdrop-filter: blur(18px);
-}
+/* ── Hero ── */
+.page-hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  min-height: 170px;
+  padding: 34px 40px;
+  border: 1px solid rgba(15, 118, 110, 0.12);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 86% 18%, rgba(132, 204, 22, 0.28), transparent 28%),
+    radial-gradient(circle at 16% 20%, rgba(14, 165, 233, 0.16), transparent 32%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(236, 253, 245, 0.86) 54%, rgba(224, 242, 254, 0.86) 100%);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.09);
+  color: #0f172a;
 
-.page-header {
+  &::after {
+    content: '';
+    position: absolute;
+    right: -80px;
+    bottom: -110px;
+    width: 270px;
+    height: 270px;
+    border-radius: 50%;
+    border: 38px solid rgba(15, 118, 110, 0.07);
+  }
+
   h2 {
-    margin: 0 0 8px;
-    font-size: 24px;
-    color: #18181b;
+    position: relative;
+    margin: 8px 0 10px;
+    font-size: 34px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
   }
 
   p {
+    position: relative;
+    max-width: 560px;
     margin: 0;
-    color: #71717a;
+    color: #475569;
+    font-size: 15px;
+    line-height: 1.8;
   }
 }
 
+.eyebrow,
+.section-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #0f766e;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero-notes {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 4px;
+  min-width: 142px;
+  padding: 18px 20px;
+  border: 1px solid rgba(15, 118, 110, 0.12);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px);
+
+  span {
+    color: #64748b;
+    font-size: 12px;
+  }
+
+  strong {
+    color: #0f172a;
+    font-size: 20px;
+    letter-spacing: 0.02em;
+  }
+}
+
+/* ── Page alert ── */
+.page-alert {
+  border-radius: 18px;
+}
+
+/* ── Grid layout ── */
 .ops-layout {
   display: grid;
   grid-template-columns: minmax(340px, 420px) minmax(0, 1fr);
-  gap: 16px;
+  gap: 18px;
 }
 
 .detail-panels {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
+}
+
+/* ── Cards ── */
+.panel-card {
+  border: 1px solid rgba(15, 118, 110, 0.1);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+  padding: 22px 24px;
 }
 
 .panel-header {
@@ -593,18 +676,21 @@ onMounted(() => loadCourierList())
   margin-bottom: 16px;
 
   h3 {
-    margin: 0 0 6px;
+    margin: 6px 0 6px;
     font-size: 18px;
-    color: #18181b;
+    font-weight: 900;
+    color: #0f172a;
   }
 
   p {
     margin: 0;
-    color: #71717a;
-    line-height: 1.5;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.6;
   }
 }
 
+/* ── Filters ── */
 .panel-filters {
   margin-bottom: 12px;
 }
@@ -619,14 +705,21 @@ onMounted(() => loadCourierList())
   display: flex;
   gap: 8px;
   margin-bottom: 8px;
+
+  .el-button--primary {
+    border: none;
+    background: linear-gradient(135deg, #0f766e, #0ea5e9);
+    box-shadow: 0 12px 24px rgba(14, 165, 233, 0.22);
+  }
 }
 
+/* ── Table scroll ── */
 .table-scroll {
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   padding-bottom: 4px;
-  border-radius: 14px;
+  border-radius: 18px;
 
   &::-webkit-scrollbar {
     height: 8px;
@@ -638,19 +731,38 @@ onMounted(() => loadCourierList())
   }
 }
 
+/* ── Tables ── */
+.courier-table,
+.panel-card :deep(.el-table) {
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+}
+
+.courier-table :deep(.el-table__inner-wrapper::before),
+.panel-card :deep(.el-table__inner-wrapper::before) {
+  display: none;
+}
+
+.courier-table :deep(.el-table__header-wrapper th),
+.panel-card :deep(.el-table__header-wrapper th) {
+  background: #f8fafc;
+  color: #0f172a;
+  font-weight: 800;
+}
+
+.courier-table :deep(.el-table__row),
+.panel-card :deep(.el-table__row) {
+  color: #334155;
+}
+
+.courier-table :deep(.el-table__cell),
+.panel-card :deep(.el-table__cell) {
+  border-bottom-color: #edf2f7;
+}
+
 .courier-table {
   min-width: 620px;
-  border-radius: 14px;
-
-  :deep(.el-table__inner-wrapper::before) {
-    display: none;
-  }
-
-  :deep(.el-table__header-wrapper th) {
-    background: rgba(240, 253, 250, 0.92);
-    color: #0f172a;
-    font-weight: 850;
-  }
 
   :deep(.el-table__body tr.current-row > td.el-table__cell) {
     background: rgba(15, 118, 110, 0.9);
@@ -663,52 +775,54 @@ onMounted(() => loadCourierList())
   }
 }
 
-.selected-summary {
+/* ── Summary cards ── */
+.selected-summary,
+.map-summary {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 12px;
 }
 
+.map-summary {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
 .summary-item {
   background: #f8fafc;
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 14px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 
   span {
-    color: #71717a;
+    color: #64748b;
     font-size: 13px;
   }
 
   strong {
-    color: #18181b;
+    color: #0f172a;
   }
 }
 
+/* ── Pagination ── */
 .pagination-wrapper {
   margin-top: 16px;
   display: flex;
   justify-content: flex-end;
 }
 
+/* ── Map ── */
 .map-preview-layout {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-.map-summary {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
-}
-
 .map-preview-shell {
   overflow: hidden;
-  border-radius: 16px;
-  border: 1px solid #e4e7ed;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
   background: #f8fafc;
   min-height: 320px;
 }
@@ -720,14 +834,17 @@ onMounted(() => loadCourierList())
 
 .map-hint {
   margin-bottom: 0;
+  border-radius: 14px;
 }
 
 .map-note {
   margin: 0;
-  color: #71717a;
+  color: #64748b;
+  font-size: 13px;
   line-height: 1.6;
 }
 
+/* ── Responsive ── */
 @media (max-width: 1280px) {
   .ops-layout {
     grid-template-columns: 1fr;
@@ -739,10 +856,16 @@ onMounted(() => loadCourierList())
     padding: 12px;
   }
 
-  .page-header,
+  .page-hero {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 24px 20px;
+    border-radius: 22px;
+  }
+
   .panel-card {
     padding: 16px;
-    border-radius: 16px;
+    border-radius: 18px;
   }
 
   .filter-actions {

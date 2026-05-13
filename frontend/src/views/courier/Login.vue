@@ -4,19 +4,19 @@
       <section class="brand-panel">
         <span class="entry-badge">兼职端入口</span>
         <h1>兼职端登录</h1>
-        <p>日常接单、取餐、送达和异常上报都从这里进入。首次报名和审核仍保留在用户端入驻入口。</p>
+        <p>接单、取餐、送达、异常上报都从这里进入。第一次报名请先去用户端提交资料。</p>
 
         <div class="guide-grid">
           <div class="guide-item">
             <span>首次入驻</span>
-            <strong>用户端 onboarding</strong>
+            <strong>用户端报名</strong>
           </div>
           <div class="guide-item">
             <span>日常工作</span>
-            <strong>手机号 + 密码换取 courier token</strong>
+            <strong>手机号 + 密码登录</strong>
           </div>
           <div class="guide-item">
-            <span>成功后承接</span>
+            <span>登录成功后</span>
             <strong>直接进入兼职工作台</strong>
           </div>
         </div>
@@ -24,8 +24,8 @@
 
       <section class="form-panel">
         <div class="panel-heading">
-          <h2>使用已审核通过的兼职账号登录</h2>
-          <p>本页复用现有 `/api/campus/courier/auth/token`，不新增第二套认证流。</p>
+          <h2>用已审核通过的账号登录</h2>
+          <p>审核通过并启用后，就可以用手机号和密码进入工作台。</p>
         </div>
 
         <el-alert
@@ -133,11 +133,13 @@ const goToUserLogin = () => {
 <style scoped lang="scss">
 .parttime-login-page {
   min-height: 100vh;
-  padding: 22px 16px;
+  min-height: 100dvh;
+  padding: calc(22px + env(safe-area-inset-top, 0px)) 16px calc(22px + env(safe-area-inset-bottom, 0px));
   display: flex;
   align-items: center;
   justify-content: center;
   background: #f5f5f5;
+  overflow-x: hidden;
 }
 
 .login-shell {
@@ -151,7 +153,7 @@ const goToUserLogin = () => {
 .form-panel {
   background: #ffffff;
   border: 1px solid #e4e4e7;
-  border-radius: 16px;
+  border-radius: 14px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
@@ -277,11 +279,29 @@ const goToUserLogin = () => {
   .brand-panel,
   .form-panel {
     padding: 20px;
-    border-radius: 14px;
   }
 
   .secondary-actions {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 360px) {
+  .parttime-login-page {
+    padding: 16px;
+  }
+
+  .brand-panel,
+  .form-panel {
+    padding: 16px;
+  }
+
+  .brand-panel h1 {
+    font-size: 22px;
+  }
+
+  .panel-heading h2 {
+    font-size: 17px;
   }
 }
 </style>

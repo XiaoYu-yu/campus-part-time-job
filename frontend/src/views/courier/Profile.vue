@@ -5,7 +5,7 @@
         <div>
           <span class="eyebrow">兼职身份</span>
           <h2>{{ displayText(profile.realName, '兼职人员') }}</h2>
-          <p>这里展示当前兼职端 token 对应的资料、审核状态和启用状态。日常接单从工作台进入，资料提交仍回用户端入驻入口。</p>
+          <p>这里能看到你的兼职资料、审核结果和是否可以接单。资料要修改的话，回用户端报名页更新。</p>
         </div>
         <el-tag :type="isApproved ? 'success' : 'warning'" size="large">
           {{ displayText(reviewStatus.reviewStatus || profile.reviewStatus, '待确认') }}
@@ -16,14 +16,14 @@
         <div class="section-header">
           <div>
             <h3>身份状态</h3>
-            <p>读取 `/api/campus/courier/profile` 与 `/api/campus/courier/review-status`，不新增后端接口。</p>
+            <p>这里展示平台已记录的兼职资料和审核结果。</p>
           </div>
           <el-button type="primary" plain :loading="loading" @click="loadProfile">刷新</el-button>
         </div>
 
         <div class="summary-grid">
           <div class="summary-item">
-            <span>兼职资料 ID</span>
+            <span>兼职资料编号</span>
             <strong>{{ displayText(profile.id) }}</strong>
           </div>
           <div class="summary-item">
@@ -61,11 +61,11 @@
         <div class="section-header compact">
           <div>
             <h3>审核说明</h3>
-            <p>审核状态决定是否可以进入兼职端工作台接单。</p>
+            <p>通过审核并启用后，就可以在工作台接单。</p>
           </div>
         </div>
         <div class="notice-panel" :class="{ approved: isApproved }">
-          <strong>{{ isApproved ? '当前账号可用于兼职端日常工作' : '当前账号仍需等待审核或启用' }}</strong>
+          <strong>{{ isApproved ? '你的账号可以正常接单' : '你的账号还在审核或等待启用' }}</strong>
           <span>{{ displayText(reviewStatus.reviewRemark || reviewStatus.reviewComment || profile.reviewRemark || profile.reviewComment, '暂无审核说明') }}</span>
         </div>
       </section>
@@ -74,7 +74,7 @@
         <div class="section-header compact">
           <div>
             <h3>快捷操作</h3>
-            <p>只提供当前兼职端最小入口，不扩完整个人中心。</p>
+            <p>常用操作都放在这里，接单去工作台，改资料回报名页。</p>
           </div>
         </div>
         <div class="action-grid">
@@ -192,14 +192,15 @@ onMounted(() => loadProfile())
   display: flex;
   flex-direction: column;
   gap: 14px;
+  overflow-x: hidden;
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(211, 230, 232, 0.82);
-  border-radius: 22px;
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 14px;
   padding: 18px;
-  box-shadow: 0 16px 38px rgba(26, 87, 100, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .profile-hero {
@@ -207,9 +208,8 @@ onMounted(() => loadProfile())
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  background:
-    radial-gradient(circle at right, rgba(137, 232, 213, 0.22), transparent 38%),
-    rgba(255, 255, 255, 0.9);
+  border-radius: 14px;
+  background: linear-gradient(135deg, #eefdfa, #f0fdfa);
 }
 
 .eyebrow {
@@ -247,7 +247,7 @@ onMounted(() => loadProfile())
 
 .summary-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 12px;
 }
 
@@ -255,10 +255,10 @@ onMounted(() => loadProfile())
   display: flex;
   flex-direction: column;
   gap: 6px;
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 14px;
-  background: rgba(248, 250, 252, 0.78);
-  border: 1px solid rgba(15, 118, 110, 0.08);
+  background: #f8fafc;
+  border: 1px solid #e4e4e7;
 }
 
 .summary-item span {
@@ -275,14 +275,14 @@ onMounted(() => loadProfile())
   flex-direction: column;
   gap: 8px;
   padding: 14px 16px;
-  border-radius: 16px;
-  background: rgba(254, 243, 199, 0.7);
+  border-radius: 12px;
+  background: #fef9c3;
   border: 1px solid rgba(245, 158, 11, 0.16);
   color: #92400e;
 }
 
 .notice-panel.approved {
-  background: rgba(240, 253, 250, 0.78);
+  background: #f0fdfa;
   border-color: rgba(20, 184, 166, 0.18);
   color: #0f766e;
 }
@@ -302,6 +302,20 @@ onMounted(() => loadProfile())
 
   .action-grid {
     flex-direction: column;
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  }
+}
+
+@media (max-width: 380px) {
+  .card {
+    padding: 14px;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>

@@ -2348,3 +2348,114 @@
 - [project-logs/campus-relay/file-change-list.md](file-change-list.md)
 
 本轮是当前本地工作树服务器部署与远端 smoke 轮：部署前执行服务器备份，随后上传当前本地工作树并通过单机内测 Docker Compose 重建 `mysql / backend / frontend`。公网 frontend 80 可访问，backend 8080 与 MySQL 3306 继续仅本机绑定。远端 smoke 复跑 25 项通过、0 项失败、0 项跳过。本轮没有改业务代码、bridge、`request.js`、token 附着逻辑、后端鉴权、路由、数据库结构或旧兼容模块。
+
+## Step 158 - 安卓双端前端视觉与移动端交互重构
+
+- [frontend/src/styles/mobile-theme.css](../../frontend/src/styles/mobile-theme.css)（新增）
+- [frontend/src/layout/UserLayout.vue](../../frontend/src/layout/UserLayout.vue)
+- [frontend/src/layout/ParttimeLayout.vue](../../frontend/src/layout/ParttimeLayout.vue)
+- [frontend/src/views/user/Login.vue](../../frontend/src/views/user/Login.vue)
+- [frontend/src/views/user/Home.vue](../../frontend/src/views/user/Home.vue)
+- [frontend/src/views/user/CampusRelayOrders.vue](../../frontend/src/views/user/CampusRelayOrders.vue)
+- [frontend/src/views/user/CampusOrderResult.vue](../../frontend/src/views/user/CampusOrderResult.vue)
+- [frontend/src/views/user/CourierOnboarding.vue](../../frontend/src/views/user/CourierOnboarding.vue)
+- [frontend/src/views/user/Profile.vue](../../frontend/src/views/user/Profile.vue)
+- [frontend/src/views/user/AfterSaleResult.vue](../../frontend/src/views/user/AfterSaleResult.vue)
+- [frontend/src/views/courier/Login.vue](../../frontend/src/views/courier/Login.vue)
+- [frontend/src/views/courier/CourierWorkbench.vue](../../frontend/src/views/courier/CourierWorkbench.vue)
+- [frontend/src/views/courier/Profile.vue](../../frontend/src/views/courier/Profile.vue)
+- [project-logs/campus-relay/step-158-android-dual-end-frontend-rebuild.md](step-158-android-dual-end-frontend-rebuild.md)（新增）
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+
+## Step 159 - 公测 P0 收口复核与 Android 安全区修复
+
+- [frontend/index.html](../../frontend/index.html)
+  - viewport 增加 `viewport-fit=cover`，支持 Android / WebView 安全区。
+- [frontend/src/layout/UserLayout.vue](../../frontend/src/layout/UserLayout.vue)
+  - 用户端移动壳顶部栏增加 `env(safe-area-inset-top)` padding 和最小高度。
+- [frontend/src/layout/ParttimeLayout.vue](../../frontend/src/layout/ParttimeLayout.vue)
+  - 兼职端移动壳顶部栏增加 `env(safe-area-inset-top)` padding 和最小高度。
+- [frontend/src/views/user/Login.vue](../../frontend/src/views/user/Login.vue)
+  - 用户端登录页增加顶部 / 底部 safe-area padding。
+- [frontend/src/views/courier/Login.vue](../../frontend/src/views/courier/Login.vue)
+  - 兼职端登录页增加顶部 / 底部 safe-area padding。
+- [frontend/src/views/CampusCourierOpsView.vue](../../frontend/src/views/CampusCourierOpsView.vue)
+  - 拉平嵌套 `:deep(...)` 表格选择器，消除 `lightningcss` 构建 warning。
+- [project-logs/campus-relay/step-159-public-beta-p0-closure-and-android-safe-area-fix.md](step-159-public-beta-p0-closure-and-android-safe-area-fix.md)（新增）
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+
+本轮是公测 P0 收口复核与 Android 安全区修复轮：处理 Android WebView 安全区、登录页顶部 / 底部留白和前端构建 warning；重新完成 Web 构建、双端 public 构建、双端 Capacitor sync 和双端 Debug APK 构建。本轮没有改后端 Java、数据库、`request.js`、API 运行时行为、router、token 附着逻辑、bridge 或旧外卖兼容模块。ADB 当前无在线设备，因此本轮新 APK 尚未完成真机安装复测。
+
+2026-05-12 补充：手机重新连接后，双端 APK 已通过 `adb install -r` 安装并完成真机启动 / 登录 smoke。新增或更新 runtime 留痕：
+
+- [runtime/step-159-android-device/campus-user-step159.png](runtime/step-159-android-device/campus-user-step159.png)
+- [runtime/step-159-android-device/campus-parttime-step159.png](runtime/step-159-android-device/campus-parttime-step159.png)
+- [runtime/step-159-android-device/campus-parttime-login-form-step159.png](runtime/step-159-android-device/campus-parttime-login-form-step159.png)
+- [runtime/step-159-android-device/campus-parttime-after-login-step159.png](runtime/step-159-android-device/campus-parttime-after-login-step159.png)
+- [runtime/step-159-android-device/campus-user-after-login-step159-2.png](runtime/step-159-android-device/campus-user-after-login-step159-2.png)
+- [runtime/step-159-android-device/campus-parttime-login-logcat.txt](runtime/step-159-android-device/campus-parttime-login-logcat.txt)
+- [runtime/step-159-android-device/campus-user-login-logcat-2.txt](runtime/step-159-android-device/campus-user-login-logcat-2.txt)
+
+补充验证结论：用户端登录成功进入首页；兼职端登录成功进入工作台，未复现 `网络连接失败，请检查网络` toast；手机到公网服务器 ping 成功。当前仍需继续完整业务链路真机验证。
+
+### 2026-05-12 补充：用户端确认送达承接与真机完整链路闭环
+
+- [frontend/src/api/campus-customer.js](../../frontend/src/api/campus-customer.js)
+  - 补回 `confirmCampusCustomerOrder(orderId)`，复用既有 `POST /api/campus/customer/orders/{id}/confirm`。
+- [frontend/src/views/user/CampusOrderResult.vue](../../frontend/src/views/user/CampusOrderResult.vue)
+  - `AWAITING_CONFIRMATION` 状态下展示 `确认已收到` 最小确认区块。
+  - 点击确认后刷新订单详情，回读最终 `COMPLETED` 状态。
+  - 修正结果页文案，使其与等待确认 / 已完成的真实能力一致。
+- [project-logs/campus-relay/runtime/step-159-android-device/campus-user-confirm-visible-step159.png](runtime/step-159-android-device/campus-user-confirm-visible-step159.png)
+- [project-logs/campus-relay/runtime/step-159-android-device/window-user-confirm-visible.xml](runtime/step-159-android-device/window-user-confirm-visible.xml)
+- [project-logs/campus-relay/runtime/step-159-android-device/campus-user-confirm-after-step159.png](runtime/step-159-android-device/campus-user-confirm-after-step159.png)
+- [project-logs/campus-relay/runtime/step-159-android-device/window-user-confirm-after.xml](runtime/step-159-android-device/window-user-confirm-after.xml)
+- [project-logs/campus-relay/runtime/step-159-android-device/campus-user-confirm-logcat.txt](runtime/step-159-android-device/campus-user-confirm-logcat.txt)
+
+补充验证结论：订单 `CR202605010405291760` 已在真机公网环境完成兼职端接单、取餐、配送、送达，并在用户端点击 `确认已收到` 后回读为 `已完成 / COMPLETED`。本补充没有新增后端接口，没有改 bridge、`request.js`、token 附着逻辑、路由、后端状态机或旧兼容模块。
+
+## Step 160 - 移动端界面文案接地气优化
+
+- [frontend/src/views/user/Home.vue](../../frontend/src/views/user/Home.vue)
+- [frontend/src/views/user/Login.vue](../../frontend/src/views/user/Login.vue)
+- [frontend/src/views/user/Profile.vue](../../frontend/src/views/user/Profile.vue)
+- [frontend/src/views/user/CampusRelayOrders.vue](../../frontend/src/views/user/CampusRelayOrders.vue)
+- [frontend/src/views/user/CampusOrderResult.vue](../../frontend/src/views/user/CampusOrderResult.vue)
+- [frontend/src/views/user/CourierOnboarding.vue](../../frontend/src/views/user/CourierOnboarding.vue)
+- [frontend/src/views/user/AfterSaleResult.vue](../../frontend/src/views/user/AfterSaleResult.vue)
+- [frontend/src/views/courier/Login.vue](../../frontend/src/views/courier/Login.vue)
+- [frontend/src/views/courier/Profile.vue](../../frontend/src/views/courier/Profile.vue)
+- [frontend/src/views/courier/CourierWorkbench.vue](../../frontend/src/views/courier/CourierWorkbench.vue)
+- [project-logs/campus-relay/step-160-ui-copy-natural-language-polish.md](step-160-ui-copy-natural-language-polish.md)（新增）
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+
+本轮是移动端界面文案自然化轮：用户端和兼职端核心页面可见文案从工程/接口语境调整为更接地气的中文表达。本轮没有改后端、接口、路由、bridge、`request.js`、token 附着逻辑、旧兼容模块或新增页面。Web 构建、Android 用户端 public 构建、Android 兼职端 public 构建均通过，`git diff --check` 通过，仅 CRLF 提示。
+
+## Step 161 - Android 双端显示名调整
+
+- [mobile/user-app/capacitor.config.json](../../mobile/user-app/capacitor.config.json)
+- [mobile/user-app/android/app/src/main/res/values/strings.xml](../../mobile/user-app/android/app/src/main/res/values/strings.xml)
+- [mobile/user-app/android/app/src/main/assets/capacitor.config.json](../../mobile/user-app/android/app/src/main/assets/capacitor.config.json)
+- [mobile/parttime-app/capacitor.config.json](../../mobile/parttime-app/capacitor.config.json)
+- [mobile/parttime-app/android/app/src/main/res/values/strings.xml](../../mobile/parttime-app/android/app/src/main/res/values/strings.xml)
+- [mobile/parttime-app/android/app/src/main/assets/capacitor.config.json](../../mobile/parttime-app/android/app/src/main/assets/capacitor.config.json)
+- [project-logs/campus-relay/step-161-android-app-display-name-rename.md](step-161-android-app-display-name-rename.md)（新增）
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+
+本轮只调整 Android 双端桌面显示名：用户端显示为 `用户端`，兼职端显示为 `兼职端`。真实 `applicationId` 保持 `com.xiaoyu.campus.user` / `com.xiaoyu.campus.parttime` 不变。双端 Capacitor sync、Debug APK 构建、ADB 安装和 `aapt dump badging` 标签核验均通过。本轮没有改后端、接口、路由、bridge、`request.js`、token 附着逻辑或管理后台。

@@ -1,13 +1,6 @@
 <template>
   <div class="shop-status-management">
-    <div class="compat-notice">
-      <el-alert type="info" :closable="false" show-icon>
-        <template #title>
-          该页面保留旧模块兼容能力，不作为当前校园兼职主业务入口。
-        </template>
-      </el-alert>
-    </div>
-    <h2>店铺状态兼容</h2>
+    <h2>店铺营业状态管理</h2>
 
     <div class="status-card">
       <div class="status-header">
@@ -81,10 +74,6 @@ onMounted(() => loadShopStatus())
 
 <style scoped lang="scss">
 .shop-status-management {
-  .compat-notice {
-    margin-bottom: 16px;
-  }
-
   padding: 20px;
 }
 

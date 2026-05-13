@@ -224,10 +224,10 @@ ul, ol {
   .table-card {
     min-width: 0;
     margin-bottom: 0 !important;
-    border: 1px solid rgba(29, 108, 242, 0.1) !important;
+    border: 1px solid rgba(15, 118, 110, 0.1) !important;
     border-radius: 24px !important;
     background: rgba(255, 255, 255, 0.9) !important;
-    box-shadow: 0 18px 46px rgba(30, 64, 175, 0.075) !important;
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08) !important;
     backdrop-filter: blur(18px);
   }
 
@@ -236,9 +236,9 @@ ul, ol {
     overflow: hidden;
     padding: 28px 32px !important;
     background:
-      radial-gradient(circle at 86% 12%, rgba(29, 108, 242, 0.18), transparent 28%),
-      radial-gradient(circle at 16% 18%, rgba(56, 189, 248, 0.12), transparent 34%),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.97), rgba(239, 246, 255, 0.84)) !important;
+      radial-gradient(circle at 86% 12%, rgba(132, 204, 22, 0.18), transparent 28%),
+      radial-gradient(circle at 16% 18%, rgba(14, 165, 233, 0.12), transparent 34%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(236, 253, 245, 0.86) 54%, rgba(224, 242, 254, 0.86)) !important;
 
     &::after {
       content: '';
@@ -247,7 +247,7 @@ ul, ol {
       bottom: -110px;
       width: 250px;
       height: 250px;
-      border: 34px solid rgba(29, 108, 242, 0.055);
+      border: 34px solid rgba(15, 118, 110, 0.055);
       border-radius: 50%;
       pointer-events: none;
     }
@@ -276,34 +276,34 @@ ul, ol {
   }
 
   .guide-item {
-    border: 1px solid rgba(29, 108, 242, 0.1) !important;
+    border: 1px solid rgba(15, 118, 110, 0.1) !important;
     border-radius: 18px !important;
     background: rgba(255, 255, 255, 0.86) !important;
-    box-shadow: 0 12px 30px rgba(30, 64, 175, 0.055);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.055);
 
     span {
-      background: #eaf2ff !important;
-      color: #1d6cf2 !important;
+      background: #f0fdfa !important;
+      color: #0f766e !important;
       font-weight: 800;
     }
   }
 
   .readonly-badge,
   .ops-badge {
-    border: 1px solid rgba(29, 108, 242, 0.14) !important;
-    background: #eaf2ff !important;
-    color: #1d6cf2 !important;
+    border: 1px solid rgba(15, 118, 110, 0.14) !important;
+    background: #f0fdfa !important;
+    color: #0f766e !important;
     font-weight: 800 !important;
   }
 
   .table-note,
   .resolved-note {
-    border: 1px solid rgba(29, 108, 242, 0.08) !important;
-    background: linear-gradient(135deg, #f8fbff, #eef4ff) !important;
+    border: 1px solid rgba(15, 118, 110, 0.08) !important;
+    background: linear-gradient(135deg, #f8fffe, #f0fdfa) !important;
     color: #64748b !important;
 
     strong {
-      color: #1d6cf2 !important;
+      color: #0f766e !important;
     }
   }
 

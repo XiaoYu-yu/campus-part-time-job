@@ -4,14 +4,14 @@
       <section class="card">
         <div class="section-header">
           <div>
-            <h2>校园代送售后结果</h2>
-            <p>输入校园代送订单号，查看当前售后处理结果与回执。</p>
+            <h2>售后处理结果</h2>
+            <p>输入代送订单号，查看这单的售后处理进度和结果。</p>
           </div>
         </div>
 
         <div class="search-row">
           <el-input v-model="orderId" placeholder="请输入校园代送订单号，例如 CR202604060001" clearable @keyup.enter="loadResult" />
-          <el-button type="primary" @click="loadResult">查询结果</el-button>
+          <el-button type="primary" @click="loadResult">查询</el-button>
         </div>
       </section>
 
@@ -40,15 +40,15 @@
             <strong>{{ formatDateTime(result.afterSaleAppliedAt) }}</strong>
           </div>
           <div class="detail-item">
-            <span>处理动作</span>
+            <span>处理方式</span>
             <strong>{{ result.afterSaleHandleAction || '处理中' }}</strong>
           </div>
           <div class="detail-item">
-            <span>决策类型</span>
+            <span>处理类型</span>
             <strong>{{ result.decisionType || '待记录' }}</strong>
           </div>
           <div class="detail-item">
-            <span>决策金额</span>
+            <span>涉及金额</span>
             <strong>{{ formatDecisionAmount(result.decisionAmount) }}</strong>
           </div>
           <div class="detail-item">
@@ -127,23 +127,30 @@ onMounted(() => {
 <style scoped lang="scss">
 .after-sale-page {
   padding: 16px;
+  overflow-x: hidden;
 }
 
 .card {
-  background: white;
-  border-radius: 16px;
+  background: #ffffff;
+  border-radius: 14px;
   padding: 16px;
   margin-bottom: 14px;
+  border: 1px solid #e4e4e7;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 .section-header h2 {
   margin: 0 0 6px;
+  font-size: 18px;
+  color: #18181b;
+  font-weight: 700;
 }
 
 .section-header p {
   margin: 0;
-  color: #909399;
+  color: #71717a;
   font-size: 14px;
+  line-height: 1.5;
 }
 
 .search-row {
@@ -151,24 +158,46 @@ onMounted(() => {
   grid-template-columns: 1fr auto;
   gap: 12px;
   margin-top: 16px;
+
+  :deep(.el-input__wrapper) {
+    min-height: 44px;
+    border-radius: 10px;
+  }
+
+  :deep(.el-button) {
+    min-height: 44px;
+    border-radius: 10px;
+  }
+}
+
+.result-card {
+  border-radius: 14px;
 }
 
 .result-header {
   display: flex;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
   align-items: center;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
 .result-header h3 {
   margin: 4px 0 0;
+  font-size: 16px;
+  color: #18181b;
+  font-weight: 700;
+  word-break: break-all;
 }
 
 .receipt-pill {
-  padding: 8px 14px;
+  padding: 6px 14px;
   border-radius: 999px;
   font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .receipt-pill.processing {
@@ -192,47 +221,96 @@ onMounted(() => {
 }
 
 .message-box {
-  background: #fff7e6;
+  background: #fffbeb;
   color: #8a5a00;
   border-radius: 12px;
   padding: 14px;
   margin-bottom: 16px;
   line-height: 1.6;
+  font-size: 14px;
+  border: 1px solid #fde68a;
 }
 
 .detail-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
 }
 
 .detail-item {
-  background: #f8fafc;
+  background: #fafafa;
   border-radius: 12px;
   padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 6px;
+  border: 1px solid #e4e4e7;
+
+  strong {
+    color: #18181b;
+    font-size: 14px;
+    word-break: break-all;
+  }
 }
 
 .detail-item span,
 .label {
-  color: #909399;
+  color: #71717a;
   font-size: 13px;
 }
 
 .remark-block {
   margin-top: 16px;
+  padding: 14px;
+  border-radius: 12px;
+  background: #fafafa;
+  border: 1px solid #e4e4e7;
+
+  .label {
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  div {
+    color: #3f3f46;
+    font-size: 14px;
+    line-height: 1.6;
+    word-break: break-all;
+  }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 480px) {
   .search-row {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-grid {
     grid-template-columns: 1fr;
   }
 
   .result-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 360px) {
+  .after-sale-page {
+    padding: 12px;
+  }
+
+  .card {
+    padding: 14px 12px;
+    border-radius: 12px;
+  }
+
+  .section-header h2 {
+    font-size: 16px;
+  }
+
+  .receipt-pill {
+    font-size: 12px;
+    padding: 5px 10px;
   }
 }
 </style>

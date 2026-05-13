@@ -51,11 +51,11 @@
       <section class="card">
         <div class="section-header">
           <h3>校园代送</h3>
-          <span class="section-tip">新增演示入口</span>
+          <span class="section-tip">常用入口</span>
         </div>
-        <div class="menu-item" @click="router.push('/user/campus/order-result')">代送结果回看</div>
-        <div class="menu-item" @click="router.push('/user/campus/after-sale-result')">售后结果回执</div>
-        <div class="menu-item" @click="router.push('/user/campus/courier-onboarding')">兼职配送入驻</div>
+        <div class="menu-item" @click="router.push('/user/campus/order-result')">查看代送进度</div>
+        <div class="menu-item" @click="router.push('/user/campus/after-sale-result')">查看售后结果</div>
+        <div class="menu-item" @click="router.push('/user/campus/courier-onboarding')">报名校园兼职</div>
         <div class="menu-item" @click="router.push('/parttime/login')">兼职端登录</div>
         <div class="menu-item" @click="router.push('/parttime/workbench')">兼职工作台</div>
       </section>
@@ -171,6 +171,7 @@ onMounted(() => loadProfile())
 <style scoped lang="scss">
 .profile-page {
   padding: 16px;
+  overflow-x: hidden;
 }
 
 .profile-card,
@@ -181,6 +182,7 @@ onMounted(() => loadProfile())
   padding: 16px;
   margin-bottom: 14px;
   border: 1px solid #e4e4e7;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 .profile-card {
@@ -194,6 +196,25 @@ onMounted(() => loadProfile())
   height: 72px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid #e4e4e7;
+  flex-shrink: 0;
+}
+
+.profile-info {
+  min-width: 0;
+
+  h2 {
+    margin: 0 0 4px;
+    font-size: 18px;
+    color: #18181b;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+    color: #71717a;
+    font-size: 14px;
+  }
 }
 
 .stats-card {
@@ -204,6 +225,23 @@ onMounted(() => loadProfile())
 
 .stat-item {
   text-align: center;
+  padding: 12px 8px;
+  border-radius: 12px;
+  background: #fafafa;
+  border: 1px solid #e4e4e7;
+
+  strong {
+    display: block;
+    font-size: 22px;
+    color: #0f9f8f;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  span {
+    color: #71717a;
+    font-size: 13px;
+  }
 }
 
 .section-header,
@@ -214,26 +252,50 @@ onMounted(() => loadProfile())
   align-items: center;
 }
 
-.address-item {
-  padding: 12px 0;
-  border-bottom: 1px solid #f4f4f5;
-  font-size: 14px;
+.section-header {
+  margin-bottom: 12px;
+
+  h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #18181b;
+    font-weight: 700;
+  }
 }
 
-.address-item:last-child {
-  border-bottom: none;
+.address-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #e4e4e7;
+  font-size: 14px;
+  color: #3f3f46;
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .address-title {
   display: flex;
   gap: 10px;
   margin-bottom: 6px;
+  flex-wrap: wrap;
+
+  strong {
+    color: #18181b;
+  }
+
+  span {
+    color: #71717a;
+  }
 }
 
 .default-tag {
   color: #f59e0b;
   font-size: 12px;
   font-weight: 600;
+  background: #fffbeb;
+  padding: 2px 8px;
+  border-radius: 6px;
 }
 
 .section-tip {
@@ -246,15 +308,22 @@ onMounted(() => loadProfile())
   border-bottom: 1px solid #f4f4f5;
   cursor: pointer;
   font-size: 14px;
+  color: #18181b;
+  transition: background 0.15s;
 
   &::after {
     content: '';
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     border-top: 2px solid #a1a1aa;
     border-right: 2px solid #a1a1aa;
     transform: rotate(45deg);
     flex-shrink: 0;
+    margin-left: 8px;
+  }
+
+  &:active {
+    background: #f4f4f5;
   }
 }
 
@@ -266,10 +335,12 @@ onMounted(() => loadProfile())
 .text-btn {
   border: none;
   cursor: pointer;
+  font-family: inherit;
 }
 
 .logout-btn {
   width: 100%;
+  min-height: 48px;
   background: #ef4444;
   color: #ffffff;
   border-radius: 12px;
@@ -277,6 +348,16 @@ onMounted(() => loadProfile())
   font-size: 15px;
   font-weight: 600;
   margin-top: 8px;
+  transition: background 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    background: #dc2626;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+  }
+
+  &:active {
+    background: #b91c1c;
+  }
 }
 
 .text-btn {
@@ -284,10 +365,38 @@ onMounted(() => loadProfile())
   color: #0f9f8f;
   font-weight: 600;
   font-size: 13px;
+  padding: 4px 0;
 }
 
 .empty-tip {
   color: #a1a1aa;
   font-size: 14px;
+  padding: 12px 0;
+}
+
+@media (max-width: 360px) {
+  .profile-page {
+    padding: 12px;
+  }
+
+  .profile-card,
+  .stats-card,
+  .card {
+    padding: 14px 12px;
+    border-radius: 12px;
+  }
+
+  .avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .profile-info h2 {
+    font-size: 16px;
+  }
+
+  .stat-item strong {
+    font-size: 20px;
+  }
 }
 </style>

@@ -115,6 +115,12 @@ API 封装位于 `src/api/`：
 - 旧外卖与通用：`customer.js`、`customer-order.js`、`cart.js`、`address.js`、`order.js`、`statistics.js`、`shop.js` 等。
 - 共享 axios 实例在 `src/utils/request.js`，负责按 URL 前缀附加对应 token，并在 401 时清理对应 token 后跳转到角色登录页。
 
+状态管理位于 `src/stores/`：
+- `user.js`：admin 状态（employee）。
+- `customer.js`：customer 状态与 onboarding 流程。
+- `courier.js`：courier 状态与 workbench 数据。
+- `mock.js`：模拟支付与资金流状态。
+
 `VITE_APP_SHELL` 控制构建壳：标准 dev 下三种角色都可访问；Android user / parttime 模式分别输出到 `dist-android-user`、`dist-android-parttime`。
 
 ## 移动端架构

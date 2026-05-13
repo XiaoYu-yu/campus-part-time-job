@@ -8,7 +8,7 @@
             <span>校内代送</span>
             <span>一键发布</span>
           </h1>
-          <p>发布校园代送需求、查看订单结果，也可以申请成为兼职人员。</p>
+          <p>想让同学帮忙取餐、送东西，或者自己想接单赚点零花钱，都从这里开始。</p>
         </div>
         <div class="hero-illustration" aria-hidden="true">
           <span class="campus-building"></span>
@@ -23,39 +23,39 @@
             <span>今日校园服务已开启</span>
           </div>
           <div class="status-metrics">
-            <span><strong>发布</strong>代送需求</span>
-            <span><strong>回看</strong>订单结果</span>
-            <span><strong>申请</strong>兼职入驻</span>
+            <span><strong>发布</strong>代送单</span>
+            <span><strong>查看</strong>订单进度</span>
+            <span><strong>报名</strong>接单兼职</span>
           </div>
         </div>
       </section>
 
       <button class="primary-banner-action" type="button" @click="goTo('/user/campus/orders')">
         <span>➤</span>
-        发布校园代送需求
-        <small>填写取件与送达信息</small>
+        发一单校园代送
+        <small>填取餐点和送达位置</small>
       </button>
 
       <section class="quick-grid">
         <button class="quick-card" type="button" @click="goTo('/user/campus/orders')">
           <span class="quick-icon order">▣</span>
-          <strong>发布代送需求</strong>
-          <p>取餐点、楼栋与备注一页填写。</p>
+          <strong>发布代送单</strong>
+          <p>取餐点、宿舍楼、备注一次填好。</p>
         </button>
         <button class="quick-card" type="button" @click="goTo('/user/campus/order-result')">
           <span class="quick-icon result">☑</span>
-          <strong>查看我的订单</strong>
-          <p>按订单号回看确认与完成状态。</p>
+          <strong>查看订单进度</strong>
+          <p>输入订单号，看是否送达和完成。</p>
         </button>
         <button class="quick-card" type="button" @click="goTo('/user/campus/courier-onboarding')">
           <span class="quick-icon onboard">✦</span>
-          <strong>申请成为兼职人员</strong>
-          <p>提交资料，通过后申请兼职 token。</p>
+          <strong>报名做兼职</strong>
+          <p>填资料，审核通过后就能接单。</p>
         </button>
         <button class="quick-card" type="button" @click="goTo('/parttime/login')">
           <span class="quick-icon workbench">↗</span>
           <strong>兼职端登录</strong>
-          <p>已审核人员进入工作台接任务。</p>
+          <p>审核通过后，到这里接单干活。</p>
         </button>
       </section>
 
@@ -63,7 +63,7 @@
         <div>
           <span>校园代送主入口</span>
           <h2>从校内取件到宿舍送达</h2>
-          <p>模拟支付只用于流程演示，不产生真实扣费。</p>
+          <p>这里先走模拟支付，不会真的扣钱。</p>
         </div>
         <button type="button" @click="goTo('/user/campus/orders')">立即使用</button>
       </section>
@@ -72,21 +72,21 @@
         <div class="section-heading">
           <div>
             <span>订单结果</span>
-            <h2>快速回看校园代送单</h2>
+            <h2>查一下我的代送单</h2>
           </div>
         </div>
         <div class="order-search">
           <el-input v-model="orderId" placeholder="输入订单号，例如 CR202604060001" clearable @keyup.enter="openOrderResult" />
-          <el-button type="primary" @click="openOrderResult">回看</el-button>
+          <el-button type="primary" @click="openOrderResult">查询</el-button>
         </div>
-        <p class="helper-text">只读跳转到结果回看页，不触发确认、售后或其它写操作。</p>
+        <p class="helper-text">这里只会打开订单详情，不会自动确认或发起售后。</p>
       </section>
 
       <section class="card status-card">
         <div class="section-heading">
           <div>
             <span>兼职入驻</span>
-            <h2>当前申请状态</h2>
+            <h2>我的兼职报名</h2>
           </div>
           <button class="text-link" type="button" @click="refreshOnboardingStatus">刷新</button>
         </div>
@@ -94,14 +94,14 @@
         <div v-if="statusLoading" class="state-row">
           <span class="state-dot loading"></span>
           <div>
-            <strong>正在读取入驻状态</strong>
-            <p>正在调用 customer onboarding 读取接口。</p>
+            <strong>正在读取报名状态</strong>
+            <p>正在看看你的报名资料有没有更新。</p>
           </div>
         </div>
         <div v-else-if="statusError" class="state-row warning">
           <span class="state-dot warning"></span>
           <div>
-            <strong>暂未读取到状态</strong>
+            <strong>暂时没拿到报名状态</strong>
             <p>{{ statusError }}</p>
           </div>
         </div>
@@ -111,14 +111,14 @@
             <strong>{{ statusLabel(reviewStatus.reviewStatus) }}</strong>
           </div>
           <div class="summary-item">
-            <span>token 资格</span>
+            <span>接单资格</span>
             <strong>{{ eligibility.eligible ? '可以申请' : '暂不可申请' }}</strong>
           </div>
-          <p>{{ eligibility.message || reviewStatus.message || '可进入入驻页查看资料、审核状态和 token 申请入口。' }}</p>
+          <p>{{ eligibility.message || reviewStatus.message || '可以进入报名页查看资料、审核状态和接单资格。' }}</p>
         </div>
 
         <button class="wide-action" type="button" @click="goTo('/user/campus/courier-onboarding')">
-          进入兼职入驻页
+          去报名兼职
         </button>
       </section>
 
@@ -129,7 +129,7 @@
             <h2>兼容功能仍保留</h2>
           </div>
         </div>
-        <p>旧分类、购物车、历史订单和地址能力未删除，当前仅从首页主视觉中降级为兼容入口。</p>
+        <p>旧分类、购物车、历史订单和地址能力还保留着，只是不作为现在的主入口。</p>
         <div class="legacy-links">
           <button type="button" @click="goTo('/user/category')">分类</button>
           <button type="button" @click="goTo('/user/cart')">购物车</button>
@@ -209,21 +209,22 @@ onMounted(() => {
 <style scoped lang="scss">
 .home-page {
   padding: 14px 14px 24px;
+  overflow-x: hidden;
 }
 
 .hero-card,
 .card,
 .quick-card,
 .campus-entry-card {
-  border: 1px solid #e4e4e7;
   background: #ffffff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e4e4e7;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 .hero-card {
   position: relative;
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 14px;
   padding: 22px 18px 16px;
   margin-bottom: 16px;
   background: linear-gradient(135deg, #eefdfa, #f0fdfa);
@@ -239,6 +240,7 @@ onMounted(() => {
     line-height: 1.15;
     letter-spacing: -0.5px;
     color: #18181b;
+    font-weight: 700;
   }
 
   p {
@@ -254,7 +256,7 @@ onMounted(() => {
 .hero-copy {
   position: relative;
   z-index: 2;
-  max-width: 76%;
+  max-width: 100%;
 }
 
 .hero-kicker,
@@ -266,59 +268,15 @@ onMounted(() => {
 }
 
 .hero-illustration {
-  position: absolute;
-  right: 14px;
-  top: 24px;
-  width: 130px;
-  height: 112px;
-  z-index: 1;
-  opacity: 0.6;
+  display: none;
 }
 
-.campus-building {
-  position: absolute;
-  right: 8px;
-  bottom: 18px;
-  width: 76px;
-  height: 56px;
-  border-radius: 14px 14px 10px 10px;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.62) 1px, transparent 1px) 0 0 / 18px 100%,
-    linear-gradient(180deg, #c7f2ff, #f7ffff);
-  box-shadow: 0 4px 12px rgba(28, 128, 160, 0.1);
-}
-
-.route-dot {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #21c4b6;
-  box-shadow: 0 0 0 5px rgba(33, 196, 182, 0.1);
-}
-
-.dot-a {
-  left: 12px;
-  top: 26px;
-}
-
-.dot-b {
-  right: 14px;
-  bottom: 8px;
-  background: #28aef5;
-  box-shadow: 0 0 0 5px rgba(40, 174, 245, 0.1);
-}
-
+.campus-building,
+.route-dot,
+.dot-a,
+.dot-b,
 .route-line {
-  position: absolute;
-  left: 28px;
-  right: 28px;
-  top: 48px;
-  height: 46px;
-  border: 2px dashed rgba(15, 118, 110, 0.15);
-  border-top: 0;
-  border-left: 0;
-  border-radius: 0 0 40px 0;
+  display: none;
 }
 
 .status-panel {
@@ -329,8 +287,10 @@ onMounted(() => {
   gap: 12px;
   margin-top: 18px;
   padding: 14px;
-  border-radius: 14px;
-  background: #fafafa;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid #e4e4e7;
 }
 
@@ -343,6 +303,7 @@ onMounted(() => {
   background: #eefdfa;
   color: #0f9f8f;
   font-weight: 900;
+  flex-shrink: 0;
 }
 
 .status-copy {
@@ -397,6 +358,18 @@ onMounted(() => {
 .wide-action {
   background: #0f9f8f;
   color: #fff;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.primary-banner-action:hover,
+.wide-action:hover {
+  background: #0d8a7e;
+  box-shadow: 0 4px 14px rgba(15, 159, 143, 0.3);
+}
+
+.primary-banner-action:active,
+.wide-action:active {
+  background: #0b7a70;
 }
 
 .primary-banner-action {
@@ -446,6 +419,11 @@ onMounted(() => {
   border-radius: 14px;
   padding: 14px;
   color: #18181b;
+  transition: box-shadow 0.2s, transform 0.15s;
+
+  &:active {
+    transform: scale(0.98);
+  }
 
   strong {
     font-size: 15px;
@@ -494,7 +472,6 @@ onMounted(() => {
   border-radius: 14px;
   padding: 16px;
   margin-bottom: 16px;
-  background: #ffffff;
 
   span {
     color: #0f9f8f;
@@ -524,6 +501,12 @@ onMounted(() => {
     color: #0f9f8f;
     font-weight: 700;
     font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:active {
+      background: rgba(15, 159, 143, 0.2);
+    }
   }
 }
 
@@ -600,10 +583,16 @@ onMounted(() => {
 
 .state-dot.loading {
   background: #3b82f6;
+  animation: spin 1s linear infinite;
 }
 
 .state-dot.warning {
   background: #f59e0b;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .onboarding-summary {
@@ -633,6 +622,7 @@ onMounted(() => {
 
 .wide-action {
   width: 100%;
+  min-height: 48px;
   margin-top: 14px;
   border-radius: 12px;
   padding: 12px 16px;
@@ -658,6 +648,13 @@ onMounted(() => {
     padding: 11px;
     font-weight: 700;
     font-size: 14px;
+    min-height: 44px;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:active {
+      background: #f4f4f5;
+    }
   }
 }
 
@@ -668,22 +665,54 @@ onMounted(() => {
   }
 }
 
-@media (max-width: 390px) {
+@media (max-width: 480px) {
+  .quick-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .order-search {
+    grid-template-columns: 1fr;
+  }
+
+  .legacy-links {
+    grid-template-columns: 1fr;
+  }
+
+  .status-metrics {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .home-page {
+    padding: 10px 10px 20px;
+  }
+
   .hero-card {
-    padding: 20px 16px 16px;
+    padding: 18px 14px 14px;
 
     h1 {
       font-size: 24px;
     }
   }
 
-  .hero-copy {
-    max-width: 78%;
+  .card {
+    padding: 14px 12px;
   }
 
-  .hero-illustration {
-    right: 8px;
-    width: 112px;
+  .quick-card {
+    padding: 12px;
+  }
+
+  .campus-entry-card {
+    padding: 14px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+
+    button {
+      align-self: stretch;
+      text-align: center;
+    }
   }
 }
 </style>

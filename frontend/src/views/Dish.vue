@@ -3,188 +3,178 @@
   @description 旧模块兼容 — 商品管理，保留旧模块兼容能力，不作为当前校园兼职主业务入口
 -->
 <template>
-  <div class="dish-management">
-    <div class="compat-notice">
-      <el-alert type="info" :closable="false" show-icon>
-        <template #title>
-          该页面保留旧模块兼容能力，不作为当前校园兼职主业务入口。
-        </template>
-      </el-alert>
-    </div>
-    <h2>商品兼容管理</h2>
-    <div class="content">
-      <!-- 搜索和筛选 -->
-      <div class="search-filter">
-        <el-input
-          v-model="searchForm.name"
-          placeholder="请输入菜品名称"
-          style="width: 200px; margin-right: 10px"
-          clearable
-          @keyup.enter="handleSearch"
-        >
-          <template #prefix>
-            <el-icon><Search /></el-icon>
-          </template>
-        </el-input>
-        <el-select
-          v-model="searchForm.categoryId"
-          placeholder="请选择分类"
-          style="width: 150px; margin-right: 10px"
-          clearable
-        >
-          <el-option
-            v-for="category in categories"
-            :key="category.id"
-            :label="category.name"
-            :value="category.id"
-          />
-        </el-select>
-        <el-button type="primary" @click="handleSearch">搜索</el-button>
-        <el-button type="primary" @click="handleAdd" style="margin-left: 10px;">
-          <el-icon><Plus /></el-icon>
-          新增菜品
-        </el-button>
-      </div>
+  <MainLayout>
+    <div class="dish-management">
+      <section class="page-hero">
+        <div>
+          <span class="eyebrow">Legacy Compat</span>
+          <h2>商品管理</h2>
+          <p>旧模块兼容 — 维护菜品商品信息，保留旧模块兼容能力。</p>
+        </div>
+        <div class="hero-notes">
+          <span>旧模块</span>
+          <strong>dish</strong>
+        </div>
+      </section>
 
-      <!-- 批量操作 -->
-      <div class="batch-actions" style="margin: 20px 0;">
-        <el-button
-          type="primary"
-          :disabled="selectedDishes.length === 0"
-          @click="handleBatchEnable"
-        >
-          批量启用
-        </el-button>
-        <el-button
-          type="danger"
-          :disabled="selectedDishes.length === 0"
-          @click="handleBatchDisable"
-        >
-          批量禁用
-        </el-button>
-      </div>
-
-      <!-- 菜品列表 -->
-      <el-table
-        v-loading="loading"
-        :data="dishList"
-        style="width: 100%"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column type="selection" width="55" />
-        <el-table-column prop="id" label="菜品ID" width="80" />
-        <el-table-column prop="name" label="菜品名称" width="150" />
-        <el-table-column label="菜品图片" width="120">
-          <template #default="scope">
-            <el-image
-              :src="scope.row.image"
-              fit="cover"
-              style="width: 80px; height: 80px; border-radius: 4px"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column label="分类" width="100">
-          <template #default="scope">
-            {{ scope.row.categoryName || getCategoryName(scope.row.categoryId) }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="price" label="价格" width="100">
-          <template #default="scope">
-            ¥{{ Number(scope.row.price).toFixed(2) }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="status" label="状态" width="100">
-          <template #default="scope">
-            <el-switch
-              v-model="scope.row.status"
-              :active-value="1"
-              :inactive-value="0"
-              @change="handleStatusChange(scope.row.id, scope.row.status)"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column prop="description" label="描述" show-overflow-tooltip />
-        <el-table-column prop="createdAt" label="创建时间" width="180">
-          <template #default="scope">
-            {{ formatDateTime(scope.row.createdAt) }}
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="150">
-          <template #default="scope">
-            <el-button size="small" type="primary" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button size="small" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-
-      <!-- 分页 -->
-      <div class="pagination" style="margin-top: 20px; text-align: right;">
-        <el-pagination
-          v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :page-sizes="[10, 20, 50, 100]"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
-      </div>
-
-      <!-- 新增/编辑菜品弹窗 -->
-      <el-dialog
-        v-model="dialogVisible"
-        :title="dialogTitle"
-        width="600px"
-      >
-        <el-form :model="form" label-width="100px" :rules="formRules" ref="formRef">
-          <el-form-item label="菜品名称" prop="name">
-            <el-input v-model="form.name" placeholder="请输入菜品名称" />
-          </el-form-item>
-          <el-form-item label="分类" prop="categoryId">
-            <el-select v-model="form.categoryId" placeholder="请选择分类" style="width: 100%;">
-              <el-option
-                v-for="category in categories"
-                :key="category.id"
-                :label="category.name"
-                :value="category.id"
-              />
+      <div class="content">
+        <div class="toolbar-card">
+          <div class="toolbar-copy">
+            <span class="section-kicker">筛选与维护</span>
+            <h3>按名称或分类定位商品</h3>
+          </div>
+          <div class="search-section">
+            <el-input v-model="searchForm.name" class="staff-search" placeholder="请输入菜品名称" clearable @keyup.enter="handleSearch">
+              <template #append>
+                <el-button @click="handleSearch">
+                  <el-icon><Search /></el-icon>
+                  搜索
+                </el-button>
+              </template>
+            </el-input>
+            <el-select v-model="searchForm.categoryId" placeholder="请选择分类" clearable style="width: 150px;">
+              <el-option v-for="category in categories" :key="category.id" :label="category.name" :value="category.id" />
             </el-select>
-          </el-form-item>
-          <el-form-item label="价格" prop="price">
-            <el-input-number v-model="form.price" :min="0" :precision="2" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="图片" prop="image">
-            <el-upload
-              class="image-uploader"
-              :show-file-list="false"
-              :http-request="handleUpload"
-              accept="image/*"
-            >
-              <el-image
-                v-if="form.image"
-                :src="form.image"
-                fit="cover"
-                class="uploaded-image"
-              />
-              <div v-else class="upload-placeholder">
-                <el-icon><Plus /></el-icon>
-                <span>点击上传图片</span>
-              </div>
-            </el-upload>
-          </el-form-item>
-          <el-form-item label="描述" prop="description">
-            <el-input v-model="form.description" type="textarea" rows="3" placeholder="请输入描述" />
-          </el-form-item>
-        </el-form>
-        <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="handleSave" :loading="saveLoading">保存</el-button>
-          </span>
-        </template>
-      </el-dialog>
+            <el-button type="primary" class="add-button" @click="handleAdd">
+              <el-icon><Plus /></el-icon>
+              新增菜品
+            </el-button>
+          </div>
+        </div>
+
+        <!-- 批量操作 -->
+        <div class="batch-card">
+          <el-button type="primary" :disabled="selectedDishes.length === 0" @click="handleBatchEnable">批量启用</el-button>
+          <el-button type="danger" plain :disabled="selectedDishes.length === 0" @click="handleBatchDisable">批量禁用</el-button>
+          <span class="batch-hint" v-if="selectedDishes.length > 0">已选 {{ selectedDishes.length }} 项</span>
+        </div>
+
+        <div class="table-card">
+          <div class="table-heading">
+            <div>
+              <span class="section-kicker">商品列表</span>
+              <h3>全部菜品</h3>
+            </div>
+            <el-tag type="info" effect="plain">共 {{ total }} 件</el-tag>
+          </div>
+          <el-table v-loading="loading" :data="dishList" class="campus-table" style="width: 100%" @selection-change="handleSelectionChange" empty-text="暂无菜品数据">
+            <el-table-column type="selection" width="55" />
+            <el-table-column prop="id" label="菜品ID" width="80" />
+            <el-table-column prop="name" label="菜品名称" width="150" />
+            <el-table-column label="菜品图片" width="120">
+              <template #default="scope">
+                <el-image
+                  :src="scope.row.image"
+                  fit="cover"
+                  style="width: 80px; height: 80px; border-radius: 4px"
+                />
+              </template>
+            </el-table-column>
+            <el-table-column label="分类" width="100">
+              <template #default="scope">
+                {{ scope.row.categoryName || getCategoryName(scope.row.categoryId) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="price" label="价格" width="100">
+              <template #default="scope">
+                ¥{{ Number(scope.row.price).toFixed(2) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="status" label="状态" width="100">
+              <template #default="scope">
+                <el-switch
+                  v-model="scope.row.status"
+                  :active-value="1"
+                  :inactive-value="0"
+                  @change="handleStatusChange(scope.row.id, scope.row.status)"
+                />
+              </template>
+            </el-table-column>
+            <el-table-column prop="description" label="描述" show-overflow-tooltip />
+            <el-table-column prop="createdAt" label="创建时间" width="180">
+              <template #default="scope">
+                {{ formatDateTime(scope.row.createdAt) }}
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="150">
+              <template #default="scope">
+                <el-button size="small" type="primary" @click="handleEdit(scope.row)">编辑</el-button>
+                <el-button size="small" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+
+        <!-- 分页 -->
+        <div class="pagination-section">
+          <el-pagination
+            v-model:current-page="currentPage"
+            v-model:page-size="pageSize"
+            :page-sizes="[10, 20, 50, 100]"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
+        </div>
+
+        <!-- 新增/编辑菜品弹窗 -->
+        <el-dialog
+          v-model="dialogVisible"
+          :title="dialogTitle"
+          width="600px"
+          class="dish-dialog"
+        >
+          <el-form :model="form" label-width="100px" :rules="formRules" ref="formRef">
+            <el-form-item label="菜品名称" prop="name">
+              <el-input v-model="form.name" placeholder="请输入菜品名称" />
+            </el-form-item>
+            <el-form-item label="分类" prop="categoryId">
+              <el-select v-model="form.categoryId" placeholder="请选择分类" style="width: 100%;">
+                <el-option
+                  v-for="category in categories"
+                  :key="category.id"
+                  :label="category.name"
+                  :value="category.id"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="价格" prop="price">
+              <el-input-number v-model="form.price" :min="0" :precision="2" style="width: 100%;" />
+            </el-form-item>
+            <el-form-item label="图片" prop="image">
+              <el-upload
+                class="image-uploader"
+                :show-file-list="false"
+                :http-request="handleUpload"
+                accept="image/*"
+              >
+                <el-image
+                  v-if="form.image"
+                  :src="form.image"
+                  fit="cover"
+                  class="uploaded-image"
+                />
+                <div v-else class="upload-placeholder">
+                  <el-icon><Plus /></el-icon>
+                  <span>点击上传图片</span>
+                </div>
+              </el-upload>
+            </el-form-item>
+            <el-form-item label="描述" prop="description">
+              <el-input v-model="form.description" type="textarea" rows="3" placeholder="请输入描述" />
+            </el-form-item>
+          </el-form>
+          <template #footer>
+            <span class="dialog-footer">
+              <el-button @click="dialogVisible = false">取消</el-button>
+              <el-button type="primary" @click="handleSave" :loading="saveLoading">保存</el-button>
+            </span>
+          </template>
+        </el-dialog>
+      </div>
     </div>
-  </div>
+  </MainLayout>
 </template>
 
 <script setup>
@@ -195,6 +185,7 @@
 import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search, Plus } from '@element-plus/icons-vue'
+import MainLayout from '../layout/MainLayout.vue'
 import {
   getDishList,
   addDish,
@@ -564,35 +555,208 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .dish-management {
-  .compat-notice {
-    margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+
+  .page-hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    min-height: 170px;
+    padding: 34px 40px;
+    border: 1px solid rgba(15, 118, 110, 0.12);
+    border-radius: 28px;
+    background:
+      radial-gradient(circle at 86% 18%, rgba(132, 204, 22, 0.28), transparent 28%),
+      radial-gradient(circle at 16% 20%, rgba(14, 165, 233, 0.16), transparent 32%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(236, 253, 245, 0.86) 54%, rgba(224, 242, 254, 0.86) 100%);
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.09);
+    color: #0f172a;
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: -80px;
+      bottom: -110px;
+      width: 270px;
+      height: 270px;
+      border-radius: 50%;
+      border: 38px solid rgba(15, 118, 110, 0.07);
+    }
+
+    h2 {
+      position: relative;
+      margin: 8px 0 10px;
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    p {
+      position: relative;
+      max-width: 560px;
+      margin: 0;
+      color: #475569;
+      font-size: 15px;
+      line-height: 1.8;
+    }
   }
 
-  h2 {
-    margin-bottom: 20px;
-    color: #303133;
+  .eyebrow,
+  .section-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #0f766e;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .hero-notes {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 4px;
+    min-width: 142px;
+    padding: 18px 20px;
+    border: 1px solid rgba(15, 118, 110, 0.12);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(14px);
+
+    span {
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    strong {
+      color: #0f172a;
+      font-size: 20px;
+      letter-spacing: 0.02em;
+    }
   }
 
   .content {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
   }
 
-  .search-filter {
-    margin-bottom: 20px;
+  .toolbar-card,
+  .table-card,
+  .batch-card {
+    border: 1px solid rgba(15, 118, 110, 0.1);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
   }
 
-  .batch-actions {
-    margin: 20px 0;
+  .toolbar-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 24px;
+
+    h3 {
+      margin: 6px 0 6px;
+      color: #0f172a;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    p {
+      margin: 0;
+      color: #64748b;
+      font-size: 13px;
+    }
   }
 
-  .pagination {
-    margin-top: 20px;
-    text-align: right;
+  .search-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+
+    .staff-search {
+      width: 320px;
+    }
+
+    .add-button {
+      min-width: 142px;
+      border: none;
+      background: linear-gradient(135deg, #0f766e, #0ea5e9);
+      box-shadow: 0 12px 24px rgba(14, 165, 233, 0.22);
+    }
+  }
+
+  .batch-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    border-radius: 20px;
+
+    .batch-hint {
+      color: #0f766e;
+      font-size: 13px;
+      font-weight: 700;
+      margin-left: 4px;
+    }
+  }
+
+  .table-card {
+    padding: 22px 24px 16px;
+  }
+
+  .table-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+
+    h3 {
+      margin: 6px 0 0;
+      color: #0f172a;
+      font-size: 20px;
+      font-weight: 900;
+    }
+  }
+
+  .campus-table {
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+
+    :deep(.el-table__header-wrapper th) {
+      background: #f8fafc;
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    :deep(.el-table__row) {
+      color: #334155;
+    }
+
+    :deep(.el-table__cell) {
+      border-bottom-color: #edf2f7;
+    }
+  }
+
+  .pagination-section {
+    padding: 4px 2px 0;
+    display: flex;
+    justify-content: flex-end;
   }
 
   .dialog-footer {
@@ -637,6 +801,25 @@ onMounted(() => {
 
       span {
         font-size: 14px;
+      }
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .dish-management {
+    .page-hero,
+    .toolbar-card {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .search-section {
+      justify-content: flex-start;
+      width: 100%;
+
+      .staff-search {
+        width: 100%;
       }
     }
   }

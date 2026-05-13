@@ -42,6 +42,7 @@
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useCourierStore } from '../stores/courier'
+import '../styles/mobile-theme.css'
 
 const router = useRouter()
 const courierStore = useCourierStore()
@@ -56,21 +57,24 @@ const handleLogout = () => {
 <style scoped lang="scss">
 .parttime-layout {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   background: #f5f5f5;
-  color: #102a43;
+  color: #18181b;
+  overflow-x: hidden;
 }
 
 .parttime-header {
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 12px 16px;
+  gap: 12px;
+  padding: env(safe-area-inset-top, 0px) 16px 0;
+  min-height: calc(56px + env(safe-area-inset-top, 0px));
   background: #ffffff;
   border-bottom: 1px solid #e4e4e7;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
@@ -80,6 +84,8 @@ const handleLogout = () => {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
+  flex: 1;
 }
 
 .brand-mark {
@@ -92,19 +98,26 @@ const handleLogout = () => {
   color: #fff;
   font-weight: 800;
   font-size: 16px;
-  background: #0f9f8f;
+  background: linear-gradient(135deg, #0f9f8f, #14b8a6);
+  flex-shrink: 0;
 }
 
 .brand h1 {
   margin: 0;
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .brand p {
   margin: 2px 0 0;
   color: #71717a;
   font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .logout-btn {
@@ -115,13 +128,20 @@ const handleLogout = () => {
   color: #0f9f8f;
   cursor: pointer;
   font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  min-height: 36px;
+  transition: background 0.15s ease;
+
+  &:active {
+    background: #f5f5f5;
+  }
 }
 
 .parttime-main {
   flex: 1;
-  width: min(520px, 100%);
-  margin: 0 auto;
   padding: 14px 14px 80px;
+  overflow-x: hidden;
 }
 
 .parttime-nav {
@@ -129,13 +149,14 @@ const handleLogout = () => {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 30;
+  z-index: 100;
   display: flex;
   justify-content: space-around;
   height: 56px;
   border-top: 1px solid #e4e4e7;
   background: #ffffff;
   box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.04);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .nav-item {
@@ -148,8 +169,9 @@ const handleLogout = () => {
   text-decoration: none;
   color: #71717a;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 11px;
   padding: 4px 0;
+  transition: color 0.15s ease;
 }
 
 .nav-item.active {
@@ -161,24 +183,43 @@ const handleLogout = () => {
   height: 24px;
   display: grid;
   place-items: center;
+  transition: color 0.15s ease;
 
   svg {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
   }
 }
 
+.nav-item.active .nav-icon {
+  color: #0f9f8f;
+}
+
 @media (max-width: 640px) {
+  .brand p {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
   .parttime-header {
-    padding: 12px 14px;
+    max-width: 520px;
+    width: 100%;
+    margin: 0 auto;
   }
 
   .parttime-main {
-    padding: 12px 12px 76px;
+    max-width: 520px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 14px 14px 80px;
   }
 
-  .brand p {
-    display: none;
+  .parttime-nav {
+    left: 50%;
+    right: auto;
+    width: min(520px, 100%);
+    transform: translateX(-50%);
   }
 }
 </style>

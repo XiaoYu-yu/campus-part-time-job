@@ -5,18 +5,18 @@
         <div>
           <div class="title-row">
             <h2>兼职工作台</h2>
-            <span class="readonly-badge">最小承接</span>
+            <span class="readonly-badge">接单中</span>
           </div>
-          <p>这是兼职端独立登录后的最小承接页。当前已补到接单、详情、取餐、送达和异常上报的最小闭环，但仍不扩完整兼职主工作流。</p>
+          <p>这里可以看可接任务、接单、取餐、送达，也能在路上遇到问题时上报异常。</p>
         </div>
         <div class="token-pill" :class="hasCourierToken ? 'active' : 'inactive'">
-          {{ hasCourierToken ? '兼职 token 已就绪' : '兼职 token 缺失' }}
+          {{ hasCourierToken ? '已登录兼职端' : '请先登录' }}
         </div>
       </section>
 
       <el-alert
-        :title="hasCourierToken ? '当前浏览器已检测到兼职 token，可继续查看兼职侧只读承接信息。' : '当前浏览器未检测到兼职 token，请先登录兼职端或返回入驻入口申请。'"
-        :description="hasCourierToken ? '页面会自动读取兼职资料、审核状态和可接单预览。' : '没有兼职 token 时，本页不会调用 courier 业务接口，只展示回退入口。'"
+        :title="hasCourierToken ? '登录状态正常，可以继续接单。' : '还没有登录兼职端，请先登录或去报名。'"
+        :description="hasCourierToken ? '页面会自动刷新你的资料、审核状态和可接任务。' : '登录后才能查看可接任务和订单详情。'"
         :type="hasCourierToken ? 'success' : 'warning'"
         :closable="false"
         show-icon
@@ -38,7 +38,7 @@
             <strong>{{ Number(reviewStatus.enabled ?? profile.enabled) === 1 ? '可工作' : '待启用' }}</strong>
           </div>
           <div class="status-tile issue">
-            <span>Token</span>
+            <span>登录</span>
             <strong>有效</strong>
           </div>
         </section>
@@ -47,14 +47,14 @@
           <div class="section-header">
             <div>
               <h3>身份状态卡</h3>
-              <p>优先展示本地 courier_profile 摘要，并在页面加载时刷新最新 profile / review-status。</p>
+              <p>这里展示你的兼职资料和最新审核状态。</p>
             </div>
             <el-button type="primary" plain :loading="loading" @click="loadWorkbench">刷新工作台</el-button>
           </div>
 
           <div class="summary-grid">
             <div class="summary-item">
-              <span>courierProfileId</span>
+              <span>兼职资料编号</span>
               <strong>{{ displayText(profile.id) }}</strong>
             </div>
             <div class="summary-item">
@@ -74,7 +74,7 @@
               <strong>{{ displayText(reviewStatus.reviewComment || profile.reviewComment) }}</strong>
             </div>
             <div class="summary-item">
-              <span>token 状态</span>
+              <span>登录状态</span>
               <strong>{{ tokenPreview }}</strong>
             </div>
           </div>
@@ -83,15 +83,15 @@
         <section class="card">
           <div class="section-header">
             <div>
-              <h3>可接单预览</h3>
-              <p>调用 `GET /api/campus/courier/orders/available`，本轮补一个最小接单动作，成功后直接刷新当前预览列表。</p>
+              <h3>可接任务</h3>
+              <p>附近还没人接的代送单会出现在这里，接单成功后列表会自动刷新。</p>
             </div>
             <el-button text type="primary" :loading="loading" @click="loadWorkbench">刷新列表</el-button>
           </div>
 
           <div class="table-note">
             <strong>接单提示</strong>
-            <span>可接任务会以卡片展示；为空时可通过下方订单号回读入口查看已完成样本。</span>
+            <span>看到合适的任务就可以接；暂时没有的话，稍后刷新看看。</span>
           </div>
 
           <div
@@ -100,7 +100,7 @@
           >
             <el-empty
               v-if="!loading && availableOrders.length === 0"
-              description="当前暂无可接任务，稍后刷新或用订单号回读样本"
+              description="当前暂无可接任务，稍后刷新看看"
             />
 
             <article v-for="order in availableOrders" :key="order.id" class="task-card">
@@ -114,7 +114,7 @@
               </div>
               <div class="task-meta">
                 <span>状态：{{ displayText(order.status) }}</span>
-                <span>当前可接</span>
+                <span>可接单</span>
               </div>
               <div class="task-actions">
                 <el-button @click="openOrderDetail(order.id)">查看详情</el-button>
@@ -134,13 +134,13 @@
           <div class="section-header">
             <div>
               <h3>快捷入口</h3>
-              <p>本轮继续保持最小承接，除了刷新和回退，还补一个“按订单号查看详情”的只读回读入口，便于验证 completed 态。</p>
+              <p>可以刷新工作台，也可以输入订单号直接查看这单的详情。</p>
             </div>
           </div>
           <div class="lookup-panel">
             <el-input
               v-model="detailLookupId"
-              placeholder="输入订单号后直接查看详情，例如 CR202604060001"
+              placeholder="输入订单号查看详情，例如 CR202604060001"
               clearable
             />
             <el-button
@@ -168,7 +168,7 @@
             <template v-if="orderDetail.id">
               <div class="detail-status-card">
                 <div>
-                  <span>当前订单</span>
+                  <span>订单号</span>
                   <strong>{{ displayText(orderDetail.id) }}</strong>
                 </div>
                 <el-tag :type="isCompletedOrder ? 'success' : isAwaitingConfirmation ? 'warning' : 'info'">
@@ -178,7 +178,7 @@
 
               <div class="drawer-section-title">
                 <h4>订单基本信息</h4>
-                <p>以下字段均来自 courier 订单详情读取接口，本轮只做展示分组，不改变字段来源。</p>
+                <p>这单的取餐、送达、金额和时间信息都在这里。</p>
               </div>
 
               <div class="summary-grid detail-summary-grid">
@@ -211,7 +211,7 @@
                   <strong>{{ displayText(orderDetail.pickupCode) }}</strong>
                 </div>
                 <div class="summary-item">
-                  <span>customer 备注</span>
+                  <span>下单备注</span>
                   <strong>{{ displayText(orderDetail.customerRemark) }}</strong>
                 </div>
                 <div class="summary-item">
@@ -239,7 +239,7 @@
                   <strong>{{ displayText(orderDetail.updatedAt) }}</strong>
                 </div>
                 <div class="summary-item">
-                  <span>当前 courierProfileId</span>
+                  <span>兼职资料编号</span>
                   <strong>{{ displayText(orderDetail.courierProfileId) }}</strong>
                 </div>
               </div>
@@ -247,24 +247,24 @@
               <div class="pickup-section">
                 <div class="pickup-header">
                   <div>
-                    <h4>最小取餐承接</h4>
-                    <p>当前后端要求上传受控文件路径作为取餐凭证，例如 `/api/files/...`。本轮只补一个最小输入区，不新开页面。</p>
+                    <h4>确认取餐</h4>
+                    <p>拿到餐后，上传或填写一张取餐凭证，方便后面核对。</p>
                   </div>
                   <el-tag :type="canPickupOrder ? 'success' : 'info'">
-                    {{ canPickupOrder ? '当前订单可尝试取餐' : '当前订单状态暂不支持取餐' }}
+                    {{ canPickupOrder ? '现在可以确认取餐' : '这单现在还不能取餐' }}
                   </el-tag>
                 </div>
 
                 <el-form label-position="top" class="pickup-form">
-                  <el-form-item label="取餐凭证路径">
+                  <el-form-item label="取餐凭证图片地址">
                     <el-input
                       v-model="pickupForm.pickupProofImageUrl"
                       :disabled="!canPickupOrder || pickupSubmitting"
-                      placeholder="请输入受控文件路径，例如 /api/files/campus/pickup-proof/xxx.jpg"
+                      placeholder="测试时可填 /api/files/android-smoke-pickup.jpg"
                       clearable
                     />
                   </el-form-item>
-                  <el-form-item label="courier 备注">
+                  <el-form-item label="取餐备注">
                     <el-input
                       v-model="pickupForm.courierRemark"
                       type="textarea"
@@ -289,11 +289,11 @@
               <div class="deliver-section">
                 <div class="pickup-header">
                   <div>
-                    <h4>最小送达承接</h4>
-                    <p>当前后端 `deliver` 接口会按真实状态推进：`PICKED_UP -> DELIVERING`，`DELIVERING -> AWAITING_CONFIRMATION`。本轮只补一个最小 remark 输入区。</p>
+                    <h4>配送与送达</h4>
+                    <p>取餐后先开始配送，送到后再确认送达。用户确认后订单才会最终完成。</p>
                   </div>
                   <el-tag :type="canDeliverOrder ? 'success' : 'info'">
-                    {{ canDeliverOrder ? deliverActionLabel : '当前订单状态暂不支持推进送达流程' }}
+                    {{ canDeliverOrder ? deliverActionLabel : '这单现在还不能操作配送' }}
                   </el-tag>
                 </div>
 
@@ -333,7 +333,7 @@
 
                 <div class="summary-grid exception-grid">
                   <div class="summary-item">
-                    <span>当前订单状态</span>
+                    <span>订单状态</span>
                     <strong>{{ displayText(orderDetail.status) }}</strong>
                   </div>
                   <div class="summary-item">
@@ -368,7 +368,7 @@
                     <strong>{{ formatAmount(orderDetail.totalAmount) }}</strong>
                   </div>
                   <div class="summary-item">
-                    <span>customer 备注</span>
+                    <span>下单备注</span>
                     <strong>{{ displayText(orderDetail.customerRemark) }}</strong>
                   </div>
                   <div class="summary-item">
@@ -392,11 +392,11 @@
               <div class="exception-section">
                 <div class="pickup-header">
                   <div>
-                    <h4>最小异常上报承接</h4>
-                    <p>当前后端 `exception-report` 仅要求 `exceptionType` 和 `exceptionRemark`。本轮不扩历史表，只支持在允许阶段上报最新一次异常信息。</p>
+                    <h4>上报异常</h4>
+                    <p>联系不上、地址不清楚、商家缺货等情况，都可以先在这里说明。</p>
                   </div>
                   <el-tag :type="canReportException ? 'warning' : 'info'">
-                    {{ canReportException ? '当前订单可上报异常' : '当前订单状态暂不支持异常上报' }}
+                    {{ canReportException ? '这单可以上报异常' : '这单现在不能上报异常' }}
                   </el-tag>
                 </div>
 
@@ -420,7 +420,7 @@
                     <el-input
                       v-model="exceptionForm.exceptionType"
                       :disabled="!canReportException || exceptionSubmitting"
-                      placeholder="请输入最小异常类型，例如 联系不上 / 商家缺货 / 地址异常"
+                      placeholder="例如：联系不上 / 商家缺货 / 地址不清楚"
                       clearable
                     />
                   </el-form-item>
@@ -430,7 +430,7 @@
                       type="textarea"
                       :rows="3"
                       :disabled="!canReportException || exceptionSubmitting"
-                      placeholder="请输入异常说明，失败时会直接展示后端原错误信息"
+                      placeholder="简单说清楚发生了什么，方便后续处理"
                     />
                   </el-form-item>
                   <div class="pickup-actions">
@@ -440,21 +440,21 @@
                       :loading="exceptionSubmitting"
                       @click="reportException"
                     >
-                      提交异常上报
+                      提交异常
                     </el-button>
                   </div>
                 </el-form>
               </div>
             </template>
-            <el-empty v-else description="当前没有可展示的订单详情；可从可接单列表进入，或在快捷入口输入订单号回读。" />
+            <el-empty v-else description="还没有打开订单详情。可以从任务列表点进来，也可以输入订单号查看。" />
           </div>
         </el-drawer>
       </template>
 
       <section v-else class="card no-token-card">
-        <el-empty description="当前浏览器还没有兼职 token，暂时无法进入兼职工作台。">
+        <el-empty description="还没有登录兼职端，暂时不能查看工作台。">
           <el-button type="primary" @click="goToParttimeLogin">前往兼职端登录</el-button>
-          <el-button @click="goToOnboarding">返回入驻页面</el-button>
+          <el-button @click="goToOnboarding">去报名页</el-button>
           <el-button @click="goToProfile">查看兼职资料</el-button>
         </el-empty>
       </section>
@@ -547,13 +547,13 @@ const isAwaitingConfirmation = computed(() => orderDetail.status === 'AWAITING_C
 const isCompletedOrder = computed(() => orderDetail.status === 'COMPLETED')
 const showPostDeliveryStatus = computed(() => isAwaitingConfirmation.value || isCompletedOrder.value)
 const deliverActionLabel = computed(() => (orderDetail.status === 'PICKED_UP' ? '开始配送' : '确认送达'))
-const postDeliverySectionTitle = computed(() => (isCompletedOrder.value ? '完成后最小只读承接' : '送达后状态可视化'))
+const postDeliverySectionTitle = computed(() => (isCompletedOrder.value ? '订单已完成' : '等待用户确认'))
 const postDeliveryMessage = computed(() => {
   if (isAwaitingConfirmation.value) {
-    return '订单已送达，当前等待 customer 侧确认。此阶段不再补新动作，只做最小状态提示和最近异常只读展示。'
+    return '订单已经送达，正在等用户确认收货。你可以先关注是否有异常记录。'
   }
   if (isCompletedOrder.value) {
-    return '订单已完成，当前 drawer 继续保留送达后节点、异常摘要和订单关键字段的最小只读承接。'
+    return '这单已经完成，这里保留送达时间、完成时间和异常摘要，方便回头核对。'
   }
   return ''
 })
@@ -570,12 +570,9 @@ const postDeliveryNodes = computed(() => {
 const tokenPreview = computed(() => {
   const token = localStorage.getItem('courier_token') || ''
   if (!token) {
-    return '未获取'
+    return '未登录'
   }
-  if (token.length <= 20) {
-    return token
-  }
-  return `${token.slice(0, 10)}...${token.slice(-8)}`
+  return '已登录'
 })
 
 const displayText = (value) => (value === null || value === undefined || value === '' ? '暂无' : value)
@@ -657,7 +654,7 @@ const loadWorkbench = async () => {
 
 const openOrderDetail = async (orderId) => {
   if (!hasCourierToken.value) {
-    ElMessage.warning('当前没有兼职 token，请先登录兼职端或返回入驻页面申请')
+    ElMessage.warning('请先登录兼职端，或回报名页完成开通')
     return
   }
 
@@ -693,7 +690,7 @@ const openOrderDetail = async (orderId) => {
 
 const acceptOrder = async (orderId) => {
   if (!hasCourierToken.value) {
-    ElMessage.warning('当前没有兼职 token，请先登录兼职端或返回入驻页面申请')
+    ElMessage.warning('请先登录兼职端，或回报名页完成开通')
     return
   }
 
@@ -712,7 +709,7 @@ const acceptOrder = async (orderId) => {
 
 const pickupOrder = async () => {
   if (!hasCourierToken.value) {
-    ElMessage.warning('当前没有兼职 token，请先登录兼职端或返回入驻页面申请')
+    ElMessage.warning('请先登录兼职端，或回报名页完成开通')
     return
   }
 
@@ -739,7 +736,7 @@ const pickupOrder = async () => {
 
 const deliverOrder = async () => {
   if (!hasCourierToken.value) {
-    ElMessage.warning('当前没有兼职 token，请先登录兼职端或返回入驻页面申请')
+    ElMessage.warning('请先登录兼职端，或回报名页完成开通')
     return
   }
 
@@ -765,7 +762,7 @@ const deliverOrder = async () => {
 
 const reportException = async () => {
   if (!hasCourierToken.value) {
-    ElMessage.warning('当前没有兼职 token，请先登录兼职端或返回入驻页面申请')
+    ElMessage.warning('请先登录兼职端，或回报名页完成开通')
     return
   }
 
@@ -811,16 +808,16 @@ onMounted(() => {
 <style scoped lang="scss">
 .workbench-page {
   padding: 2px 0 16px;
+  overflow-x: hidden;
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(21, 184, 166, 0.12);
-  border-radius: 24px;
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 14px;
   padding: 18px;
   margin-bottom: 14px;
-  box-shadow: 0 16px 38px rgba(26, 106, 128, 0.1);
-  backdrop-filter: blur(18px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .hero-card {
@@ -830,20 +827,8 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  background:
-    radial-gradient(circle at 88% 12%, rgba(45, 212, 191, 0.28), transparent 32%),
-    linear-gradient(135deg, rgba(236, 254, 255, 0.96), rgba(255, 255, 255, 0.86));
-
-  &::after {
-    content: "";
-    position: absolute;
-    right: -38px;
-    bottom: -36px;
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    background: rgba(20, 184, 166, 0.1);
-  }
+  border-radius: 16px;
+  background: linear-gradient(135deg, #eefdfa, #f0fdfa);
 
   > * {
     position: relative;
@@ -854,7 +839,7 @@ onMounted(() => {
 .hero-card h2 {
   margin: 0 0 6px;
   color: #0f172a;
-  font-size: 26px;
+  font-size: 22px;
 }
 
 .hero-card p {
@@ -911,14 +896,14 @@ onMounted(() => {
 
 .status-tile {
   min-height: 78px;
-  border-radius: 20px;
+  border-radius: 14px;
   padding: 14px 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.84);
-  box-shadow: 0 10px 26px rgba(26, 106, 128, 0.08);
+  border: 1px solid #e4e4e7;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .status-tile span {
@@ -934,19 +919,19 @@ onMounted(() => {
 }
 
 .status-tile.available {
-  background: linear-gradient(180deg, #eefbff, #ffffff);
+  background: #f0f9ff;
 }
 
 .status-tile.progress {
-  background: linear-gradient(180deg, #f0fdf4, #ffffff);
+  background: #f0fdf4;
 }
 
 .status-tile.done {
-  background: linear-gradient(180deg, #ecfeff, #ffffff);
+  background: #ecfeff;
 }
 
 .status-tile.issue {
-  background: linear-gradient(180deg, #fff7ed, #ffffff);
+  background: #fff7ed;
 }
 
 .section-header {
@@ -992,11 +977,11 @@ onMounted(() => {
 }
 
 .task-card {
-  border: 1px solid rgba(21, 184, 166, 0.12);
-  border-radius: 20px;
+  border: 1px solid #e4e4e7;
+  border-radius: 14px;
   padding: 15px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 12px 28px rgba(26, 106, 128, 0.08);
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .task-card__top {
@@ -1026,7 +1011,7 @@ onMounted(() => {
 
 .task-price {
   color: #ff5c22;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 800;
   white-space: nowrap;
   background: rgba(255, 92, 34, 0.08);
@@ -1059,13 +1044,13 @@ onMounted(() => {
 
 .summary-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 12px;
 }
 
 .summary-item {
-  background: rgba(248, 250, 252, 0.82);
-  border-radius: 14px;
+  background: #f8fafc;
+  border-radius: 12px;
   padding: 14px;
   display: flex;
   flex-direction: column;
@@ -1104,9 +1089,9 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  border-radius: 16px;
-  background: linear-gradient(180deg, rgba(240, 253, 250, 0.86) 0%, rgba(236, 254, 255, 0.78) 100%);
-  border: 1px solid rgba(15, 118, 110, 0.08);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #f0fdfa, #ecfeff);
+  border: 1px solid #e4e4e7;
   padding: 14px;
   margin-bottom: 16px;
 }
@@ -1187,7 +1172,7 @@ onMounted(() => {
   gap: 12px;
   padding: 12px 14px;
   border-radius: 12px;
-  background: rgba(248, 250, 252, 0.82);
+  background: #f8fafc;
 }
 
 .node-label {
@@ -1222,6 +1207,11 @@ onMounted(() => {
 
 .pickup-form {
   margin-top: 8px;
+
+  :deep(.el-input__wrapper),
+  :deep(.el-textarea__inner) {
+    min-height: 44px;
+  }
 }
 
 .pickup-actions {
@@ -1250,6 +1240,10 @@ onMounted(() => {
     flex-direction: column;
     align-items: flex-start;
   }
+
+  .summary-grid {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  }
 }
 
 .no-token-card {
@@ -1262,6 +1256,10 @@ onMounted(() => {
 }
 
 @media (max-width: 380px) {
+  .status-tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .status-tile {
     min-height: 64px;
     padding: 10px;
@@ -1269,6 +1267,14 @@ onMounted(() => {
 
   .status-tile strong {
     font-size: 16px;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>
