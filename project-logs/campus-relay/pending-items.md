@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 166 最高优先级 - QA APK 分发包 manifest 与安装复核
+## Step 167 最高优先级 - 公开公测前安全与发布缺口收口评估
 
 ### 当前依据
 
@@ -9,13 +9,17 @@
 - Step 165 本轮订单：`CR202605131124021644`，最终用户端和兼职端均回读 `COMPLETED`。
 - Step 165 已覆盖：创建订单、模拟支付、可接单读取、接单、取餐、配送、异常上报、送达、用户确认、completed 回读。
 - 证据位置：`project-logs/campus-relay/runtime/step-165-android-action-matrix/android-action-matrix-report.json`。
+- Step 166 已完成 Android QA APK manifest 与安装复核。
+- Step 166 双端 APK 已生成、哈希已记录，并已通过 ADB 安装到真机。
+- Step 166 安全版 manifest：`docs/deployment/android-qa-apk-manifest.md`。
 
 ### 下一轮建议
 
-1. 基于当前通过的 Android 动作链，确认或重新生成一轮用户端 / 兼职端 QA APK。
-2. 记录 APK 文件名、包名、显示名、版本号、构建时间、对应 Git commit 和安装验证结果。
-3. 补一份不含敏感信息的 QA APK manifest，方便内测发包和回滚定位。
-4. 若 manifest 完成，再评估 release 签名包、HTTPS / 域名 / 证书和隐私说明。
+1. 评估 release 签名策略：签名文件生成、保管、是否进入仓库外安全目录。
+2. 评估 HTTPS / 域名 / 证书收口：公开公测前不建议继续使用 cleartext。
+3. 补最小隐私说明与用户协议草案，至少覆盖账号、订单、位置、异常图片/备注和日志留痕。
+4. 补内测反馈入口和问题分级规则。
+5. 不在上述发布缺口未评估前扩大到公开公测。
 
 ### 继续冻结项
 

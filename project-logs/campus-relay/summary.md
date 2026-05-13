@@ -2552,3 +2552,15 @@
   - 本轮未改业务代码、前端页面、后端接口、Android 原生配置、bridge、鉴权、路由、`request.js`、token 附着逻辑或旧兼容模块。
   - 当前足够支撑 owner-controlled 小范围内测继续推进；公开公测前仍需 QA APK manifest、release 签名、HTTPS / 域名 / 证书和隐私说明。
   - [Step 165 日志](step-165-python-android-action-matrix.md)
+
+- 当前已完成：`Step 166 - Android QA APK Manifest 与安装复核`
+  - 复用 `scripts/trial-operation/build-android-qa-apks.ps1 -Mode public` 生成双端 Debug QA APK。
+  - 新增安全版分发清单：`docs/deployment/android-qa-apk-manifest.md`。
+  - 用户端 APK：`campus-user-public-debug.apk`，包名 `com.xiaoyu.campus.user`，显示名 `用户端`，version `1 / 1.0`。
+  - 兼职端 APK：`campus-parttime-public-debug.apk`，包名 `com.xiaoyu.campus.parttime`，显示名 `兼职端`，version `1 / 1.0`。
+  - 双端 APK 已通过 ADB 覆盖安装到真机 `10AE221PGA003Y5`。
+  - `aapt dump badging` 已确认包名和显示名正确。
+  - 已采集双端安装后启动截图。
+  - APK 二进制产物不提交到 Git，只保留本地 runtime 目录或由 owner 私下分发。
+  - 本轮未改业务代码、前端页面、后端接口、Android 包名/版本号、bridge、鉴权、路由、`request.js`、token 附着逻辑或旧兼容模块。
+  - [Step 166 日志](step-166-android-qa-apk-manifest-and-install-check.md)

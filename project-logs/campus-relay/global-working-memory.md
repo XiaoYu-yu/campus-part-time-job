@@ -594,3 +594,44 @@
 10. 下一步建议：
    - 进入 QA APK 分发包 manifest 与安装复核。
    - 继续避免把公网地址、服务器密码、GitHub token、腾讯地图 key 或 `.env` 内容写入仓库。
+
+## 2026-05-13 补充：Step 166 Android QA APK Manifest 与安装复核已完成
+
+1. 新增安全版 manifest：
+   - `docs/deployment/android-qa-apk-manifest.md`
+2. 本轮生成的本地 QA APK：
+   - 用户端：`project-logs/campus-relay/runtime/step-166-android-qa-apks/campus-user-public-debug.apk`
+   - 兼职端：`project-logs/campus-relay/runtime/step-166-android-qa-apks/campus-parttime-public-debug.apk`
+3. APK 基本信息：
+   - 用户端包名：`com.xiaoyu.campus.user`
+   - 用户端显示名：`用户端`
+   - 用户端 version：`1 / 1.0`
+   - 用户端 SHA256：`76398CB22068056DB3845A8AC749D914D4A15381783A643AD992D131CFE855CB`
+   - 兼职端包名：`com.xiaoyu.campus.parttime`
+   - 兼职端显示名：`兼职端`
+   - 兼职端 version：`1 / 1.0`
+   - 兼职端 SHA256：`197DFD540206EE427D1B5C11AF34E29341BC8C1F985FEC9DED12429B79E8B812`
+4. 安装复核：
+   - ADB 设备：`10AE221PGA003Y5`
+   - 用户端 `adb install -r`：`Success`
+   - 兼职端 `adb install -r`：`Success`
+   - 用户端 `lastUpdateTime=2026-05-13 19:56:28`
+   - 兼职端 `lastUpdateTime=2026-05-13 19:56:33`
+5. 包名 / 显示名核验：
+   - `aapt dump badging` 确认用户端包名和显示名正确。
+   - `aapt dump badging` 确认兼职端包名和显示名正确。
+6. 启动截图：
+   - `project-logs/campus-relay/runtime/step-166-android-qa-apks/user-qa-install-launch.png`
+   - `project-logs/campus-relay/runtime/step-166-android-qa-apks/parttime-qa-install-launch.png`
+7. Git 处理：
+   - APK 二进制产物不提交。
+   - `.gitignore` 已忽略 runtime APK 与本地生成的 `android-qa-apk-manifest.json`。
+8. 未改内容：
+   - 未改业务代码、前端页面、后端接口、Android 包名/版本号、bridge、`request.js`、token 附着逻辑、接口、路由、鉴权或旧兼容模块。
+9. 当前结论：
+   - owner-controlled 小范围内测已有可追溯 QA APK manifest 和安装复核。
+   - 公开公测仍未就绪。
+10. 下一步建议：
+   - 评估 release 签名策略。
+   - 评估 HTTPS / 域名 / 证书和 cleartext 收口。
+   - 补最小隐私说明、用户协议、反馈入口和问题分级规则。

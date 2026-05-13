@@ -635,3 +635,45 @@ Phase 2：清理前端残留文件（HelloWorld.vue、vue.svg、vite.svg、Compo
 ### 下一轮建议
 
 进入 QA APK 分发包 manifest 与安装复核：记录双端 APK 文件名、包名、显示名、版本号、构建时间、对应 Git commit 和安装验证结果。
+
+## Step 166 协作记录 - Android QA APK Manifest 与安装复核
+
+### 本轮目标
+
+基于 Step 165 已通过的动作链，确认当前双端 QA APK 是否可构建、可识别、可安装、可启动，并形成安全版 manifest。
+
+### 实际改动
+
+- 新增 `docs/deployment/android-qa-apk-manifest.md`。
+- 新增 Step 166 日志。
+- 新增双端安装后启动截图：
+  - `project-logs/campus-relay/runtime/step-166-android-qa-apks/user-qa-install-launch.png`
+  - `project-logs/campus-relay/runtime/step-166-android-qa-apks/parttime-qa-install-launch.png`
+- 更新 `.gitignore`，避免误提交 APK 二进制产物和本地生成 manifest。
+- 更新 summary / pending / file-change-list / global-working-memory。
+- 使用 `build-android-qa-apks.ps1 -Mode public` 生成双端 Debug QA APK。
+- 使用 ADB 将双端 APK 覆盖安装到真机 `10AE221PGA003Y5`，结果均为 `Success`。
+- 使用 `aapt dump badging` 核验包名和显示名。
+
+### 未改动内容
+
+- 未改业务代码。
+- 未改前端页面。
+- 未改后端接口、数据库、鉴权或路由。
+- 未改 Android 包名、显示名、版本号或原生配置。
+- 未改 bridge。
+- 未改 `request.js`。
+- 未改 token 附着逻辑。
+- 未删除旧兼容模块。
+- 未提交 APK 二进制产物。
+- 未提交真实密钥、公网地址、服务器密码、GitHub token、腾讯地图 key、测试账号密码或 `.env` 内容。
+
+### 风险
+
+- 当前仍是 Debug QA 包，不是生产 release 包。
+- 公开公测前仍需处理 release 签名、HTTPS / 域名 / 证书、cleartext 收口和隐私说明。
+- APK 本体只在本地 runtime 目录，不在 Git 仓库长期保存。
+
+### 下一轮建议
+
+进入公开公测前安全与发布缺口收口评估，优先评估 release 签名、HTTPS / 域名 / 证书、隐私说明与内测反馈入口。

@@ -2527,3 +2527,21 @@
 - [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
 
 本轮是 Python Android 双端动作链矩阵轮：真实手机启动用户端和兼职端，通过公开 API 跑通创建订单、模拟支付、接单、取餐、配送、异常上报、送达、用户确认和 completed 双端回读。本轮创建订单 `CR202605131124021644`，最终用户端和兼职端均回读 `COMPLETED`。本轮没有改业务代码、前端页面、后端接口、Android 原生配置、bridge、鉴权、路由、`request.js`、token 附着逻辑或旧兼容模块。
+
+## Step 166 - Android QA APK Manifest 与安装复核
+
+- [.gitignore](../../.gitignore)
+  - 忽略 runtime 目录下的 APK 二进制产物和本地生成的 `android-qa-apk-manifest.json`，避免误提交分发包本体或本地路径 manifest。
+- [docs/deployment/android-qa-apk-manifest.md](../../docs/deployment/android-qa-apk-manifest.md)（新增）
+  - 新增安全版 Android QA APK 分发清单。
+  - 记录双端 APK 文件名、包名、显示名、版本号、大小、SHA256、安装复核和使用边界。
+- [project-logs/campus-relay/step-166-android-qa-apk-manifest-and-install-check.md](step-166-android-qa-apk-manifest-and-install-check.md)（新增）
+- [project-logs/campus-relay/runtime/step-166-android-qa-apks/user-qa-install-launch.png](runtime/step-166-android-qa-apks/user-qa-install-launch.png)（新增）
+- [project-logs/campus-relay/runtime/step-166-android-qa-apks/parttime-qa-install-launch.png](runtime/step-166-android-qa-apks/parttime-qa-install-launch.png)（新增）
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+
+本轮是 Android QA APK manifest 与安装复核轮：复用现有构建脚本生成双端 public Debug QA APK，记录用户端 / 兼职端包名、显示名、版本、大小和 SHA256，并通过 ADB 安装到真机 `10AE221PGA003Y5`。APK 二进制产物未提交到 Git；仓库只记录安全版 manifest、Step 166 日志和启动截图。本轮没有改业务代码、前端页面、后端接口、Android 包名/版本号、bridge、鉴权、路由、`request.js`、token 附着逻辑或旧兼容模块。
