@@ -2730,3 +2730,26 @@
 - [project-logs/campus-relay/legacy-takeaway-removal-readiness.md](legacy-takeaway-removal-readiness.md)
 
 本轮是旧外卖前端可见模块收口轮：旧外卖已从 admin 侧边栏、admin 路由、用户端路由、用户端首页和个人中心入口中移除，相关旧前端页面和 API wrapper 已删除。后端旧模块、旧表、user / employee / auth / upload / statistics 等基础能力仍保留，等待后续按模块审计。本轮未改 bridge、`request.js`、token 附着逻辑、后端鉴权或核心状态机。
+
+## Step 172 - 旧前端入口移除后的本地 smoke 复核
+
+- [project-logs/campus-relay/step-172-post-legacy-frontend-smoke.md](step-172-post-legacy-frontend-smoke.md)（新增）
+- [project-logs/campus-relay/runtime/step-172-legacy-frontend-smoke/local-remote-smoke.json](runtime/step-172-legacy-frontend-smoke/local-remote-smoke.json)（新增）
+  - 本地 API + SPA shell smoke 报告，URL 和 token 已脱敏。
+- [project-logs/campus-relay/runtime/step-172-legacy-frontend-smoke/admin-dashboard.png](runtime/step-172-legacy-frontend-smoke/admin-dashboard.png)（新增）
+- [project-logs/campus-relay/runtime/step-172-legacy-frontend-smoke/admin-employee.png](runtime/step-172-legacy-frontend-smoke/admin-employee.png)（新增）
+- [project-logs/campus-relay/runtime/step-172-legacy-frontend-smoke/admin-settlements.png](runtime/step-172-legacy-frontend-smoke/admin-settlements.png)（新增）
+- [project-logs/campus-relay/runtime/step-172-legacy-frontend-smoke/admin-after-sale-executions.png](runtime/step-172-legacy-frontend-smoke/admin-after-sale-executions.png)（新增）
+- [project-logs/campus-relay/runtime/step-172-legacy-frontend-smoke/admin-exceptions.png](runtime/step-172-legacy-frontend-smoke/admin-exceptions.png)（新增）
+- [project-logs/campus-relay/runtime/step-172-legacy-frontend-smoke/customer-order-result.png](runtime/step-172-legacy-frontend-smoke/customer-order-result.png)（新增）
+- [project-logs/campus-relay/runtime/step-172-legacy-frontend-smoke/parttime-workbench.png](runtime/step-172-legacy-frontend-smoke/parttime-workbench.png)（新增）
+- [project-logs/campus-relay/runtime/step-172-legacy-frontend-smoke/browser-smoke-report.json](runtime/step-172-legacy-frontend-smoke/browser-smoke-report.json)（新增）
+- [frontend/src/stores/customer.js](../../frontend/src/stores/customer.js)
+  - 新增 localStorage 中 `customer_user_info` 的安全解析，malformed JSON 时回退为空用户并清理坏值。
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+
+本轮是旧前端入口移除后的本地 smoke 复核轮：本地 API + SPA shell smoke 25 PASS / 0 FAIL / 0 SKIP，浏览器截图 smoke 7 PASS / 0 FAIL，证明 admin / customer / parttime 核心接口和关键 SPA shell 在前端去旧后仍可用。smoke 期间顺手修复了 `customer_user_info` 坏 JSON 会导致 customer store 初始化报错的稳健性问题。本轮没有继续删除后端旧模块、旧表、bridge、`request.js`、token 附着逻辑、鉴权或核心状态机。

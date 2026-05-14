@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 172 最高优先级 - 旧后端模块删除前依赖审计与 release 收口排序
+## Step 173 最高优先级 - 旧后端模块依赖审计或 release 签名包收口
 
 ### 当前依据
 
@@ -12,22 +12,24 @@
   - 旧前端页面、旧前端 API wrapper、Vite 模板残留和未引用 mock store 已删除。
 - Step 171 仍保留后端旧模块和旧表，因为 user / employee / auth / upload / statistics 等基础能力仍被 campus 复用。
 - Step 171 构建验证通过：web、Android user public、Android parttime public、后端 compile、`git diff --check`。
+- Step 172 已完成前端去旧后的本地 smoke：
+  - API + SPA shell smoke：25 PASS / 0 FAIL / 0 SKIP。
+  - admin / customer / parttime 核心接口和关键 SPA shell 均可用。
+  - 浏览器截图 smoke：7 PASS / 0 FAIL。
+  - 本轮修复了 `customer_user_info` malformed JSON 下 customer store 初始化报错的稳健性问题。
 
 ### 下一轮建议
 
-1. 先做一次本地/服务器 smoke，确认删除旧前端入口后：
-   - admin 登录、运营总览、运营人员、数据看板、校园订单/结算/异常/售后入口可用。
-   - 用户端登录、首页、发布代送、结果回看、兼职报名、反馈入口可用。
-   - 兼职端登录、工作台、资料页可用。
-2. 如果 smoke 稳定，再进入旧后端模块删除前依赖审计：
+1. 如果继续去旧，进入旧后端模块删除前依赖审计：
    - `category`
    - `dish`
    - `setmeal`
    - `shop`
    - `order`
-3. 每个后端旧模块必须独立确认 controller / service / mapper / entity / XML / H2 seed / MySQL init / 前端调用均无依赖后，才允许删除。
-4. 不要一次删除多个后端旧模块。
-5. 真实 release keystore、正式 release 签名 APK 仍是公开公测前阻断项，旧模块审计后需要继续收口。
+2. 每个后端旧模块必须独立确认 controller / service / mapper / entity / XML / H2 seed / MySQL init / 前端调用均无依赖后，才允许删除。
+3. 不要一次删除多个后端旧模块。
+4. 如果转向公开公测准备，优先生成真实 release keystore、构建正式 release 签名 APK，并做真机主链路 smoke。
+5. 可单独优化 `browser-smoke.ps1`，拆成 admin / user / parttime 三段，降低截图 smoke 耗时。
 6. 仍不要提交 keystore、`key.properties`、服务器密码、GitHub token、腾讯地图 key、证书私钥或 `.env` 内容。
 
 ### 继续冻结项

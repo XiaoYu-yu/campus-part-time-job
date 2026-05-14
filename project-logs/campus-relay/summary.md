@@ -2635,3 +2635,14 @@
   - `git diff --check` 通过，仅 CRLF 提示。
   - 当前仍未解决：后端旧模块删除前依赖审计、真实 release keystore、正式 release 签名 APK。
   - [Step 171 日志](step-171-legacy-takeaway-frontend-removal.md)
+
+- 当前已完成：`Step 172 - 旧前端入口移除后的本地 smoke 复核`
+  - 本地启动 backend `test` profile 和 frontend dev server。
+  - 启动后 8080 / 5173 端口均可达，smoke 后已关闭本轮启动的服务。
+  - API + SPA shell smoke 结果：25 PASS / 0 FAIL / 0 SKIP。
+  - 覆盖 admin 登录、customer 登录、parttime token、admin 运营接口、customer 校园代送接口、parttime 工作台接口和关键 SPA shell。
+  - 浏览器截图 smoke 结果：7 PASS / 0 FAIL，覆盖 5 个 admin 页面、customer 结果页和 parttime workbench。
+  - 修复 `customer_user_info` malformed JSON 导致 customer store 初始化报错的稳健性问题。
+  - 本轮没有继续删除后端旧模块、旧表、bridge、`request.js`、token 附着逻辑、鉴权或核心状态机。
+  - 当前仍未解决：后端旧模块删除前依赖审计、真实 release keystore、正式 release 签名 APK。
+  - [Step 172 日志](step-172-post-legacy-frontend-smoke.md)

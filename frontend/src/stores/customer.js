@@ -7,10 +7,19 @@ const emptyUser = {
   avatar: ''
 }
 
+const parseStoredCustomerInfo = () => {
+  try {
+    return JSON.parse(localStorage.getItem('customer_user_info') || JSON.stringify(emptyUser))
+  } catch {
+    localStorage.removeItem('customer_user_info')
+    return { ...emptyUser }
+  }
+}
+
 export const useCustomerStore = defineStore('customer', {
   state: () => ({
     token: localStorage.getItem('customer_token') || '',
-    userInfo: JSON.parse(localStorage.getItem('customer_user_info') || JSON.stringify(emptyUser))
+    userInfo: parseStoredCustomerInfo()
   }),
   getters: {
     isLoggedIn: (state) => !!state.token

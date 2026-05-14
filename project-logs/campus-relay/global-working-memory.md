@@ -824,3 +824,35 @@
    - 不改 `request.js`、token 附着逻辑、鉴权或核心状态机。
    - 不删除 `user` / `employee` 等 shared 基础模块。
    - 不提交真实密钥、证书、服务器凭据、release keystore、GitHub token、腾讯地图 key 或 `.env`。
+
+## 2026-05-14 补充：Step 172 前端去旧后本地 smoke 已完成
+
+1. 本地服务：
+   - 启动 backend `test` profile。
+   - 启动 frontend dev server。
+   - smoke 后已关闭本轮启动的服务。
+2. API + SPA shell smoke：
+   - 报告：`project-logs/campus-relay/runtime/step-172-legacy-frontend-smoke/local-remote-smoke.json`
+   - 结果：25 PASS / 0 FAIL / 0 SKIP。
+   - 覆盖 admin / customer / parttime 登录和关键接口。
+   - 覆盖关键 SPA shell。
+3. 浏览器截图 smoke：
+   - 报告：`project-logs/campus-relay/runtime/step-172-legacy-frontend-smoke/browser-smoke-report.json`
+   - 结果：7 PASS / 0 FAIL。
+   - 覆盖 5 个 admin 页面、customer 结果页、parttime workbench。
+   - 后续可拆成 admin / user / parttime 三段以降低耗时。
+4. 额外修复：
+   - `frontend/src/stores/customer.js` 已对 malformed `customer_user_info` 增加安全解析。
+   - 坏 localStorage 值会被清理并回退为空用户，不再导致 router 初始化报错。
+5. 当前结论：
+   - Step 171 前端去旧没有破坏核心 API 和关键 SPA shell。
+   - 后端旧模块仍未删除。
+6. 当前仍未解决：
+   - 旧后端模块删除前依赖审计。
+   - 真实 release keystore。
+   - 正式 release 签名 APK。
+7. 继续禁止：
+   - 不重开 bridge。
+   - 不改 `request.js`、token 附着逻辑、鉴权或核心状态机。
+   - 不删除 shared 基础模块。
+   - 不提交真实密钥、证书、服务器凭据、release keystore、GitHub token、腾讯地图 key 或 `.env`。
