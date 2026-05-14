@@ -2545,3 +2545,37 @@
 - [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
 
 本轮是 Android QA APK manifest 与安装复核轮：复用现有构建脚本生成双端 public Debug QA APK，记录用户端 / 兼职端包名、显示名、版本、大小和 SHA256，并通过 ADB 安装到真机 `10AE221PGA003Y5`。APK 二进制产物未提交到 Git；仓库只记录安全版 manifest、Step 166 日志和启动截图。本轮没有改业务代码、前端页面、后端接口、Android 包名/版本号、bridge、鉴权、路由、`request.js`、token 附着逻辑或旧兼容模块。
+
+## Step 167 - 公开公测前安全与发布缺口收口
+
+- [.gitignore](../../.gitignore)
+  - 增加 Android release 签名材料保护：`key.properties`、`keystore/`、`*.jks`、`*.keystore`。
+- [mobile/user-app/android/.gitignore](../../mobile/user-app/android/.gitignore)
+  - 明确忽略用户端本地签名配置和 keystore 文件。
+- [mobile/parttime-app/android/.gitignore](../../mobile/parttime-app/android/.gitignore)
+  - 明确忽略兼职端本地签名配置和 keystore 文件。
+- [mobile/user-app/android/app/build.gradle](../../mobile/user-app/android/app/build.gradle)
+  - 增加本地 `key.properties` release 签名读取逻辑。
+  - 增加 debug / release `usesCleartextTraffic` manifest placeholder。
+- [mobile/parttime-app/android/app/build.gradle](../../mobile/parttime-app/android/app/build.gradle)
+  - 增加本地 `key.properties` release 签名读取逻辑。
+  - 增加 debug / release `usesCleartextTraffic` manifest placeholder。
+- [mobile/user-app/android/app/src/main/AndroidManifest.xml](../../mobile/user-app/android/app/src/main/AndroidManifest.xml)
+  - 使用 `usesCleartextTraffic` placeholder，并增加 `networkSecurityConfig` 与 `tools:replace`。
+- [mobile/parttime-app/android/app/src/main/AndroidManifest.xml](../../mobile/parttime-app/android/app/src/main/AndroidManifest.xml)
+  - 使用 `usesCleartextTraffic` placeholder，并增加 `networkSecurityConfig` 与 `tools:replace`。
+- [mobile/user-app/android/app/src/debug/res/xml/network_security_config.xml](../../mobile/user-app/android/app/src/debug/res/xml/network_security_config.xml)（新增）
+- [mobile/user-app/android/app/src/release/res/xml/network_security_config.xml](../../mobile/user-app/android/app/src/release/res/xml/network_security_config.xml)（新增）
+- [mobile/parttime-app/android/app/src/debug/res/xml/network_security_config.xml](../../mobile/parttime-app/android/app/src/debug/res/xml/network_security_config.xml)（新增）
+- [mobile/parttime-app/android/app/src/release/res/xml/network_security_config.xml](../../mobile/parttime-app/android/app/src/release/res/xml/network_security_config.xml)（新增）
+- [mobile/user-app/android/key.properties.example](../../mobile/user-app/android/key.properties.example)（新增）
+- [mobile/parttime-app/android/key.properties.example](../../mobile/parttime-app/android/key.properties.example)（新增）
+- [docs/deployment/public-beta-release-gap-closure.md](../../docs/deployment/public-beta-release-gap-closure.md)（新增）
+- [project-logs/campus-relay/step-167-public-beta-release-gap-closure.md](step-167-public-beta-release-gap-closure.md)（新增）
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+
+本轮是公开公测前发布安全基线收口轮：双端 release 签名已有本地配置入口，debug / release 明文网络策略已拆分，debug 继续支撑当前 HTTP 内测环境，release 默认禁明文。双端 `assembleDebug` 和 `assembleRelease` 均通过，合并 manifest 已确认 debug 为 `usesCleartextTraffic=true`，release 为 `false`。本轮没有提交真实签名、证书、服务器密钥、公网地址、腾讯地图 key 或 `.env` 内容，也没有改后端接口、前端业务页面、bridge、`request.js`、token 附着逻辑或旧兼容模块。

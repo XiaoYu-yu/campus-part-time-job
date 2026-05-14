@@ -1,0 +1,6 @@
+# Copy this file to key.properties and keep the real file out of git.
+# Generate the release keystore in android/keystore/ or another private backup location.
+storeFile=keystore/campus-user-release.jks
+storePassword=CHANGE_ME
+keyAlias=campus-user
+keyPassword=CHANGE_ME

@@ -2564,3 +2564,17 @@
   - APK 二进制产物不提交到 Git，只保留本地 runtime 目录或由 owner 私下分发。
   - 本轮未改业务代码、前端页面、后端接口、Android 包名/版本号、bridge、鉴权、路由、`request.js`、token 附着逻辑或旧兼容模块。
   - [Step 166 日志](step-166-android-qa-apk-manifest-and-install-check.md)
+
+- 当前已完成：`Step 167 - 公开公测前安全与发布缺口收口`
+  - 用当前仓库真实文件复核 release 签名、HTTPS / 域名 / 证书、cleartext、隐私说明和反馈入口缺口。
+  - 用户端和兼职端 Gradle 已支持从本地 `android/key.properties` 读取 release 签名配置。
+  - 新增双端 `key.properties.example`，真实 `key.properties`、keystore、jks 已加入 ignore 保护。
+  - Android Manifest 改为使用 `usesCleartextTraffic` placeholder。
+  - Debug 构建继续允许 cleartext，保证当前内测 HTTP 环境可运行。
+  - Release 构建默认 `usesCleartextTraffic=false`，并通过 `network_security_config.xml` 禁明文。
+  - 已通过双端 `assembleDebug` 和 `assembleRelease`。
+  - 已确认合并后的 debug manifest 为 `usesCleartextTraffic=true`，release manifest 为 `false`。
+  - 新增 [公开公测前发布缺口收口清单](../../docs/deployment/public-beta-release-gap-closure.md)。
+  - 当前仍未解决：真实 release keystore、HTTPS / 域名 / 证书、隐私说明/用户协议入口、App 内反馈入口。
+  - 本轮未改后端业务接口、前端业务页面、bridge、`request.js`、token 附着逻辑或旧兼容模块。
+  - [Step 167 日志](step-167-public-beta-release-gap-closure.md)

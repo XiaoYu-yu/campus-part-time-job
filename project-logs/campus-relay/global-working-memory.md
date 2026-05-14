@@ -635,3 +635,52 @@
    - 评估 release 签名策略。
    - 评估 HTTPS / 域名 / 证书和 cleartext 收口。
    - 补最小隐私说明、用户协议、反馈入口和问题分级规则。
+
+## 2026-05-14 补充：Step 167 公开公测前发布安全基线已推进
+
+1. 本轮根据当前仓库真实文件复核公开公测前缺口：
+   - release 签名此前缺入口。
+   - Android cleartext 此前一直为 true。
+   - HTTPS / 域名 / 证书仍缺。
+   - 隐私说明 / 用户协议仍缺。
+   - App 内反馈入口仍缺。
+2. 已完成 release 签名入口：
+   - `mobile/user-app/android/app/build.gradle`
+   - `mobile/parttime-app/android/app/build.gradle`
+   - 两端均从本地 `android/key.properties` 读取 release 签名配置。
+   - 未提供真实 key 时 release 构建仍可执行，但会输出 unsigned release 和 warning。
+3. 已新增示例文件：
+   - `mobile/user-app/android/key.properties.example`
+   - `mobile/parttime-app/android/key.properties.example`
+4. 已增加 ignore 保护：
+   - `mobile/**/android/key.properties`
+   - `mobile/**/android/keystore/`
+   - `mobile/**/android/*.jks`
+   - `mobile/**/android/*.keystore`
+5. 已完成 Android cleartext 策略拆分：
+   - Debug：`usesCleartextTraffic=true`
+   - Release：`usesCleartextTraffic=false`
+   - 两端均新增 debug/release `network_security_config.xml`
+   - 两端 Manifest 均使用 placeholder 和 `tools:replace`
+6. 验证结果：
+   - 用户端 `assembleDebug` 通过。
+   - 用户端 `assembleRelease` 通过。
+   - 兼职端 `assembleDebug` 通过。
+   - 兼职端 `assembleRelease` 通过。
+   - 合并 manifest 已确认 debug true / release false。
+7. 新增发布缺口清单：
+   - `docs/deployment/public-beta-release-gap-closure.md`
+8. 未改内容：
+   - 未生成或提交真实 keystore。
+   - 未提交签名密码。
+   - 未配置域名、证书或 HTTPS。
+   - 未改后端接口。
+   - 未改前端业务页面。
+   - 未重开 bridge。
+   - 未删除旧兼容模块。
+9. 当前结论：
+   - 发布安全基线比 Step 166 更接近公开公测。
+   - 但公开公测仍未就绪。
+10. 下一步建议：
+   - 如果冲公开公测，先做域名 / HTTPS / 证书和真实 release 签名。
+   - 如果继续内测，先补隐私/用户协议静态页和 App 内反馈入口。

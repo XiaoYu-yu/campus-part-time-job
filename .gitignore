@@ -3,6 +3,10 @@ frontend/dist/
 frontend/dist-android-user/
 frontend/dist-android-parttime/
 mobile/**/node_modules/
+mobile/**/android/key.properties
+mobile/**/android/keystore/
+mobile/**/android/*.jks
+mobile/**/android/*.keystore
 backend/target/
 target/
 apache-maven-3.9.14/

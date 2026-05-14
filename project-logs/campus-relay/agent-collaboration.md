@@ -677,3 +677,55 @@ Phase 2：清理前端残留文件（HelloWorld.vue、vue.svg、vite.svg、Compo
 ### 下一轮建议
 
 进入公开公测前安全与发布缺口收口评估，优先评估 release 签名、HTTPS / 域名 / 证书、隐私说明与内测反馈入口。
+
+## Step 167 协作记录 - 公开公测前安全与发布缺口收口
+
+### 本轮目标
+
+复核公开公测前的安全和发布缺口，并优先落地不依赖外部域名、证书或真实密钥的收口项。
+
+### 实际改动
+
+- 双端 Android Gradle 增加 release 签名配置入口。
+- 新增双端 `key.properties.example`。
+- `.gitignore` 和双端 Android `.gitignore` 已保护 keystore、jks 和 `key.properties`。
+- 双端 Android Manifest 使用 `usesCleartextTraffic` placeholder。
+- 双端新增 debug / release 分离的 `network_security_config.xml`。
+- Debug 保持 cleartext true，继续支持当前 HTTP 内测环境。
+- Release 默认 cleartext false。
+- 新增 `docs/deployment/public-beta-release-gap-closure.md`。
+- 新增 Step 167 日志。
+- 更新 summary / pending / file-change-list / global-working-memory。
+
+### 未改动内容
+
+- 未生成真实 release keystore。
+- 未提交任何真实签名文件或密码。
+- 未配置真实域名。
+- 未申请或提交 HTTPS 证书。
+- 未改后端接口。
+- 未改前端业务页面。
+- 未新增反馈接口。
+- 未新增隐私协议页面。
+- 未重开 bridge。
+- 未删除旧兼容模块。
+- 未提交公网 IP、服务器密码、GitHub token、腾讯地图 key 或 `.env` 内容。
+
+### 验证结果
+
+- 用户端 `:app:assembleDebug :app:assembleRelease` 通过。
+- 兼职端 `:app:assembleDebug :app:assembleRelease` 通过。
+- 用户端 debug 合并 manifest：`usesCleartextTraffic=true`。
+- 用户端 release 合并 manifest：`usesCleartextTraffic=false`。
+- 兼职端 debug 合并 manifest：`usesCleartextTraffic=true`。
+- 兼职端 release 合并 manifest：`usesCleartextTraffic=false`。
+
+### 风险
+
+- 当前 release 包仍是 unsigned，必须等 owner 本地生成真实 keystore 后才可作为正式分发包。
+- 当前没有 HTTPS / 域名 / 证书，不能把 cleartext=false 的 release 包发给公开用户。
+- 隐私说明、用户协议和 App 内反馈入口仍未落地。
+
+### 下一轮建议
+
+二选一推进：如果准备公开公测，先处理 HTTPS / 域名 / 证书和真实 release 签名；如果继续小范围内测，先补隐私/用户协议静态页和 App 内反馈入口。

@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 167 最高优先级 - 公开公测前安全与发布缺口收口评估
+## Step 168 最高优先级 - HTTPS/签名实操或隐私反馈入口二选一
 
 ### 当前依据
 
@@ -12,14 +12,16 @@
 - Step 166 已完成 Android QA APK manifest 与安装复核。
 - Step 166 双端 APK 已生成、哈希已记录，并已通过 ADB 安装到真机。
 - Step 166 安全版 manifest：`docs/deployment/android-qa-apk-manifest.md`。
+- Step 167 已完成 release 签名配置入口、debug/release cleartext 分离和发布缺口清单。
+- Step 167 已验证双端 `assembleDebug` / `assembleRelease` 通过。
+- Step 167 已确认 debug manifest 为 `usesCleartextTraffic=true`，release manifest 为 `false`。
 
 ### 下一轮建议
 
-1. 评估 release 签名策略：签名文件生成、保管、是否进入仓库外安全目录。
-2. 评估 HTTPS / 域名 / 证书收口：公开公测前不建议继续使用 cleartext。
-3. 补最小隐私说明与用户协议草案，至少覆盖账号、订单、位置、异常图片/备注和日志留痕。
-4. 补内测反馈入口和问题分级规则。
-5. 不在上述发布缺口未评估前扩大到公开公测。
+1. 如果要继续冲公开公测：先买/绑定域名，做 HTTPS / 证书 / Nginx 443 / Android HTTPS API base，并本地生成真实 release keystore。
+2. 如果仍先做小范围内测：先补 App 内隐私说明 / 用户协议静态页和反馈入口。
+3. 不要在没有 HTTPS 和真实签名的情况下把 release 包发给公开用户。
+4. 不要提交 keystore、`key.properties`、公网地址、服务器密码、GitHub token、腾讯地图 key 或 `.env` 内容。
 
 ### 继续冻结项
 
