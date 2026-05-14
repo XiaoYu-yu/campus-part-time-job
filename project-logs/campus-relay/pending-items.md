@@ -1,33 +1,29 @@
 # 校园代送待处理事项
 
-## Step 169 最高优先级 - 服务器 HTTPS 实操或隐私反馈入口二选一
+## Step 170 最高优先级 - App 内隐私协议与反馈入口收口
 
 ### 当前依据
 
-- Step 164 已完成 Android 双端 WebView 小回归和远端 smoke。
-- Step 165 已新增 `scripts/trial-operation/android_action_matrix.py`，并在真实 Android 设备上跑通用户端 + 兼职端完整动作链。
-- Step 165 本轮订单：`CR202605131124021644`，最终用户端和兼职端均回读 `COMPLETED`。
-- Step 165 已覆盖：创建订单、模拟支付、可接单读取、接单、取餐、配送、异常上报、送达、用户确认、completed 回读。
-- 证据位置：`project-logs/campus-relay/runtime/step-165-android-action-matrix/android-action-matrix-report.json`。
-- Step 166 已完成 Android QA APK manifest 与安装复核。
-- Step 166 双端 APK 已生成、哈希已记录，并已通过 ADB 安装到真机。
-- Step 166 安全版 manifest：`docs/deployment/android-qa-apk-manifest.md`。
 - Step 167 已完成 release 签名配置入口、debug/release cleartext 分离和发布缺口清单。
-- Step 167 已验证双端 `assembleDebug` / `assembleRelease` 通过。
-- Step 167 已确认 debug manifest 为 `usesCleartextTraffic=true`，release manifest 为 `false`。
-- Step 168 已确认 `xiaoyu.xin` 解析到服务器。
-- Step 168 已新增宿主机 Nginx 443 模板和 HTTPS runbook。
-- Step 168 已将 Docker frontend 端口收口到 `127.0.0.1:18080`。
-- Step 168 已将 Android public env 示例切换到 `https://xiaoyu.xin/api`。
-- Step 168 前端 Web 构建、Android 双端 public 构建和后端 compile 均通过。
+- Step 168 已完成 `xiaoyu.xin` HTTPS / Nginx 443 仓库侧准备。
+- Step 169 已在服务器完成 `xiaoyu.xin` HTTPS / Nginx / Certbot 实操。
+- Step 169 已确认 `http://xiaoyu.xin/` 跳转 HTTPS。
+- Step 169 已确认 `https://xiaoyu.xin/` 返回前端页面。
+- Step 169 已确认 `https://xiaoyu.xin/api/` 进入后端代理。
+- Step 169 远端 smoke：25 PASS / 0 FAIL / 0 SKIP。
+- Step 169 Android public API smoke：2 PASS / 0 FAIL。
+- Step 169 已生成基于 `https://xiaoyu.xin/api` 的用户端 / 兼职端 public Debug QA APK。
+- Step 169 已用轻量 ADB 脚本完成双端安装与 launcher 启动复核。
+- HTTPS / 域名 / 证书这一公开公测阻断项已实际收口。
 
 ### 下一轮建议
 
-1. 如果服务器已准备好：按 `docs/deployment/xiaoyu-xin-https-runbook.md` 实操 Nginx / Certbot / 443，并做远端 smoke。
-2. 如果暂时不动服务器：先补 App 内隐私说明 / 用户协议静态页和反馈入口。
-3. HTTPS 实操后，重新生成 Android public 包并在真机验证 `https://xiaoyu.xin/api`。
-4. 不要在没有 HTTPS 和真实签名的情况下把 release 包发给公开用户。
-5. 不要提交 keystore、`key.properties`、公网地址、服务器密码、GitHub token、腾讯地图 key、证书私钥或 `.env` 内容。
+1. 用户端和兼职端登录页增加隐私政策 / 用户协议入口。
+2. 优先做最小静态协议页面或弹层，先覆盖收集信息、使用目的、保存期限、用户权利和联系方式。
+3. 增加 App 内反馈入口，优先从“我的 / 个人中心”进入。
+4. 如果做正式方案，可新增 `campus_feedback` 表、提交接口和后台只读列表；如果先做过渡方案，可跳转外部表单。
+5. 隐私/反馈完成后，再生成真实 release keystore 与签名包，并用 HTTPS 入口做正式包回归。
+6. 不要提交 keystore、`key.properties`、公网地址、服务器密码、GitHub token、腾讯地图 key、证书私钥或 `.env` 内容。
 
 ### 继续冻结项
 

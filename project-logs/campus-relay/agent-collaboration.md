@@ -782,3 +782,63 @@ Phase 2：清理前端残留文件（HelloWorld.vue、vue.svg、vite.svg、Compo
 ### 下一轮建议
 
 优先在服务器上实操 Nginx / Certbot / 443 并做远端 smoke；如果暂时不碰服务器，则转入隐私政策、用户协议和 App 内反馈入口。
+
+## Step 169 协作记录 - xiaoyu.xin HTTPS 服务器实操与 Android 公网包复核
+
+### 本轮目标
+
+把 Step 168 的 HTTPS 接入准备落到真实服务器：完成 Nginx / Certbot / 443、远端 smoke、Android public 包重新生成和真机轻量启动复核。
+
+### 实际改动
+
+- 服务器已同步当前仓库归档并重建 Docker Compose。
+- 服务器真实 `.env` 已调整为 HTTPS origin 和 frontend 本机端口，真实内容未写入仓库。
+- 服务器已安装 Nginx、Certbot 和 Nginx 插件。
+- 已为 `xiaoyu.xin` 签发真实证书，有效期至 `2026-08-12`。
+- HTTP 80 已跳转 HTTPS。
+- `https://xiaoyu.xin/` 返回前端页面。
+- `https://xiaoyu.xin/api/` 进入后端代理。
+- Certbot timer 已存在，dry-run 日志确认模拟续期成功。
+- 远端 smoke：25 PASS / 0 FAIL / 0 SKIP。
+- Android public API smoke：2 PASS / 0 FAIL。
+- 已重新生成基于 HTTPS API base 的用户端 / 兼职端 public Debug QA APK。
+- 新增轻量 ADB 启动脚本 `scripts/trial-operation/android-app-launch-smoke.py`。
+- 真机轻量安装 / 启动复核通过，报告默认脱敏设备 ID 且不截图。
+- 更新 `docs/deployment/public-beta-release-gap-closure.md` 和 `docs/deployment/xiaoyu-xin-https-runbook.md`。
+- 新增 Step 169 日志。
+- 更新 summary / pending / file-change-list / global-working-memory。
+
+### 未改动内容
+
+- 未提交证书或证书私钥。
+- 未提交服务器 `.env`、服务器密码或公网地址。
+- 未生成或提交 release keystore。
+- 未新增隐私政策 / 用户协议入口。
+- 未新增 App 内反馈入口。
+- 未改业务接口。
+- 未改前端业务页面。
+- 未改 bridge。
+- 未改 `request.js`。
+- 未改 token 附着逻辑、路由或鉴权。
+- 未删除旧兼容模块。
+
+### 验证结果
+
+- `nginx -t` 通过。
+- `https://xiaoyu.xin/` 外部访问通过。
+- `https://xiaoyu.xin/api/` 外部访问进入后端代理。
+- `remote-smoke.ps1`：25 PASS / 0 FAIL / 0 SKIP。
+- `android-public-api-smoke.ps1`：2 PASS / 0 FAIL。
+- `build-android-qa-apks.ps1 -Mode public` 通过。
+- `android-app-launch-smoke.py` 通过。
+
+### 风险
+
+- 当前 APK 仍是 public Debug QA 包，不是正式 release 包。
+- 真实 release keystore 和签名包仍未完成。
+- 隐私政策 / 用户协议入口仍未完成。
+- App 内反馈入口仍未完成。
+
+### 下一轮建议
+
+Step 170 优先补 App 内隐私政策 / 用户协议入口和反馈入口；完成后再进入真实 release 签名包生成与 HTTPS 正式包回归。

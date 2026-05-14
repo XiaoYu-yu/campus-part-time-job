@@ -2609,3 +2609,30 @@
 - [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
 
 本轮是 `xiaoyu.xin` HTTPS / Nginx 443 接入准备轮：仓库侧已具备宿主机 Nginx 模板、Docker 本机端口收口、Android public HTTPS API base 示例和服务器执行说明。本轮没有登录服务器申请证书，没有提交真实证书、证书私钥、服务器密码、`.env` 或腾讯地图 key，也没有改业务接口、业务页面、bridge、`request.js`、token 附着逻辑或旧兼容模块。
+
+## Step 169 - xiaoyu.xin HTTPS 服务器实操与 Android 公网包复核
+
+- [docs/deployment/public-beta-release-gap-closure.md](../../docs/deployment/public-beta-release-gap-closure.md)
+  - 将 HTTPS / 域名 / 证书从“仍未收口”更新为“已收口”。
+  - 保留真实 release 签名、隐私政策 / 用户协议和 App 内反馈入口为剩余公测阻断项。
+- [docs/deployment/xiaoyu-xin-https-runbook.md](../../docs/deployment/xiaoyu-xin-https-runbook.md)
+  - 追加 Step 169 服务器实操完成状态。
+  - 记录证书有效期、HTTPS 访问结果、自动续期 dry-run 和远端 smoke 结果。
+- [scripts/trial-operation/android-app-launch-smoke.py](../../scripts/trial-operation/android-app-launch-smoke.py)（新增）
+  - 新增轻量 Android 安装 / 启动 smoke 脚本。
+  - 默认不截图，默认脱敏真实 ADB 设备 ID。
+  - 支持安装用户端 / 兼职端 APK，并拉起两个包输出 JSON 报告。
+- [project-logs/campus-relay/step-169-xiaoyu-https-server-rollout.md](step-169-xiaoyu-https-server-rollout.md)（新增）
+- [project-logs/campus-relay/runtime/step-169-xiaoyu-https/remote-smoke-report.json](runtime/step-169-xiaoyu-https/remote-smoke-report.json)（新增）
+  - 远端 HTTPS smoke 报告，URL 与 token 已脱敏。
+- [project-logs/campus-relay/runtime/step-169-xiaoyu-https/android-public-api-smoke.json](runtime/step-169-xiaoyu-https/android-public-api-smoke.json)（新增）
+  - Android public API base 只读依赖 smoke 报告，host 已脱敏。
+- [project-logs/campus-relay/runtime/step-169-xiaoyu-https/android-app-launch-smoke.json](runtime/step-169-xiaoyu-https/android-app-launch-smoke.json)（新增）
+  - Android 双端安装 / 启动轻量 smoke 报告，设备 ID 已脱敏。
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+
+本轮是 `xiaoyu.xin` HTTPS 服务器实操与 Android 公网包复核轮：服务器已完成 Nginx / Certbot / 443 接入，HTTP 已跳转 HTTPS，`https://xiaoyu.xin/` 和 `https://xiaoyu.xin/api/` 已可访问。远端 smoke 25 PASS / 0 FAIL，Android public API smoke 2 PASS / 0 FAIL，双端 public Debug QA APK 已重新生成并通过真机轻量安装 / 启动复核。本轮没有提交证书、证书私钥、服务器 `.env`、服务器密码、公网地址、release keystore、GitHub token、腾讯地图 key 或真实设备 ID，也没有改业务接口、业务页面、bridge、`request.js`、token 附着逻辑或旧兼容模块。

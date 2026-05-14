@@ -1,0 +1,42 @@
+{
+  "step": "Step 121",
+  "date": "2026-05-14",
+  "purpose": "Android public API base smoke for customer campus order entry dependencies",
+  "apiBase": "https://<redacted>/api",
+  "apiBaseScheme": "https",
+  "checks": [
+    {
+      "name": "pickup points",
+      "path": "/campus/public/pickup-points",
+      "method": "GET",
+      "httpStatus": 200,
+      "bodyCode": 200,
+      "bodyMsg": "success",
+      "passed": true,
+      "error": null,
+      "checkedAt": "2026-05-14T11:50:27"
+    },
+    {
+      "name": "delivery rules",
+      "path": "/campus/public/delivery-rules",
+      "method": "GET",
+      "httpStatus": 200,
+      "bodyCode": 200,
+      "bodyMsg": "success",
+      "passed": true,
+      "error": null,
+      "checkedAt": "2026-05-14T11:50:29"
+    }
+  ],
+  "summary": {
+    "total": 2,
+    "passed": 2,
+    "failed": 0,
+    "usableForAndroidPublicSmoke": true
+  },
+  "notes": [
+    "This script only checks read-only public dependencies needed by the Android user campus order entry.",
+    "It does not create orders, mutate data, change bridge behavior, or store the real host unless -NoRedact is used.",
+    "If public endpoints fail, build-mode validation can still pass, but WebView API smoke must stay blocked."
+  ]
+}

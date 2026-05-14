@@ -1,0 +1,65 @@
+{
+  "name": "Android app launch smoke",
+  "generatedAt": "2026-05-14T16:27:27",
+  "deviceId": "<redacted>",
+  "deviceIdRedacted": true,
+  "installs": [
+    {
+      "apk": "project-logs\\campus-relay\\runtime\\step-169-xiaoyu-https\\android-qa-apks\\campus-user-public-debug.apk",
+      "ok": true,
+      "stdout": "Performing Streamed Install\nSuccess",
+      "stderr": ""
+    },
+    {
+      "apk": "project-logs\\campus-relay\\runtime\\step-169-xiaoyu-https\\android-qa-apks\\campus-parttime-public-debug.apk",
+      "ok": true,
+      "stdout": "Performing Streamed Install\nSuccess",
+      "stderr": ""
+    }
+  ],
+  "checks": [
+    {
+      "package": "com.xiaoyu.campus.user",
+      "installed": true,
+      "launch": {
+        "package": "com.xiaoyu.campus.user",
+        "ok": true,
+        "stdout": "bash arg: -p\n  bash arg: com.xiaoyu.campus.user\n  bash arg: -c\n  bash arg: android.intent.category.LAUNCHER\n  bash arg: 1\nEvents injected: 1\n## Network stats: elapsed time=234ms (0ms mobile, 0ms wifi, 234ms not connected)",
+        "stderr": "args: [-p, com.xiaoyu.campus.user, -c, android.intent.category.LAUNCHER, 1]\n arg: \"-p\"\n arg: \"com.xiaoyu.campus.user\"\n arg: \"-c\"\n arg: \"android.intent.category.LAUNCHER\"\n arg: \"1\"\ndata=\"com.xiaoyu.campus.user\"\ndata=\"android.intent.category.LAUNCHER\"",
+        "focusedWindow": [
+          "mCurrentFocus=null",
+          "mFocusedApp=null",
+          "mCurrentFocus=Window{2bc67c4 u0 com.xiaoyu.campus.user/com.xiaoyu.campus.user.MainActivity type=1 }",
+          "mFocusedApp=ActivityRecord{74214331 u0 com.xiaoyu.campus.user/.MainActivity t11316 d0}"
+        ]
+      }
+    },
+    {
+      "package": "com.xiaoyu.campus.parttime",
+      "installed": true,
+      "launch": {
+        "package": "com.xiaoyu.campus.parttime",
+        "ok": true,
+        "stdout": "bash arg: -p\n  bash arg: com.xiaoyu.campus.parttime\n  bash arg: -c\n  bash arg: android.intent.category.LAUNCHER\n  bash arg: 1\nEvents injected: 1\n## Network stats: elapsed time=29ms (0ms mobile, 0ms wifi, 29ms not connected)",
+        "stderr": "args: [-p, com.xiaoyu.campus.parttime, -c, android.intent.category.LAUNCHER, 1]\n arg: \"-p\"\n arg: \"com.xiaoyu.campus.parttime\"\n arg: \"-c\"\n arg: \"android.intent.category.LAUNCHER\"\n arg: \"1\"\ndata=\"com.xiaoyu.campus.parttime\"\ndata=\"android.intent.category.LAUNCHER\"",
+        "focusedWindow": [
+          "mCurrentFocus=null",
+          "mFocusedApp=null",
+          "mCurrentFocus=Window{5f17465 u0 com.xiaoyu.campus.parttime/com.xiaoyu.campus.parttime.MainActivity type=1 }",
+          "mFocusedApp=ActivityRecord{104366344 u0 com.xiaoyu.campus.parttime/.MainActivity t11317 d0}"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "ok": true,
+    "installedPackages": [
+      "com.xiaoyu.campus.user",
+      "com.xiaoyu.campus.parttime"
+    ]
+  },
+  "notes": [
+    "No screenshots are captured by this script.",
+    "Use WebView smoke scripts only when UI route/API checks are needed."
+  ]
+}

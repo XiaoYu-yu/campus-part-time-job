@@ -2590,3 +2590,21 @@
   - 本机没有 Docker 命令，`docker compose config` 未能本地执行，需在服务器实操前复核。
   - 本轮未申请证书、未提交真实证书/密钥/`.env`，未改业务接口、bridge、`request.js`、token 附着逻辑或旧兼容模块。
   - [Step 168 日志](step-168-xiaoyu-domain-https-nginx-prep.md)
+
+- 当前已完成：`Step 169 - xiaoyu.xin HTTPS 服务器实操与 Android 公网包复核`
+  - 已将当前仓库归档同步到服务器部署目录，并重建 Docker Compose 栈。
+  - 服务器 frontend 继续只绑定宿主机本机端口，公网入口由宿主机 Nginx 接管。
+  - 已安装 Nginx、Certbot 和 Nginx 插件。
+  - 已为 `xiaoyu.xin` 签发真实 HTTPS 证书，证书有效期至 `2026-08-12`。
+  - 已启用 HTTP -> HTTPS 跳转。
+  - `https://xiaoyu.xin/` 已返回前端页面。
+  - `https://xiaoyu.xin/api/` 已进入后端代理，返回认证拦截结果属于预期。
+  - Certbot 自动续期 timer 已存在，`renew --dry-run` 日志确认模拟续期成功。
+  - 远端 smoke 通过：25 PASS / 0 FAIL / 0 SKIP。
+  - Android public API smoke 通过：2 PASS / 0 FAIL。
+  - 已重新生成基于 `https://xiaoyu.xin/api` 的用户端 / 兼职端 public Debug QA APK。
+  - 新增轻量 ADB 启动脚本 `scripts/trial-operation/android-app-launch-smoke.py`，默认不截图并脱敏设备 ID。
+  - 真机轻量安装 / 启动复核通过：用户端与兼职端均安装成功并可拉起。
+  - 本轮未提交证书、证书私钥、服务器 `.env`、服务器密码、release keystore、GitHub token、腾讯地图 key 或真实设备 ID。
+  - 当前仍未收口：真实 release keystore / 签名包、隐私政策 / 用户协议入口、App 内反馈入口。
+  - [Step 169 日志](step-169-xiaoyu-https-server-rollout.md)

@@ -2,6 +2,23 @@
 
 本文记录当前校园兼职平台内测服务器的 HTTPS 接入方案。
 
+## 当前执行状态
+
+截至 Step 169，`xiaoyu.xin` HTTPS 已在服务器完成实操：
+
+- 宿主机 Nginx 已安装并启用。
+- Certbot 与 Nginx 插件已安装。
+- `xiaoyu.xin` 证书已签发。
+- HTTP 80 已跳转 HTTPS。
+- `https://xiaoyu.xin/` 已反代到 frontend。
+- `https://xiaoyu.xin/api/` 已反代到 backend。
+- 证书有效期至 `2026-08-12`。
+- Certbot timer 已存在。
+- `certbot renew --dry-run` 日志确认模拟续期成功。
+- 远端 smoke 结果：25 PASS / 0 FAIL / 0 SKIP。
+
+本文后续内容保留为复现、排查和回滚说明。
+
 ## 当前目标
 
 - 域名：`xiaoyu.xin`

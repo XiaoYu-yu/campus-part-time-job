@@ -46,33 +46,39 @@ keytool -genkeypair -v -keystore mobile\parttime-app\android\keystore\campus-par
 
 注意：
 
-- 当前没有真实域名和 HTTPS 证书时，不应把 release 包发给公开用户。
+- 当前 HTTPS 入口已就绪，但 release 包仍需要真实 keystore 签名后才能给公开用户。
 - 当前 public Debug QA 包仍是内测包，不是正式 release 包。
+
+### 3. HTTPS / 域名 / 证书
+
+已完成：
+
+- 域名 `xiaoyu.xin` 已确认解析到当前服务器。
+- Docker 前端端口已收口为宿主机本机端口：
+  - `127.0.0.1:18080`
+- 宿主机 Nginx 已接入：
+  - `/` 反代 frontend。
+  - `/api/` 反代 backend。
+- 已通过 Certbot 为 `xiaoyu.xin` 签发真实证书。
+- 证书只保存在服务器宿主机 Nginx 层，未进入 Docker 容器，未提交到 Git。
+- HTTP 80 已跳转 HTTPS。
+- 已提供仓库侧 Nginx 443 模板：
+  - `deploy/internal-trial/nginx-xiaoyu.xin.conf`
+- 已提供执行与回滚说明：
+  - `docs/deployment/xiaoyu-xin-https-runbook.md`
+- Android public env 示例已切换为 `https://xiaoyu.xin/api`。
+- 已完成远端 smoke：
+  - 25 PASS / 0 FAIL / 0 SKIP。
+- 已重新生成 Android public QA 包，并完成真机轻量安装 / 启动复核。
+
+注意：
+
+- 不要提交证书、证书私钥、服务器 `.env` 或服务器登录凭据。
+- 后续正式 release 包仍需真实 keystore 签名。
 
 ## 当前仍未收口
 
-### 1. HTTPS / 域名 / 证书
-
-当前状态：
-
-- 域名 `xiaoyu.xin` 已确认解析到当前服务器。
-- Docker 前端端口已收口为宿主机本地 `127.0.0.1:18080`。
-- 已提供宿主机 Nginx 443 模板：
-  - `deploy/internal-trial/nginx-xiaoyu.xin.conf`
-- 已提供执行说明：
-  - `docs/deployment/xiaoyu-xin-https-runbook.md`
-- Android public env 示例已切换为 `https://xiaoyu.xin/api`。
-
-公开公测前必须完成：
-
-1. 服务器安全组放行 `80/tcp` 和 `443/tcp`。
-2. 在服务器安装 Nginx、Certbot 和 `python3-certbot-nginx`。
-3. 用 Certbot 为 `xiaoyu.xin` 签发证书。
-4. 套用 `nginx-xiaoyu.xin.conf`，确认 HTTP 80 统一跳转 HTTPS。
-5. 服务器真实 `.env` 设置 `APP_CORS_ALLOWED_ORIGINS=https://xiaoyu.xin`。
-6. 重新生成 Android public 包并确认 cleartext false 下可正常访问。
-
-### 2. 隐私说明与用户协议
+### 1. 隐私说明与用户协议
 
 当前状态：
 
@@ -87,7 +93,7 @@ keytool -genkeypair -v -keystore mobile\parttime-app\android\keystore\campus-par
 4. 用户权利：查询、更正、删除、注销或联系处理。
 5. 联系方式：反馈邮箱、表单或站内反馈入口。
 
-### 3. App 内反馈入口
+### 2. App 内反馈入口
 
 当前状态：
 
@@ -108,13 +114,13 @@ keytool -genkeypair -v -keystore mobile\parttime-app\android\keystore\campus-par
 - 不提交 `key.properties`。
 - 不提交公网 IP、服务器密码、GitHub token、腾讯地图 key 或 `.env` 内容。
 - 不把 Debug QA 包当正式 release 包发给公开用户。
-- 不在没有 HTTPS 的情况下分发 release cleartext=false 包。
 - 不重开 bridge 主线。
 - 不删除旧外卖兼容模块。
 
 ## 推荐下一步
 
-Step 168 建议二选一：
+Step 170 建议：
 
-1. 如果要继续推进公开公测：先做 HTTPS / 域名 / 证书和 release 签名实操。
-2. 如果仍只做小范围内测：先补 App 内反馈入口和隐私/用户协议静态页。
+1. 先补 App 内隐私政策 / 用户协议入口。
+2. 再补 App 内反馈入口。
+3. 然后生成真实 release keystore 与签名包，并用 HTTPS 入口做正式包回归。

@@ -720,3 +720,41 @@
    - 不提交真实证书、证书私钥、服务器密码、`.env`、腾讯地图 key、GitHub token 或 release keystore。
    - 不重开 bridge。
    - 不改 `request.js`、token 附着逻辑或旧兼容模块。
+
+## 2026-05-14 补充：Step 169 xiaoyu.xin HTTPS 服务器实操已完成
+
+1. 服务器 HTTPS 已完成：
+   - Nginx 已安装并启用。
+   - Certbot 与 Nginx 插件已安装。
+   - `xiaoyu.xin` 真实证书已签发。
+   - HTTP 80 已跳转 HTTPS。
+   - `https://xiaoyu.xin/` 已反代 frontend。
+   - `https://xiaoyu.xin/api/` 已反代 backend。
+   - 证书有效期至 `2026-08-12`。
+   - Certbot timer 已存在。
+   - `certbot renew --dry-run` 日志确认模拟续期成功。
+2. 服务器部署状态：
+   - 当前仓库归档已同步到服务器部署目录。
+   - Docker Compose 已重建并启动。
+   - frontend 仅绑定宿主机本机端口。
+   - backend 仍由宿主机 Nginx 通过 `/api/` 反代。
+   - 服务器真实 `.env` 未写入仓库。
+3. 验证：
+   - 远端 smoke：25 PASS / 0 FAIL / 0 SKIP。
+   - Android public API smoke：2 PASS / 0 FAIL。
+   - Android public Debug QA APK 已重新生成。
+   - 真机轻量安装 / 启动 smoke 已通过。
+4. 新增脚本：
+   - `scripts/trial-operation/android-app-launch-smoke.py`
+   - 用途：安装/拉起用户端与兼职端 APK，输出 JSON 报告。
+   - 默认不截图。
+   - 默认脱敏真实设备 ID。
+5. 当前仍未解决：
+   - 真实 release keystore。
+   - 正式 release 签名包。
+   - 隐私政策 / 用户协议入口。
+   - App 内反馈入口。
+6. 继续禁止：
+   - 不提交证书、证书私钥、服务器 `.env`、服务器密码、公网地址、GitHub token、腾讯地图 key、release keystore 或真实设备 ID。
+   - 不重开 bridge。
+   - 不改 `request.js`、token 附着逻辑或旧兼容模块。
