@@ -55,6 +55,16 @@
           </el-button>
         </el-form>
 
+        <label class="agreement-line">
+          <el-checkbox v-model="agreed" />
+          <span>
+            我已阅读并同意
+            <router-link to="/legal/terms">《用户协议》</router-link>
+            和
+            <router-link to="/legal/privacy">《隐私政策》</router-link>
+          </span>
+        </label>
+
         <div class="tips">
           <p>测试账号：13900139001</p>
           <p>测试密码：123456</p>
@@ -81,6 +91,7 @@ const route = useRoute()
 const courierStore = useCourierStore()
 const formRef = ref(null)
 const loading = ref(false)
+const agreed = ref(false)
 
 const form = reactive({
   phone: '13900139001',
@@ -105,6 +116,10 @@ const resolveRedirect = () => {
 
 const handleLogin = async () => {
   try {
+    if (!agreed.value) {
+      ElMessage.warning('请先阅读并同意用户协议和隐私政策')
+      return
+    }
     await formRef.value.validate()
     loading.value = true
     const result = await applyCourierToken({
@@ -262,6 +277,27 @@ const goToUserLogin = () => {
   color: #52525b;
   line-height: 1.8;
   font-size: 13px;
+}
+
+.agreement-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 14px;
+  color: #52525b;
+  font-size: 12px;
+  line-height: 1.7;
+
+  span {
+    display: inline-block;
+    padding-top: 1px;
+  }
+
+  a {
+    color: #0f766e;
+    font-weight: 700;
+    text-decoration: none;
+  }
 }
 
 .secondary-actions {

@@ -758,3 +758,34 @@
    - 不提交证书、证书私钥、服务器 `.env`、服务器密码、公网地址、GitHub token、腾讯地图 key、release keystore 或真实设备 ID。
    - 不重开 bridge。
    - 不改 `request.js`、token 附着逻辑或旧兼容模块。
+
+## 2026-05-14 补充：Step 170 隐私协议与反馈入口已完成
+
+1. App 内合规入口：
+   - `/legal/privacy`
+   - `/legal/terms`
+   - 用户端登录页已要求勾选协议。
+   - 兼职端登录页已要求勾选协议。
+2. App 内反馈入口：
+   - `/feedback`
+   - 用户端个人中心可进入。
+   - 兼职端资料页可进入。
+3. 后端最小闭环：
+   - 新增 `campus_feedback`。
+   - 新增 `POST /api/campus/public/feedback`。
+   - 走现有 `/api/campus/public/**` 公共路径，不需要 token。
+4. 验证：
+   - 后端 compile 通过。
+   - Web build 通过。
+   - Android user public build 通过。
+   - Android parttime public build 通过。
+   - H2/test profile 运行态反馈提交通过，返回 `code=200,data=1`。
+   - `git diff --check` 通过，仅 CRLF 提示。
+5. 当前仍未解决：
+   - 真实 release keystore。
+   - 正式 release 签名 APK。
+   - admin 反馈只读 / 处理入口。
+6. 继续禁止：
+   - 不提交真实 keystore、`key.properties`、证书私钥、服务器 `.env`、服务器密码、公网地址、GitHub token、腾讯地图 key 或真实设备 ID。
+   - 不重开 bridge。
+   - 不改 `request.js`、token 附着逻辑、鉴权或旧兼容模块。

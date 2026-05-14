@@ -2636,3 +2636,42 @@
 - [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
 
 本轮是 `xiaoyu.xin` HTTPS 服务器实操与 Android 公网包复核轮：服务器已完成 Nginx / Certbot / 443 接入，HTTP 已跳转 HTTPS，`https://xiaoyu.xin/` 和 `https://xiaoyu.xin/api/` 已可访问。远端 smoke 25 PASS / 0 FAIL，Android public API smoke 2 PASS / 0 FAIL，双端 public Debug QA APK 已重新生成并通过真机轻量安装 / 启动复核。本轮没有提交证书、证书私钥、服务器 `.env`、服务器密码、公网地址、release keystore、GitHub token、腾讯地图 key 或真实设备 ID，也没有改业务接口、业务页面、bridge、`request.js`、token 附着逻辑或旧兼容模块。
+
+## Step 170 - App 内隐私协议与反馈入口收口
+
+- [backend/db/init.sql](../../backend/db/init.sql)
+  - 新增 `campus_feedback` 表。
+- [backend/db/migrations/V13__campus_feedback.sql](../../backend/db/migrations/V13__campus_feedback.sql)（新增）
+  - 新增 MySQL migration。
+- [backend/src/main/resources/db/schema-h2.sql](../../backend/src/main/resources/db/schema-h2.sql)
+  - 新增 H2 `campus_feedback` 表和索引。
+- [backend/src/main/java/com/cangqiong/takeaway/campus/dto/CampusFeedbackSubmitDTO.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/dto/CampusFeedbackSubmitDTO.java)（新增）
+- [backend/src/main/java/com/cangqiong/takeaway/campus/entity/CampusFeedback.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/entity/CampusFeedback.java)（新增）
+- [backend/src/main/java/com/cangqiong/takeaway/campus/mapper/CampusFeedbackMapper.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/mapper/CampusFeedbackMapper.java)（新增）
+- [backend/src/main/java/com/cangqiong/takeaway/campus/service/CampusFeedbackService.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/service/CampusFeedbackService.java)（新增）
+- [backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusFeedbackServiceImpl.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusFeedbackServiceImpl.java)（新增）
+- [backend/src/main/java/com/cangqiong/takeaway/campus/controller/CampusFeedbackController.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/controller/CampusFeedbackController.java)（新增）
+  - 新增 `POST /api/campus/public/feedback`。
+- [frontend/src/api/campus-feedback.js](../../frontend/src/api/campus-feedback.js)（新增）
+- [frontend/src/views/common/LegalDocument.vue](../../frontend/src/views/common/LegalDocument.vue)（新增）
+- [frontend/src/views/common/Feedback.vue](../../frontend/src/views/common/Feedback.vue)（新增）
+- [frontend/src/router/index.js](../../frontend/src/router/index.js)
+  - 新增 `/legal/privacy`、`/legal/terms`、`/feedback` 公共路由。
+- [frontend/src/views/user/Login.vue](../../frontend/src/views/user/Login.vue)
+  - 新增协议勾选与协议链接。
+- [frontend/src/views/courier/Login.vue](../../frontend/src/views/courier/Login.vue)
+  - 新增协议勾选与协议链接。
+- [frontend/src/views/user/Profile.vue](../../frontend/src/views/user/Profile.vue)
+  - 新增问题反馈和隐私政策入口。
+- [frontend/src/views/courier/Profile.vue](../../frontend/src/views/courier/Profile.vue)
+  - 新增问题反馈入口。
+- [docs/deployment/public-beta-release-gap-closure.md](../../docs/deployment/public-beta-release-gap-closure.md)
+  - 更新隐私协议与反馈入口收口状态，保留 release 签名包为公开公测阻断项。
+- [project-logs/campus-relay/step-170-privacy-terms-feedback-entry.md](step-170-privacy-terms-feedback-entry.md)（新增）
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+
+本轮是公开公测前 App 内合规与反馈入口收口轮：隐私政策 / 用户协议入口已上线到双端登录页，App 内反馈可从用户端 / 兼职端进入，并通过公共后端接口写入 `campus_feedback`。本轮未改 bridge、鉴权、`request.js`、token 附着逻辑、旧外卖兼容模块或核心状态机，也未提交真实密钥、证书、服务器凭据、release keystore 或 `.env` 内容。

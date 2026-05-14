@@ -80,6 +80,7 @@
         <div class="action-grid">
           <el-button type="primary" @click="goToWorkbench">进入工作台</el-button>
           <el-button @click="goToOnboarding">更新入驻资料</el-button>
+          <el-button @click="goToFeedback">问题反馈</el-button>
           <el-button type="danger" plain @click="logout">退出兼职端</el-button>
         </div>
       </section>
@@ -176,6 +177,10 @@ const goToWorkbench = () => {
 
 const goToOnboarding = () => {
   router.push('/user/campus/courier-onboarding')
+}
+
+const goToFeedback = () => {
+  router.push('/feedback?role=PARTTIME&from=parttime-profile')
 }
 
 const logout = () => {

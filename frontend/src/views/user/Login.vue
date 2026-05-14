@@ -18,6 +18,15 @@
         </el-form-item>
         <el-button type="primary" class="login-btn" :loading="loading" @click="handleLogin">登录</el-button>
       </el-form>
+      <label class="agreement-line">
+        <el-checkbox v-model="agreed" />
+        <span>
+          我已阅读并同意
+          <router-link to="/legal/terms">《用户协议》</router-link>
+          和
+          <router-link to="/legal/privacy">《隐私政策》</router-link>
+        </span>
+      </label>
       <div class="tips">
         <strong>测试账号</strong>
         <p><span>手机号</span>13900139000</p>
@@ -38,6 +47,7 @@ const router = useRouter()
 const customerStore = useCustomerStore()
 const formRef = ref(null)
 const loading = ref(false)
+const agreed = ref(false)
 
 const form = reactive({
   phone: '',
@@ -57,6 +67,10 @@ const rules = {
 
 const handleLogin = async () => {
   try {
+    if (!agreed.value) {
+      ElMessage.warning('请先阅读并同意用户协议和隐私政策')
+      return
+    }
     await formRef.value.validate()
     loading.value = true
     const res = await customerLogin(form)
@@ -192,6 +206,27 @@ const handleLogin = async () => {
       color: #0f9f8f;
       font-weight: 700;
     }
+  }
+}
+
+.agreement-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 14px;
+  color: #52525b;
+  font-size: 12px;
+  line-height: 1.7;
+
+  span {
+    display: inline-block;
+    padding-top: 1px;
+  }
+
+  a {
+    color: #0f766e;
+    font-weight: 700;
+    text-decoration: none;
   }
 }
 

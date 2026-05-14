@@ -58,6 +58,8 @@
         <div class="menu-item" @click="router.push('/user/campus/courier-onboarding')">报名校园兼职</div>
         <div class="menu-item" @click="router.push('/parttime/login')">兼职端登录</div>
         <div class="menu-item" @click="router.push('/parttime/workbench')">兼职工作台</div>
+        <div class="menu-item" @click="router.push('/feedback?role=USER&from=user-profile')">问题反馈</div>
+        <div class="menu-item" @click="router.push('/legal/privacy')">隐私政策</div>
       </section>
 
       <button class="logout-btn" @click="handleLogout">退出登录</button>

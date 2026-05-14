@@ -2608,3 +2608,16 @@
   - 本轮未提交证书、证书私钥、服务器 `.env`、服务器密码、release keystore、GitHub token、腾讯地图 key 或真实设备 ID。
   - 当前仍未收口：真实 release keystore / 签名包、隐私政策 / 用户协议入口、App 内反馈入口。
   - [Step 169 日志](step-169-xiaoyu-https-server-rollout.md)
+
+- 当前已完成：`Step 170 - App 内隐私协议与反馈入口收口`
+  - 新增公共协议页：`/legal/privacy`、`/legal/terms`。
+  - 用户端和兼职端登录页均新增用户协议 / 隐私政策勾选，未勾选不允许登录。
+  - 新增 App 内反馈页 `/feedback`。
+  - 用户端个人中心新增“问题反馈”和“隐私政策”入口。
+  - 兼职端资料页新增“问题反馈”入口。
+  - 新增 `campus_feedback` 表、MySQL init、migration 和 H2 schema。
+  - 新增后端提交接口：`POST /api/campus/public/feedback`。
+  - H2/test profile 运行态验证：反馈提交返回 `code=200` 并生成记录 ID。
+  - 本轮未改 bridge、鉴权、`request.js`、token 附着逻辑、旧外卖兼容模块或核心业务状态机。
+  - 当前仍未解决：真实 release keystore、正式 release 签名 APK、admin 反馈只读处理入口。
+  - [Step 170 日志](step-170-privacy-terms-feedback-entry.md)

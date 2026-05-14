@@ -31,6 +31,24 @@ const router = createRouter({
       component: () => import('../views/Login.vue')
     },
     {
+      path: '/legal/privacy',
+      name: 'PrivacyPolicy',
+      meta: { public: true },
+      component: () => import('../views/common/LegalDocument.vue')
+    },
+    {
+      path: '/legal/terms',
+      name: 'UserAgreement',
+      meta: { public: true },
+      component: () => import('../views/common/LegalDocument.vue')
+    },
+    {
+      path: '/feedback',
+      name: 'CampusFeedback',
+      meta: { public: true },
+      component: () => import('../views/common/Feedback.vue')
+    },
+    {
       path: '/dashboard',
       name: 'Dashboard',
       meta: { requiresAdminAuth: true },

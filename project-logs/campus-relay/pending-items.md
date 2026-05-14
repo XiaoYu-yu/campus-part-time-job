@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 170 最高优先级 - App 内隐私协议与反馈入口收口
+## Step 171 最高优先级 - 真实 release 签名包准备与回归
 
 ### 当前依据
 
@@ -15,15 +15,19 @@
 - Step 169 已生成基于 `https://xiaoyu.xin/api` 的用户端 / 兼职端 public Debug QA APK。
 - Step 169 已用轻量 ADB 脚本完成双端安装与 launcher 启动复核。
 - HTTPS / 域名 / 证书这一公开公测阻断项已实际收口。
+- Step 170 已完成 App 内隐私政策 / 用户协议入口。
+- Step 170 已完成 App 内问题反馈入口。
+- Step 170 已落地 `campus_feedback` 表和 `POST /api/campus/public/feedback`。
+- Step 170 H2/test profile 运行态验证：反馈提交返回 `code=200` 并生成记录 ID。
 
 ### 下一轮建议
 
-1. 用户端和兼职端登录页增加隐私政策 / 用户协议入口。
-2. 优先做最小静态协议页面或弹层，先覆盖收集信息、使用目的、保存期限、用户权利和联系方式。
-3. 增加 App 内反馈入口，优先从“我的 / 个人中心”进入。
-4. 如果做正式方案，可新增 `campus_feedback` 表、提交接口和后台只读列表；如果先做过渡方案，可跳转外部表单。
-5. 隐私/反馈完成后，再生成真实 release keystore 与签名包，并用 HTTPS 入口做正式包回归。
-6. 不要提交 keystore、`key.properties`、公网地址、服务器密码、GitHub token、腾讯地图 key、证书私钥或 `.env` 内容。
+1. owner 本地生成用户端和兼职端真实 release keystore。
+2. 复制双端 `key.properties.example` 为本地 ignored `key.properties`，填入真实密码和 alias。
+3. 构建用户端 / 兼职端 release APK。
+4. 用 `https://xiaoyu.xin/api` 做 release 包真机安装和主链路 smoke。
+5. 仍不要提交 keystore、`key.properties`、公网地址、服务器密码、GitHub token、腾讯地图 key、证书私钥或 `.env` 内容。
+6. 如果 release 签名包完成后仍有余力，再补 admin 反馈只读列表。
 
 ### 继续冻结项
 

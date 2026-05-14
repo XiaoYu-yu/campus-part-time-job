@@ -842,3 +842,48 @@ Phase 2：清理前端残留文件（HelloWorld.vue、vue.svg、vite.svg、Compo
 ### 下一轮建议
 
 Step 170 优先补 App 内隐私政策 / 用户协议入口和反馈入口；完成后再进入真实 release 签名包生成与 HTTPS 正式包回归。
+
+## Step 170 协作记录 - App 内隐私协议与反馈入口收口
+
+### 本轮目标
+
+补齐公开公测前的 App 内隐私政策 / 用户协议入口和真实反馈提交入口。
+
+### 实际改动
+
+- 新增 `/legal/privacy`、`/legal/terms` 公共路由和静态协议页。
+- 用户端登录页和兼职端登录页新增协议勾选，未勾选不允许登录。
+- 新增 `/feedback` 公共反馈页。
+- 用户端个人中心新增“问题反馈”和“隐私政策”入口。
+- 兼职端资料页新增“问题反馈”入口。
+- 新增 `campus_feedback` 表、MySQL init、migration 和 H2 schema。
+- 新增 `POST /api/campus/public/feedback`。
+- 更新公开公测缺口文档和 Step 170 日志。
+
+### 未改动内容
+
+- 未改 bridge。
+- 未改 `/api/campus/courier/profile` 或 `/api/campus/courier/review-status`。
+- 未改 `request.js`。
+- 未改 token 附着逻辑、鉴权或路由主链路。
+- 未删除旧外卖兼容模块。
+- 未提交真实密钥、证书私钥、服务器凭据、release keystore、GitHub token、腾讯地图 key 或 `.env`。
+
+### 验证结果
+
+- `.\mvnw.cmd -DskipTests compile` 通过。
+- `npm run build` 通过。
+- `npm run build:android:user:public` 通过。
+- `npm run build:android:parttime:public` 通过。
+- `git diff --check` 通过，仅 CRLF 提示。
+- H2/test profile 运行态验证：`POST /api/campus/public/feedback` 返回 `code=200,data=1`。
+
+### 风险
+
+- 隐私政策 / 用户协议仍是最小静态版，正式公开前建议 owner 补齐真实运营主体和联系方式。
+- 反馈目前可提交入库，但没有 admin 反馈只读列表，测试人数扩大后需要补。
+- 正式 release keystore 和签名 APK 仍未完成。
+
+### 下一轮建议
+
+Step 171 优先进入真实 release 签名包准备：生成双端 keystore、填写本地 ignored `key.properties`、构建 release APK，并用 `https://xiaoyu.xin/api` 做真机主链路 smoke。
