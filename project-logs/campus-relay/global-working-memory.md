@@ -684,3 +684,39 @@
 10. 下一步建议：
    - 如果冲公开公测，先做域名 / HTTPS / 证书和真实 release 签名。
    - 如果继续内测，先补隐私/用户协议静态页和 App 内反馈入口。
+
+## 2026-05-14 补充：Step 168 xiaoyu.xin HTTPS / Nginx 443 接入准备已完成
+
+1. owner 已确认域名：
+   - `xiaoyu.xin`
+2. 本地 DNS 解析确认：
+   - `xiaoyu.xin` 指向当前服务器。
+3. 仓库侧 HTTPS 接入准备已完成：
+   - `deploy/internal-trial/docker-compose.yml`
+   - `deploy/internal-trial/.env.example`
+   - `deploy/internal-trial/nginx-xiaoyu.xin.conf`
+   - `docs/deployment/xiaoyu-xin-https-runbook.md`
+4. Docker 端口策略：
+   - frontend 默认 `127.0.0.1:18080`
+   - backend 默认 `127.0.0.1:8080`
+   - 公网只应通过宿主机 Nginx 80/443 访问。
+5. Android public API base：
+   - tracked example：`https://xiaoyu.xin/api`
+   - ignored local env 也已同步为 `https://xiaoyu.xin/api`
+6. 验证：
+   - Web build 通过。
+   - Android user public build 通过。
+   - Android parttime public build 通过。
+   - 后端 compile 通过。
+   - public 构建产物命中 `https://xiaoyu.xin/api`，未命中旧 HTTP 公网 IP。
+   - `git diff --check` 通过，仅 CRLF 提示。
+7. 未完成：
+   - 未在服务器实操 Certbot。
+   - 未签发真实证书。
+   - 未验证 `https://xiaoyu.xin/` 和 `https://xiaoyu.xin/api/`。
+   - 未生成真实 release keystore。
+   - 未补隐私政策 / 用户协议 / App 内反馈入口。
+8. 继续禁止：
+   - 不提交真实证书、证书私钥、服务器密码、`.env`、腾讯地图 key、GitHub token 或 release keystore。
+   - 不重开 bridge。
+   - 不改 `request.js`、token 附着逻辑或旧兼容模块。

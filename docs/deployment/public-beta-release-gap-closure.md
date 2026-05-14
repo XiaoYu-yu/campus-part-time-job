@@ -55,20 +55,22 @@ keytool -genkeypair -v -keystore mobile\parttime-app\android\keystore\campus-par
 
 当前状态：
 
-- 内测 Nginx 仍是 `listen 80`。
-- 当前 Android public 构建仍依赖 HTTP API base。
-- 尚无域名、证书、443 配置和 HTTP -> HTTPS 跳转。
+- 域名 `xiaoyu.xin` 已确认解析到当前服务器。
+- Docker 前端端口已收口为宿主机本地 `127.0.0.1:18080`。
+- 已提供宿主机 Nginx 443 模板：
+  - `deploy/internal-trial/nginx-xiaoyu.xin.conf`
+- 已提供执行说明：
+  - `docs/deployment/xiaoyu-xin-https-runbook.md`
+- Android public env 示例已切换为 `https://xiaoyu.xin/api`。
 
 公开公测前必须完成：
 
-1. 准备域名。
-2. DNS 解析到服务器。
-3. 申请证书。
-4. Nginx 增加 443 ssl server。
-5. HTTP 80 统一跳转 HTTPS。
-6. Android public env 改为 `https://<domain>/api`。
-7. 后端 CORS 白名单加入 HTTPS origin。
-8. 重新生成 release 包并确认 cleartext false 下可正常访问。
+1. 服务器安全组放行 `80/tcp` 和 `443/tcp`。
+2. 在服务器安装 Nginx、Certbot 和 `python3-certbot-nginx`。
+3. 用 Certbot 为 `xiaoyu.xin` 签发证书。
+4. 套用 `nginx-xiaoyu.xin.conf`，确认 HTTP 80 统一跳转 HTTPS。
+5. 服务器真实 `.env` 设置 `APP_CORS_ALLOWED_ORIGINS=https://xiaoyu.xin`。
+6. 重新生成 Android public 包并确认 cleartext false 下可正常访问。
 
 ### 2. 隐私说明与用户协议
 

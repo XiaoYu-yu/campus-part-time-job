@@ -26,8 +26,9 @@
 
 1. Docker Engine
 2. Docker Compose Plugin
-3. 可用的 80 端口；8080 / 3306 默认只绑定服务器本机 `127.0.0.1`
+3. 可用的本机端口；frontend / backend / MySQL 默认只绑定服务器本机 `127.0.0.1`
 4. 一个真实但未提交到仓库的腾讯地图 JS SDK key
+5. 如果开放公网 HTTPS，需要宿主机 Nginx、Certbot，以及云服务器安全组放行 `80/tcp`、`443/tcp`
 
 如果你暂时不演示地图，仍然建议保留 `VITE_TENCENT_MAP_KEY` 配置位，但可以在演示口径中明确该能力属于只读预览。
 
@@ -45,7 +46,7 @@ cp deploy/internal-trial/.env.example deploy/internal-trial/.env
    - `JWT_SECRET`
    - `APP_CORS_ALLOWED_ORIGINS`
    - `VITE_TENCENT_MAP_KEY`
-3. 如果前端直接通过服务器 IP 访问，把服务器访问地址补进 `APP_CORS_ALLOWED_ORIGINS`。
+3. 如果使用 `xiaoyu.xin` HTTPS 入口，`APP_CORS_ALLOWED_ORIGINS` 保持为 `https://xiaoyu.xin`。
 
 ## 启动命令
 
@@ -143,11 +144,19 @@ bash deploy/internal-trial/restore-drill.sh
 
 默认端口映射：
 
-1. frontend: `http://<server-ip>:${FRONTEND_PORT}`
+1. frontend: `127.0.0.1:${FRONTEND_PORT}`，默认 `18080`，由宿主机 Nginx 代理到公网
 2. backend: `127.0.0.1:${BACKEND_PORT}`，仅服务器本机诊断或 SSH tunnel 使用
 3. mysql: `127.0.0.1:${MYSQL_PORT}`，仅服务器本机诊断或 SSH tunnel 使用
 
 远端访问 API 应通过 frontend nginx 的 `/api` 反向代理，不再默认暴露 backend 8080 或 MySQL 3306。
+
+如需公网 HTTPS，使用：
+
+1. 宿主机 Nginx 配置模板：`deploy/internal-trial/nginx-xiaoyu.xin.conf`
+2. HTTPS 执行说明：[xiaoyu.xin HTTPS / Nginx 443 Runbook](xiaoyu-xin-https-runbook.md)
+3. 公开入口：
+   - `https://xiaoyu.xin/`
+   - `https://xiaoyu.xin/api/`
 
 ## 回滚与重置
 
@@ -185,7 +194,7 @@ docker compose \
 3. 真实打款
 4. 完整生产监控
 5. 自动备份与恢复编排
-6. HTTPS / 域名 / CDN 自动配置
+6. CDN 自动配置
 7. 多节点扩容
 8. bridge 收口动作
 

@@ -2579,3 +2579,33 @@
 - [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
 
 本轮是公开公测前发布安全基线收口轮：双端 release 签名已有本地配置入口，debug / release 明文网络策略已拆分，debug 继续支撑当前 HTTP 内测环境，release 默认禁明文。双端 `assembleDebug` 和 `assembleRelease` 均通过，合并 manifest 已确认 debug 为 `usesCleartextTraffic=true`，release 为 `false`。本轮没有提交真实签名、证书、服务器密钥、公网地址、腾讯地图 key 或 `.env` 内容，也没有改后端接口、前端业务页面、bridge、`request.js`、token 附着逻辑或旧兼容模块。
+
+## Step 168 - xiaoyu.xin HTTPS / Nginx 443 接入准备
+
+- [deploy/internal-trial/docker-compose.yml](../../deploy/internal-trial/docker-compose.yml)
+  - frontend 端口从公网 `${FRONTEND_PORT:-80}:80` 收口为 `127.0.0.1:${FRONTEND_PORT:-18080}:80`。
+- [deploy/internal-trial/.env.example](../../deploy/internal-trial/.env.example)
+  - `FRONTEND_PORT=18080`。
+  - `APP_CORS_ALLOWED_ORIGINS=https://xiaoyu.xin`。
+- [deploy/internal-trial/nginx-xiaoyu.xin.conf](../../deploy/internal-trial/nginx-xiaoyu.xin.conf)（新增）
+  - 新增宿主机 Nginx 80 -> 443 跳转和 HTTPS 反代模板。
+  - `/` 反代 `127.0.0.1:18080`。
+  - `/api/` 反代 `127.0.0.1:8080`。
+- [docs/deployment/xiaoyu-xin-https-runbook.md](../../docs/deployment/xiaoyu-xin-https-runbook.md)（新增）
+  - 新增域名、Nginx、Certbot、证书、验证和回滚执行说明。
+- [docs/deployment/internal-trial-compose.md](../../docs/deployment/internal-trial-compose.md)
+  - 同步 frontend 本机端口和 HTTPS 入口说明。
+- [docs/deployment/public-beta-release-gap-closure.md](../../docs/deployment/public-beta-release-gap-closure.md)
+  - 更新 HTTPS 缺口状态：域名已就绪，仓库侧模板已补齐，服务器实操仍待完成。
+- [frontend/.env.android-user-public.example](../../frontend/.env.android-user-public.example)
+  - API base 示例改为 `https://xiaoyu.xin/api`。
+- [frontend/.env.android-parttime-public.example](../../frontend/.env.android-parttime-public.example)
+  - API base 示例改为 `https://xiaoyu.xin/api`。
+- [project-logs/campus-relay/step-168-xiaoyu-domain-https-nginx-prep.md](step-168-xiaoyu-domain-https-nginx-prep.md)（新增）
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+
+本轮是 `xiaoyu.xin` HTTPS / Nginx 443 接入准备轮：仓库侧已具备宿主机 Nginx 模板、Docker 本机端口收口、Android public HTTPS API base 示例和服务器执行说明。本轮没有登录服务器申请证书，没有提交真实证书、证书私钥、服务器密码、`.env` 或腾讯地图 key，也没有改业务接口、业务页面、bridge、`request.js`、token 附着逻辑或旧兼容模块。

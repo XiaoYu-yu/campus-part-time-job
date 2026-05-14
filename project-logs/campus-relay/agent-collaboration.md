@@ -729,3 +729,56 @@ Phase 2：清理前端残留文件（HelloWorld.vue、vue.svg、vite.svg、Compo
 ### 下一轮建议
 
 二选一推进：如果准备公开公测，先处理 HTTPS / 域名 / 证书和真实 release 签名；如果继续小范围内测，先补隐私/用户协议静态页和 App 内反馈入口。
+
+## Step 168 协作记录 - xiaoyu.xin HTTPS / Nginx 443 接入准备
+
+### 本轮目标
+
+把 owner 已确认的 `xiaoyu.xin` 域名接入方案固化为仓库模板和执行说明，先完成 HTTPS / Nginx 443 的配置准备，不在本轮提交任何真实证书或服务器密钥。
+
+### 实际改动
+
+- Docker Compose frontend 端口收口为 `127.0.0.1:18080`。
+- `deploy/internal-trial/.env.example` 默认 `FRONTEND_PORT=18080`，CORS 示例改为 `https://xiaoyu.xin`。
+- 新增 `deploy/internal-trial/nginx-xiaoyu.xin.conf`。
+- 新增 `docs/deployment/xiaoyu-xin-https-runbook.md`。
+- 更新 `docs/deployment/internal-trial-compose.md`。
+- 更新 `docs/deployment/public-beta-release-gap-closure.md`。
+- Android public env 示例切换到 `https://xiaoyu.xin/api`。
+- 本地 ignored Android public env 也已同步，但不会提交。
+- 新增 Step 168 日志。
+- 更新 summary / pending / file-change-list / global-working-memory。
+
+### 未改动内容
+
+- 未申请证书。
+- 未提交证书、证书私钥、服务器密码或真实 `.env`。
+- 未生成真实 Android release keystore。
+- 未改后端业务接口。
+- 未改前端业务页面。
+- 未改 bridge。
+- 未改 `request.js`。
+- 未改 token 附着逻辑、路由或鉴权。
+- 未删除旧兼容模块。
+
+### 验证结果
+
+- DNS 本地解析：`xiaoyu.xin` 指向当前服务器。
+- `npm run build` 通过。
+- `npm run build:android:user:public` 通过。
+- `npm run build:android:parttime:public` 通过。
+- Android public 构建产物已包含 `https://xiaoyu.xin/api`，未命中旧 HTTP 公网 IP。
+- 后端 `.\mvnw.cmd -DskipTests compile` 通过。
+- `git diff --check` 通过，仅 CRLF 提示。
+- 本机无 Docker 命令，未能执行 `docker compose config`。
+
+### 风险
+
+- 服务器尚未实际签发证书。
+- Nginx 443 尚未在服务器实操验证。
+- Android release 真实签名仍未完成。
+- 隐私政策、用户协议和 App 内反馈入口仍未完成。
+
+### 下一轮建议
+
+优先在服务器上实操 Nginx / Certbot / 443 并做远端 smoke；如果暂时不碰服务器，则转入隐私政策、用户协议和 App 内反馈入口。

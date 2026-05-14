@@ -1,6 +1,6 @@
 # 校园代送待处理事项
 
-## Step 168 最高优先级 - HTTPS/签名实操或隐私反馈入口二选一
+## Step 169 最高优先级 - 服务器 HTTPS 实操或隐私反馈入口二选一
 
 ### 当前依据
 
@@ -15,13 +15,19 @@
 - Step 167 已完成 release 签名配置入口、debug/release cleartext 分离和发布缺口清单。
 - Step 167 已验证双端 `assembleDebug` / `assembleRelease` 通过。
 - Step 167 已确认 debug manifest 为 `usesCleartextTraffic=true`，release manifest 为 `false`。
+- Step 168 已确认 `xiaoyu.xin` 解析到服务器。
+- Step 168 已新增宿主机 Nginx 443 模板和 HTTPS runbook。
+- Step 168 已将 Docker frontend 端口收口到 `127.0.0.1:18080`。
+- Step 168 已将 Android public env 示例切换到 `https://xiaoyu.xin/api`。
+- Step 168 前端 Web 构建、Android 双端 public 构建和后端 compile 均通过。
 
 ### 下一轮建议
 
-1. 如果要继续冲公开公测：先买/绑定域名，做 HTTPS / 证书 / Nginx 443 / Android HTTPS API base，并本地生成真实 release keystore。
-2. 如果仍先做小范围内测：先补 App 内隐私说明 / 用户协议静态页和反馈入口。
-3. 不要在没有 HTTPS 和真实签名的情况下把 release 包发给公开用户。
-4. 不要提交 keystore、`key.properties`、公网地址、服务器密码、GitHub token、腾讯地图 key 或 `.env` 内容。
+1. 如果服务器已准备好：按 `docs/deployment/xiaoyu-xin-https-runbook.md` 实操 Nginx / Certbot / 443，并做远端 smoke。
+2. 如果暂时不动服务器：先补 App 内隐私说明 / 用户协议静态页和反馈入口。
+3. HTTPS 实操后，重新生成 Android public 包并在真机验证 `https://xiaoyu.xin/api`。
+4. 不要在没有 HTTPS 和真实签名的情况下把 release 包发给公开用户。
+5. 不要提交 keystore、`key.properties`、公网地址、服务器密码、GitHub token、腾讯地图 key、证书私钥或 `.env` 内容。
 
 ### 继续冻结项
 

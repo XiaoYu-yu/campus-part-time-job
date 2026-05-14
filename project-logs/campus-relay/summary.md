@@ -2578,3 +2578,15 @@
   - 当前仍未解决：真实 release keystore、HTTPS / 域名 / 证书、隐私说明/用户协议入口、App 内反馈入口。
   - 本轮未改后端业务接口、前端业务页面、bridge、`request.js`、token 附着逻辑或旧兼容模块。
   - [Step 167 日志](step-167-public-beta-release-gap-closure.md)
+
+- 当前已完成：`Step 168 - xiaoyu.xin HTTPS / Nginx 443 接入准备`
+  - 已确认 `xiaoyu.xin` 本地解析到当前服务器。
+  - Docker frontend 端口已从公网 80 收口为本机 `127.0.0.1:18080`。
+  - 新增宿主机 Nginx HTTPS 模板：`deploy/internal-trial/nginx-xiaoyu.xin.conf`。
+  - 新增执行说明：[xiaoyu.xin HTTPS / Nginx 443 执行说明](../../docs/deployment/xiaoyu-xin-https-runbook.md)。
+  - Android public env 示例已切换为 `https://xiaoyu.xin/api`。
+  - 本地 ignored Android public env 也已同步到 `https://xiaoyu.xin/api`，但不会提交。
+  - `npm run build`、`npm run build:android:user:public`、`npm run build:android:parttime:public`、后端 `.\mvnw.cmd -DskipTests compile` 均通过。
+  - 本机没有 Docker 命令，`docker compose config` 未能本地执行，需在服务器实操前复核。
+  - 本轮未申请证书、未提交真实证书/密钥/`.env`，未改业务接口、bridge、`request.js`、token 附着逻辑或旧兼容模块。
+  - [Step 168 日志](step-168-xiaoyu-domain-https-nginx-prep.md)
