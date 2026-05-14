@@ -64,27 +64,6 @@
           <template #title>校园异常处理</template>
         </el-menu-item>
 
-        <div class="menu-section-label">旧模块兼容</div>
-        <el-menu-item index="/category">
-          <el-icon><Grid /></el-icon>
-          <template #title>分类兼容</template>
-        </el-menu-item>
-        <el-menu-item index="/dish">
-          <el-icon><Mug /></el-icon>
-          <template #title>商品兼容</template>
-        </el-menu-item>
-        <el-menu-item index="/setmeal">
-          <el-icon><Sugar /></el-icon>
-          <template #title>套餐兼容</template>
-        </el-menu-item>
-        <el-menu-item index="/order">
-          <el-icon><ShoppingCart /></el-icon>
-          <template #title>订单兼容</template>
-        </el-menu-item>
-        <el-menu-item index="/shop-status">
-          <el-icon><Position /></el-icon>
-          <template #title>店铺状态兼容</template>
-        </el-menu-item>
       </el-menu>
 
       <div class="sidebar-footer">
@@ -173,7 +152,7 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/user'
 import { normalizeDisplayText } from '../utils/text'
 import { 
-  HomeFilled, User, Grid, Mug, Sugar, ShoppingCart, DataAnalysis, Position, Tickets, Document, LocationInformation, Coin,
+  HomeFilled, User, DataAnalysis, Tickets, Document, LocationInformation, Coin,
   DArrowLeft, DArrowRight, House, FullScreen, Bell, ArrowDown, Setting, SwitchButton, Search
 } from '@element-plus/icons-vue'
 
@@ -209,17 +188,12 @@ const breadcrumb = computed(() => {
   const pathMap = {
     '/dashboard': '运营总览',
     '/employee': '运营人员',
-    '/category': '分类兼容',
-    '/dish': '商品兼容',
-    '/setmeal': '套餐兼容',
-    '/order': '订单兼容',
     '/statistics': '数据看板',
     '/campus/settlement-batches': '校园结算批次',
     '/campus/after-sale-executions': '校园售后执行',
     '/campus/courier-ops': '校园配送运营',
     '/campus/settlements': '校园结算运营',
-    '/campus/exceptions': '校园异常处理',
-    '/shop-status': '店铺状态兼容'
+    '/campus/exceptions': '校园异常处理'
   }
   return pathMap[path] || ''
 })

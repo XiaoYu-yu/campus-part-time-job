@@ -887,3 +887,47 @@ Step 170 优先补 App 内隐私政策 / 用户协议入口和反馈入口；完
 ### 下一轮建议
 
 Step 171 优先进入真实 release 签名包准备：生成双端 keystore、填写本地 ignored `key.properties`、构建 release APK，并用 `https://xiaoyu.xin/api` 做真机主链路 smoke。
+
+## Step 171 协作记录 - 旧外卖前端可见模块收口
+
+### 本轮目标
+
+按 owner 指令先去掉旧外卖模块，但采用安全边界：只删除前端可见旧入口、旧路由、旧页面和旧 API wrapper，不删除后端旧模块或旧表。
+
+### 实际改动
+
+- 管理后台移除“旧模块兼容”分组。
+- 移除 admin 旧外卖路由：`/category`、`/dish`、`/setmeal`、`/order`、`/shop-status`、`/component-demo`。
+- 移除 user 旧外卖路由：`/user/category`、`/user/dish/:id`、`/user/cart`、`/user/checkout`、`/user/orders`。
+- 删除旧前端页面、旧前端 API wrapper、Vite 模板残留和未引用 mock store。
+- Dashboard 最近订单改为读取 campus admin 订单列表。
+- 用户端首页和个人中心不再显示旧分类、购物车、旧订单、地址入口。
+- 新增 Step 171 日志并更新 summary / pending / file-change-list / working memory / legacy readiness。
+
+### 未改动内容
+
+- 未删除后端旧外卖模块。
+- 未删除旧数据库表。
+- 未删除 `user`、`employee`、登录、上传、统计等仍被 campus 复用的基础能力。
+- 未改 bridge。
+- 未改 `request.js`。
+- 未改 token 附着逻辑、鉴权或核心状态机。
+- 未提交真实密钥、证书、服务器凭据、release keystore、GitHub token、腾讯地图 key 或 `.env`。
+
+### 验证结果
+
+- `npm run build` 通过。
+- `npm run build:android:user:public` 通过。
+- `npm run build:android:parttime:public` 通过。
+- `.\mvnw.cmd -DskipTests compile` 通过。
+- `git diff --check` 通过，仅 CRLF 提示。
+
+### 风险
+
+- 后端旧模块仍在仓库中，必须后续按模块审计后才能删除。
+- `Statistics.vue` / `statistics.js` 仍保留为 admin 数据看板能力，是否 campus 化需要单独评估。
+- 真实 release keystore / release APK 仍未完成。
+
+### 下一轮建议
+
+先做一次本地/服务器 smoke；若稳定，再进入旧后端模块删除前依赖审计或回到 release 签名包收口。

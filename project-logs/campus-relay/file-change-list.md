@@ -2675,3 +2675,58 @@
 - [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
 
 本轮是公开公测前 App 内合规与反馈入口收口轮：隐私政策 / 用户协议入口已上线到双端登录页，App 内反馈可从用户端 / 兼职端进入，并通过公共后端接口写入 `campus_feedback`。本轮未改 bridge、鉴权、`request.js`、token 附着逻辑、旧外卖兼容模块或核心状态机，也未提交真实密钥、证书、服务器凭据、release keystore 或 `.env` 内容。
+
+## Step 171 - 旧外卖前端可见模块收口
+
+- [frontend/src/layout/MainLayout.vue](../../frontend/src/layout/MainLayout.vue)
+  - 移除管理后台“旧模块兼容”菜单分组。
+  - 移除旧兼容菜单 icon import 和 breadcrumb 映射。
+- [frontend/src/router/index.js](../../frontend/src/router/index.js)
+  - 移除 admin 旧外卖路由：`/category`、`/dish`、`/setmeal`、`/order`、`/shop-status`、`/component-demo`。
+  - 移除 user 旧外卖路由：`/user/category`、`/user/dish/:id`、`/user/cart`、`/user/checkout`、`/user/orders`。
+- [frontend/src/api/campus-admin.js](../../frontend/src/api/campus-admin.js)
+  - 新增 `getCampusAdminOrders`，供 Dashboard 最近校园单快照读取 campus admin 订单列表。
+- [frontend/src/views/Dashboard.vue](../../frontend/src/views/Dashboard.vue)
+  - 最近订单从旧 `order.js` 切换到 `GET /api/campus/admin/orders`。
+  - 状态映射切换为 campus 订单状态。
+  - 文案从旧兼容语义改为校园运营语义。
+- [frontend/src/views/user/Home.vue](../../frontend/src/views/user/Home.vue)
+  - 移除旧模块兼容卡片和分类 / 购物车 / 旧订单 / 地址入口。
+- [frontend/src/views/user/Profile.vue](../../frontend/src/views/user/Profile.vue)
+  - 移除旧地址管理、旧订单、旧购物车入口。
+  - 改为展示校园代送单数量和 campus 常用入口。
+- 删除旧前端 API wrapper：
+  - [frontend/src/api/address.js](../../frontend/src/api/address.js)
+  - [frontend/src/api/cart.js](../../frontend/src/api/cart.js)
+  - [frontend/src/api/category.js](../../frontend/src/api/category.js)
+  - [frontend/src/api/customer-order.js](../../frontend/src/api/customer-order.js)
+  - [frontend/src/api/dish.js](../../frontend/src/api/dish.js)
+  - [frontend/src/api/order.js](../../frontend/src/api/order.js)
+  - [frontend/src/api/public.js](../../frontend/src/api/public.js)
+  - [frontend/src/api/setmeal.js](../../frontend/src/api/setmeal.js)
+  - [frontend/src/api/shop.js](../../frontend/src/api/shop.js)
+- 删除旧前端页面和模板残留：
+  - [frontend/src/views/Category.vue](../../frontend/src/views/Category.vue)
+  - [frontend/src/views/Dish.vue](../../frontend/src/views/Dish.vue)
+  - [frontend/src/views/Setmeal.vue](../../frontend/src/views/Setmeal.vue)
+  - [frontend/src/views/Order.vue](../../frontend/src/views/Order.vue)
+  - [frontend/src/views/ShopStatus.vue](../../frontend/src/views/ShopStatus.vue)
+  - [frontend/src/views/ComponentDemo.vue](../../frontend/src/views/ComponentDemo.vue)
+  - [frontend/src/views/user/Category.vue](../../frontend/src/views/user/Category.vue)
+  - [frontend/src/views/user/DishDetail.vue](../../frontend/src/views/user/DishDetail.vue)
+  - [frontend/src/views/user/Cart.vue](../../frontend/src/views/user/Cart.vue)
+  - [frontend/src/views/user/Checkout.vue](../../frontend/src/views/user/Checkout.vue)
+  - [frontend/src/views/user/Orders.vue](../../frontend/src/views/user/Orders.vue)
+  - [frontend/src/components/HelloWorld.vue](../../frontend/src/components/HelloWorld.vue)
+  - [frontend/src/assets/vue.svg](../../frontend/src/assets/vue.svg)
+  - [frontend/src/assets/vite.svg](../../frontend/src/assets/vite.svg)
+  - [frontend/src/stores/mock.js](../../frontend/src/stores/mock.js)
+- [project-logs/campus-relay/step-171-legacy-takeaway-frontend-removal.md](step-171-legacy-takeaway-frontend-removal.md)（新增）
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+- [project-logs/campus-relay/legacy-takeaway-removal-readiness.md](legacy-takeaway-removal-readiness.md)
+
+本轮是旧外卖前端可见模块收口轮：旧外卖已从 admin 侧边栏、admin 路由、用户端路由、用户端首页和个人中心入口中移除，相关旧前端页面和 API wrapper 已删除。后端旧模块、旧表、user / employee / auth / upload / statistics 等基础能力仍保留，等待后续按模块审计。本轮未改 bridge、`request.js`、token 附着逻辑、后端鉴权或核心状态机。

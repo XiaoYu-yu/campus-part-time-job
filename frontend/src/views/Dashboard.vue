@@ -33,7 +33,7 @@
         <div class="chart-card">
           <div class="section-title">
             <span>趋势观察</span>
-            <small>兼容旧统计接口</small>
+            <small>校园运营趋势</small>
           </div>
           <div ref="trendChartRef" class="chart-container"></div>
         </div>
@@ -50,7 +50,7 @@
       <div class="recent-orders">
         <div class="section-title">
           <span>最近校园单快照</span>
-          <small>只读预览，保留旧订单兼容语义</small>
+          <small>只读预览，来自校园代送订单</small>
         </div>
         <el-table v-loading="loading" :data="recentOrders" class="glass-table" style="width: 100%">
           <el-table-column prop="id" label="订单号" width="120" />
@@ -87,7 +87,7 @@ import { useUserStore } from '../stores/user'
 import { computed, onMounted, ref, watch } from 'vue'
 import { echarts } from '../utils/echarts'
 import { getDashboardData } from '../api/statistics'
-import { getOrderList } from '../api/order'
+import { getCampusAdminOrders } from '../api/campus-admin'
 import { normalizeDisplayText } from '../utils/text'
 
 const userStore = useUserStore()
@@ -133,11 +133,13 @@ const formatDateTime = (dateTime) => {
 
 const getStatusLabel = (status) => {
   const statusMap = {
-    0: '待支付',
-    1: '处理中',
-    2: '已配送',
-    3: '已完成',
-    4: '已取消'
+    WAITING_ACCEPT: '待接单',
+    ACCEPTED: '已接单',
+    PICKED_UP: '已取餐',
+    DELIVERING: '配送中',
+    AWAITING_CONFIRMATION: '待确认',
+    COMPLETED: '已完成',
+    CANCELLED: '已取消'
   }
 
   return statusMap[status] || '未知状态'
@@ -146,15 +148,17 @@ const getStatusLabel = (status) => {
 // 获取状态对应的标签类型
 const getStatusType = (status) => {
   switch (status) {
-    case 0:
+    case 'WAITING_ACCEPT':
       return 'warning'
-    case 1:
+    case 'ACCEPTED':
+    case 'PICKED_UP':
       return 'info'
-    case 2:
+    case 'DELIVERING':
+    case 'AWAITING_CONFIRMATION':
       return 'primary'
-    case 3:
+    case 'COMPLETED':
       return 'success'
-    case 4:
+    case 'CANCELLED':
       return 'danger'
     default:
       return ''
@@ -191,7 +195,7 @@ const loadDashboardData = async () => {
 const loadRecentOrders = async () => {
   loading.value = true
   try {
-    const res = await getOrderList({ page: 1, size: 5 })
+    const res = await getCampusAdminOrders({ page: 1, pageSize: 5 })
     recentOrders.value = res.records || []
   } catch (error) {
     console.error('加载最近订单失败:', error)

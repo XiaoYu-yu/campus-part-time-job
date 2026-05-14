@@ -43,6 +43,12 @@ export const getCampusAdminAfterSaleResult = (relayOrderId) => request({
   method: 'get'
 })
 
+export const getCampusAdminOrders = (params) => request({
+  url: '/campus/admin/orders',
+  method: 'get',
+  params: normalizePageParams(params)
+})
+
 export const getCampusCouriers = (params) => request({
   url: '/campus/admin/couriers',
   method: 'get',

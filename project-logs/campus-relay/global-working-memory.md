@@ -789,3 +789,38 @@
    - 不提交真实 keystore、`key.properties`、证书私钥、服务器 `.env`、服务器密码、公网地址、GitHub token、腾讯地图 key 或真实设备 ID。
    - 不重开 bridge。
    - 不改 `request.js`、token 附着逻辑、鉴权或旧兼容模块。
+
+## 2026-05-14 补充：Step 171 旧外卖前端可见模块收口已完成
+
+1. 前端旧外卖入口已移除：
+   - admin 侧边栏不再显示“旧模块兼容”分组。
+   - admin 旧路由已移除：`/category`、`/dish`、`/setmeal`、`/order`、`/shop-status`、`/component-demo`。
+   - user 旧路由已移除：`/user/category`、`/user/dish/:id`、`/user/cart`、`/user/checkout`、`/user/orders`。
+2. 已删除：
+   - 旧前端页面。
+   - 旧前端 API wrapper。
+   - Vite 模板残留。
+   - 未引用 `stores/mock.js`。
+3. 已调整：
+   - Dashboard 最近订单读取 campus admin 订单列表。
+   - 用户端首页不再展示旧模块兼容入口。
+   - 用户端个人中心不再展示旧地址、旧订单、旧购物车入口。
+4. 未删除：
+   - 后端旧外卖 controller / service / mapper / entity。
+   - 旧数据库表和 H2 seed。
+   - `user`、`employee`、登录、上传、统计等基础能力。
+5. 验证：
+   - Web build 通过。
+   - Android user public build 通过。
+   - Android parttime public build 通过。
+   - Backend compile 通过。
+   - `git diff --check` 通过，仅 CRLF 提示。
+6. 当前仍未解决：
+   - 旧后端模块删除前依赖审计。
+   - 真实 release keystore。
+   - 正式 release 签名 APK。
+7. 继续禁止：
+   - 不重开 bridge。
+   - 不改 `request.js`、token 附着逻辑、鉴权或核心状态机。
+   - 不删除 `user` / `employee` 等 shared 基础模块。
+   - 不提交真实密钥、证书、服务器凭据、release keystore、GitHub token、腾讯地图 key 或 `.env`。

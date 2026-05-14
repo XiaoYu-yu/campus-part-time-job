@@ -338,3 +338,60 @@
 - 删除旧 Controller 前必须确认前端 API 文件不再调用对应路由。当前 `category.js`、`dish.js`、`setmeal.js`、`order.js`、`shop.js` 仍被旧 admin 页面引用。
 - 删除旧 Entity 前必须确认 campus 代码未通过 import 间接引用。虽然当前 audit 显示 campus 不 import 旧 Entity（User/Employee 除外），但 MyBatis XML/注解可能通过 resultType 间接引用。
 - `Orders` → `Order` 的命名不一致：旧表叫 `orders`（复数），Entity 叫 `Order`（单数）。如果将来删除旧订单模块，要小心不要误删 campus 依赖的 `OrderMapper` 或 `OrderService`。
+
+---
+
+## 九、Step 171 更新：前端可见旧模块已收口
+
+### 9.1 已完成的前端删除
+
+Step 171 已完成前端旧外卖可见模块收口：
+
+1. 管理后台已移除“旧模块兼容”菜单分组。
+2. 管理后台旧外卖路由已移除：
+   - `/category`
+   - `/dish`
+   - `/setmeal`
+   - `/order`
+   - `/shop-status`
+   - `/component-demo`
+3. 用户端旧外卖路由已移除：
+   - `/user/category`
+   - `/user/dish/:id`
+   - `/user/cart`
+   - `/user/checkout`
+   - `/user/orders`
+4. 旧前端页面、旧前端 API wrapper、Vite 模板残留和未引用 mock store 已删除。
+5. Dashboard 最近订单已改为读取 campus admin 订单列表。
+6. 用户端首页和个人中心不再暴露旧分类、购物车、旧订单、地址入口。
+
+### 9.2 当前仍保留的后端边界
+
+Step 171 未删除任何后端旧模块或旧表。原因：
+
+1. `user` / `employee` 是 campus 账号体系基础，绝对不能作为旧模块删除。
+2. 登录、鉴权、上传、统计等仍被当前后台或 campus 功能复用。
+3. 旧表仍存在于 MySQL init / H2 schema / H2 seed 中，删除前必须逐表审计。
+4. 删除后端旧模块必须按模块独立验证，不允许一次性批量删除。
+
+### 9.3 下一阶段删除前审计建议
+
+如果继续去旧，建议进入新的 Phase 3-A：按模块做后端删除前审计。
+
+推荐顺序：
+
+1. `setmeal`
+2. `dish`
+3. `category`
+4. `shop`
+5. `order`
+
+每个模块必须单独确认：
+
+1. 前端已无 API wrapper 调用。
+2. 后端 campus 包无 import。
+3. MyBatis XML / 注解无 resultType / mapper 引用。
+4. H2 schema / H2 data / MySQL init 不再依赖。
+5. 后端 compile 通过。
+6. Web 和 Android 双端构建通过。
+7. 本地/服务器 smoke 不破坏 admin、用户端、兼职端主链路。

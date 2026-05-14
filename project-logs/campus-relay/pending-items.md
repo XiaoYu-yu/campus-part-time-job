@@ -1,33 +1,34 @@
 # 校园代送待处理事项
 
-## Step 171 最高优先级 - 真实 release 签名包准备与回归
+## Step 172 最高优先级 - 旧后端模块删除前依赖审计与 release 收口排序
 
 ### 当前依据
 
-- Step 167 已完成 release 签名配置入口、debug/release cleartext 分离和发布缺口清单。
-- Step 168 已完成 `xiaoyu.xin` HTTPS / Nginx 443 仓库侧准备。
-- Step 169 已在服务器完成 `xiaoyu.xin` HTTPS / Nginx / Certbot 实操。
-- Step 169 已确认 `http://xiaoyu.xin/` 跳转 HTTPS。
-- Step 169 已确认 `https://xiaoyu.xin/` 返回前端页面。
-- Step 169 已确认 `https://xiaoyu.xin/api/` 进入后端代理。
-- Step 169 远端 smoke：25 PASS / 0 FAIL / 0 SKIP。
-- Step 169 Android public API smoke：2 PASS / 0 FAIL。
-- Step 169 已生成基于 `https://xiaoyu.xin/api` 的用户端 / 兼职端 public Debug QA APK。
-- Step 169 已用轻量 ADB 脚本完成双端安装与 launcher 启动复核。
-- HTTPS / 域名 / 证书这一公开公测阻断项已实际收口。
-- Step 170 已完成 App 内隐私政策 / 用户协议入口。
-- Step 170 已完成 App 内问题反馈入口。
-- Step 170 已落地 `campus_feedback` 表和 `POST /api/campus/public/feedback`。
-- Step 170 H2/test profile 运行态验证：反馈提交返回 `code=200` 并生成记录 ID。
+- Step 169 已完成 `xiaoyu.xin` HTTPS / Nginx / Certbot 实操，HTTPS 公网入口已可用。
+- Step 170 已完成 App 内隐私政策 / 用户协议入口和问题反馈入口。
+- Step 171 已完成旧外卖前端可见模块收口：
+  - 管理后台不再显示旧兼容分组。
+  - 用户端不再显示旧分类、购物车、旧订单、地址入口。
+  - 旧前端页面、旧前端 API wrapper、Vite 模板残留和未引用 mock store 已删除。
+- Step 171 仍保留后端旧模块和旧表，因为 user / employee / auth / upload / statistics 等基础能力仍被 campus 复用。
+- Step 171 构建验证通过：web、Android user public、Android parttime public、后端 compile、`git diff --check`。
 
 ### 下一轮建议
 
-1. owner 本地生成用户端和兼职端真实 release keystore。
-2. 复制双端 `key.properties.example` 为本地 ignored `key.properties`，填入真实密码和 alias。
-3. 构建用户端 / 兼职端 release APK。
-4. 用 `https://xiaoyu.xin/api` 做 release 包真机安装和主链路 smoke。
-5. 仍不要提交 keystore、`key.properties`、公网地址、服务器密码、GitHub token、腾讯地图 key、证书私钥或 `.env` 内容。
-6. 如果 release 签名包完成后仍有余力，再补 admin 反馈只读列表。
+1. 先做一次本地/服务器 smoke，确认删除旧前端入口后：
+   - admin 登录、运营总览、运营人员、数据看板、校园订单/结算/异常/售后入口可用。
+   - 用户端登录、首页、发布代送、结果回看、兼职报名、反馈入口可用。
+   - 兼职端登录、工作台、资料页可用。
+2. 如果 smoke 稳定，再进入旧后端模块删除前依赖审计：
+   - `category`
+   - `dish`
+   - `setmeal`
+   - `shop`
+   - `order`
+3. 每个后端旧模块必须独立确认 controller / service / mapper / entity / XML / H2 seed / MySQL init / 前端调用均无依赖后，才允许删除。
+4. 不要一次删除多个后端旧模块。
+5. 真实 release keystore、正式 release 签名 APK 仍是公开公测前阻断项，旧模块审计后需要继续收口。
+6. 仍不要提交 keystore、`key.properties`、服务器密码、GitHub token、腾讯地图 key、证书私钥或 `.env` 内容。
 
 ### 继续冻结项
 
@@ -35,7 +36,8 @@
 - 展示 polish 线继续保持冻结 / 维护态。
 - 媒体线继续收住。
 - 第五个 admin 页继续后置。
-- 不改 `request.js`、token 附着逻辑、鉴权、路由或旧兼容模块。
+- 不改 `request.js`、token 附着逻辑、鉴权或 bridge。
+- 不删除 `user`、`employee`、登录、上传、统计等仍被 campus 复用的基础模块。
 
 ## Step 163 收口记录
 

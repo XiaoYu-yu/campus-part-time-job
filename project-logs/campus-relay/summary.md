@@ -2621,3 +2621,17 @@
   - 本轮未改 bridge、鉴权、`request.js`、token 附着逻辑、旧外卖兼容模块或核心业务状态机。
   - 当前仍未解决：真实 release keystore、正式 release 签名 APK、admin 反馈只读处理入口。
   - [Step 170 日志](step-170-privacy-terms-feedback-entry.md)
+
+- 当前已完成：`Step 171 - 旧外卖前端可见模块收口`
+  - 管理后台侧边栏移除“旧模块兼容”分组。
+  - 管理后台旧外卖路由已移除：`/category`、`/dish`、`/setmeal`、`/order`、`/shop-status`、`/component-demo`。
+  - 用户端旧外卖路由已移除：`/user/category`、`/user/dish/:id`、`/user/cart`、`/user/checkout`、`/user/orders`。
+  - 删除旧前端页面、旧前端 API wrapper、Vite 模板残留和未引用 mock store。
+  - `Dashboard.vue` 最近订单改为读取 `GET /api/campus/admin/orders`。
+  - 用户端首页和个人中心不再暴露旧分类、购物车、旧订单、地址入口。
+  - 本轮未删除后端旧模块、旧数据库表、`user`、`employee`、登录、上传、统计等仍被 campus 复用的基础能力。
+  - 本轮未改 bridge、`request.js`、token 附着逻辑、后端鉴权或核心状态机。
+  - `npm run build`、`npm run build:android:user:public`、`npm run build:android:parttime:public`、后端 `.\mvnw.cmd -DskipTests compile` 均通过。
+  - `git diff --check` 通过，仅 CRLF 提示。
+  - 当前仍未解决：后端旧模块删除前依赖审计、真实 release keystore、正式 release 签名 APK。
+  - [Step 171 日志](step-171-legacy-takeaway-frontend-removal.md)

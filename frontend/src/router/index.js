@@ -61,30 +61,6 @@ const router = createRouter({
       component: () => import('../views/Employee.vue')
     },
     {
-      path: '/category',
-      name: 'Category',
-      meta: { requiresAdminAuth: true },
-      component: () => import('../views/Category.vue')
-    },
-    {
-      path: '/dish',
-      name: 'Dish',
-      meta: { requiresAdminAuth: true },
-      component: () => import('../views/Dish.vue')
-    },
-    {
-      path: '/setmeal',
-      name: 'Setmeal',
-      meta: { requiresAdminAuth: true },
-      component: () => import('../views/Setmeal.vue')
-    },
-    {
-      path: '/order',
-      name: 'Order',
-      meta: { requiresAdminAuth: true },
-      component: () => import('../views/Order.vue')
-    },
-    {
       path: '/statistics',
       name: 'Statistics',
       meta: { requiresAdminAuth: true },
@@ -126,18 +102,6 @@ const router = createRouter({
       meta: { requiresAdminAuth: true },
       component: () => import('../views/CampusExceptionOpsView.vue')
     },
-    {
-      path: '/shop-status',
-      name: 'ShopStatus',
-      meta: { requiresAdminAuth: true },
-      component: () => import('../views/ShopStatus.vue')
-    },
-    {
-      path: '/component-demo',
-      name: 'ComponentDemo',
-      meta: { requiresAdminAuth: true },
-      component: () => import('../views/ComponentDemo.vue')
-    },
     // 用户端路由
     {
       path: '/user/login',
@@ -150,36 +114,6 @@ const router = createRouter({
       name: 'UserHome',
       meta: { requiresCustomerAuth: true },
       component: () => import('../views/user/Home.vue')
-    },
-    {
-      path: '/user/category',
-      name: 'UserCategory',
-      meta: { requiresCustomerAuth: true },
-      component: () => import('../views/user/Category.vue')
-    },
-    {
-      path: '/user/dish/:id',
-      name: 'UserDishDetail',
-      meta: { requiresCustomerAuth: true },
-      component: () => import('../views/user/DishDetail.vue')
-    },
-    {
-      path: '/user/cart',
-      name: 'UserCart',
-      meta: { requiresCustomerAuth: true },
-      component: () => import('../views/user/Cart.vue')
-    },
-    {
-      path: '/user/checkout',
-      name: 'UserCheckout',
-      meta: { requiresCustomerAuth: true },
-      component: () => import('../views/user/Checkout.vue')
-    },
-    {
-      path: '/user/orders',
-      name: 'UserOrders',
-      meta: { requiresCustomerAuth: true },
-      component: () => import('../views/user/Orders.vue')
     },
     {
       path: '/user/profile',

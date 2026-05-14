@@ -122,21 +122,6 @@
         </button>
       </section>
 
-      <section class="card legacy-card">
-        <div class="section-heading">
-          <div>
-            <span>旧模块兼容</span>
-            <h2>兼容功能仍保留</h2>
-          </div>
-        </div>
-        <p>旧分类、购物车、历史订单和地址能力还保留着，只是不作为现在的主入口。</p>
-        <div class="legacy-links">
-          <button type="button" @click="goTo('/user/category')">分类</button>
-          <button type="button" @click="goTo('/user/cart')">购物车</button>
-          <button type="button" @click="goTo('/user/orders')">旧订单</button>
-          <button type="button" @click="goTo('/user/profile')">地址 / 我的</button>
-        </div>
-      </section>
     </div>
   </UserLayout>
 </template>
@@ -347,7 +332,6 @@ onMounted(() => {
 .primary-banner-action,
 .wide-action,
 .text-link,
-.legacy-links button,
 .quick-card {
   border: none;
   cursor: pointer;
@@ -537,7 +521,6 @@ onMounted(() => {
 }
 
 .helper-text,
-.legacy-card p,
 .state-row p,
 .onboarding-summary p {
   margin: 10px 0 0;
@@ -630,34 +613,6 @@ onMounted(() => {
   font-weight: 700;
 }
 
-.legacy-card {
-  background: #fafafa;
-}
-
-.legacy-links {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-top: 14px;
-
-  button {
-    border: 1px solid #e4e4e7;
-    border-radius: 12px;
-    background: #ffffff;
-    color: #0f9f8f;
-    padding: 11px;
-    font-weight: 700;
-    font-size: 14px;
-    min-height: 44px;
-    cursor: pointer;
-    transition: background 0.15s;
-
-    &:active {
-      background: #f4f4f5;
-    }
-  }
-}
-
 @media (min-width: 768px) {
   .home-page {
     max-width: 520px;
@@ -671,10 +626,6 @@ onMounted(() => {
   }
 
   .order-search {
-    grid-template-columns: 1fr;
-  }
-
-  .legacy-links {
     grid-template-columns: 1fr;
   }
 
