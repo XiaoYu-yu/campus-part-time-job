@@ -65,8 +65,14 @@ export SPRING_PROFILES_ACTIVE=prod
 export SERVER_PORT=8080
 export DB_HOST="$MYSQL_CONTAINER"
 export DB_PORT=3306
+export DB_USE_SSL="${DB_USE_SSL:-false}"
+export DB_ALLOW_PUBLIC_KEY_RETRIEVAL="${DB_ALLOW_PUBLIC_KEY_RETRIEVAL:-true}"
+export DB_MIGRATION_ENABLED="${DB_MIGRATION_ENABLED:-true}"
+export DB_FLYWAY_BASELINE_ON_MIGRATE="${DB_FLYWAY_BASELINE_ON_MIGRATE:-false}"
+export DB_FLYWAY_BASELINE_VERSION="${DB_FLYWAY_BASELINE_VERSION:-14}"
 export JWT_EXPIRATION="${JWT_EXPIRATION:-86400000}"
 export APP_UPLOAD_STORAGE_PATH=/app/uploads/private/images/
+APP_SEED_INTERNAL_TRIAL="${APP_SEED_INTERNAL_TRIAL:-1}"
 
 echo "Building isolated campus images..."
 podman build \
@@ -109,7 +115,6 @@ podman run -d \
   -e MYSQL_ROOT_PASSWORD \
   -p "127.0.0.1:${MYSQL_PORT}:3306" \
   -v "${MYSQL_VOLUME}:/var/lib/mysql" \
-  -v "$REPO_ROOT/backend/db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro,Z" \
   "$MYSQL_IMAGE" \
   --character-set-server=utf8mb4 \
   --collation-server=utf8mb4_unicode_ci >/dev/null
@@ -131,21 +136,6 @@ if [[ "$mysql_ready" -ne 1 ]]; then
   exit 1
 fi
 
-feedback_column_count="$(
-  podman exec \
-    -e MYSQL_PWD \
-    "$MYSQL_CONTAINER" \
-    mysql -N -uroot -e \
-    "SELECT COUNT(*) FROM information_schema.columns WHERE table_schema='${DB_NAME}' AND table_name='campus_feedback' AND column_name='admin_note';"
-)"
-if [[ "$feedback_column_count" == "0" ]]; then
-  echo "Applying V14 feedback processing migration..."
-  podman exec \
-    -e MYSQL_PWD \
-    -i "$MYSQL_CONTAINER" \
-    mysql -uroot "$DB_NAME" <"$REPO_ROOT/backend/db/migrations/V14__campus_feedback_admin_processing.sql"
-fi
-
 echo "Starting isolated backend on 127.0.0.1:${BACKEND_PORT}..."
 podman run -d \
   --name "$BACKEND_CONTAINER" \
@@ -161,6 +151,11 @@ podman run -d \
   -e DB_NAME \
   -e DB_USERNAME \
   -e DB_PASSWORD \
+  -e DB_USE_SSL \
+  -e DB_ALLOW_PUBLIC_KEY_RETRIEVAL \
+  -e DB_MIGRATION_ENABLED \
+  -e DB_FLYWAY_BASELINE_ON_MIGRATE \
+  -e DB_FLYWAY_BASELINE_VERSION \
   -e JWT_SECRET \
   -e JWT_EXPIRATION \
   -e APP_CORS_ALLOWED_ORIGINS \
@@ -181,6 +176,20 @@ if [[ "$backend_ready" -ne 1 ]]; then
   podman logs --tail 100 "$BACKEND_CONTAINER"
   echo "Backend did not become ready." >&2
   exit 1
+fi
+
+if [[ "$APP_SEED_INTERNAL_TRIAL" == "1" || "$APP_SEED_INTERNAL_TRIAL" == "true" ]]; then
+  seed_file="$REPO_ROOT/backend/db/seed/internal-trial-data.sql"
+  if [[ ! -f "$seed_file" ]]; then
+    echo "Internal trial seed file is missing: $seed_file" >&2
+    exit 1
+  fi
+
+  echo "Applying idempotent internal-trial seed data..."
+  podman exec \
+    -e MYSQL_PWD \
+    -i "$MYSQL_CONTAINER" \
+    mysql -uroot "$DB_NAME" <"$seed_file"
 fi
 
 echo "Starting isolated frontend on 0.0.0.0:${FRONTEND_PORT}..."

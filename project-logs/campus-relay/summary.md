@@ -2714,3 +2714,22 @@
   - 已复核当前生效配置中除 `/etc/hosts` 兼容别名外无旧 `hbase01/02/03` 残留。
   - 本轮未启动、停止或重启任何集群服务，未修改 HDFS 数据块、Hive metastore 数据、LVM、GRUB 或 fstab。
   - [Step 178 日志](step-178-cluster-hostname-normalization.md)
+
+- 当前已完成：`Step 179 - 138/master Hive CLI 启动诊断`
+  - 按 owner 口径重新在 `192.168.121.138 / master` 上直接执行 `hive` CLI，而不是只按 Beeline / HiveServer2 判断。
+  - 已确认 `HIVE_HOME=/export/servers/apache-hive-3.1.3-bin`、`HADOOP_HOME=/export/servers/hadoop-3.2.2`、`hive` 命令路径正常。
+  - `hive -S -e "show databases;"` 执行成功，返回 `default / test / ky / xyz` 等数据库。
+  - 当前结论：138 上直接执行 `hive` CLI 可用；`jdbc:hive2://master:10000` 连接失败属于 HiveServer2 未运行 / 10000 未监听，不代表 CLI 不可用。
+  - 记录 Hadoop HBase GetJavaProperty 变量名、SLF4J multiple bindings、DataNucleus metadata warning；这些 warning 未阻断本轮 Hive CLI。
+  - 本轮未修改服务器配置，未启动/停止/重启 Hadoop、Hive、HBase、ZooKeeper 或 MySQL，未修改 Hive metastore 或 HDFS 数据。
+  - [Step 179 日志](step-179-hive-cli-startup-diagnosis.md)
+
+- 当前已完成：`Step 180 - MySQL Flyway 正式化数据库改造`
+  - 后端新增 Flyway，`prod` profile 默认启用 MySQL 结构迁移，`test` profile 继续使用 H2 并禁用 Flyway。
+  - Maven 打包会把 `backend/db/migrations/V1..V14` 复制到 `classpath:db/migration`，jar 内已确认包含 14 个迁移脚本和 `flyway-core-9.22.3.jar`。
+  - 修正 `V2__campus_relay_schema.sql` 中与 V3 重复的 `paid_at / cancelled_at / after_sale_applied_at / cancel_reason` 字段。
+  - standalone MySQL 部署从挂载 `init.sql` + 手工补 V14 改为：空 MySQL -> 后端 Flyway -> 可选 MySQL 内测 seed。
+  - 新增 `backend/db/seed/internal-trial-data.sql`，用于 MySQL standalone smoke 的幂等示例数据。
+  - 后端 58 tests 全绿，后端打包通过，`git diff --check` 通过。
+  - 本轮未在 138 Hive metastore MySQL 上创建或修改数据库，未启动/停止任何集群服务。
+  - [Step 180 日志](step-180-mysql-flyway-production-database-hardening.md)

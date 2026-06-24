@@ -2958,3 +2958,56 @@
 - `project-logs/campus-relay/global-working-memory.md`
 
 本轮没有启动、停止或重启任何集群服务。当前生效配置除 `/etc/hosts` 兼容别名外已无旧 `hbase01 / hbase02 / hbase03` 残留。
+
+## Step 179 - 138/master Hive CLI 启动诊断
+
+- `project-logs/campus-relay/step-179-hive-cli-startup-diagnosis.md`（新增）
+  - 记录 owner 反馈“直接在 138 里面执行 hive”的复现口径。
+  - 记录 `hive -S -e "show databases;"` 在 `master` 上执行成功。
+  - 记录 Hive CLI 与 HiveServer2 / Beeline 的区别：CLI 可用，`master:10000` 需要 HiveServer2 单独运行。
+  - 记录当前不阻断 CLI 的 Hadoop HBase GetJavaProperty、SLF4J、DataNucleus warning。
+- `project-logs/campus-relay/summary.md`
+- `project-logs/campus-relay/pending-items.md`
+- `project-logs/campus-relay/file-change-list.md`
+- `project-logs/campus-relay/agent-collaboration.md`
+- `project-logs/campus-relay/global-working-memory.md`
+
+服务器侧仅执行只读诊断和 `hive -S -e "show databases;"` 验证；未修改配置，未启动、停止或重启 Hadoop / Hive / HBase / ZooKeeper / MySQL，未修改 Hive metastore 或 HDFS 数据。
+
+## Step 180 - MySQL Flyway 正式化数据库改造
+
+- `backend/pom.xml`
+  - 新增 `flyway-core`。
+  - 将 `backend/db/migrations/*.sql` 打包到 `classpath:db/migration`。
+- `backend/src/main/resources/application-prod.properties`
+  - `prod` profile 默认启用 Flyway。
+  - MySQL URL 支持 `DB_USE_SSL` 与 `DB_ALLOW_PUBLIC_KEY_RETRIEVAL`。
+- `backend/src/main/resources/application-dev.properties`
+  - dev profile 可通过 `DB_MIGRATION_ENABLED=true` 手动启用 Flyway。
+- `backend/src/main/resources/application-test.properties`
+  - test profile 明确禁用 Flyway，继续使用 H2 初始化。
+- `backend/db/migrations/V2__campus_relay_schema.sql`
+  - 移除与 V3 重复的时间线 / 取消字段。
+- `backend/db/migrations/README.md`
+  - 更新为 Flyway 迁移说明。
+- `backend/db/seed/README.md`（新增）
+- `backend/db/seed/internal-trial-data.sql`（新增）
+  - 新增 MySQL standalone 内测 seed。
+- `backend/.env.example`
+- `deploy/internal-trial/backend.Dockerfile`
+  - 构建时复制 `backend/db`，确保迁移脚本进入 jar。
+- `deploy/standalone-podman/.env.example`
+- `deploy/standalone-podman/init-env.sh`
+- `deploy/standalone-podman/deploy.sh`
+  - 移除 `init.sql` 挂载和 V14 手工补丁。
+  - 改为后端 Flyway 自动迁移后可选导入 seed。
+- `deploy/standalone-podman/README.md`
+  - 补充 Flyway / seed / baseline 使用边界。
+- `project-logs/campus-relay/step-180-mysql-flyway-production-database-hardening.md`（新增）
+- `project-logs/campus-relay/summary.md`
+- `project-logs/campus-relay/pending-items.md`
+- `project-logs/campus-relay/file-change-list.md`
+- `project-logs/campus-relay/agent-collaboration.md`
+- `project-logs/campus-relay/global-working-memory.md`
+
+验证：后端 58 tests 全绿，后端打包通过，jar 内包含 Flyway 和 V1..V14 迁移脚本，`git diff --check` 通过。未在 138 Hive metastore MySQL 上创建或修改数据库。

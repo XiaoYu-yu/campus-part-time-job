@@ -13,6 +13,7 @@ RUN sed -i 's/\r$//' mvnw && chmod +x mvnw
 RUN ./mvnw -q -DskipTests dependency:go-offline
 
 COPY backend/src src
+COPY backend/db db
 
 RUN ./mvnw -q -DskipTests package
 

@@ -1038,3 +1038,53 @@
    - 写 `master` 主控启动 / 停止 runbook。
    - 写只读健康检查脚本。
    - 如需 HBase，先决定单机 HBase 还是三机 HBase；当前只有 `master` 有 HBase 目录，不建议直接启动三机 HBase。
+
+## 2026-06-24 补充：Step 179 Hive CLI 可用性结论
+
+1. owner 澄清使用场景是“直接在 138 里面执行 hive”，不是 Beeline / JDBC。
+2. 已在 `192.168.121.138 / master` 复现：
+   - `HIVE_HOME=/export/servers/apache-hive-3.1.3-bin`
+   - `HADOOP_HOME=/export/servers/hadoop-3.2.2`
+   - `hive=/export/servers/apache-hive-3.1.3-bin/bin/hive`
+   - `hive -S -e "show databases;"` 成功。
+3. Hive CLI 返回数据库包括：
+   - `default`
+   - `test`
+   - `ky`
+   - `xyz`
+   - `zjsm`
+   - 以及若干课程/练习库。
+4. 当前结论：
+   - 直接执行 `hive` CLI：可用。
+   - `beeline -u jdbc:hive2://master:10000`：依赖 HiveServer2，若 `10000` 未监听会连接失败。
+5. 运行时 warning：
+   - Hadoop HBase GetJavaProperty 变量名 warning。
+   - SLF4J multiple bindings。
+   - DataNucleus metadata warning。
+   - 本轮未阻断 `hive` CLI，不建议在上课前临时大改。
+6. 本轮没有修改服务器配置，没有启动/停止/重启 Hadoop、Hive、HBase、ZooKeeper 或 MySQL。
+
+## 2026-06-24 补充：Step 180 数据库正式化路线
+
+1. 数据库路线已明确：
+   - H2：继续用于 `test` profile 和 H2 smoke fallback。
+   - MySQL：正式 / standalone 持久化部署目标。
+   - Flyway：正式结构迁移入口。
+2. 后端已新增 `flyway-core`，`prod` profile 默认启用：
+   - `spring.flyway.enabled=${DB_MIGRATION_ENABLED:true}`
+   - `spring.flyway.locations=classpath:db/migration`
+3. `backend/db/migrations/V1..V14` 通过 Maven resources 打进 jar：
+   - jar 中路径为 `BOOT-INF/classes/db/migration/V*.sql`
+4. `test` profile 明确 `spring.flyway.enabled=false`，后端 58 tests 已全绿。
+5. 已修正 V2 与 V3 的重复字段问题：
+   - `paid_at`
+   - `cancelled_at`
+   - `after_sale_applied_at`
+   - `cancel_reason`
+6. standalone MySQL 部署现在应走：
+   - 空 MySQL 容器；
+   - 后端 prod 启动；
+   - Flyway 自动建表 / 迁移；
+   - 可选导入 `backend/db/seed/internal-trial-data.sql`。
+7. `backend/db/init.sql` 仍保留，但不再作为 standalone 正式部署入口；后续可标记为历史人工参考。
+8. 本轮没有在 138 的 Hive metastore MySQL 上创建或修改任何库表；后续真实 MySQL 验证应使用隔离 standalone MySQL。

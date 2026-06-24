@@ -33,8 +33,18 @@ bash deploy/standalone-podman/deploy.sh
 ```
 
 The first build pulls Maven, Eclipse Temurin, Node, Nginx, and MySQL images.
-Later runs reuse the Podman cache and preserve named data volumes. The script
-uses China-friendly mirror defaults that can be overridden when needed:
+Later runs reuse the Podman cache and preserve named data volumes. The MySQL
+container starts with an empty database; the backend `prod` profile runs Flyway
+migrations on startup. By default, this standalone path then applies the
+idempotent internal-trial seed file so smoke accounts and sample orders exist:
+
+```text
+backend/db/seed/internal-trial-data.sql
+```
+
+Set `APP_SEED_INTERNAL_TRIAL=0` in `.env` if you want a clean schema without
+demo data. The script uses China-friendly mirror defaults that can be
+overridden when needed:
 
 ```bash
 MAVEN_IMAGE=docker.io/library/maven:3.9.9-eclipse-temurin-17 \
@@ -48,6 +58,20 @@ NPM_REGISTRY=https://registry.npmjs.org \
 
 Container secrets are inherited from the private `.env` as environment names,
 so password values are not placed directly in the `podman run` command line.
+
+### Existing manual schema
+
+For a fresh standalone volume, keep:
+
+```env
+DB_FLYWAY_BASELINE_ON_MIGRATE=false
+DB_FLYWAY_BASELINE_VERSION=14
+```
+
+Only if you intentionally point the app at a verified existing manual schema
+that already matches the current migrations, set
+`DB_FLYWAY_BASELINE_ON_MIGRATE=true`. Do not use this to skip unknown or partial
+database state.
 
 ## H2 smoke fallback
 

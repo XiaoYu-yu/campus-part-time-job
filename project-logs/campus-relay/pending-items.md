@@ -1008,7 +1008,7 @@
 - 没有做轨迹回放、路线规划、实时调度或地图大屏；当前只保留 Step 72 的单页腾讯地图点位预览试点
 - 没有新增第二套返回体
 
-## Step 178 后的上线前待办
+## Step 180 后的上线前待办
 
 ### P0 - owner 私有发布材料
 
@@ -1026,11 +1026,15 @@
    - backend：仅 `127.0.0.1:18081`
    - smoke：27 PASS / 0 FAIL / 0 SKIP
 3. 当前 H2 smoke 栈只用于局域网验证，不是持久化生产部署。
-4. MySQL 持久化部署仍待收口：
-   - 当前 Docker Hub / MySQL 镜像拉取不稳定。
-   - 宿主机已有 MySQL 未获授权凭据，未修改。
-   - 下一轮可选择：修复镜像源后继续 Podman MySQL，或由 owner 提供专用 MySQL 用户。
-5. 若要切正式公网入口，仍需重新确认 HTTPS / 域名 / 证书和生产签名包。
+4. MySQL 持久化部署代码链路已收口为 Flyway：
+   - `prod` profile 默认启用 Flyway。
+   - `backend/db/migrations/V1..V14` 已打进 jar。
+   - standalone MySQL 部署会先空库启动，再由后端 Flyway 建表，最后可选导入 `backend/db/seed/internal-trial-data.sql`。
+5. MySQL 持久化部署仍待真实环境验证：
+   - 当前尚未在隔离 MySQL 上跑完整 Flyway 启动。
+   - 不要复用或修改 138 的 Hive metastore MySQL。
+   - 下一轮优先在 standalone Podman MySQL 上验证；若镜像源仍慢，再考虑专用 MySQL 用户或离线镜像。
+6. 若要切正式公网入口，仍需重新确认 HTTPS / 域名 / 证书和生产签名包。
 
 ### P0 - 集群 / Hive 上课环境保护
 
@@ -1059,14 +1063,28 @@
    - 只有 `master` 有 HBase 目录。
    - `regionservers` 仍为 `localhost`。
    - 若需要 HBase，先完成 HBase 安装和配置同步。
+7. `138/master` 上直接执行 `hive` CLI 已验证可用：
+   - `hive -S -e "show databases;"` 成功返回数据库列表。
+   - 若使用 Beeline / JDBC，则需要单独启动 HiveServer2 并确认 `master:10000` 监听。
+   - 当前 Hadoop HBase GetJavaProperty、SLF4J、DataNucleus warning 不阻断 Hive CLI，不建议在上课前临时大改。
 
 ### P1 - 集群整理下一步
 
 1. 写一份 `master` 主控启动/停止 runbook。
 2. 写一个只读健康检查脚本，统一检查三台状态。
-3. 修正 SSH 免密不对称问题，或明确只允许从 138 启停集群。
-4. 后续如需迁移 HDFS 数据目录到 `/export/data/hadoop`，必须安排停机窗口并先备份；不要在上课前临时迁移。
-5. 将 runbook 文案从旧 `hbase01 / hbase02 / hbase03` 口径更新为 `master / worker01 / worker02`。
+3. 在健康检查脚本中区分 Hive CLI 与 HiveServer2：
+   - CLI：`hive -S -e "show databases;"`
+   - HiveServer2：`ss -lntp | grep 10000` + `beeline -u jdbc:hive2://master:10000`
+4. 修正 SSH 免密不对称问题，或明确只允许从 138 启停集群。
+5. 后续如需迁移 HDFS 数据目录到 `/export/data/hadoop`，必须安排停机窗口并先备份；不要在上课前临时迁移。
+6. 将 runbook 文案从旧 `hbase01 / hbase02 / hbase03` 口径更新为 `master / worker01 / worker02`。
+
+### P1 - 数据库后续
+
+1. 在隔离 MySQL 上跑一次真实 Flyway 迁移启动验证。
+2. 验证 `flyway_schema_history` 中 V1..V14 均为成功状态。
+3. 用 MySQL standalone 栈复跑 remote smoke。
+4. 旧 `backend/db/init.sql` 后续标记为历史人工参考，避免被误当正式部署入口。
 
 ### P1 - 反馈与运营
 
