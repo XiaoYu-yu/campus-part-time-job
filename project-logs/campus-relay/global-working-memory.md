@@ -999,3 +999,42 @@
 9. 继续禁止：
    - 不改集群网络、卷、容器或服务。
    - 不提交 `.env`、密码、证书私钥、release keystore、GitHub token、腾讯地图 key 或服务器凭据。
+
+## 2026-06-24 补充：Step 177/178 集群命名与环境整理
+
+1. owner 明确：`192.168.121.138` 是主节点 / 主控入口，日常操作优先在 138 上完成。
+2. 三台机器已规范化命名：
+   - `192.168.121.138 = master`
+   - `192.168.121.139 = worker01`
+   - `192.168.121.140 = worker02`
+3. `/etc/hosts` 当前策略：
+   - 新名字在前。
+   - 旧 `hbase01 / hbase02 / hbase03` 保留为兼容别名。
+   - 不建议直接删除旧别名，因为 Hive metastore / HDFS 历史路径可能仍有旧 URI。
+4. 当前集群主控口径：
+   - HDFS NameNode：`master`
+   - HDFS SecondaryNameNode：`master`
+   - YARN ResourceManager：`master`
+   - Hive metastore / HiveServer2：`master`
+   - MySQL：`master`
+   - workers：`master / worker01 / worker02`
+5. 当前配置已更新：
+   - Hadoop：`core-site.xml`、`yarn-site.xml`、`hdfs-site.xml`、`workers`
+   - ZooKeeper：`zoo.cfg`
+   - Hive：`master` 上 `hive-site.xml`
+   - HBase：`master` 上 `hbase-site.xml`
+   - Chrony：`worker01 / worker02` 注释
+6. 当前运行态：
+   - 三台 `jps -lm` 只有 `Jps`。
+   - 本轮没有启动、停止或重启集群服务。
+7. 当前不要改：
+   - `/etc/fstab`、GRUB、kernel cmdline 中的 `cs_hbase01`，这是 LVM 名称。
+   - `/export/servers/hadoop-3.2.2/tmp/dfs/...` 中的旧名，这是 HDFS 数据块和历史作业内容。
+   - `.bak*`、历史备份、日志。
+8. 备份位置：
+   - Step 177：`/root/cluster-config-backup-20260624-*.tar.gz`
+   - Step 178：`/root/cluster-rename-backup-20260624-*.tar.gz`
+9. 后续优先：
+   - 写 `master` 主控启动 / 停止 runbook。
+   - 写只读健康检查脚本。
+   - 如需 HBase，先决定单机 HBase 还是三机 HBase；当前只有 `master` 有 HBase 目录，不建议直接启动三机 HBase。

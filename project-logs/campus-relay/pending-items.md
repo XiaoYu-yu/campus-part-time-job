@@ -1008,7 +1008,7 @@
 - 没有做轨迹回放、路线规划、实时调度或地图大屏；当前只保留 Step 72 的单页腾讯地图点位预览试点
 - 没有新增第二套返回体
 
-## Step 176 后的上线前待办
+## Step 178 后的上线前待办
 
 ### P0 - owner 私有发布材料
 
@@ -1020,17 +1020,53 @@
 
 ### P0 - 最终服务器发布
 
-1. `192.168.121.138` 已完成磁盘扩容并运行 standalone H2 smoke 栈：
+1. `192.168.121.138 / master` 已明确作为主控节点和主要操作入口；应用部署、Hive/MySQL、HDFS/YARN 主控能力默认优先放 138。
+2. `192.168.121.138` 已完成磁盘扩容并运行 standalone H2 smoke 栈：
    - frontend：`http://192.168.121.138:18080/`
    - backend：仅 `127.0.0.1:18081`
    - smoke：27 PASS / 0 FAIL / 0 SKIP
-2. 当前 H2 smoke 栈只用于局域网验证，不是持久化生产部署。
-3. MySQL 持久化部署仍待收口：
+3. 当前 H2 smoke 栈只用于局域网验证，不是持久化生产部署。
+4. MySQL 持久化部署仍待收口：
    - 当前 Docker Hub / MySQL 镜像拉取不稳定。
    - 宿主机已有 MySQL 未获授权凭据，未修改。
    - 下一轮可选择：修复镜像源后继续 Podman MySQL，或由 owner 提供专用 MySQL 用户。
-4. 仍禁止修改既有集群网络、卷、容器或服务；继续只使用独立 `campus-standalone-*` 命名和回环端口。
 5. 若要切正式公网入口，仍需重新确认 HTTPS / 域名 / 证书和生产签名包。
+
+### P0 - 集群 / Hive 上课环境保护
+
+1. 后续默认不重装、不格式化、不删除：
+   - `/export/servers/hadoop-3.2.2/tmp/dfs`
+   - `/export/data/zookeeper`
+   - `/export/servers/mysql-8.0.45/data`
+2. 启停集群前先执行健康检查：
+   - 三台 `jps`
+   - 关键端口
+   - HDFS safemode / report
+   - Hive beeline
+3. 当前三机命名：
+   - `192.168.121.138 = master`
+   - `192.168.121.139 = worker01`
+   - `192.168.121.140 = worker02`
+4. 当前主控口径：
+   - NameNode：`master`
+   - ResourceManager：`master`
+   - SecondaryNameNode：`master`
+   - Hive metastore / HiveServer2：`master`
+   - MySQL：`master`
+   - worker：`worker01 / worker02`，必要时 `master` 也可兼任 DataNode / NodeManager。
+5. `/etc/hosts` 中保留 `hbase01 / hbase02 / hbase03` 兼容别名，暂不删除；删除前必须确认 Hive metastore 表路径和 HDFS 历史路径不再依赖旧名。
+6. 暂不建议直接启动 HBase 三机：
+   - 只有 `master` 有 HBase 目录。
+   - `regionservers` 仍为 `localhost`。
+   - 若需要 HBase，先完成 HBase 安装和配置同步。
+
+### P1 - 集群整理下一步
+
+1. 写一份 `master` 主控启动/停止 runbook。
+2. 写一个只读健康检查脚本，统一检查三台状态。
+3. 修正 SSH 免密不对称问题，或明确只允许从 138 启停集群。
+4. 后续如需迁移 HDFS 数据目录到 `/export/data/hadoop`，必须安排停机窗口并先备份；不要在上课前临时迁移。
+5. 将 runbook 文案从旧 `hbase01 / hbase02 / hbase03` 口径更新为 `master / worker01 / worker02`。
 
 ### P1 - 反馈与运营
 

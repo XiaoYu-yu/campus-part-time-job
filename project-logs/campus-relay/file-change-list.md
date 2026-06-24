@@ -2923,3 +2923,38 @@
 - `project-logs/campus-relay/global-working-memory.md`
 
 本轮在 owner 授权的 `192.168.121.138` 上完成磁盘扩容，并以独立 `campus-standalone-*` 容器启动 H2 smoke-only 栈。未修改集群环境，未停止或复用宿主机已有 MySQL，未提交 `.env`、密码、证书私钥、release keystore、GitHub token、腾讯地图 key 或服务器凭据。持久化 MySQL 部署仍待镜像源或专用 MySQL 用户到位后继续。
+
+## Step 177 - 三机集群环境巡检与低风险整理
+
+- `project-logs/campus-relay/step-177-cluster-env-audit-and-safe-normalization.md`（新增）
+  - 记录三台机器基础资源、组件分布、运行态、配置混乱点、备份位置和低风险修正。
+- 三台服务器配置（仅服务器侧，未进入 Git）：
+  - 生成 `/root/cluster-config-backup-20260624-*.tar.gz`。
+  - 修正 `master` 上 ZooKeeper 三机 `server.1/2/3` 配置。
+  - 按 138 主控口径统一 `dfs.namenode.secondary.http-address`。
+- `project-logs/campus-relay/summary.md`
+- `project-logs/campus-relay/pending-items.md`
+
+本轮未启动、停止或重启 Hadoop / Hive / HBase / ZooKeeper / MySQL，未删除数据目录，未重置 MySQL。
+
+## Step 178 - 集群主机名规范化
+
+- `project-logs/campus-relay/step-178-cluster-hostname-normalization.md`（新增）
+  - 记录三台主机名从 `hbase01 / hbase02 / hbase03` 规范化为 `master / worker01 / worker02`。
+  - 记录 `/etc/hosts` 新名优先、旧名兼容别名策略。
+  - 记录 Hadoop / ZooKeeper / Hive / HBase 当前配置改名范围。
+  - 记录明确不改的 LVM / GRUB / fstab / HDFS 数据块 / 历史备份。
+- 三台服务器配置（仅服务器侧，未进入 Git）：
+  - 生成 `/root/cluster-rename-backup-20260624-*.tar.gz`。
+  - 修改 `/etc/hostname`、运行态 hostname、`/etc/hosts`。
+  - 修改 Hadoop `core-site.xml`、`yarn-site.xml`、`hdfs-site.xml`、`workers`。
+  - 修改 ZooKeeper `zoo.cfg`。
+  - 修改 `master` 上 Hive `hive-site.xml` 与 HBase `hbase-site.xml`。
+  - 修改 `worker01 / worker02` 上 `/etc/chrony.conf` 注释。
+- `project-logs/campus-relay/summary.md`
+- `project-logs/campus-relay/pending-items.md`
+- `project-logs/campus-relay/file-change-list.md`
+- `project-logs/campus-relay/agent-collaboration.md`
+- `project-logs/campus-relay/global-working-memory.md`
+
+本轮没有启动、停止或重启任何集群服务。当前生效配置除 `/etc/hosts` 兼容别名外已无旧 `hbase01 / hbase02 / hbase03` 残留。

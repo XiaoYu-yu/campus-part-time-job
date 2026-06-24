@@ -2693,3 +2693,24 @@
   - MySQL 持久化容器未完成：MySQL 镜像拉取在当前网络下过慢 / 失败；宿主机已有 MySQL 未获授权凭据，未修改或复用。
   - 本轮未提交真实 `.env`、密码、证书私钥、release keystore、GitHub token、腾讯地图 key 或服务器凭据。
   - [Step 176 日志](step-176-hbase01-disk-expand-and-standalone-h2-deploy.md)
+
+- 当前已完成：`Step 177 - 三机集群环境巡检与低风险整理`
+  - 已确认 owner 口径：`192.168.121.138 / hbase01` 作为主控节点和主要操作入口，`139 / 140` 作为 worker / 辅助节点。
+  - 已只读巡检三台系统资源、网络、时间同步、Java/Hadoop/Hive/ZooKeeper/MySQL/HBase 分布和当前进程。
+  - 已在三台生成配置备份：`/root/cluster-config-backup-20260624-*.tar.gz`。
+  - 已修正 `hbase01` ZooKeeper 配置，使三台 `server.1/2/3` 列表一致。
+  - 已按 138 主控口径将三台 `dfs.namenode.secondary.http-address` 统一为 `hbase01:50090`。
+  - 本轮没有启动、停止或重启 Hadoop / Hive / HBase / ZooKeeper / MySQL，没有删除数据目录，没有重置 MySQL。
+  - 当前建议：Hive 上课链路优先围绕 138 启动 HDFS/YARN/Hive；暂不启动 HBase，除非先完成 HBase 三机安装/配置整理。
+  - [Step 177 日志](step-177-cluster-env-audit-and-safe-normalization.md)
+
+- 当前已完成：`Step 178 - 集群主机名规范化`
+  - 已将三台机器运行态 hostname 改为：`master / worker01 / worker02`。
+  - 三台 `/etc/hosts` 已统一为新名优先，并保留 `hbase01 / hbase02 / hbase03` 作为兼容别名。
+  - Hadoop 配置已切换为 `master` 主控：`fs.defaultFS=hdfs://master:9000`、`yarn.resourcemanager.hostname=master`、`workers=master,worker01,worker02`。
+  - ZooKeeper 配置已切换为 `server.1=master`、`server.2=worker01`、`server.3=worker02`。
+  - Hive JDBC 已切到 `jdbc:mysql://master:3306/metastore`。
+  - `master` 上 HBase 配置已切到 `hdfs://master:9000/hbase` 和 `hbase.zookeeper.quorum=master`。
+  - 已复核当前生效配置中除 `/etc/hosts` 兼容别名外无旧 `hbase01/02/03` 残留。
+  - 本轮未启动、停止或重启任何集群服务，未修改 HDFS 数据块、Hive metastore 数据、LVM、GRUB 或 fstab。
+  - [Step 178 日志](step-178-cluster-hostname-normalization.md)
