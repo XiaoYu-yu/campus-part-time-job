@@ -1145,3 +1145,22 @@
 6. 下一步优先级：
    - 若先网页内测：补 HTTPS / 域名 / Nginx / 备份。
    - 若先 APK 分发：补生产 keystore / signed APK/AAB / HTTPS WebView 验证。
+
+## 2026-06-24 补充：Step 183 上线材料指南与 main 口径
+
+1. 新增总览文档：
+   - `docs/deployment/launch-readiness-acquisition-guide.md`
+2. 以后 owner 问“上线还差什么 / 去哪申请 / 怎么拿到”，优先引用这份文档。
+3. 当前项目主线入口：
+   - `README.md`
+   - `docs/README.md`
+   - `docs/deployment/launch-readiness-acquisition-guide.md`
+   - `project-logs/campus-relay/summary.md`
+4. 当前 main 分支口径：
+   - 保持可构建、可 smoke、无真实 secrets。
+   - 不随意移动 `backend/`、`frontend/`、`mobile/`。
+   - 不删除旧外卖后端模块。
+   - 不拆散 `project-logs/campus-relay/`。
+5. 后续实现优先级：
+   - 先做 138 standalone 备份 / 恢复 / 状态检查。
+   - 再看 owner 是要公网网页内测还是 Android 包分发。

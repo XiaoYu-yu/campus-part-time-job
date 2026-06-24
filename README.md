@@ -13,6 +13,7 @@
 - 可本地启动
 - 可完整演示 customer / courier / admin 三端闭环
 - 可使用 H2/test 数据完成主链路联调
+- 可在 138 standalone MySQL + Flyway 栈完成局域网内测和答辩演示
 - 支付、地图、真实打款等外部公司能力暂用模拟数据或只读记录代替
 - bridge 主线处于 `Phase A no-op` 冻结态，不删除旧兼容接口
 - 模拟支付、模拟退款、模拟打款和 settlement 只作为试运营状态与审计记录，不代表真实资金流
@@ -119,6 +120,8 @@ npm run dev
 如果你准备把当前试运营版部署到单机服务器做内测，而不是正式生产上线，优先看：
 
 - [内测型试运营 Compose 部署说明](docs/deployment/internal-trial-compose.md)
+- [隔离式 Standalone Podman 部署](deploy/standalone-podman/README.md)
+- [上线差距与材料获取指南](docs/deployment/launch-readiness-acquisition-guide.md)
 - [环境变量与密钥配置清单](docs/deployment/env-and-secret-checklist.md)
 - [部署后 Smoke Checklist](docs/deployment/post-deploy-smoke-checklist.md)
 - [单机内测试运营运维 Runbook](docs/deployment/internal-trial-ops-runbook.md)
@@ -187,6 +190,7 @@ npm run build
 - [模拟资金链路产品化边界](docs/simulated-funds-boundary.md)
 - [用户端 / 兼职端 Android 壳 scaffold 方案](docs/mobile/android-shell-scaffold-plan.md)
 - [项目状态检查](docs/project-status-review.md)
+- [上线差距与材料获取指南](docs/deployment/launch-readiness-acquisition-guide.md)
 - [API 总览](docs/api-overview.md)
 - [数据库总览](docs/db-overview.md)
 - [旧外卖文档归档](docs/legacy-takeaway/README.md)

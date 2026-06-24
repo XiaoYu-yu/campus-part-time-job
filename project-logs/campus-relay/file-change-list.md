@@ -3053,3 +3053,24 @@
 - `project-logs/campus-relay/global-working-memory.md`
 
 本轮无业务代码变更。验证结论：当前 138 standalone MySQL 栈可支撑局域网内测 / 答辩演示；正式公网长期运行前仍需补生产发布、备份、监控、secrets 和资源余量。
+
+## Step 183 - 上线材料获取指南与 main 主线整理
+
+- `docs/deployment/launch-readiness-acquisition-guide.md`（新增）
+  - 新增项目上线差距与材料获取指南。
+  - 覆盖域名 / ICP 备案 / HTTPS / Android release 签名 / secrets / MySQL 备份恢复 / 服务器资源 / 监控 / 日志轮转 / 回滚 / 腾讯地图 key 等。
+  - 增加项目文件整理口径与 `main` 分支状态口径。
+- `docs/README.md`
+  - 当前交付文档和部署与运维部分增加“上线差距与材料获取指南”入口。
+- `README.md`
+  - 当前交付定位补充 138 standalone MySQL + Flyway 栈可用于局域网内测和答辩演示。
+  - 内测型试运营部署入口补充 standalone Podman 文档与上线材料指南。
+  - 文档入口补充上线材料指南。
+- `project-logs/campus-relay/step-183-launch-material-guide-and-mainline-organization.md`（新增）
+- `project-logs/campus-relay/summary.md`
+- `project-logs/campus-relay/pending-items.md`
+- `project-logs/campus-relay/file-change-list.md`
+- `project-logs/campus-relay/agent-collaboration.md`
+- `project-logs/campus-relay/global-working-memory.md`
+
+本轮无业务代码变更，无服务器操作，无数据库操作。

@@ -10,6 +10,7 @@
 - [用户端 / 兼职端 Android 壳 scaffold 方案](mobile/android-shell-scaffold-plan.md)
 - [Android 壳工程说明](../mobile/README.md)
 - [项目状态检查](project-status-review.md)
+- [上线差距与材料获取指南](deployment/launch-readiness-acquisition-guide.md)
 - [API 总览](api-overview.md)
 - [数据库总览](db-overview.md)
 
@@ -23,6 +24,7 @@
 - [内测型试运营 Compose 部署说明](deployment/internal-trial-compose.md)
 - [隔离式 Standalone Podman 部署](../deploy/standalone-podman/README.md)
 - [生产部署说明](deployment/production-deploy.md)
+- [上线差距与材料获取指南](deployment/launch-readiness-acquisition-guide.md)
 - [环境变量与密钥配置清单](deployment/env-and-secret-checklist.md)
 - [部署后 Smoke Checklist](deployment/post-deploy-smoke-checklist.md)
 - [最小 CI 检查边界](deployment/ci-check-boundary.md)

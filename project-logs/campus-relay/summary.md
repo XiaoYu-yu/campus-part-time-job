@@ -2754,3 +2754,11 @@
   - 重启 backend / frontend 后恢复正常，Flyway validate 确认 schema V14 up to date，重启后 smoke 仍为 27 PASS / 0 FAIL / 0 SKIP。
   - 当前结论：局域网内测 / 答辩演示可用；正式公网长期运行前仍需补 HTTPS / 域名、生产签名包、secrets 管理、MySQL 备份恢复、监控日志和内存余量。
   - [Step 182 日志](step-182-stability-check-and-launch-gap.md)
+
+- 当前已完成：`Step 183 - 上线材料获取指南与 main 主线整理`
+  - 新增 `docs/deployment/launch-readiness-acquisition-guide.md`，集中说明项目距离上线还差什么、每类材料如何申请 / 获得 / 放置 / 接入。
+  - 文档按 P0 / P1 / P2 梳理：域名、ICP备案、HTTPS、Android release 签名、生产 secrets、MySQL 备份恢复、服务器资源、监控、日志轮转、回滚、腾讯地图 key、真实支付等。
+  - 文档补充项目文件整理口径与 `main` 分支状态口径，明确当前主线入口和不建议随意移动 / 删除的目录。
+  - `README.md` 和 `docs/README.md` 已增加新文档入口，并补充 138 standalone MySQL + Flyway 局域网内测状态。
+  - 本轮仅文档和索引变更，未改服务器、数据库或业务代码。
+  - [Step 183 日志](step-183-launch-material-guide-and-mainline-organization.md)

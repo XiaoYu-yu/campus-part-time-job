@@ -1174,3 +1174,27 @@
 4. 2 小时 / 8 小时 soak test。
 5. 20 - 50 并发轻量压测。
 6. 内测数据清理或正式库初始化策略。
+
+## Step 183 后的文档入口更新
+
+### 新增总览文档
+
+上线材料、申请入口和获取方式统一看：
+
+- `docs/deployment/launch-readiness-acquisition-guide.md`
+
+### 下一步建议顺序
+
+1. 如果继续稳住 138 内测：
+   - 先做 `campus-backup`。
+   - 再做 `campus-restore-drill`。
+   - 再做 `campus-status`。
+2. 如果准备公网内测：
+   - 先决定域名服务商。
+   - 按服务器所在地判断 ICP 备案。
+   - 配 HTTPS。
+   - 跑公网 smoke。
+3. 如果准备 Android 分发：
+   - owner 先生成生产 release keystore。
+   - 配 signed APK / AAB 构建。
+   - 用 HTTPS API 地址做 MuMu / 真机验证。
