@@ -46,6 +46,12 @@
 
 记录 courier 每次异常上报的历史。订单表上的 latest exception 字段继续作为兼容摘要。
 
+### feedback
+
+- `campus_feedback`
+
+记录用户端与兼职端提交的反馈。支持 `PENDING / IN_PROGRESS / RESOLVED` 处理状态，并保留最近处理管理员、处理时间和处理备注。
+
 ### after-sale
 
 - campus 售后决策字段
@@ -77,6 +83,8 @@
 - `V10__campus_after_sale_execution_record.sql`
 - `V11__campus_settlement_batch_operation_record.sql`
 - `V12__campus_settlement_reconcile_difference_record.sql`
+- `V13__campus_feedback.sql`
+- `V14__campus_feedback_admin_processing.sql`
 
 ## 设计约束
 

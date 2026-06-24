@@ -63,6 +63,10 @@
           <el-icon><Document /></el-icon>
           <template #title>校园异常处理</template>
         </el-menu-item>
+        <el-menu-item index="/campus/feedback">
+          <el-icon><ChatDotRound /></el-icon>
+          <template #title>用户反馈</template>
+        </el-menu-item>
 
       </el-menu>
 
@@ -151,9 +155,9 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/user'
 import { normalizeDisplayText } from '../utils/text'
-import { 
+import {
   HomeFilled, User, DataAnalysis, Tickets, Document, LocationInformation, Coin,
-  DArrowLeft, DArrowRight, House, FullScreen, Bell, ArrowDown, Setting, SwitchButton, Search
+  DArrowLeft, DArrowRight, House, FullScreen, Bell, ArrowDown, Setting, SwitchButton, Search, ChatDotRound
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -177,6 +181,9 @@ const activeMenu = computed(() => {
   if (path.startsWith('/campus/exceptions')) {
     return '/campus/exceptions'
   }
+  if (path.startsWith('/campus/feedback')) {
+    return '/campus/feedback'
+  }
   return path
 })
 
@@ -193,7 +200,8 @@ const breadcrumb = computed(() => {
     '/campus/after-sale-executions': '校园售后执行',
     '/campus/courier-ops': '校园配送运营',
     '/campus/settlements': '校园结算运营',
-    '/campus/exceptions': '校园异常处理'
+    '/campus/exceptions': '校园异常处理',
+    '/campus/feedback': '用户反馈'
   }
   return pathMap[path] || ''
 })

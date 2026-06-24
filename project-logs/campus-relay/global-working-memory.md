@@ -856,3 +856,146 @@
    - 不改 `request.js`、token 附着逻辑、鉴权或核心状态机。
    - 不删除 shared 基础模块。
    - 不提交真实密钥、证书、服务器凭据、release keystore、GitHub token、腾讯地图 key 或 `.env`。
+
+## 2026-06-23 补充：Step 173 admin 反馈运营闭环与 CI 回归加固
+
+1. `campus_feedback` 已不再是只能入库的孤立能力：
+   - admin 可分页筛选、查看详情。
+   - admin 可推进到 `IN_PROGRESS / RESOLVED`。
+   - 保留处理管理员、处理时间和处理备注。
+2. 管理后台新增 `/campus/feedback`。
+3. 数据库新增 `V14__campus_feedback_admin_processing.sql`；服务器升级前必须执行该 migration。
+4. 回归基线：
+   - backend 58 tests / 0 failures。
+   - frontend lint 通过。
+   - frontend 5 tests 通过。
+   - Web、Android user public、Android parttime public 构建通过。
+   - sample validation 0 hard failures；3 个既有 optional warnings。
+5. CI 已升级：
+   - backend 运行 `mvn test`。
+   - frontend 运行 lint、Vitest、build。
+6. 当前公开公测最后核心阻断项仍是 owner 私有的真实 release keystore 和正式签名 APK。
+7. 后续优先级：
+   - release 签名包。
+   - 部署 V14 与远端 smoke。
+   - admin 反馈页 browser smoke。
+   - 公共反馈防刷。
+   - 旧后端模块逐项依赖审计。
+
+## 2026-06-23 补充：Step 174 反馈防刷与 MuMu 回归已完成
+
+1. 公开反馈：
+   - 内容至少 5 个字符。
+   - 同一组精确反馈 60 秒内重复提交返回业务码 429。
+   - Nginx 对 `/api/campus/public/feedback` 做单独限流。
+2. HTTPS / Nginx：
+   - TLS 1.2 / 1.3。
+   - HSTS、nosniff、SAMEORIGIN、Referrer Policy。
+3. 独立部署预案：
+   - `deploy/standalone-podman/` 使用 `campus-standalone-*` 命名。
+   - backend / MySQL 只绑定回环。
+   - 该预案未完成服务器部署。
+4. Linux 边界：
+   - owner 明确要求停止 Linux 后，不再连接任何服务器。
+   - 停止前仅在独立备用机安装 Podman并暂存源码。
+   - 未拉镜像、未创建容器/网络/卷、未启动服务、未占用业务端口、未修改集群。
+5. MuMu 基线：
+   - Android 12。
+   - adb 设备：本机回环端口。
+   - `10.0.2.2` 可访问 Windows 宿主机。
+   - 双端 Debug APK 安装、启动、截图通过。
+6. WebView 回归：
+   - 用户端登录、创建代送单、模拟支付、详情回读通过。
+   - 兼职端登录、profile、review-status、available orders 通过。
+   - 协议勾选已纳入自动 smoke。
+7. 回归基线：
+   - backend 58 tests。
+   - frontend lint。
+   - frontend 5 tests。
+   - frontend build。
+   - sample validation 0 hard failures。
+8. 当前 P0：
+   - owner 私有 release keystore。
+   - 正式签名 APK。
+   - release 包 HTTPS MuMu / 真机回归。
+   - owner 重新授权后的 V14 服务器部署与远端 smoke。
+
+## 2026-06-24 补充：Step 175 Android release candidate 管线已完成
+
+1. Android release 配置：
+   - 双端提交态 `capacitor.config.json` 为 `androidScheme=https`、`cleartext=false`。
+   - `cap:sync` / `cap:sync:emulator` / `cap:sync:lan` 会切到 HTTP cleartext 调试。
+   - `cap:sync:public` 会切回 HTTPS-only。
+2. Android release 构建：
+   - 双端支持 `CAMPUS_VERSION_CODE`。
+   - 双端支持 `CAMPUS_VERSION_NAME`。
+   - 双端支持 `CAMPUS_REQUIRE_RELEASE_SIGNING`。
+   - `key.properties` 不完整会失败。
+   - keystore 文件不存在会失败。
+   - release 校验 no-cleartext。
+   - release 校验 `allowBackup=false`。
+3. 新增脚本：
+   - `scripts/trial-operation/build-android-release-apks.ps1`
+   - `scripts/trial-operation/android-release-webview-smoke.ps1`
+   - `mobile/configure-capacitor.mjs`
+4. CI / workflow：
+   - `.github/workflows/trial-operation-ci.yml` 新增 unsigned release candidate job。
+   - `.github/workflows/android-release.yml` 新增手动 signed release workflow。
+   - signed workflow 依赖 owner 配置 GitHub Secrets，构建后清理私有签名文件。
+5. 本地验证：
+   - unsigned release candidate 构建通过。
+   - 临时 QA keystore signed release candidate 构建通过。
+   - MuMu Android 12 安装双端 signed release APK 通过。
+   - 双端 `versionCode=175`、`versionName=0.9.0-rc.175`。
+   - release 启动 smoke 通过：焦点、截图、logcat 均满足要求。
+   - backend 58 tests 通过。
+   - frontend lint / 5 tests / build 通过。
+   - sample validation CI wrapper 通过：0 hard failures，3 个 optional warnings。
+   - `git diff --check` 通过，仅 CRLF 提示。
+6. 安全边界：
+   - 临时 QA keystore 和本地 `key.properties` 已删除。
+   - 未连接 Linux。
+   - 未部署服务器。
+   - 未修改集群环境。
+   - 未提交真实 keystore、密码、证书私钥、服务器凭据、GitHub token、腾讯地图 key 或真实设备 ID。
+7. 当前 P0：
+   - owner 生产 release keystore 或 GitHub signing secrets。
+   - 正式 signed APK / AAB。
+   - 生产签名包 MuMu / 真机主链路 smoke。
+   - owner 重新授权后的服务器部署、V14 migration 和公网 smoke。
+8. 当前公网状态：
+   - 本机访问 `https://xiaoyu.xin/api/campus/public/health` 超时。
+   - 在 owner 重新授权服务器操作前，不默认连接服务器定位。
+
+## 2026-06-24 补充：Step 176 138 standalone smoke 部署已完成
+
+1. owner 已重新授权使用 `192.168.121.138`，但边界是“不动集群环境”。
+2. 138 系统盘扩容已完成：
+   - `/dev/sda2` 约 39G。
+   - root LV / xfs 约 37G。
+   - `/` 可用空间约 23G。
+   - 分区表备份在 138 的 `/root/sda-partition-before-campus-expand-20260624-124429.sfdisk`。
+3. standalone 部署目录：
+   - `/opt/campus-part-time-job-standalone`
+4. 当前 138 运行的是 H2 smoke-only 栈：
+   - frontend：`0.0.0.0:18080`
+   - backend：`127.0.0.1:18081`
+   - 容器名：`campus-standalone-backend`、`campus-standalone-frontend`
+   - 网络名：`campus-standalone-net`
+5. 远端 smoke：
+   - `project-logs/campus-relay/runtime/step-176-standalone-138-h2-smoke/remote-smoke-report.json`
+   - 27 PASS / 0 FAIL / 0 SKIP
+6. 持久化 DB 尚未完成：
+   - `docker.io` 访问不稳定。
+   - MySQL 镜像 mirror 拉取过慢 / 中断。
+   - 138 宿主机已有 MySQL root 未授权，未修改、未复用。
+7. standalone 脚本状态：
+   - `deploy.sh` 支持镜像源覆盖。
+   - `deploy.sh` 敏感环境变量通过名称继承，避免明文出现在 `podman run` 命令行。
+   - 新增 `deploy-h2-smoke.sh` 作为非持久化 smoke fallback。
+8. 后续默认不要把 H2 smoke-only 当正式部署：
+   - 若继续上线前发布，优先解决 MySQL 持久化部署。
+   - 然后复跑远端 smoke、浏览器 smoke、Android release 公网 smoke。
+9. 继续禁止：
+   - 不改集群网络、卷、容器或服务。
+   - 不提交 `.env`、密码、证书私钥、release keystore、GitHub token、腾讯地图 key 或服务器凭据。

@@ -96,7 +96,8 @@ class CampusCourierAcceptIntegrationTest {
         String courierToken = loginCourier("13900139000");
 
         mockMvc.perform(get("/api/campus/courier/orders/available")
-                        .header("Authorization", "Bearer " + courierToken))
+                        .header("Authorization", "Bearer " + courierToken)
+                        .param("orderNo", seedOrderId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data.total").value(1))

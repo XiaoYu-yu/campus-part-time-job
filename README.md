@@ -42,6 +42,7 @@
 - settlement 单笔、批次、对账摘要只读运营页
 - after-sale 执行分页与执行历史 drawer
 - 异常历史列表、详情与最小 resolve 处理
+- 用户反馈列表、详情与处理进度
 - 旧外卖后台基础页面仍保留
 
 ## 明确边界
@@ -158,6 +159,7 @@ npm run dev
 - `/campus/after-sale-executions`
 - `/campus/courier-ops`
 - `/campus/exceptions`
+- `/campus/feedback`
 
 ## 验证命令
 

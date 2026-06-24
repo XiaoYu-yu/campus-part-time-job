@@ -10,10 +10,10 @@
     "build:web:public": "npm --prefix ../../frontend run build:android:user:public",
     "cap:add:android": "npx cap add android",
     "cap:copy": "npx cap copy android",
-    "cap:sync": "npm run build:web && npx cap sync android",
-    "cap:sync:emulator": "npm run build:web:emulator && npx cap sync android",
-    "cap:sync:lan": "npm run build:web:lan && npx cap sync android",
-    "cap:sync:public": "npm run build:web:public && npx cap sync android",
+    "cap:sync": "npm run build:web && node ../configure-capacitor.mjs user-app default && npx cap sync android",
+    "cap:sync:emulator": "npm run build:web:emulator && node ../configure-capacitor.mjs user-app emulator && npx cap sync android",
+    "cap:sync:lan": "npm run build:web:lan && node ../configure-capacitor.mjs user-app lan && npx cap sync android",
+    "cap:sync:public": "npm run build:web:public && node ../configure-capacitor.mjs user-app public && npx cap sync android",
     "cap:open": "npx cap open android"
   },
   "dependencies": {

@@ -228,6 +228,7 @@ $pages = @(
     [pscustomobject]@{ name = 'admin settlements'; slug = 'admin-settlements'; loginPath = '/login'; path = '/campus/settlements'; storage = $adminStorage },
     [pscustomobject]@{ name = 'admin after-sale executions'; slug = 'admin-after-sale-executions'; loginPath = '/login'; path = '/campus/after-sale-executions'; storage = $adminStorage },
     [pscustomobject]@{ name = 'admin exceptions'; slug = 'admin-exceptions'; loginPath = '/login'; path = '/campus/exceptions'; storage = $adminStorage },
+    [pscustomobject]@{ name = 'admin feedback'; slug = 'admin-feedback'; loginPath = '/login'; path = '/campus/feedback'; storage = $adminStorage },
     [pscustomobject]@{ name = 'customer order result'; slug = 'customer-order-result'; loginPath = '/user/login'; path = '/user/campus/order-result?orderId=CR202604060001'; storage = $customerStorage },
     [pscustomobject]@{ name = 'parttime workbench'; slug = 'parttime-workbench'; loginPath = '/parttime/login'; path = '/parttime/workbench'; storage = $parttimeStorage }
 )

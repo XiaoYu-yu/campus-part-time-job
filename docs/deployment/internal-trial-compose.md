@@ -30,6 +30,13 @@
 4. 一个真实但未提交到仓库的腾讯地图 JS SDK key
 5. 如果开放公网 HTTPS，需要宿主机 Nginx、Certbot，以及云服务器安全组放行 `80/tcp`、`443/tcp`
 
+如目标机没有 Docker Compose 且需要与现有集群环境隔离，可使用：
+
+- `deploy/standalone-podman/README.md`
+
+该路径只创建 `campus-standalone-*` 前缀的容器、网络和卷，并默认使用
+`18080 / 18081 / 13306` 隔离端口。
+
 如果你暂时不演示地图，仍然建议保留 `VITE_TENCENT_MAP_KEY` 配置位，但可以在演示口径中明确该能力属于只读预览。
 
 ## 首次准备

@@ -82,6 +82,26 @@ if ($script:HardFailures -gt 0) {
 
 $schema = Get-Content -LiteralPath $SchemaFile -Raw
 $data = Get-Content -LiteralPath $DataFile -Raw
+$hostNginxPath = Join-Path $RepoRoot "deploy\internal-trial\nginx-xiaoyu.xin.conf"
+$containerNginxPath = Join-Path $RepoRoot "deploy\internal-trial\nginx.conf"
+$standaloneDeployPath = Join-Path $RepoRoot "deploy\standalone-podman\deploy.sh"
+
+if (-not (Test-Path -LiteralPath $hostNginxPath)) {
+    Write-Check "host nginx config" "FAIL" "host nginx config is missing" $true
+}
+if (-not (Test-Path -LiteralPath $containerNginxPath)) {
+    Write-Check "container nginx config" "FAIL" "container nginx config is missing" $true
+}
+if (-not (Test-Path -LiteralPath $standaloneDeployPath)) {
+    Write-Check "standalone deployment script" "FAIL" "standalone Podman deploy script is missing" $true
+}
+if ($script:HardFailures -gt 0) {
+    exit 1
+}
+
+$hostNginx = Get-Content -LiteralPath $hostNginxPath -Raw
+$containerNginx = Get-Content -LiteralPath $containerNginxPath -Raw
+$standaloneDeploy = Get-Content -LiteralPath $standaloneDeployPath -Raw
 
 Test-Text "admin account seed" $data @("13800138000", "employee") "admin seed account exists" "admin seed account is incomplete"
 Test-Text "customer account seed" $data @("13900139000", "campus_customer_profile") "customer seed account exists" "customer seed account is incomplete"
@@ -91,10 +111,15 @@ Test-Text "available order seed" $data @("CR202604070002", "WAITING_ACCEPT") "av
 Test-Text "completed order seed" $data @("CR202604060001", "COMPLETED") "completed order seed exists" "completed order seed is incomplete"
 Test-Text "location report seed" $data @("MERGE INTO campus_location_report", "CR202604060001", "106.5515500") "location report seed exists" "location report seed is incomplete"
 Test-Text "settlement seed" $data @("MERGE INTO campus_settlement_record", "CR202604060001", "PENDING") "settlement seed exists" "settlement seed is incomplete"
+Test-Text "feedback seed" $data @("MERGE INTO campus_feedback", "SUGGESTION", "RESOLVED") "feedback operations seed exists" "feedback operations seed is incomplete"
 
 Test-Text "exception history schema" $schema @("CREATE TABLE IF NOT EXISTS campus_exception_record", "process_status", "reported_at") "exception history schema exists" "exception history schema is incomplete"
 Test-Text "after-sale history schema" $schema @("CREATE TABLE IF NOT EXISTS campus_after_sale_execution_record", "execution_status", "executed_at") "after-sale execution history schema exists" "after-sale execution history schema is incomplete"
 Test-Text "settlement reconcile schema" $schema @("CREATE TABLE IF NOT EXISTS campus_settlement_reconcile_difference_record", "difference_status", "reported_at") "settlement reconcile difference schema exists" "settlement reconcile schema is incomplete"
+Test-Text "feedback operations schema" $schema @("CREATE TABLE IF NOT EXISTS campus_feedback", "processed_by_employee_id", "admin_note") "feedback operations schema exists" "feedback operations schema is incomplete"
+Test-Text "host feedback rate limit" $hostNginx @("limit_req_zone", "location = /api/campus/public/feedback", "limit_req_status 429", "TLSv1.2 TLSv1.3") "host nginx feedback rate limit and TLS baseline exist" "host nginx hardening is incomplete"
+Test-Text "container feedback rate limit" $containerNginx @("limit_req_zone", "location = /api/campus/public/feedback", "limit_req_status 429") "container nginx feedback rate limit exists" "container nginx hardening is incomplete"
+Test-Text "standalone isolation boundary" $standaloneDeploy @('campus-standalone-', '127.0.0.1:${MYSQL_PORT}:3306', '127.0.0.1:${BACKEND_PORT}:8080') "standalone deployment keeps DB/backend on loopback" "standalone deployment isolation is incomplete"
 
 $optionalHard = [bool]$StrictOptional
 Test-Text "after-sale fixed sample" $data @("campus_after_sale_execution_record") "after-sale fixed sample exists" "after-sale fixed sample is not pre-seeded; use page empty state or prepare runtime sample" $optionalHard

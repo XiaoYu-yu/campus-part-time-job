@@ -106,3 +106,20 @@ export const resolveCampusException = (id, data) => request({
   method: 'post',
   data
 })
+
+export const getCampusFeedbackRecords = (params) => request({
+  url: '/campus/admin/feedback',
+  method: 'get',
+  params: normalizePageParams(params)
+})
+
+export const getCampusFeedbackDetail = (id) => request({
+  url: `/campus/admin/feedback/${id}`,
+  method: 'get'
+})
+
+export const processCampusFeedback = (id, data) => request({
+  url: `/campus/admin/feedback/${id}/process`,
+  method: 'post',
+  data
+})

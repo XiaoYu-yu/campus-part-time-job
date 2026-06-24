@@ -267,13 +267,20 @@ try {
     inputs[1].value = '123456';
     inputs[1].dispatchEvent(new Event('input', { bubbles: true }));
   }
+  const agreement = document.querySelector('.agreement-line input[type="checkbox"]');
+  if (agreement && !agreement.checked) {
+    agreement.click();
+  }
+  if (!agreement || !agreement.checked) {
+    return { ok: false, reason: 'agreement checkbox not checked', href: location.href, inputCount: inputs.length };
+  }
   const buttons = Array.from(document.querySelectorAll('button'));
   const button = document.querySelector('.login-btn') || buttons.find((item) => item.className && String(item.className).includes('login-btn')) || buttons[buttons.length - 1];
   if (!button) {
     return { ok: false, reason: 'login button not found', href: location.href, inputCount: inputs.length };
   }
   button.click();
-  return { ok: true, href: location.href, inputCount: inputs.length, buttonCount: buttons.length };
+  return { ok: true, href: location.href, inputCount: inputs.length, buttonCount: buttons.length, agreementChecked: agreement.checked };
 })()
 '@
     $loginClick = Invoke-Javascript -Socket $socket -Expression $loginScript

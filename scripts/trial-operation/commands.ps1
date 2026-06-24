@@ -43,8 +43,10 @@ Write-Host ""
 
 Write-Host "8. Remote/internal-trial smoke"
 Write-Host "Run after server deployment. Use placeholders in docs; do not commit real host values:"
-Write-Host "Preferred after port hardening:"
-Write-Host "powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host/api -FrontendBase http://your-host/"
+Write-Host "Preferred HTTPS form:"
+Write-Host "powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase https://your-domain/api -FrontendBase https://your-domain/"
+Write-Host "Isolated LAN validation form:"
+Write-Host "powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host:18080/api -FrontendBase http://your-host:18080/"
 Write-Host "Legacy direct backend form, only if 8080 is intentionally public:"
 Write-Host "powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host:8080/api -FrontendBase http://your-host/"
 Write-Host ""
@@ -96,6 +98,7 @@ if ($Full) {
     Write-Host "Admin after-sale:    /campus/after-sale-executions"
     Write-Host "Admin courier ops:   /campus/courier-ops"
     Write-Host "Admin exceptions:    /campus/exceptions"
+    Write-Host "Admin feedback:      /campus/feedback"
     Write-Host ""
 }
 

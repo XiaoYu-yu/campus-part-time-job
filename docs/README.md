@@ -21,6 +21,7 @@
 ## 部署与运维
 
 - [内测型试运营 Compose 部署说明](deployment/internal-trial-compose.md)
+- [隔离式 Standalone Podman 部署](../deploy/standalone-podman/README.md)
 - [生产部署说明](deployment/production-deploy.md)
 - [环境变量与密钥配置清单](deployment/env-and-secret-checklist.md)
 - [部署后 Smoke Checklist](deployment/post-deploy-smoke-checklist.md)

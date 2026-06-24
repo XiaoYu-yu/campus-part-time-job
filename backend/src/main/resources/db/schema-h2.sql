@@ -411,6 +411,9 @@ CREATE TABLE IF NOT EXISTS campus_feedback (
     page_path VARCHAR(120),
     order_id VARCHAR(32),
     status VARCHAR(20) DEFAULT 'PENDING' NOT NULL,
+    processed_by_employee_id BIGINT,
+    processed_at TIMESTAMP,
+    admin_note VARCHAR(500),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

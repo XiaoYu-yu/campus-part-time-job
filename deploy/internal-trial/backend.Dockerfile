@@ -1,9 +1,13 @@
-FROM maven:3.9.9-eclipse-temurin-17 AS build
+ARG MAVEN_IMAGE=docker.io/library/maven:3.9.9-eclipse-temurin-17
+ARG JRE_IMAGE=docker.io/library/eclipse-temurin:17-jre
+
+FROM ${MAVEN_IMAGE} AS build
 
 WORKDIR /workspace/backend
 
 COPY backend/.mvn .mvn
 COPY backend/mvnw backend/pom.xml ./
+COPY deploy/internal-trial/maven-settings.xml /root/.m2/settings.xml
 
 RUN sed -i 's/\r$//' mvnw && chmod +x mvnw
 RUN ./mvnw -q -DskipTests dependency:go-offline
@@ -12,7 +16,7 @@ COPY backend/src src
 
 RUN ./mvnw -q -DskipTests package
 
-FROM eclipse-temurin:17-jre
+FROM ${JRE_IMAGE}
 
 WORKDIR /app
 

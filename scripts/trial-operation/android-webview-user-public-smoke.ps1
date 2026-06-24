@@ -339,13 +339,20 @@ try {
   inputs[0].dispatchEvent(new Event('input', { bubbles: true }));
   inputs[1].value = '123456';
   inputs[1].dispatchEvent(new Event('input', { bubbles: true }));
+  const agreement = document.querySelector('.agreement-line input[type="checkbox"]');
+  if (agreement && !agreement.checked) {
+    agreement.click();
+  }
+  if (!agreement || !agreement.checked) {
+    return { ok: false, reason: 'agreement checkbox not checked', href: location.href, inputCount: inputs.length };
+  }
   const buttons = Array.from(document.querySelectorAll('button'));
   const button = document.querySelector('.login-btn') || buttons[buttons.length - 1];
   if (!button) {
     return { ok: false, reason: 'login button not found', href: location.href };
   }
   button.click();
-  return { ok: true, href: location.href, inputCount: inputs.length };
+  return { ok: true, href: location.href, inputCount: inputs.length, agreementChecked: agreement.checked };
 })()
 '@
 

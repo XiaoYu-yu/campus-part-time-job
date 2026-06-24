@@ -54,11 +54,12 @@
 
 单机内测服务器应先阅读 [单机内测安全边界说明](internal-trial-security-boundary.md)。
 
-- [ ] 业务公网入口只开放 frontend `80`。
+- [ ] `80` 只跳转 HTTPS，业务入口使用 `443`。
 - [ ] SSH `22` 只作为运维入口，建议限制来源 IP。
+- [ ] frontend `18080` 不可公网访问。
 - [ ] backend `8080` 不可公网访问。
 - [ ] MySQL `3306` 不可公网访问。
-- [ ] 远端 smoke 使用 `http://your-host/api`，不再默认使用 `http://your-host:8080/api`。
+- [ ] 远端 smoke 使用 `https://your-domain/api`。
 
 ### 单机内测日志轮转
 
@@ -101,6 +102,12 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps
 powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host/api -FrontendBase http://your-host/
 ```
 
+HTTPS 已启用时使用：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase https://your-domain/api -FrontendBase https://your-domain/
+```
+
 ## 三、customer smoke
 
 - [ ] 使用 customer 账号登录成功。
@@ -134,6 +141,9 @@ powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps
 - [ ] 如果地图 key 无效，页面应保持其它只读信息可用。
 - [ ] `/campus/exceptions` 可打开。
 - [ ] 异常历史列表、详情 drawer 和 resolve 状态展示可读。
+- [ ] `/campus/feedback` 可打开。
+- [ ] 反馈列表、详情和处理状态展示可读。
+- [ ] 匿名反馈网关限流已在其它 smoke 完成后验证，超限返回 HTTP `429`。
 
 ## 六、模拟资金链路口径检查
 

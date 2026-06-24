@@ -2,11 +2,33 @@ apply plugin: 'com.android.application'
 
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
-def hasReleaseSigning = keystorePropertiesFile.exists()
-if (hasReleaseSigning) {
+def releaseSigningKeys = ['storeFile', 'storePassword', 'keyAlias', 'keyPassword']
+if (keystorePropertiesFile.exists()) {
     keystorePropertiesFile.withInputStream { stream ->
         keystoreProperties.load(stream)
     }
+}
+def hasReleaseSigning = keystorePropertiesFile.exists() &&
+        releaseSigningKeys.every { key -> keystoreProperties[key]?.toString()?.trim() }
+if (keystorePropertiesFile.exists() && !hasReleaseSigning) {
+    throw new GradleException("android/key.properties exists but is incomplete. Required keys: ${releaseSigningKeys.join(', ')}")
+}
+if (hasReleaseSigning && !rootProject.file(keystoreProperties['storeFile']).exists()) {
+    throw new GradleException("Release keystore does not exist: ${keystoreProperties['storeFile']}")
+}
+
+def releaseSigningRequired = (project.findProperty('CAMPUS_REQUIRE_RELEASE_SIGNING') ?: 'false').toString().toBoolean()
+if (releaseSigningRequired && !hasReleaseSigning) {
+    throw new GradleException("Release signing is required. Create android/key.properties and provide the private keystore.")
+}
+
+def resolvedVersionCodeText = (project.findProperty('CAMPUS_VERSION_CODE') ?: '1').toString()
+if (!(resolvedVersionCodeText ==~ /\d+/) || resolvedVersionCodeText.toInteger() < 1) {
+    throw new GradleException("CAMPUS_VERSION_CODE must be a positive integer.")
+}
+def resolvedVersionName = (project.findProperty('CAMPUS_VERSION_NAME') ?: '1.0.0').toString().trim()
+if (!(resolvedVersionName ==~ /[0-9A-Za-z][0-9A-Za-z._-]{0,49}/)) {
+    throw new GradleException("CAMPUS_VERSION_NAME must be 1-50 characters using letters, digits, dot, underscore or hyphen.")
 }
 
 android {
@@ -16,8 +38,8 @@ android {
         applicationId "com.xiaoyu.campus.parttime"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode resolvedVersionCodeText.toInteger()
+        versionName resolvedVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.

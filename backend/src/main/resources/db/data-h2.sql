@@ -106,3 +106,10 @@ MERGE INTO campus_settlement_record (
     settled_at, remark, created_at, updated_at
 ) KEY (id) VALUES
 (1, 'CR202604060001', 2, 6.00, 0.00, 6.00, 'PENDING', NULL, NULL, NULL, NULL, NULL, NULL, '第一版待结算示例', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+MERGE INTO campus_feedback (
+    id, submitter_role, category, content, contact, page_path, order_id, status,
+    processed_by_employee_id, processed_at, admin_note, created_at, updated_at
+) KEY (id) VALUES
+(1, 'USER', 'ORDER', '订单送达后状态刷新较慢，希望能更清楚地提示。', '13900139000', '/user/campus/order-result', 'CR202604060001', 'PENDING', NULL, NULL, NULL, DATEADD('MINUTE', -30, CURRENT_TIMESTAMP), DATEADD('MINUTE', -30, CURRENT_TIMESTAMP)),
+(2, 'PARTTIME', 'SUGGESTION', '建议在工作台增加取餐点快速筛选。', '13900139001', '/parttime/workbench', NULL, 'RESOLVED', 1, DATEADD('MINUTE', -10, CURRENT_TIMESTAMP), '已记录为后续体验优化项。', DATEADD('HOUR', -1, CURRENT_TIMESTAMP), DATEADD('MINUTE', -10, CURRENT_TIMESTAMP));

@@ -5,8 +5,12 @@
 ## public
 
 - `GET /api/public/shop/status`
+- `GET /api/campus/public/health`
+- `GET /api/campus/public/pickup-points`
+- `GET /api/campus/public/delivery-rules`
+- `POST /api/campus/public/feedback`
 
-保留旧外卖公开能力，用于基础运行检查。
+旧外卖公开能力仍保留用于基础运行检查；campus public 接口提供健康检查、规则读取与 App 内反馈提交。
 
 ## admin
 
@@ -42,6 +46,14 @@
 - `GET /api/campus/admin/exceptions`
 - `GET /api/campus/admin/exceptions/{id}`
 - `POST /api/campus/admin/exceptions/{id}/resolve`
+
+### campus feedback
+
+- `GET /api/campus/admin/feedback`
+- `GET /api/campus/admin/feedback/{id}`
+- `POST /api/campus/admin/feedback/{id}/process`
+
+反馈状态固定为 `PENDING / IN_PROGRESS / RESOLVED`。管理员处理接口只允许推进到 `IN_PROGRESS` 或 `RESOLVED`，已完成反馈不可重复覆盖。
 
 ### campus after-sale
 

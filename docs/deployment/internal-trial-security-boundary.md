@@ -4,23 +4,25 @@
 
 这份文档固化当前单机内测服务器的最小安全边界，避免后续部署时重新暴露 backend 或 MySQL。
 
-它不是完整生产安全方案，也不替代 HTTPS、域名、WAF、正式监控、堡垒机或企业级审计。
+它不是完整生产安全方案，也不替代 WAF、正式监控、堡垒机或企业级审计。
 
 ## 当前边界结论
 
 当前单机内测环境采用以下边界：
 
-1. 业务公网入口只使用 frontend `80`。
-2. API 公网访问统一走 frontend nginx `/api` 反向代理。
-3. backend `8080` 只绑定服务器本机 `127.0.0.1`。
-4. MySQL `3306` 只绑定服务器本机 `127.0.0.1`。
-5. SSH `22` 仅作为运维入口，建议在云厂商安全组中限制来源 IP。
+1. 公网 `80` 只负责跳转到 HTTPS。
+2. 业务公网入口统一使用宿主机 Nginx `443`。
+3. API 公网访问统一走宿主机 Nginx `/api` 反向代理。
+4. backend `8080` 只绑定服务器本机 `127.0.0.1`。
+5. MySQL `3306` 只绑定服务器本机 `127.0.0.1`。
+6. SSH `22` 仅作为运维入口，建议在云厂商安全组中限制来源 IP。
 
 ## 允许暴露的端口
 
 | 端口 | 用途 | 公网策略 | 说明 |
 | --- | --- | --- | --- |
-| `80` | frontend / nginx / `/api` 反向代理 | 允许 | 当前唯一业务公网入口 |
+| `80` | HTTP 到 HTTPS 跳转 / ACME challenge | 允许 | 不承载明文业务会话 |
+| `443` | HTTPS frontend / `/api` 反向代理 | 允许 | 当前唯一业务公网入口 |
 | `22` | SSH 运维 | 仅限 owner 或可信来源 IP | 不属于业务入口，建议收窄安全组来源 |
 
 ## 不允许公网暴露的端口
@@ -44,28 +46,27 @@ backend:
     - "127.0.0.1:${BACKEND_PORT:-8080}:8080"
 ```
 
-frontend 继续作为业务公网入口：
+frontend 容器只绑定宿主机本机，由宿主机 Nginx 代理：
 
 ```yaml
 frontend:
   ports:
-    - "${FRONTEND_PORT:-80}:80"
+    - "127.0.0.1:${FRONTEND_PORT:-18080}:80"
 ```
 
 ## 云安全组建议
 
 云安全组建议只放行：
 
-1. `80/tcp`：面向内测用户访问前端和 `/api`。
-2. `22/tcp`：面向 owner 运维，建议限制为固定来源 IP。
+1. `80/tcp`：HTTP 跳转与证书续期 challenge。
+2. `443/tcp`：面向用户访问前端和 `/api`。
+3. `22/tcp`：面向 owner 运维，建议限制为固定来源 IP。
 
 云安全组不应放行：
 
 1. `8080/tcp`。
 2. `3306/tcp`。
 3. 其它未明确需要的业务端口。
-
-如果后续启用 HTTPS，再新增 `443/tcp`，但本阶段不做 HTTPS / 域名 / 证书。
 
 ## 验证命令
 
@@ -74,17 +75,15 @@ frontend:
 在服务器执行：
 
 ```bash
-ss -tlnp | grep -E ':(22|80|8080|3306)\b' || true
+ss -tlnp | grep -E ':(22|80|443|18080|8080|3306)\b' || true
 ```
 
 期望：
 
-1. `0.0.0.0:80` 或 `[::]:80` 可见。
+1. `0.0.0.0:80`、`0.0.0.0:443` 或对应 IPv6 监听可见。
 2. `0.0.0.0:22` 或 `[::]:22` 可见。
-3. `127.0.0.1:8080` 可见。
-4. `127.0.0.1:3306` 可见。
-5. 不应出现 `0.0.0.0:8080`。
-6. 不应出现 `0.0.0.0:3306`。
+3. `127.0.0.1:18080`、`127.0.0.1:8080`、`127.0.0.1:3306` 可见。
+4. 不应出现 `0.0.0.0:18080 / 8080 / 3306`。
 
 ### 本地公网端口探测
 
@@ -92,7 +91,7 @@ ss -tlnp | grep -E ':(22|80|8080|3306)\b' || true
 
 ```powershell
 $hostName = "your-host"
-foreach ($port in @(22, 80, 8080, 3306)) {
+foreach ($port in @(22, 80, 443, 18080, 8080, 3306)) {
   $result = Test-NetConnection -ComputerName $hostName -Port $port -InformationLevel Quiet -WarningAction SilentlyContinue
   [pscustomobject]@{ Port = $port; TcpReachable = $result }
 }
@@ -100,17 +99,16 @@ foreach ($port in @(22, 80, 8080, 3306)) {
 
 期望：
 
-1. `80` 可访问。
+1. `80 / 443` 可访问。
 2. `22` 可访问或按安全组策略限制为可信来源可访问。
-3. `8080` 不可访问。
-4. `3306` 不可访问。
+3. `18080 / 8080 / 3306` 不可从公网访问。
 
 ### 远端 smoke
 
 端口收敛后，远端 smoke 必须走 `/api`：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase http://your-host/api -FrontendBase http://your-host/
+powershell -ExecutionPolicy Bypass -File scripts\trial-operation\remote-smoke.ps1 -ApiBase https://your-domain/api -FrontendBase https://your-domain/
 ```
 
 不要再默认使用：
@@ -132,25 +130,25 @@ curl -s http://127.0.0.1/api/campus/public/health
 公网等价入口：
 
 ```bash
-curl -s http://your-host/api/campus/public/health
+curl -s https://your-domain/api/campus/public/health
 ```
 
 该接口只表达应用存活，不读取用户、订单、资金、地图或数据库数据。
 
 ## 当前实测摘要
 
-Step 139 已基于当前内测服务器做脱敏验证：
+Step 139 已完成端口收口；Step 169 已完成 HTTPS 接入：
 
 1. 服务器监听：
    - SSH `22` 监听公网。
-   - frontend `80` 监听公网。
+   - 宿主机 Nginx `80 / 443` 监听公网。
+   - frontend `18080` 监听 `127.0.0.1`。
    - backend `8080` 监听 `127.0.0.1`。
    - MySQL `3306` 监听 `127.0.0.1`。
 2. 本地公网端口探测：
    - `22` 可达。
-   - `80` 可达。
-   - `8080` 不可达。
-   - `3306` 不可达。
+   - `80 / 443` 可达。
+   - `18080 / 8080 / 3306` 不应公网可达。
 3. 服务器 OS 防火墙状态：
    - `ufw` 当前 inactive。
    - `firewalld` 当前不可用。
@@ -174,7 +172,7 @@ Step 139 已基于当前内测服务器做脱敏验证：
 
 ## 明确不做
 
-1. 不配置 HTTPS、域名或证书。
+1. 不在容器中保存 HTTPS 证书私钥。
 2. 不把 health endpoint 当成完整业务验收。
 3. 不改 bridge。
 4. 不改 `request.js`。

@@ -4,7 +4,7 @@
   "webDir": "../../frontend/dist-android-user",
   "bundledWebRuntime": false,
   "server": {
-    "androidScheme": "http",
-    "cleartext": true
+    "androidScheme": "https",
+    "cleartext": false
   }
 }

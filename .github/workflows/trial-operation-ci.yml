@@ -12,8 +12,8 @@ permissions:
   contents: read
 
 jobs:
-  backend-compile:
-    name: Backend compile
+  backend-test:
+    name: Backend tests
     runs-on: windows-latest
 
     steps:
@@ -27,9 +27,9 @@ jobs:
           java-version: "17"
           cache: maven
 
-      - name: Compile backend
+      - name: Run backend tests
         working-directory: backend
-        run: .\mvnw.cmd -DskipTests compile
+        run: .\mvnw.cmd test
 
   frontend-build:
     name: Frontend build
@@ -49,6 +49,14 @@ jobs:
       - name: Install dependencies
         working-directory: frontend
         run: npm ci
+
+      - name: Lint frontend
+        working-directory: frontend
+        run: npm run lint
+
+      - name: Test frontend
+        working-directory: frontend
+        run: npm test
 
       - name: Build frontend
         working-directory: frontend
@@ -80,3 +88,63 @@ jobs:
           }
           Write-Error "Sample validation failed with exit code $code."
           exit $code
+
+  android-release-candidate:
+    name: Android unsigned release candidate
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: |
+            frontend/package-lock.json
+            mobile/user-app/package-lock.json
+            mobile/parttime-app/package-lock.json
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: gradle
+
+      - name: Install Android SDK 36
+        shell: pwsh
+        run: |
+          $sdkManager = Join-Path $env:ANDROID_HOME "cmdline-tools\latest\bin\sdkmanager.bat"
+          if (-not (Test-Path $sdkManager)) {
+            throw "sdkmanager.bat not found under ANDROID_HOME."
+          }
+          & $sdkManager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+
+      - name: Install JavaScript dependencies
+        shell: pwsh
+        run: |
+          npm ci --prefix frontend
+          npm ci --prefix mobile/user-app
+          npm ci --prefix mobile/parttime-app
+
+      - name: Build unsigned release candidates
+        shell: pwsh
+        run: |
+          & scripts/trial-operation/build-android-release-apks.ps1 `
+            -VersionCode 1 `
+            -VersionName "0.0.0-ci.${{ github.run_number }}" `
+            -ApiBase "https://xiaoyu.xin/api" `
+            -OutputDirectory target/android-release-candidate
+
+      - name: Upload release candidate manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release-candidate-manifest
+          path: target/android-release-candidate/android-release-manifest.json
+          if-no-files-found: error

@@ -1,45 +1,38 @@
 # 校园代送待处理事项
 
-## Step 173 最高优先级 - 旧后端模块依赖审计或 release 签名包收口
+## Step 174 最高优先级 - release 签名包与服务器反馈闭环部署
 
 ### 当前依据
 
-- Step 169 已完成 `xiaoyu.xin` HTTPS / Nginx / Certbot 实操，HTTPS 公网入口已可用。
-- Step 170 已完成 App 内隐私政策 / 用户协议入口和问题反馈入口。
-- Step 171 已完成旧外卖前端可见模块收口：
-  - 管理后台不再显示旧兼容分组。
-  - 用户端不再显示旧分类、购物车、旧订单、地址入口。
-  - 旧前端页面、旧前端 API wrapper、Vite 模板残留和未引用 mock store 已删除。
-- Step 171 仍保留后端旧模块和旧表，因为 user / employee / auth / upload / statistics 等基础能力仍被 campus 复用。
-- Step 171 构建验证通过：web、Android user public、Android parttime public、后端 compile、`git diff --check`。
-- Step 172 已完成前端去旧后的本地 smoke：
-  - API + SPA shell smoke：25 PASS / 0 FAIL / 0 SKIP。
-  - admin / customer / parttime 核心接口和关键 SPA shell 均可用。
-  - 浏览器截图 smoke：7 PASS / 0 FAIL。
-  - 本轮修复了 `customer_user_info` malformed JSON 下 customer store 初始化报错的稳健性问题。
+- Step 169 已完成 `xiaoyu.xin` HTTPS / Nginx / Certbot 实操。
+- Step 170 已完成隐私政策、用户协议和 App 内反馈提交。
+- Step 171-172 已完成旧外卖前端可见模块收口与本地 smoke。
+- Step 173 已完成 admin 反馈运营闭环：
+  - 新增反馈分页、详情和处理 API。
+  - 新增 `/campus/feedback` 管理页面。
+  - 新增 `V14__campus_feedback_admin_processing.sql`。
+  - 后端 58 tests 全绿。
+  - 前端 lint、5 tests、Web build、双 Android public build 全绿。
+  - CI 已升级为后端全量测试 + 前端 lint / test / build。
 
 ### 下一轮建议
 
-1. 如果继续去旧，进入旧后端模块删除前依赖审计：
-   - `category`
-   - `dish`
-   - `setmeal`
-   - `shop`
-   - `order`
-2. 每个后端旧模块必须独立确认 controller / service / mapper / entity / XML / H2 seed / MySQL init / 前端调用均无依赖后，才允许删除。
-3. 不要一次删除多个后端旧模块。
-4. 如果转向公开公测准备，优先生成真实 release keystore、构建正式 release 签名 APK，并做真机主链路 smoke。
-5. 可单独优化 `browser-smoke.ps1`，拆成 admin / user / parttime 三段，降低截图 smoke 耗时。
-6. 仍不要提交 keystore、`key.properties`、服务器密码、GitHub token、腾讯地图 key、证书私钥或 `.env` 内容。
+1. owner 在私有环境生成用户端 / 兼职端真实 release keystore。
+2. 构建正式 release 签名 APK，并确认 release 包只访问 `https://xiaoyu.xin/api`。
+3. 服务器执行 V14 migration、重建服务并运行远端 smoke。
+4. 将 `/campus/feedback` 加入 admin browser smoke。
+5. 使用正式 release 包做用户下单、兼职接单配送、用户确认和 admin 反馈查看的真机回归。
+6. 公开流量扩大前补公共反馈提交限流或 Nginx 防刷策略。
+7. release 收口后，再按 `category / dish / setmeal / shop / order` 单模块审计旧后端依赖。
 
 ### 继续冻结项
 
 - bridge 主线继续保持 `Phase A no-op` 冻结态。
 - 展示 polish 线继续保持冻结 / 维护态。
 - 媒体线继续收住。
-- 第五个 admin 页继续后置。
 - 不改 `request.js`、token 附着逻辑、鉴权或 bridge。
 - 不删除 `user`、`employee`、登录、上传、统计等仍被 campus 复用的基础模块。
+- 不提交 keystore、`key.properties`、服务器密码、GitHub token、腾讯地图 key、证书私钥或 `.env` 内容。
 
 ## Step 163 收口记录
 
@@ -1014,3 +1007,41 @@
 - 没有做完整异常工单系统；异常历史表和最小 resolve 已完成，但没有做 ACKNOWLEDGED、reopen、delete、通知或多角色审批
 - 没有做轨迹回放、路线规划、实时调度或地图大屏；当前只保留 Step 72 的单页腾讯地图点位预览试点
 - 没有新增第二套返回体
+
+## Step 176 后的上线前待办
+
+### P0 - owner 私有发布材料
+
+1. 生成并妥善保管用户端、兼职端生产 release keystore。
+2. 配置双端本地 `android/key.properties`，或配置 GitHub Actions signing secrets。
+3. 使用生产签名材料构建正式 signed APK / AAB。
+4. 使用 MuMu 或真机安装生产 signed release 包，验证 HTTPS 登录和核心业务链路。
+5. 禁止把 unsigned release candidate 或临时 QA 签名包当作公开公测包分发。
+
+### P0 - 最终服务器发布
+
+1. `192.168.121.138` 已完成磁盘扩容并运行 standalone H2 smoke 栈：
+   - frontend：`http://192.168.121.138:18080/`
+   - backend：仅 `127.0.0.1:18081`
+   - smoke：27 PASS / 0 FAIL / 0 SKIP
+2. 当前 H2 smoke 栈只用于局域网验证，不是持久化生产部署。
+3. MySQL 持久化部署仍待收口：
+   - 当前 Docker Hub / MySQL 镜像拉取不稳定。
+   - 宿主机已有 MySQL 未获授权凭据，未修改。
+   - 下一轮可选择：修复镜像源后继续 Podman MySQL，或由 owner 提供专用 MySQL 用户。
+4. 仍禁止修改既有集群网络、卷、容器或服务；继续只使用独立 `campus-standalone-*` 命名和回环端口。
+5. 若要切正式公网入口，仍需重新确认 HTTPS / 域名 / 证书和生产签名包。
+
+### P1 - 反馈与运营
+
+1. 当前反馈防刷为：
+   - 应用层 60 秒精确重复拦截。
+   - Nginx 单客户端限流。
+2. 多实例或公开流量扩大后，评估 Redis 等共享限流。
+3. 通过运行态操作生成售后、异常、对账差异三个可选样本。
+4. 将 admin 反馈页纳入浏览器 smoke。
+
+### P2 - 后端去旧
+
+1. 旧后端外卖模块必须按 controller -> service -> mapper -> table 的依赖链逐项审计。
+2. 不删除仍被 campus 复用的 `user`、`employee`、认证、上传和统计基础能力。

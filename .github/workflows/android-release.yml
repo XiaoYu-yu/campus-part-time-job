@@ -1,0 +1,154 @@
+name: Android Signed Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_code:
+        description: Positive Android versionCode shared by both apps
+        required: true
+        type: number
+      version_name:
+        description: Android versionName shared by both apps, for example 1.0.0
+        required: true
+        type: string
+      api_base:
+        description: HTTPS API base ending in /api
+        required: true
+        default: https://xiaoyu.xin/api
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  signed-release:
+    name: Build and verify signed APK/AAB
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: |
+            frontend/package-lock.json
+            mobile/user-app/package-lock.json
+            mobile/parttime-app/package-lock.json
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: gradle
+
+      - name: Install Android SDK 36
+        shell: pwsh
+        run: |
+          $sdkManager = Join-Path $env:ANDROID_HOME "cmdline-tools\latest\bin\sdkmanager.bat"
+          if (-not (Test-Path $sdkManager)) {
+            throw "sdkmanager.bat not found under ANDROID_HOME."
+          }
+          & $sdkManager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+
+      - name: Install JavaScript dependencies
+        shell: pwsh
+        run: |
+          npm ci --prefix frontend
+          npm ci --prefix mobile/user-app
+          npm ci --prefix mobile/parttime-app
+
+      - name: Materialize private signing files
+        shell: pwsh
+        env:
+          USER_KEYSTORE_BASE64: ${{ secrets.ANDROID_USER_KEYSTORE_BASE64 }}
+          USER_STORE_PASSWORD: ${{ secrets.ANDROID_USER_STORE_PASSWORD }}
+          USER_KEY_ALIAS: ${{ secrets.ANDROID_USER_KEY_ALIAS }}
+          USER_KEY_PASSWORD: ${{ secrets.ANDROID_USER_KEY_PASSWORD }}
+          PARTTIME_KEYSTORE_BASE64: ${{ secrets.ANDROID_PARTTIME_KEYSTORE_BASE64 }}
+          PARTTIME_STORE_PASSWORD: ${{ secrets.ANDROID_PARTTIME_STORE_PASSWORD }}
+          PARTTIME_KEY_ALIAS: ${{ secrets.ANDROID_PARTTIME_KEY_ALIAS }}
+          PARTTIME_KEY_PASSWORD: ${{ secrets.ANDROID_PARTTIME_KEY_PASSWORD }}
+        run: |
+          $required = @{
+            USER_KEYSTORE_BASE64 = $env:USER_KEYSTORE_BASE64
+            USER_STORE_PASSWORD = $env:USER_STORE_PASSWORD
+            USER_KEY_ALIAS = $env:USER_KEY_ALIAS
+            USER_KEY_PASSWORD = $env:USER_KEY_PASSWORD
+            PARTTIME_KEYSTORE_BASE64 = $env:PARTTIME_KEYSTORE_BASE64
+            PARTTIME_STORE_PASSWORD = $env:PARTTIME_STORE_PASSWORD
+            PARTTIME_KEY_ALIAS = $env:PARTTIME_KEY_ALIAS
+            PARTTIME_KEY_PASSWORD = $env:PARTTIME_KEY_PASSWORD
+          }
+          $missing = @($required.Keys | Where-Object { [string]::IsNullOrWhiteSpace($required[$_]) })
+          if ($missing.Count -gt 0) {
+            throw "Missing Android signing secrets: $($missing -join ', ')"
+          }
+
+          $userKeystoreDir = "mobile/user-app/android/keystore"
+          $parttimeKeystoreDir = "mobile/parttime-app/android/keystore"
+          New-Item -ItemType Directory -Path $userKeystoreDir, $parttimeKeystoreDir -Force | Out-Null
+          [IO.File]::WriteAllBytes(
+            "$userKeystoreDir/campus-user-release.jks",
+            [Convert]::FromBase64String($env:USER_KEYSTORE_BASE64)
+          )
+          [IO.File]::WriteAllBytes(
+            "$parttimeKeystoreDir/campus-parttime-release.jks",
+            [Convert]::FromBase64String($env:PARTTIME_KEYSTORE_BASE64)
+          )
+          $userProperties = @(
+            "storeFile=keystore/campus-user-release.jks"
+            "storePassword=$env:USER_STORE_PASSWORD"
+            "keyAlias=$env:USER_KEY_ALIAS"
+            "keyPassword=$env:USER_KEY_PASSWORD"
+          ) -join "`n"
+          $parttimeProperties = @(
+            "storeFile=keystore/campus-parttime-release.jks"
+            "storePassword=$env:PARTTIME_STORE_PASSWORD"
+            "keyAlias=$env:PARTTIME_KEY_ALIAS"
+            "keyPassword=$env:PARTTIME_KEY_PASSWORD"
+          ) -join "`n"
+          [IO.File]::WriteAllText(
+            "mobile/user-app/android/key.properties",
+            "$userProperties`n",
+            [Text.UTF8Encoding]::new($false)
+          )
+          [IO.File]::WriteAllText(
+            "mobile/parttime-app/android/key.properties",
+            "$parttimeProperties`n",
+            [Text.UTF8Encoding]::new($false)
+          )
+
+      - name: Build and verify signed release
+        shell: pwsh
+        run: |
+          & scripts/trial-operation/build-android-release-apks.ps1 `
+            -VersionCode ${{ inputs.version_code }} `
+            -VersionName '${{ inputs.version_name }}' `
+            -ApiBase '${{ inputs.api_base }}' `
+            -OutputDirectory target/android-signed-release `
+            -RequireSigning
+
+      - name: Upload signed APK, AAB and manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: campus-android-${{ inputs.version_name }}-${{ inputs.version_code }}
+          path: target/android-signed-release/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Remove private signing files
+        if: always()
+        shell: pwsh
+        run: |
+          Remove-Item -LiteralPath "mobile/user-app/android/key.properties" -Force -ErrorAction SilentlyContinue
+          Remove-Item -LiteralPath "mobile/parttime-app/android/key.properties" -Force -ErrorAction SilentlyContinue
+          Remove-Item -LiteralPath "mobile/user-app/android/keystore" -Recurse -Force -ErrorAction SilentlyContinue
+          Remove-Item -LiteralPath "mobile/parttime-app/android/keystore" -Recurse -Force -ErrorAction SilentlyContinue

@@ -23,13 +23,13 @@ if (-not $OutputDirectory) {
 
 function Add-OptionalArg {
     param(
-        [System.Collections.Generic.List[string]]$Args,
+        [System.Collections.Generic.List[string]]$ArgumentList,
         [string]$Name,
         [string]$Value
     )
     if ($Value) {
-        $Args.Add($Name)
-        $Args.Add($Value)
+        $ArgumentList.Add($Name)
+        $ArgumentList.Add($Value)
     }
 }
 
@@ -49,10 +49,10 @@ function Invoke-SmokeScript {
     $argsList.Add("Bypass")
     $argsList.Add("-File")
     $argsList.Add($ScriptPath)
-    Add-OptionalArg -Args $argsList -Name "-ApiBase" -Value $ApiBase
-    Add-OptionalArg -Args $argsList -Name "-AdbPath" -Value $AdbPath
-    Add-OptionalArg -Args $argsList -Name "-DeviceId" -Value $DeviceId
-    Add-OptionalArg -Args $argsList -Name "-AvdName" -Value $AvdName
+    Add-OptionalArg -ArgumentList $argsList -Name "-ApiBase" -Value $ApiBase
+    Add-OptionalArg -ArgumentList $argsList -Name "-AdbPath" -Value $AdbPath
+    Add-OptionalArg -ArgumentList $argsList -Name "-DeviceId" -Value $DeviceId
+    Add-OptionalArg -ArgumentList $argsList -Name "-AvdName" -Value $AvdName
     $argsList.Add("-EmulatorBootTimeoutSeconds")
     $argsList.Add([string]$EmulatorBootTimeoutSeconds)
     $argsList.Add("-Port")

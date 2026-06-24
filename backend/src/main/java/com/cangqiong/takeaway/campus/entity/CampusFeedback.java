@@ -16,6 +16,12 @@ public class CampusFeedback {
     private String page;
     private String orderId;
     private String status;
+    private Long processedByEmployeeId;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime processedAt;
+
+    private String adminNote;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;

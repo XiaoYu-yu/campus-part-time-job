@@ -1,9 +1,14 @@
-FROM node:20-alpine AS build
+ARG NODE_IMAGE=docker.io/library/node:20-alpine
+ARG NGINX_IMAGE=docker.io/library/nginx:1.27-alpine
+ARG NPM_REGISTRY=https://registry.npmmirror.com
+
+FROM ${NODE_IMAGE} AS build
 
 WORKDIR /app/frontend
 
 COPY frontend/package.json frontend/package-lock.json ./
 
+RUN npm config set registry "${NPM_REGISTRY}"
 RUN npm ci
 
 COPY frontend .
@@ -16,7 +21,7 @@ ENV VITE_TENCENT_MAP_KEY=${VITE_TENCENT_MAP_KEY}
 
 RUN npm run build
 
-FROM nginx:1.27-alpine
+FROM ${NGINX_IMAGE}
 
 COPY deploy/internal-trial/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/frontend/dist /usr/share/nginx/html

@@ -1,0 +1,49 @@
+﻿{
+    "name":  "Android public WebView readiness smoke",
+    "date":  "2026-06-23",
+    "purpose":  "Repeatable Android public WebView readiness smoke for user and parttime apps",
+    "passed":  true,
+    "outputDirectory":  "project-logs\\campus-relay\\runtime\\android-mumu-webview-local",
+    "checks":  [
+                   {
+                       "name":  "user",
+                       "script":  "D:\\20278\\code\\Campus part-time job\\scripts\\trial-operation\\android-webview-user-public-smoke.ps1",
+                       "exitCode":  0,
+                       "passed":  true,
+                       "startedAt":  "2026-06-23T22:35:42",
+                       "finishedAt":  "2026-06-23T22:35:53",
+                       "durationSeconds":  10.99,
+                       "reportPath":  "project-logs\\campus-relay\\runtime\\android-mumu-webview-local\\user-public-webview-smoke.json",
+                       "screenshotPath":  "project-logs\\campus-relay\\runtime\\android-mumu-webview-local\\user-campus-orders-public-webview.png",
+                       "summary":  {
+                                       "passed":  true,
+                                       "createdOrderId":  "CR202606232235493921",
+                                       "finalOrderStatus":  "BUILDING_PRIORITY_PENDING",
+                                       "finalPaymentStatus":  "PAID"
+                                   }
+                   },
+                   {
+                       "name":  "parttime",
+                       "script":  "D:\\20278\\code\\Campus part-time job\\scripts\\trial-operation\\android-webview-parttime-public-smoke.ps1",
+                       "exitCode":  0,
+                       "passed":  true,
+                       "startedAt":  "2026-06-23T22:35:53",
+                       "finishedAt":  "2026-06-23T22:36:04",
+                       "durationSeconds":  10.77,
+                       "reportPath":  "project-logs\\campus-relay\\runtime\\android-mumu-webview-local\\parttime-public-webview-smoke.json",
+                       "screenshotPath":  "project-logs\\campus-relay\\runtime\\android-mumu-webview-local\\parttime-workbench-public-webview.png",
+                       "summary":  {
+                                       "passed":  true,
+                                       "courierProfileId":  2,
+                                       "reviewStatus":  "APPROVED",
+                                       "availableOrders":  2
+                                   }
+                   }
+               ],
+    "notes":  [
+                  "Child reports redact the real public API base.",
+                  "The smoke drives Android WebView through DevTools/CDP instead of host-only curl.",
+                  "This wrapper does not change bridge behavior, token attachment logic, routes, backend state machine, or old takeaway modules.",
+                  "HTTP public API is acceptable for owner-controlled smoke only; external user trial should move to HTTPS/domain/cert and cleartext tightening."
+              ]
+}

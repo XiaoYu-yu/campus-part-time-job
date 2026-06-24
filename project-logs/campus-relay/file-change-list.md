@@ -2596,6 +2596,8 @@
 - [docs/deployment/internal-trial-compose.md](../../docs/deployment/internal-trial-compose.md)
   - 同步 frontend 本机端口和 HTTPS 入口说明。
 - [docs/deployment/public-beta-release-gap-closure.md](../../docs/deployment/public-beta-release-gap-closure.md)
+- [scripts/trial-operation/validate-samples.ps1](../../scripts/trial-operation/validate-samples.ps1)
+  - 新增 feedback schema 与 H2 seed 锚点检查。
   - 更新 HTTPS 缺口状态：域名已就绪，仓库侧模板已补齐，服务器实操仍待完成。
 - [frontend/.env.android-user-public.example](../../frontend/.env.android-user-public.example)
   - API base 示例改为 `https://xiaoyu.xin/api`。
@@ -2753,3 +2755,171 @@
 - [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
 
 本轮是旧前端入口移除后的本地 smoke 复核轮：本地 API + SPA shell smoke 25 PASS / 0 FAIL / 0 SKIP，浏览器截图 smoke 7 PASS / 0 FAIL，证明 admin / customer / parttime 核心接口和关键 SPA shell 在前端去旧后仍可用。smoke 期间顺手修复了 `customer_user_info` 坏 JSON 会导致 customer store 初始化报错的稳健性问题。本轮没有继续删除后端旧模块、旧表、bridge、`request.js`、token 附着逻辑、鉴权或核心状态机。
+
+## Step 173 - admin 反馈运营闭环与 CI 回归加固
+
+- [.github/workflows/trial-operation-ci.yml](../../.github/workflows/trial-operation-ci.yml)
+  - 后端 job 从 compile 升级为全量 test。
+  - 前端 job 增加 lint 和 Vitest。
+- [backend/db/migrations/V14__campus_feedback_admin_processing.sql](../../backend/db/migrations/V14__campus_feedback_admin_processing.sql)（新增）
+- [backend/db/init.sql](../../backend/db/init.sql)
+- [backend/src/main/resources/db/schema-h2.sql](../../backend/src/main/resources/db/schema-h2.sql)
+- [backend/src/main/resources/db/data-h2.sql](../../backend/src/main/resources/db/data-h2.sql)
+  - 反馈表增加处理管理员、处理时间和处理备注，并补 H2 运营样本。
+- [backend/src/main/java/com/cangqiong/takeaway/campus/controller/CampusAdminFeedbackController.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/controller/CampusAdminFeedbackController.java)（新增）
+- [backend/src/main/java/com/cangqiong/takeaway/campus/dto/CampusAdminFeedbackProcessDTO.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/dto/CampusAdminFeedbackProcessDTO.java)（新增）
+- [backend/src/main/java/com/cangqiong/takeaway/campus/query/CampusFeedbackQuery.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/query/CampusFeedbackQuery.java)（新增）
+- [backend/src/main/java/com/cangqiong/takeaway/campus/vo/CampusFeedbackVO.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/vo/CampusFeedbackVO.java)（新增）
+- [backend/src/main/java/com/cangqiong/takeaway/campus/entity/CampusFeedback.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/entity/CampusFeedback.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/mapper/CampusFeedbackMapper.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/mapper/CampusFeedbackMapper.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/service/CampusFeedbackService.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/service/CampusFeedbackService.java)
+- [backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusFeedbackServiceImpl.java](../../backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusFeedbackServiceImpl.java)
+  - 新增反馈分页、详情和 admin 处理状态推进。
+- [backend/src/test/java/com/cangqiong/takeaway/CampusFeedbackIntegrationTest.java](../../backend/src/test/java/com/cangqiong/takeaway/CampusFeedbackIntegrationTest.java)（新增）
+- [backend/src/test/java/com/cangqiong/takeaway/CampusCourierAcceptIntegrationTest.java](../../backend/src/test/java/com/cangqiong/takeaway/CampusCourierAcceptIntegrationTest.java)
+  - 修复共享 H2 动态数据下的脆弱总数断言。
+- [frontend/src/views/CampusFeedbackOpsView.vue](../../frontend/src/views/CampusFeedbackOpsView.vue)（新增）
+- [frontend/src/api/campus-admin.js](../../frontend/src/api/campus-admin.js)
+- [frontend/src/router/index.js](../../frontend/src/router/index.js)
+- [frontend/src/layout/MainLayout.vue](../../frontend/src/layout/MainLayout.vue)
+  - 新增 `/campus/feedback` 管理入口。
+- [README.md](../../README.md)
+- [docs/api-overview.md](../../docs/api-overview.md)
+- [docs/db-overview.md](../../docs/db-overview.md)
+- [docs/deployment/ci-check-boundary.md](../../docs/deployment/ci-check-boundary.md)
+- [docs/deployment/public-beta-release-gap-closure.md](../../docs/deployment/public-beta-release-gap-closure.md)
+- [project-logs/campus-relay/step-173-admin-feedback-ops-and-ci-hardening.md](step-173-admin-feedback-ops-and-ci-hardening.md)（新增）
+- [project-logs/campus-relay/summary.md](summary.md)
+- [project-logs/campus-relay/pending-items.md](pending-items.md)
+- [project-logs/campus-relay/file-change-list.md](file-change-list.md)
+- [project-logs/campus-relay/agent-collaboration.md](agent-collaboration.md)
+- [project-logs/campus-relay/global-working-memory.md](global-working-memory.md)
+
+本轮补齐了 App 反馈的 admin 运营闭环，并将 CI 提升为真实回归门禁。未改 bridge、`request.js`、token 附着逻辑、核心订单状态机或旧后端模块，也未提交任何 keystore、密码、证书私钥、服务器凭据或 `.env` 内容。
+
+## Step 174 - 反馈防刷、部署隔离预案与 MuMu 回归
+
+- `backend/src/main/java/com/cangqiong/takeaway/campus/mapper/CampusFeedbackMapper.java`
+- `backend/src/main/java/com/cangqiong/takeaway/campus/service/impl/CampusFeedbackServiceImpl.java`
+- `backend/src/test/java/com/cangqiong/takeaway/CampusFeedbackIntegrationTest.java`
+  - 增加 60 秒重复反馈拦截和集成测试。
+- `deploy/internal-trial/backend.Dockerfile`
+- `deploy/internal-trial/frontend.Dockerfile`
+- `deploy/internal-trial/docker-compose.yml`
+- `deploy/internal-trial/nginx-xiaoyu.xin.conf`
+- `deploy/internal-trial/nginx.conf`
+  - 完整镜像名、反馈限流、TLS 与安全响应头。
+- `deploy/standalone-podman/`（新增）
+  - 独立命名、独立端口、回环绑定的单机试运行预案。
+- `scripts/trial-operation/android-webview-user-public-smoke.ps1`
+- `scripts/trial-operation/android-webview-parttime-public-smoke.ps1`
+- `scripts/trial-operation/android-webview-public-smoke.ps1`
+  - 自动勾选协议，修复参数透传。
+- `scripts/trial-operation/browser-smoke.ps1`
+- `scripts/trial-operation/remote-smoke.ps1`
+- `scripts/trial-operation/commands.ps1`
+- `scripts/trial-operation/validate-samples.ps1`
+- `mobile/README.md`
+- `docs/README.md`
+- `docs/deployment/internal-trial-compose.md`
+- `docs/deployment/internal-trial-security-boundary.md`
+- `docs/deployment/post-deploy-smoke-checklist.md`
+- `docs/deployment/public-beta-release-gap-closure.md`
+- `docs/deployment/xiaoyu-xin-https-runbook.md`
+- `project-logs/campus-relay/runtime/android-qa-apks/step-174-mumu/`
+- `project-logs/campus-relay/runtime/android-mumu-webview-local/`
+- `project-logs/campus-relay/runtime/android-smoke/20260623-223022-user-app-launch.png`
+- `project-logs/campus-relay/runtime/android-smoke/20260623-223033-parttime-app-launch.png`
+- `project-logs/campus-relay/step-174-feedback-hardening-and-mumu-smoke.md`（新增）
+- `project-logs/campus-relay/summary.md`
+- `project-logs/campus-relay/pending-items.md`
+- `project-logs/campus-relay/file-change-list.md`
+- `project-logs/campus-relay/agent-collaboration.md`
+- `project-logs/campus-relay/global-working-memory.md`
+
+本轮未改 bridge、`request.js`、token 附着逻辑、核心订单状态机或旧后端模块。Linux 路线已按 owner 指令停止，未启动容器或服务，未修改集群环境。
+
+## Step 175 - Android release candidate 管线与 MuMu release 验证
+
+- `.gitignore`
+  - 增加 `project-logs/campus-relay/runtime/**/*.aab`，避免 release AAB 二进制进入 Git。
+- `.github/workflows/trial-operation-ci.yml`
+  - 新增 `android-release-candidate` job。
+  - 使用 Node 20、JDK 21、Android SDK 36 构建双端 unsigned release candidate。
+  - 只上传 `android-release-manifest.json`，不上传 APK / AAB。
+- `.github/workflows/android-release.yml`（新增）
+  - 新增手动 signed release workflow。
+  - 从 GitHub Secrets 临时生成双端 keystore 和 `key.properties`。
+  - 构建 signed APK / AAB 并上传 artifact。
+  - workflow 结束时清理私有签名文件。
+- `mobile/configure-capacitor.mjs`（新增）
+  - 按 `default / emulator / lan / public` 模式切换 Capacitor `androidScheme` 与 `cleartext`。
+- `mobile/user-app/package.json`
+- `mobile/parttime-app/package.json`
+  - `cap:sync*` 脚本接入 Capacitor 场景配置。
+- `mobile/user-app/capacitor.config.json`
+- `mobile/parttime-app/capacitor.config.json`
+  - 提交态改为 `androidScheme=https`、`cleartext=false`。
+- `mobile/user-app/android/app/build.gradle`
+- `mobile/parttime-app/android/app/build.gradle`
+  - 增加 release 签名配置完整性校验。
+  - 增加 keystore 文件存在性校验。
+  - 支持 `CAMPUS_VERSION_CODE`、`CAMPUS_VERSION_NAME`、`CAMPUS_REQUIRE_RELEASE_SIGNING`。
+- `mobile/user-app/android/app/src/main/AndroidManifest.xml`
+- `mobile/parttime-app/android/app/src/main/AndroidManifest.xml`
+  - 设置 `android:allowBackup="false"`。
+- `scripts/trial-operation/build-android-release-apks.ps1`（新增）
+  - 构建并校验双端 release APK / AAB。
+  - 输出 release manifest、APK / AAB hash 和签名状态。
+- `scripts/trial-operation/android-release-webview-smoke.ps1`（新增）
+  - 针对 release WebView 做启动、焦点、截图、logcat 和可选公网 health smoke。
+- `docs/deployment/public-beta-release-gap-closure.md`
+  - 更新 release candidate 管线、signed workflow、MuMu release 验证和剩余阻断项。
+- `docs/deployment/ci-check-boundary.md`
+  - 更新最小 CI 范围，加入 Android unsigned release candidate job。
+- `mobile/README.md`
+  - 更新 Capacitor 配置分层、release 构建、GitHub signing secrets 和 MuMu release smoke 说明。
+- `project-logs/campus-relay/runtime/android-release-validation/step-175/android-release-manifest.json`（新增）
+  - 临时 QA 签名 release candidate 构建报告。
+- `project-logs/campus-relay/runtime/android-release-validation/step-175/android-release-webview-smoke.json`（新增）
+  - MuMu release 启动 smoke 报告，设备 ID 与 host 已脱敏。
+- `project-logs/campus-relay/runtime/android-release-validation/step-175/user-release-launch.png`（新增）
+- `project-logs/campus-relay/runtime/android-release-validation/step-175/parttime-release-launch.png`（新增）
+  - 双端 release 首屏截图留痕。
+- `project-logs/campus-relay/step-175-android-release-candidate-pipeline.md`（新增）
+- `project-logs/campus-relay/summary.md`
+- `project-logs/campus-relay/pending-items.md`
+- `project-logs/campus-relay/file-change-list.md`
+- `project-logs/campus-relay/agent-collaboration.md`
+- `project-logs/campus-relay/global-working-memory.md`
+
+本轮是 Android release candidate 管线收口轮：双端 release APK / AAB 已可重复构建并校验，临时 QA 签名 release 包已在 MuMu Android 12 完成启动级 smoke。生产 keystore 仍由 owner 私有管理，本轮没有提交真实 keystore、`key.properties`、密码、证书私钥、服务器凭据、GitHub token、腾讯地图 key 或真实设备 ID；owner 要求停止 Linux 后，本轮未连接任何服务器，未部署，未修改集群环境。
+
+## Step 176 - 138 磁盘扩容与 standalone H2 smoke 部署
+
+- `deploy/internal-trial/backend.Dockerfile`
+  - 增加 `MAVEN_IMAGE` / `JRE_IMAGE` build arg。
+  - 复制 `deploy/internal-trial/maven-settings.xml` 到构建镜像。
+- `deploy/internal-trial/frontend.Dockerfile`
+  - 增加 `NODE_IMAGE` / `NGINX_IMAGE` / `NPM_REGISTRY` build arg。
+  - 构建阶段配置 npm registry。
+- `deploy/internal-trial/maven-settings.xml`（新增）
+  - 增加 Aliyun Maven public mirror。
+- `deploy/standalone-podman/deploy.sh`
+  - 默认镜像源改为可覆盖的 mirror 变量。
+  - 增加 `MYSQL_IMAGE` / `NPM_REGISTRY` 参数。
+  - 容器敏感环境变量改为按名称继承，避免密码值直接出现在 `podman run` 命令行。
+- `deploy/standalone-podman/deploy-h2-smoke.sh`（新增）
+  - 新增 H2 smoke-only fallback，适用于 MySQL 镜像暂时不可拉取时的局域网验证。
+- `deploy/standalone-podman/README.md`
+  - 补充镜像覆盖、secret 传递边界和 H2 smoke fallback 说明。
+- `project-logs/campus-relay/runtime/step-176-standalone-138-h2-smoke/remote-smoke-report.json`（新增）
+  - 138 远端 smoke 报告：27 PASS / 0 FAIL / 0 SKIP，URL 与 token 已脱敏。
+- `project-logs/campus-relay/step-176-hbase01-disk-expand-and-standalone-h2-deploy.md`（新增）
+- `project-logs/campus-relay/summary.md`
+- `project-logs/campus-relay/pending-items.md`
+- `project-logs/campus-relay/file-change-list.md`
+- `project-logs/campus-relay/agent-collaboration.md`
+- `project-logs/campus-relay/global-working-memory.md`
+
+本轮在 owner 授权的 `192.168.121.138` 上完成磁盘扩容，并以独立 `campus-standalone-*` 容器启动 H2 smoke-only 栈。未修改集群环境，未停止或复用宿主机已有 MySQL，未提交 `.env`、密码、证书私钥、release keystore、GitHub token、腾讯地图 key 或服务器凭据。持久化 MySQL 部署仍待镜像源或专用 MySQL 用户到位后继续。

@@ -16,6 +16,7 @@
 - Certbot timer 已存在。
 - `certbot renew --dry-run` 日志确认模拟续期成功。
 - 远端 smoke 结果：25 PASS / 0 FAIL / 0 SKIP。
+- HTTPS 模板已增加 TLS 1.2/1.3、安全响应头和匿名反馈按 IP 限流。
 
 本文后续内容保留为复现、排查和回滚说明。
 
@@ -91,12 +92,22 @@ systemctl reload nginx
 /etc/letsencrypt/live/xiaoyu.xin/privkey.pem
 ```
 
+模板中的反馈防刷策略只作用于：
+
+```text
+POST /api/campus/public/feedback
+```
+
+默认每个来源 IP 每分钟 6 个请求，允许 3 个突发请求；超限返回 HTTP
+`429` 和 JSON 错误消息。其它 API 不受该限流区影响。
+
 ## HTTPS 验证
 
 ```bash
 curl -I http://xiaoyu.xin
 curl -I https://xiaoyu.xin
 curl -I https://xiaoyu.xin/api/
+nginx -t
 ```
 
 预期结果：
@@ -104,6 +115,21 @@ curl -I https://xiaoyu.xin/api/
 - `http://xiaoyu.xin` 返回 `301` 并跳转 HTTPS。
 - `https://xiaoyu.xin` 返回前端页面。
 - `https://xiaoyu.xin/api/` 能进入后端代理；如果 `/api/` 本身没有接口，返回后端 404 也可以接受，重点是代理路径正确。
+- `nginx -t` 必须通过后才能 reload。
+
+如需验证反馈限流且不写入有效反馈，可在部署末尾执行：
+
+```bash
+for i in $(seq 1 10); do
+  curl -s -o /dev/null -w "%{http_code}\n" \
+    -H 'Content-Type: application/json' \
+    -d '{}' \
+    https://xiaoyu.xin/api/campus/public/feedback
+done
+```
+
+预期先出现若干 `200`（后端业务校验失败但 HTTP 链路正常），随后出现
+`429`。该检查会短暂限制当前来源 IP，请放在其它 smoke 完成后执行。
 
 ## 自动续期验证
 
@@ -157,5 +183,4 @@ systemctl reload nginx
 ## 本说明未解决的事项
 
 - Android 真实 release keystore 仍需要本地生成并私有保存。
-- 公开公测前仍需要隐私政策和用户协议。
-- 公开公测前仍需要 App 内反馈入口。
+- 正式公开前仍需 owner 确认隐私政策中的真实运营主体与联系方式。

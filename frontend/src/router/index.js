@@ -102,6 +102,12 @@ const router = createRouter({
       meta: { requiresAdminAuth: true },
       component: () => import('../views/CampusExceptionOpsView.vue')
     },
+    {
+      path: '/campus/feedback',
+      name: 'CampusFeedbackOps',
+      meta: { requiresAdminAuth: true },
+      component: () => import('../views/CampusFeedbackOpsView.vue')
+    },
     // 用户端路由
     {
       path: '/user/login',

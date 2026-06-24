@@ -1,0 +1,47 @@
+{
+  "name": "Android release WebView read-only smoke",
+  "generatedAt": "2026-06-24T06:40:23.2717470+08:00",
+  "apiBase": "https://<redacted>/api",
+  "deviceId": "<redacted>",
+  "passed": true,
+  "apiHealth": {
+    "checked": true,
+    "required": false,
+    "passed": false,
+    "httpStatus": null,
+    "bodyCode": null,
+    "serviceStatus": null,
+    "error": "The request was canceled due to the configured HttpClient.Timeout of 8 seconds elapsing."
+  },
+  "checks": [
+    {
+      "name": "user",
+      "packageName": "com.xiaoyu.campus.user",
+      "passed": true,
+      "devtoolsExpected": false,
+      "pid": "<redacted>",
+      "focusOk": true,
+      "currentFocusRedacted": "  mCurrentFocus=Window{6f71a2d u0 <package>/<package>.MainActivity}\n  mFocusedApp=ActivityRecord{a6555fd u0 <package>/.MainActivity t57}",
+      "fatalLogDetected": false,
+      "screenshot": "project-logs\\campus-relay\\runtime\\android-release-validation\\step-175\\user-release-launch.png",
+      "screenshotSizeBytes": 292003
+    },
+    {
+      "name": "parttime",
+      "packageName": "com.xiaoyu.campus.parttime",
+      "passed": true,
+      "devtoolsExpected": false,
+      "pid": "<redacted>",
+      "focusOk": true,
+      "currentFocusRedacted": "  mCurrentFocus=Window{33d9cfd u0 <package>/<package>.MainActivity}\n  mFocusedApp=ActivityRecord{59caa64 u0 <package>/.MainActivity t58}",
+      "fatalLogDetected": false,
+      "screenshot": "project-logs\\campus-relay\\runtime\\android-release-validation\\step-175\\parttime-release-launch.png",
+      "screenshotSizeBytes": 134114
+    }
+  ],
+  "notes": [
+    "Release WebView DevTools are not expected to be exposed, so this smoke uses launch/focus/screenshot/log checks.",
+    "The optional API health check is host-side read-only; it does not create orders or mutate server state.",
+    "A passing app result proves release APKs install, launch, focus correctly, avoid cleartext errors, and render non-empty first screens."
+  ]
+}

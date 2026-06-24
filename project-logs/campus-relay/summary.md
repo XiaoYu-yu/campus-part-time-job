@@ -167,7 +167,7 @@
 - 当前已完成：`Step 155 - 双端移动原型结构对齐评估`
 - 当前已完成：`Step 156 - 用户端订单主链路原型对齐第一轮`
 - 当前已完成：`Step 157 - 当前本地工作树服务器部署与远端 smoke`
-- 当前日期：`2026-04-30`
+- 当前日期：`2026-06-24`
 - Step 125 补充：已完成旧外卖模块删除前审计与 AI 协作交接文件建立。新增 `agent-collaboration.md`、`legacy-takeaway-removal-readiness.md`，审计覆盖 10 个旧前端页面、13 个旧 API 文件、14 个旧 Controller 等，明确标记每个模块的 campus 依赖关系。本轮仅做文档，未改任何业务代码。
 - Step 126 补充：已完成前端视觉优化优先轮：MainLayout 菜单"旧店铺状态"→"店铺状态兼容"，5 个旧兼容页面标题更新为"X 兼容管理"并新增兼容提示 banner，mock.js 旧词替换。本轮仅改前端可见文案，未删除任何旧模块代码。
 - Step 127 补充：已完成用户端 + 兼职端移动入口视觉统一。用户端 5 个页面（Login/Home/CampusRelayOrders/CampusOrderResult/CourierOnboarding）和兼职端 3 个页面（Login/CourierWorkbench/Profile）全部统一为浅色玻璃态 + campus teal 色系。关键旧词替换："外卖内容"→"代送内容"、"兼职配送入驻"→"校园兼职入驻"。本轮只改展示层（CSS 颜色/背景/圆角/阴影 + 页面文案），未改任何业务行为、API、路由语义、鉴权或后端代码。已通过 `npm run build`（1.00s）。
@@ -2646,3 +2646,50 @@
   - 本轮没有继续删除后端旧模块、旧表、bridge、`request.js`、token 附着逻辑、鉴权或核心状态机。
   - 当前仍未解决：后端旧模块删除前依赖审计、真实 release keystore、正式 release 签名 APK。
   - [Step 172 日志](step-172-post-legacy-frontend-smoke.md)
+
+- 当前已完成：`Step 173 - admin 反馈运营闭环与 CI 回归加固`
+  - 新增 admin 反馈分页、详情和处理接口。
+  - `campus_feedback` 增加最近处理管理员、处理时间和处理备注字段。
+  - 管理后台新增 `/campus/feedback`，支持筛选、详情和 `PENDING / IN_PROGRESS / RESOLVED` 处理进度。
+  - 新增反馈集成测试，并修复一条依赖共享 H2 动态总数的脆弱接单测试断言。
+  - CI 升级为后端全量测试 + 前端 lint / Vitest / build。
+  - 后端 58 tests 全绿；前端 lint、5 tests、Web build、双 Android public build 均通过。
+  - 当前公开公测核心阻断项仍为 owner 私有的真实 release keystore 与正式签名 APK。
+  - [Step 173 日志](step-173-admin-feedback-ops-and-ci-hardening.md)
+
+- 当前已完成：`Step 174 - 反馈防刷、部署隔离预案与 MuMu 回归`
+  - 反馈提交增加 5 字最小长度和 60 秒精确重复防刷。
+  - Nginx 增加反馈接口限流、TLS 1.2/1.3 与常用安全响应头。
+  - 新增独立 `campus-standalone-*` Podman 部署预案，backend / MySQL 仅绑定回环地址。
+  - 修复 Android WebView smoke 未勾选协议和组合包装器参数未透传问题。
+  - MuMu Android 12 双端 APK 安装、启动、截图和真实 WebView API 闭环通过。
+  - 后端 58 tests、前端 lint / 5 tests / build 全部通过。
+  - Linux 路线已按 owner 指令停止，未创建容器或启动服务，未修改集群环境。
+  - 当前上线前核心阻断项仍为 owner 私有 release keystore、正式签名 APK，以及经重新授权后的服务器最终部署。
+  - [Step 174 日志](step-174-feedback-hardening-and-mumu-smoke.md)
+
+- 当前已完成：`Step 175 - Android release candidate 管线与 MuMu release 验证`
+  - 双端 Capacitor 提交态改为 release-safe：`androidScheme=https`、`cleartext=false`。
+  - `cap:sync` / `cap:sync:emulator` / `cap:sync:lan` 会切到 HTTP cleartext 调试模式，`cap:sync:public` 会切回 HTTPS-only 模式。
+  - 双端 Android release 构建支持版本号注入和 `CAMPUS_REQUIRE_RELEASE_SIGNING` 强制签名。
+  - 双端 Android manifest 明确 `allowBackup=false`，release 继续校验 `usesCleartextTraffic=false`。
+  - 新增 `scripts/trial-operation/build-android-release-apks.ps1`，可构建并校验双端 release APK / AAB。
+  - 新增 `.github/workflows/android-release.yml` 手动 signed release workflow，依赖 owner GitHub Secrets。
+  - `.github/workflows/trial-operation-ci.yml` 新增 Android unsigned release candidate job，只上传 manifest，不上传 APK / AAB。
+  - 新增 `scripts/trial-operation/android-release-webview-smoke.ps1`，适配 release WebView 无 DevTools 的启动 / 焦点 / 截图 / logcat 验证。
+  - unsigned release candidate 构建通过；临时 QA keystore signed release candidate 构建通过。
+  - 双端临时 QA 签名 release APK 已安装到 MuMu Android 12，`versionCode=175`、`versionName=0.9.0-rc.175`，启动 smoke 通过。
+  - 后端 58 tests、前端 lint / 5 tests / build、sample validation CI wrapper、脚本语法检查和 `git diff --check` 均通过。
+  - 临时 QA keystore 和本地 `key.properties` 已删除；未连接 Linux，未部署服务器，未修改集群环境。
+  - 当前上线前核心阻断项收敛为 owner 生产 release keystore / 正式 signed APK+AAB，以及 owner 重新授权后的服务器最终部署与公网 smoke。
+  - [Step 175 日志](step-175-android-release-candidate-pipeline.md)
+
+- 当前已完成：`Step 176 - 138 磁盘扩容与 standalone H2 smoke 部署`
+  - 已在 owner 授权的 `192.168.121.138` 上完成系统盘扩展：`/dev/sda2` 扩到 39G，root LV / xfs 扩到 37G，`/` 可用空间约 23G。
+  - 已保持集群环境不变；本轮只使用独立目录 `/opt/campus-part-time-job-standalone`、独立 `campus-standalone-*` 容器命名和独立 `campus-standalone-net` 网络。
+  - standalone Podman 构建增加镜像源 / Maven / npm mirror 参数，适配 138 当前对 Docker Hub 访问不稳定的网络。
+  - 当前 138 运行 smoke-only H2 栈：frontend 对外 `http://192.168.121.138:18080/`，backend 仅绑定 `127.0.0.1:18081`。
+  - 远端 smoke 通过：27 PASS / 0 FAIL / 0 SKIP，报告为 `runtime/step-176-standalone-138-h2-smoke/remote-smoke-report.json`。
+  - MySQL 持久化容器未完成：MySQL 镜像拉取在当前网络下过慢 / 失败；宿主机已有 MySQL 未获授权凭据，未修改或复用。
+  - 本轮未提交真实 `.env`、密码、证书私钥、release keystore、GitHub token、腾讯地图 key 或服务器凭据。
+  - [Step 176 日志](step-176-hbase01-disk-expand-and-standalone-h2-deploy.md)

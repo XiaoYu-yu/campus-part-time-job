@@ -155,6 +155,7 @@ if ($adminToken -and $customerToken -and $courierToken) {
     Invoke-Api 'admin after-sale executions' 'Get' "$ApiBase/campus/admin/orders/after-sale-executions?page=1&pageSize=5" $null $adminToken | Out-Null
     Invoke-Api 'admin couriers list' 'Get' "$ApiBase/campus/admin/couriers?page=1&pageSize=5" $null $adminToken | Out-Null
     Invoke-Api 'admin exception history list' 'Get' "$ApiBase/campus/admin/exceptions?page=1&pageSize=5" $null $adminToken | Out-Null
+    Invoke-Api 'admin feedback list' 'Get' "$ApiBase/campus/admin/feedback?page=1&pageSize=5" $null $adminToken | Out-Null
 
     Invoke-Api 'customer onboarding profile' 'Get' "$ApiBase/campus/customer/courier-onboarding/profile" $null $customerToken | Out-Null
     Invoke-Api 'customer token eligibility' 'Get' "$ApiBase/campus/customer/courier-onboarding/token-eligibility" $null $customerToken | Out-Null
@@ -176,6 +177,7 @@ if ($FrontendBase) {
         [pscustomobject]@{ name = 'frontend shell admin settlements'; path = '/campus/settlements' },
         [pscustomobject]@{ name = 'frontend shell admin after-sale'; path = '/campus/after-sale-executions' },
         [pscustomobject]@{ name = 'frontend shell admin exceptions'; path = '/campus/exceptions' },
+        [pscustomobject]@{ name = 'frontend shell admin feedback'; path = '/campus/feedback' },
         [pscustomobject]@{ name = 'frontend shell customer result'; path = '/user/campus/order-result?orderId=CR202604060001' },
         [pscustomobject]@{ name = 'frontend shell parttime workbench'; path = '/parttime/workbench' }
     )

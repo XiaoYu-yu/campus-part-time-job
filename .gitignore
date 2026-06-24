@@ -38,6 +38,7 @@ uploads/
 deploy/internal-trial/backups/
 project-logs/campus-relay/runtime/android-qa-apks/
 project-logs/campus-relay/runtime/**/*.apk
+project-logs/campus-relay/runtime/**/*.aab
 project-logs/campus-relay/runtime/**/android-qa-apk-manifest.json
 project-logs/*.tmp
 .playwright-mcp/

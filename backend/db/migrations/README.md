@@ -19,6 +19,8 @@
 - `V10__campus_after_sale_execution_record.sql`：售后执行历史记录。
 - `V11__campus_settlement_batch_operation_record.sql`：结算批次操作审计记录。
 - `V12__campus_settlement_reconcile_difference_record.sql`：结算对账差异记录。
+- `V13__campus_feedback.sql`：用户端与兼职端反馈记录。
+- `V14__campus_feedback_admin_processing.sql`：反馈处理管理员、时间与备注字段。
 
 ## 维护规则
 

@@ -1,0 +1,61 @@
+{
+  "name": "Campus Android release artifacts",
+  "generatedAt": "2026-06-23T22:51:32.1151126+08:00",
+  "commit": "45854a12caff051c057af0f28cfee064aa570fad",
+  "versionCode": 175,
+  "versionName": "0.9.0-rc.175",
+  "apiBase": "https://xiaoyu.xin/api",
+  "signingRequired": true,
+  "jdkHome": "D:\\software\\jdk-21-temurin",
+  "androidSdk": "C:\\Users\\20278\\AppData\\Local\\Android\\Sdk",
+  "artifacts": [
+    {
+      "name": "user",
+      "packageName": "com.xiaoyu.campus.user",
+      "applicationLabel": "用户端",
+      "versionCode": 175,
+      "versionName": "0.9.0-rc.175",
+      "apiBase": "https://xiaoyu.xin/api",
+      "androidScheme": "https",
+      "cleartext": false,
+      "manifestAllowsCleartext": false,
+      "androidBackupAllowed": false,
+      "signed": true,
+      "certificateSha256": "ADB038B85BDE776676D05AEB4F498054B72AD9203248D71D6C021BAC4C266E72",
+      "apk": {
+        "path": "project-logs\\campus-relay\\runtime\\android-release-validation\\step-175\\campus-user-0.9.0-rc.175-175-release-signed.apk",
+        "sizeBytes": 3857691,
+        "sha256": "A0A7640C0B6CC602C73E68B132375783BD71240A94D9D7C03D3DE21EC8596364"
+      },
+      "aab": {
+        "path": "project-logs\\campus-relay\\runtime\\android-release-validation\\step-175\\campus-user-0.9.0-rc.175-175-release-signed.aab",
+        "sizeBytes": 3720649,
+        "sha256": "66B2EA25F898F9EB240136770CD08B2739866B8CFE851A36670E13CAE900C494"
+      }
+    },
+    {
+      "name": "parttime",
+      "packageName": "com.xiaoyu.campus.parttime",
+      "applicationLabel": "兼职端",
+      "versionCode": 175,
+      "versionName": "0.9.0-rc.175",
+      "apiBase": "https://xiaoyu.xin/api",
+      "androidScheme": "https",
+      "cleartext": false,
+      "manifestAllowsCleartext": false,
+      "androidBackupAllowed": false,
+      "signed": true,
+      "certificateSha256": "98EBE985B416629314A656495A8FCF1BAC65381DC890CDF0DED5C592DC163B13",
+      "apk": {
+        "path": "project-logs\\campus-relay\\runtime\\android-release-validation\\step-175\\campus-parttime-0.9.0-rc.175-175-release-signed.apk",
+        "sizeBytes": 3857519,
+        "sha256": "1A90CB3ABA342B28D17CFCA80668BC583B7F67617B3B3DC6FC611C8EE333B4E3"
+      },
+      "aab": {
+        "path": "project-logs\\campus-relay\\runtime\\android-release-validation\\step-175\\campus-parttime-0.9.0-rc.175-175-release-signed.aab",
+        "sizeBytes": 3720471,
+        "sha256": "A4E4923276089EA7F032235378DAE7896109D38144FAD2487AB9407EBFF8DB68"
+      }
+    }
+  ]
+}
