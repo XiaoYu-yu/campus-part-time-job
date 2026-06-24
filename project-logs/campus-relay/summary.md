@@ -2733,3 +2733,15 @@
   - 后端 58 tests 全绿，后端打包通过，`git diff --check` 通过。
   - 本轮未在 138 Hive metastore MySQL 上创建或修改数据库，未启动/停止任何集群服务。
   - [Step 180 日志](step-180-mysql-flyway-production-database-hardening.md)
+
+- 当前已完成：`Step 181 - 138 standalone MySQL + Flyway 部署与 smoke 验证`
+  - 后端补充 `flyway-mysql`，解决真实 MySQL 启动时 Flyway 仅有 core 模块导致的 `Unsupported Database` 问题。
+  - standalone 默认 Node 构建镜像从 Alpine 切到 Debian slim，解决 138 上 `lightningcss` musl optional native 依赖缺失导致的 frontend build 失败。
+  - standalone 默认 MySQL 镜像固定为 `docker.m.daocloud.io/library/mysql:8.0`，避开 MySQL 8.4 与当前 Flyway 版本的兼容风险。
+  - 已在 `192.168.121.138 / master` 的 `/opt/campus-part-time-job-standalone` 完成隔离 MySQL + backend + frontend 部署。
+  - 当前服务：frontend `http://192.168.121.138:18080/`，backend 仅 `127.0.0.1:18081`，MySQL 仅 `127.0.0.1:13306`。
+  - `flyway_schema_history` 验证：V1..V14 共 14 条，全部成功，最新为 V14。
+  - MySQL seed 已导入，`campus_relay_order=3`、`campus_courier_profile=2` 等关键样本存在。
+  - 远程 smoke 通过：27 PASS / 0 FAIL / 0 SKIP，报告为 `runtime/step-181-standalone-mysql-flyway-smoke/remote-smoke-report.json`。
+  - 本轮未复用或修改 138 宿主机 Hive metastore MySQL，未启动/停止 Hadoop / Hive / HBase / ZooKeeper / 宿主机 MySQL。
+  - [Step 181 日志](step-181-standalone-mysql-flyway-deploy-and-smoke.md)

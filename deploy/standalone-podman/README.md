@@ -49,9 +49,9 @@ overridden when needed:
 ```bash
 MAVEN_IMAGE=docker.io/library/maven:3.9.9-eclipse-temurin-17 \
 JRE_IMAGE=docker.io/library/eclipse-temurin:17-jre \
-NODE_IMAGE=docker.io/library/node:20-alpine \
+NODE_IMAGE=docker.io/library/node:20-bookworm-slim \
 NGINX_IMAGE=docker.io/library/nginx:1.27-alpine \
-MYSQL_IMAGE=docker.io/library/mysql:8.4 \
+MYSQL_IMAGE=docker.io/library/mysql:8.0 \
 NPM_REGISTRY=https://registry.npmjs.org \
   bash deploy/standalone-podman/deploy.sh
 ```

@@ -1280,3 +1280,37 @@ owner 澄清问题是“直接在 138 里面执行 hive”，因此本轮按 Hiv
 ### 下一轮建议
 
 在 138 的 isolated standalone 环境跑一次 MySQL + Flyway 部署验证；如果 MySQL 镜像仍拉取困难，再走专用 MySQL 用户或离线镜像路线。
+
+## Step 181 协作记录 - 138 standalone MySQL + Flyway 部署与 smoke 验证
+
+### 本轮目标
+
+继续数据库正式化路线，在不触碰 Hive / Hadoop 上课环境的前提下，把 138 上的 standalone 栈从 H2 smoke-only 推进到 isolated MySQL + Flyway。
+
+### 实际改动
+
+- 后端新增 `flyway-mysql`。
+- frontend 构建默认 Node 镜像从 Alpine 切为 Debian slim。
+- standalone 默认 MySQL 镜像切为 MySQL 8.0。
+- 同步当前代码到 `/opt/campus-part-time-job-standalone`。
+- 使用独立 `campus-standalone-*` 容器完成部署。
+
+### 验证结果
+
+- 本地后端测试：58 tests / 0 failures / 0 errors。
+- 138 standalone 容器全部运行：
+  - `campus-standalone-mysql`
+  - `campus-standalone-backend`
+  - `campus-standalone-frontend`
+- Flyway：V1..V14 共 14 条迁移全部成功。
+- 远程 smoke：27 PASS / 0 FAIL / 0 SKIP。
+
+### 未改动内容
+
+- 未复用或修改 138 宿主机 MySQL / Hive metastore。
+- 未启动、停止或重启 Hadoop / Hive / HBase / ZooKeeper。
+- 未提交 `.env`、密码、证书私钥、release keystore、GitHub token、腾讯地图 key 或服务器凭据。
+
+### 下一轮建议
+
+先提交并推送本轮部署修正；随后补 standalone MySQL 备份恢复 runbook。若 owner 想用 Navicat 看库，优先走 SSH tunnel，不直接暴露 MySQL 端口。

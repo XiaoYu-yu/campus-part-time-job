@@ -1088,3 +1088,36 @@
    - 可选导入 `backend/db/seed/internal-trial-data.sql`。
 7. `backend/db/init.sql` 仍保留，但不再作为 standalone 正式部署入口；后续可标记为历史人工参考。
 8. 本轮没有在 138 的 Hive metastore MySQL 上创建或修改任何库表；后续真实 MySQL 验证应使用隔离 standalone MySQL。
+
+## 2026-06-24 补充：Step 181 138 isolated MySQL 栈已可用
+
+1. 当前 `192.168.121.138 / master` 的项目 standalone 主栈已从 H2 smoke-only 推进为 MySQL + Flyway：
+   - frontend：`http://192.168.121.138:18080/`
+   - backend：`127.0.0.1:18081`
+   - MySQL：`127.0.0.1:13306`
+2. 当前容器：
+   - `campus-standalone-mysql`
+   - `campus-standalone-backend`
+   - `campus-standalone-frontend`
+3. 当前数据卷：
+   - `campus-standalone-mysql-data`
+   - `campus-standalone-uploads-data`
+4. Flyway 真实 MySQL 验证已通过：
+   - `flyway_schema_history` 14 行。
+   - V1..V14 全部成功。
+   - 最新迁移 V14：`campus feedback admin processing`。
+5. 远程 smoke 报告：
+   - `project-logs/campus-relay/runtime/step-181-standalone-mysql-flyway-smoke/remote-smoke-report.json`
+   - 27 PASS / 0 FAIL / 0 SKIP
+6. 本轮部署修正：
+   - 后端需保留 `flyway-mysql`，不能只留 `flyway-core`。
+   - frontend Docker build 默认使用 `node:20-bookworm-slim`，避免 Alpine `lightningcss` optional native 问题。
+   - standalone 默认 MySQL 使用 `mysql:8.0`，暂不默认 8.4。
+7. Windows Navicat 访问 standalone MySQL 的推荐方式：
+   - 保持 138 上 MySQL 只绑定 `127.0.0.1:13306`。
+   - Windows 本机执行 SSH tunnel：`ssh -L 13306:127.0.0.1:13306 root@192.168.121.138`。
+   - Navicat 连接 Windows 本机 `127.0.0.1:13306`。
+8. 继续禁止：
+   - 不复用或修改 138 宿主机 Hive metastore MySQL。
+   - 不启动、停止、重置 Hadoop / Hive / HBase / ZooKeeper。
+   - 不删除 standalone MySQL 数据卷，除非明确要重置内测环境。

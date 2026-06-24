@@ -3011,3 +3011,27 @@
 - `project-logs/campus-relay/global-working-memory.md`
 
 验证：后端 58 tests 全绿，后端打包通过，jar 内包含 Flyway 和 V1..V14 迁移脚本，`git diff --check` 通过。未在 138 Hive metastore MySQL 上创建或修改数据库。
+
+## Step 181 - 138 standalone MySQL + Flyway 部署与 smoke 验证
+
+- `backend/pom.xml`
+  - 新增 `org.flywaydb:flyway-mysql`，补齐 Flyway MySQL database support。
+- `deploy/internal-trial/frontend.Dockerfile`
+  - 默认 `NODE_IMAGE` 从 `node:20-alpine` 切为 `node:20-bookworm-slim`。
+- `deploy/standalone-podman/deploy.sh`
+  - 默认 `NODE_IMAGE` 切为 Debian slim。
+  - 默认 `MYSQL_IMAGE` 从 MySQL 8.4 切为 MySQL 8.0。
+- `deploy/standalone-podman/deploy-h2-smoke.sh`
+  - 默认 `NODE_IMAGE` 切为 Debian slim，保证 H2 fallback 构建路径同样避开 Alpine `lightningcss` 问题。
+- `deploy/standalone-podman/README.md`
+  - 镜像覆盖示例同步为 `node:20-bookworm-slim` 与 `mysql:8.0`。
+- `project-logs/campus-relay/runtime/step-181-standalone-mysql-flyway-smoke/remote-smoke-report.json`（新增）
+  - 138 MySQL standalone 远程 smoke 报告：27 PASS / 0 FAIL / 0 SKIP，URL 与 token 已脱敏。
+- `project-logs/campus-relay/step-181-standalone-mysql-flyway-deploy-and-smoke.md`（新增）
+- `project-logs/campus-relay/summary.md`
+- `project-logs/campus-relay/pending-items.md`
+- `project-logs/campus-relay/file-change-list.md`
+- `project-logs/campus-relay/agent-collaboration.md`
+- `project-logs/campus-relay/global-working-memory.md`
+
+本轮在 owner 授权的 `192.168.121.138 / master` 上完成隔离 MySQL + Flyway standalone 部署。当前 `campus-standalone-mysql` 仅绑定 `127.0.0.1:13306`，不暴露到局域网；如需 Windows Navicat，推荐 SSH tunnel。未修改或复用 138 宿主机 Hive metastore MySQL，未启动/停止集群服务。

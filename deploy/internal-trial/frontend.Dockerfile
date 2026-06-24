@@ -1,4 +1,4 @@
-ARG NODE_IMAGE=docker.io/library/node:20-alpine
+ARG NODE_IMAGE=docker.io/library/node:20-bookworm-slim
 ARG NGINX_IMAGE=docker.io/library/nginx:1.27-alpine
 ARG NPM_REGISTRY=https://registry.npmmirror.com
 

@@ -12,7 +12,7 @@ BACKEND_IMAGE="localhost/campus-standalone-backend:current"
 FRONTEND_IMAGE="localhost/campus-standalone-frontend:current"
 MAVEN_IMAGE="${MAVEN_IMAGE:-docker.m.daocloud.io/library/maven:3.9.9-eclipse-temurin-17}"
 JRE_IMAGE="${JRE_IMAGE:-docker.m.daocloud.io/library/eclipse-temurin:17-jre}"
-NODE_IMAGE="${NODE_IMAGE:-docker.m.daocloud.io/library/node:20-alpine}"
+NODE_IMAGE="${NODE_IMAGE:-docker.m.daocloud.io/library/node:20-bookworm-slim}"
 NGINX_IMAGE="${NGINX_IMAGE:-docker.m.daocloud.io/library/nginx:1.27-alpine}"
 NPM_REGISTRY="${NPM_REGISTRY:-https://registry.npmmirror.com}"
 

@@ -1099,3 +1099,46 @@
 
 1. 旧后端外卖模块必须按 controller -> service -> mapper -> table 的依赖链逐项审计。
 2. 不删除仍被 campus 复用的 `user`、`employee`、认证、上传和统计基础能力。
+
+## Step 181 后的上线前待办更新
+
+### 已收口
+
+1. 隔离 MySQL 持久化部署已在 `192.168.121.138 / master` 验证通过：
+   - standalone MySQL：`campus-standalone-mysql`
+   - backend：`campus-standalone-backend`
+   - frontend：`campus-standalone-frontend`
+2. Flyway 真实 MySQL 验证已完成：
+   - `flyway_schema_history` V1..V14 全部 `success=1`
+   - 最新迁移为 V14
+3. MySQL standalone 远程 smoke 已完成：
+   - `project-logs/campus-relay/runtime/step-181-standalone-mysql-flyway-smoke/remote-smoke-report.json`
+   - 27 PASS / 0 FAIL / 0 SKIP
+4. H2 仍保留为 test profile 和 smoke fallback，但当前 138 standalone 主栈已切到 MySQL。
+
+### P0 - 仍需 owner 私有材料
+
+1. 生产 release keystore / GitHub signing secrets。
+2. 正式 signed APK / AAB。
+3. 正式 HTTPS 域名、证书和公网入口确认。
+4. 生产 `.env` / secrets 管理方式确认；不要把当前内测 `.env` 提交到 Git。
+
+### P1 - 138 standalone 运维补强
+
+1. 补充 MySQL 数据卷备份 / 恢复 runbook。
+2. 补充 `campus-standalone-*` 容器重启、健康检查和回滚命令。
+3. 若 Windows Navicat 需要查看 standalone MySQL，优先使用 SSH tunnel：
+
+   ```bash
+   ssh -L 13306:127.0.0.1:13306 root@192.168.121.138
+   ```
+
+   然后 Navicat 连接 Windows 本机 `127.0.0.1:13306`。
+
+4. 不建议直接把 MySQL 13306 暴露到 `0.0.0.0`；如必须暴露，需要单独配置防火墙和强密码边界。
+
+### P1 - 继续保护集群环境
+
+1. 继续不复用 138 宿主机 Hive metastore MySQL。
+2. 项目 standalone 容器继续使用独立网络、独立数据卷和独立端口。
+3. Hadoop / Hive / HBase / ZooKeeper 仍按上课环境处理，项目部署不应启动、停止或重置这些服务。
