@@ -3035,3 +3035,21 @@
 - `project-logs/campus-relay/global-working-memory.md`
 
 本轮在 owner 授权的 `192.168.121.138 / master` 上完成隔离 MySQL + Flyway standalone 部署。当前 `campus-standalone-mysql` 仅绑定 `127.0.0.1:13306`，不暴露到局域网；如需 Windows Navicat，推荐 SSH tunnel。未修改或复用 138 宿主机 Hive metastore MySQL，未启动/停止集群服务。
+
+## Step 182 - 138 standalone 稳定性检查与上线差距评估
+
+- `project-logs/campus-relay/runtime/step-182-stability-check/remote-smoke-run-1.json`（新增）
+- `project-logs/campus-relay/runtime/step-182-stability-check/remote-smoke-run-2.json`（新增）
+- `project-logs/campus-relay/runtime/step-182-stability-check/remote-smoke-run-3.json`（新增）
+  - 连续 3 轮远程 smoke 报告，每轮 27 PASS / 0 FAIL / 0 SKIP。
+- `project-logs/campus-relay/runtime/step-182-stability-check/remote-smoke-after-restart.json`（新增）
+  - backend / frontend 重启后的远程 smoke 报告：27 PASS / 0 FAIL / 0 SKIP。
+- `project-logs/campus-relay/step-182-stability-check-and-launch-gap.md`（新增）
+  - 记录 5 轮真实业务闭环、60 次健康探测、容器资源、错误日志扫描、重启恢复和上线差距。
+- `project-logs/campus-relay/summary.md`
+- `project-logs/campus-relay/pending-items.md`
+- `project-logs/campus-relay/file-change-list.md`
+- `project-logs/campus-relay/agent-collaboration.md`
+- `project-logs/campus-relay/global-working-memory.md`
+
+本轮无业务代码变更。验证结论：当前 138 standalone MySQL 栈可支撑局域网内测 / 答辩演示；正式公网长期运行前仍需补生产发布、备份、监控、secrets 和资源余量。

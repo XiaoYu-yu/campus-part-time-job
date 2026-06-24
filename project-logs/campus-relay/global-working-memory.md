@@ -1121,3 +1121,27 @@
    - 不复用或修改 138 宿主机 Hive metastore MySQL。
    - 不启动、停止、重置 Hadoop / Hive / HBase / ZooKeeper。
    - 不删除 standalone MySQL 数据卷，除非明确要重置内测环境。
+
+## 2026-06-24 补充：Step 182 稳定性与上线差距
+
+1. 138 standalone MySQL 栈已通过短时稳定性检查：
+   - 5 轮真实订单闭环通过。
+   - 3 轮连续 remote smoke 通过。
+   - 60 次健康探测通过。
+   - backend / frontend 重启后 smoke 仍通过。
+2. 重启后后端启动约 8 秒，Flyway validate 14 migrations，并确认 schema V14 up to date。
+3. 当前宿主资源：
+   - `/` 可用约 17G。
+   - 内存总量约 3.5Gi。
+   - 可用内存约 531Mi。
+   - swap 已使用约 306Mi。
+4. 资源判断：
+   - 项目容器单独运行当前够用。
+   - 如果同时跑 Hadoop / Hive 课堂任务，内存余量偏紧。
+   - 正式长期运行建议给项目单独机器或增加内存。
+5. 上线判断：
+   - 局域网内测 / 答辩演示：可以。
+   - 正式公网长期运行：还需补 HTTPS、生产签名包、secrets、MySQL 备份恢复、监控告警、日志轮转和回滚 runbook。
+6. 下一步优先级：
+   - 若先网页内测：补 HTTPS / 域名 / Nginx / 备份。
+   - 若先 APK 分发：补生产 keystore / signed APK/AAB / HTTPS WebView 验证。

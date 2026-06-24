@@ -1142,3 +1142,35 @@
 1. 继续不复用 138 宿主机 Hive metastore MySQL。
 2. 项目 standalone 容器继续使用独立网络、独立数据卷和独立端口。
 3. Hadoop / Hive / HBase / ZooKeeper 仍按上课环境处理，项目部署不应启动、停止或重置这些服务。
+
+## Step 182 后的上线差距更新
+
+### 当前可判定
+
+1. `192.168.121.138 / master` standalone MySQL 栈短时稳定性通过：
+   - 5 轮真实业务闭环通过。
+   - 3 轮连续远程 smoke 通过。
+   - 60 次健康探测通过。
+   - backend / frontend 重启后恢复并再次 smoke 通过。
+2. 当前已经适合：
+   - 局域网内测。
+   - 答辩 / 演示。
+   - 小范围人工试用。
+3. 当前还不建议直接当正式公网长期生产环境。
+
+### P0 - 正式上线前必须补
+
+1. 生产 release keystore / signed APK / signed AAB。
+2. HTTPS 域名、证书、Nginx 公网入口和 Android release HTTPS 验证。
+3. 生产 `.env` / JWT secret / DB 密码 / 腾讯地图 key 等 secrets 管理。
+4. MySQL 自动备份、备份保留周期和恢复演练。
+5. 内存余量：138 当前可用内存约 531Mi，已使用少量 swap；若同时跑上课 Hive / Hadoop，风险偏高。
+
+### P1 - 建议补
+
+1. 容器健康检查和告警脚本。
+2. 日志轮转确认。
+3. 回滚 runbook。
+4. 2 小时 / 8 小时 soak test。
+5. 20 - 50 并发轻量压测。
+6. 内测数据清理或正式库初始化策略。

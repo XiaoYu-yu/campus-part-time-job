@@ -1314,3 +1314,34 @@ owner 澄清问题是“直接在 138 里面执行 hive”，因此本轮按 Hiv
 ### 下一轮建议
 
 先提交并推送本轮部署修正；随后补 standalone MySQL 备份恢复 runbook。若 owner 想用 Navicat 看库，优先走 SSH tunnel，不直接暴露 MySQL 端口。
+
+## Step 182 协作记录 - 稳定性检查与上线差距评估
+
+### 本轮目标
+
+回应 owner “试一下稳不稳”和“距离上线还差什么”的问题，对 138 standalone MySQL 栈做短时稳定性检查，并给出上线前差距清单。
+
+### 实际动作
+
+- 检查 `campus-standalone-*` 容器状态、资源和重启计数。
+- 执行 5 轮真实业务写闭环。
+- 执行 3 轮连续 remote smoke。
+- 执行 60 次健康探测。
+- 扫描最近错误日志。
+- 重启 backend / frontend 并复测 health 与 remote smoke。
+
+### 验证结果
+
+- 5 轮真实业务闭环：全部通过。
+- 连续 remote smoke：3 轮均 27 PASS / 0 FAIL / 0 SKIP。
+- 健康探测：60 PASS / 0 FAIL。
+- 重启后 remote smoke：27 PASS / 0 FAIL / 0 SKIP。
+- Flyway 重启后 validate：schema V14 up to date。
+
+### 结论
+
+当前适合局域网内测、答辩演示和小范围人工试用。正式公网长期运行前，仍需补 HTTPS / 域名、生产签名包、secrets 管理、MySQL 备份恢复、监控日志、回滚 runbook 和资源余量。
+
+### 下一轮建议
+
+优先做 MySQL 备份 / 恢复 runbook，然后再补公网 HTTPS 入口或 Android 正式签名包，取决于 owner 下一步是先做网页内测还是 APK 分发。

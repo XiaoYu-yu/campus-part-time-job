@@ -2745,3 +2745,12 @@
   - 远程 smoke 通过：27 PASS / 0 FAIL / 0 SKIP，报告为 `runtime/step-181-standalone-mysql-flyway-smoke/remote-smoke-report.json`。
   - 本轮未复用或修改 138 宿主机 Hive metastore MySQL，未启动/停止 Hadoop / Hive / HBase / ZooKeeper / 宿主机 MySQL。
   - [Step 181 日志](step-181-standalone-mysql-flyway-deploy-and-smoke.md)
+
+- 当前已完成：`Step 182 - 138 standalone 稳定性检查与上线差距评估`
+  - 对 `campus-standalone-*` 项目容器做短时稳定性验证，不触碰 Hive / Hadoop / HBase / ZooKeeper / 宿主机 MySQL。
+  - 真实业务写链路 5 轮通过：创建代送单 -> 模拟支付 -> 接单 -> 取餐 -> 配送 -> 确认，最终均为 `COMPLETED`。
+  - 连续远程 smoke 3 轮通过，每轮 27 PASS / 0 FAIL / 0 SKIP。
+  - 高频健康探测 60 次通过，0 失败；前端 shell 多数 2ms - 6ms，health 平均约 22ms。
+  - 重启 backend / frontend 后恢复正常，Flyway validate 确认 schema V14 up to date，重启后 smoke 仍为 27 PASS / 0 FAIL / 0 SKIP。
+  - 当前结论：局域网内测 / 答辩演示可用；正式公网长期运行前仍需补 HTTPS / 域名、生产签名包、secrets 管理、MySQL 备份恢复、监控日志和内存余量。
+  - [Step 182 日志](step-182-stability-check-and-launch-gap.md)
