@@ -9,9 +9,9 @@
 - H2 schema：`backend/src/main/resources/db/schema-h2.sql`
 - H2 seed：`backend/src/main/resources/db/data-h2.sql`
 
-## 旧外卖基础表
+## 基础复用表
 
-旧外卖模块保留使用，包括：
+当前身份、账号和部分基础管理能力复用以下表：
 
 - `employee`
 - `user`
@@ -23,7 +23,7 @@
 - `cart`
 - `address`
 
-这些表仍是旧模块和复用身份模型的基础。
+这些表仍是用户、管理员、基础管理和兼容运行能力的基础。
 
 ## campus 核心表
 
@@ -71,7 +71,7 @@
 
 ## 迁移脚本现状
 
-- `V1__baseline_schema.sql`：旧外卖基线
+- `V1__baseline_schema.sql`：基础 schema 基线
 - `V2__campus_relay_schema.sql`：校园代送核心 schema
 - `V3__campus_relay_order_timeline_columns.sql`
 - `V4__campus_relay_ops_and_settlement.sql`

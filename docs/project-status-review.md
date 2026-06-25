@@ -4,7 +4,7 @@
 
 ## 当前结论
 
-项目已经从原苍穹外卖训练项目，推进为以校园代送为主线的试运营版。旧外卖模块仍保留可运行，但当前交付和演示主线是 campus 领域。
+项目当前已经形成以校园代送为主线的试运营版。当前交付和演示主线是 campus 领域，覆盖用户端、兼职端和管理端的最小闭环。
 
 当前状态可以概括为：
 
@@ -12,7 +12,7 @@
 2. 本地 H2/test 环境可用于演示和回归。
 3. admin 只读运营页已覆盖 settlement、after-sale、courier ops、exception 等核心观察面。
 4. 异常历史和售后执行历史已具备最小审计能力。
-5. bridge 主线和展示 polish 主线均已冻结。
+5. 兼容接口和展示 polish 主线均已冻结。
 6. 当前仍不是完整商业生产版，真实支付、真实地图、真实打款等外部能力未接入。
 
 ## 已完成主能力
@@ -54,18 +54,12 @@
 - [docs/README.md](README.md)
 - [project-logs/campus-relay/summary.md](../project-logs/campus-relay/summary.md)
 
-旧外卖阶段文档已归档到：
-
-- [docs/legacy-takeaway/](legacy-takeaway/README.md)
-- [project-logs/legacy-takeaway/](../project-logs/legacy-takeaway/summary.md)
-
 ## 主要风险
 
 1. 外部公司能力未接入：支付、退款、打款、地图、消息。
 2. settlement 仍停留在模拟打款和运营记录层面，不是真实财务系统。
 3. 异常处理已具备最小 resolve，但未扩展为完整工单平台。
-4. 旧外卖模块仍保留，后续如果要产品化，需要明确是否继续维护。
-5. 生产级限流、监控、告警、审计和安全加固仍未作为正式上线能力完成。
+4. 生产级限流、监控、告警、审计和安全加固仍未作为正式上线能力完成。
 
 ## 建议下一阶段
 

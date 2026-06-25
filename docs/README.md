@@ -1,6 +1,6 @@
 # 项目文档索引
 
-这个目录只保留当前“校内兼职平台 / 校园代送试运营版”需要直接阅读的文档。旧苍穹外卖阶段材料已归档到 `legacy-takeaway/`，不再作为当前主线入口。
+这个目录只保留当前“校内兼职平台 / 校园代送试运营版”需要直接阅读的文档。历史参考材料不再作为当前主线入口。
 
 ## 当前交付文档
 
@@ -17,7 +17,7 @@
 ## 校园代送规划与映射
 
 - [领域模型重构规划](campus-relay/domain-refactor-plan.md)
-- [旧模块到校园代送模块映射](campus-relay/legacy-to-campus-mapping.md)
+- [历史兼容能力到校园代送模块映射](campus-relay/legacy-to-campus-mapping.md)
 
 ## 部署与运维
 
@@ -37,20 +37,12 @@
 - [校园代送总览](../project-logs/campus-relay/summary.md)
 - [待处理事项](../project-logs/campus-relay/pending-items.md)
 - [文件改动清单](../project-logs/campus-relay/file-change-list.md)
-- [bridge 收口评估](../project-logs/campus-relay/bridge-phaseout-evaluation.md)
 - [交付整理与演示脚本](../project-logs/campus-relay/step-40-delivery-packaging-and-demo-script.md)
 - [媒体采集与归档](../project-logs/campus-relay/step-42-real-media-capture-and-archive.md)
-
-## 旧外卖阶段归档
-
-- [旧外卖文档归档说明](legacy-takeaway/README.md)
-- [旧 API 设计](legacy-takeaway/api-design.md)
-- [旧数据库设计](legacy-takeaway/db-design.md)
-- [旧修复日志归档](../project-logs/legacy-takeaway/summary.md)
 
 ## 维护规则
 
 1. 当前 campus 主线文档优先放在 `docs/` 或 `project-logs/campus-relay/`。
-2. 旧外卖材料只做参考，不再挂在 README 主入口。
+2. 历史参考材料不再挂在 README 主入口。
 3. 新增数据库结构必须同步维护 `backend/db/init.sql`、`backend/db/migrations/` 与 H2 schema。
 4. 新增阶段任务必须同步更新 `project-logs/campus-relay/summary.md`、`pending-items.md`、`file-change-list.md`。

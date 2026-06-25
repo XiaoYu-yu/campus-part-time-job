@@ -6,7 +6,7 @@
 ![MySQL](https://img.shields.io/badge/MySQL%20%2F%20MariaDB-supported-003545?logo=mysql&logoColor=white)
 ![H2](https://img.shields.io/badge/H2-test%20profile-blue)
 
-本项目由苍穹外卖风格项目增量改造而来。当前主线是“校园代送 / 校内兼职配送”试运营闭环，旧外卖模块仍保留可运行，不作为当前演示主线。
+本项目是面向校园场景的校内兼职与代送试运营平台，当前主线聚焦“校园代送 / 校内兼职配送”闭环，覆盖用户下单、兼职接单、管理端审核与运营管理。
 
 当前交付定位：
 
@@ -15,7 +15,7 @@
 - 可使用 H2/test 数据完成主链路联调
 - 可在 138 standalone MySQL + Flyway 栈完成局域网内测和答辩演示
 - 支付、地图、真实打款等外部公司能力暂用模拟数据或只读记录代替
-- bridge 主线处于 `Phase A no-op` 冻结态，不删除旧兼容接口
+- 兼容接口保持冻结态，不在上线前临时改动
 - 模拟支付、模拟退款、模拟打款和 settlement 只作为试运营状态与审计记录，不代表真实资金流
 
 ## 当前核心能力
@@ -44,7 +44,6 @@
 - after-sale 执行分页与执行历史 drawer
 - 异常历史列表、详情与最小 resolve 处理
 - 用户反馈列表、详情与处理进度
-- 旧外卖后台基础页面仍保留
 
 ## 明确边界
 
@@ -81,10 +80,8 @@ Campus part-time job/
 │   ├── campus-relay/                校园代送规划与映射
 │   ├── deployment/                  部署、备份和回滚说明
 │   ├── mobile/                      用户端 / 兼职端 Android 壳方案
-│   └── legacy-takeaway/             旧外卖阶段参考文档归档
 ├── project-logs/
 │   ├── campus-relay/                当前校园代送主线日志
-│   └── legacy-takeaway/             旧外卖修复日志归档
 ├── AGENTS.md                        协作约束
 └── README.md                        当前项目入口
 ```
@@ -193,7 +190,6 @@ npm run build
 - [上线差距与材料获取指南](docs/deployment/launch-readiness-acquisition-guide.md)
 - [API 总览](docs/api-overview.md)
 - [数据库总览](docs/db-overview.md)
-- [旧外卖文档归档](docs/legacy-takeaway/README.md)
 
 ## License
 

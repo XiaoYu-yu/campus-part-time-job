@@ -10,11 +10,11 @@
 - `GET /api/campus/public/delivery-rules`
 - `POST /api/campus/public/feedback`
 
-旧外卖公开能力仍保留用于基础运行检查；campus public 接口提供健康检查、规则读取与 App 内反馈提交。
+public 接口提供健康检查、规则读取、App 内反馈提交，以及基础运行检查能力。
 
 ## admin
 
-### 旧外卖后台
+### 基础管理能力
 
 - employee
 - category
@@ -24,7 +24,7 @@
 - statistics
 - shop status
 
-这些模块保留可运行，但不是当前 campus 主演示链路。
+这些模块作为基础管理与运行检查能力保留；当前主演示链路聚焦 campus 订单、兼职、售后、反馈和结算。
 
 ### campus 订单与运营
 
@@ -107,6 +107,6 @@
 - `POST /api/campus/courier/orders/{id}/exception-report`
 - courier location report
 
-## bridge 说明
+## 兼容接口说明
 
-`/api/campus/courier/profile` 与 `/api/campus/courier/review-status` 仍保留 customer/courier 双 token 兼容读取。当前 bridge 处于 `Phase A no-op` 冻结态，不能直接删除。
+`/api/campus/courier/profile` 与 `/api/campus/courier/review-status` 保留 customer/courier 双 token 兼容读取。当前兼容接口处于冻结态，上线前不应临时删除或收紧。

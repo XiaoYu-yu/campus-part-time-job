@@ -1164,3 +1164,26 @@
 5. 后续实现优先级：
    - 先做 138 standalone 备份 / 恢复 / 状态检查。
    - 再看 owner 是要公网网页内测还是 Android 包分发。
+
+## 2026-06-25 补充：Step 184 仓库介绍 campus-first
+
+1. owner 希望仓库介绍不再出现“苍穹外卖”等旧项目来源表述。
+2. 已更新：
+   - `README.md`
+   - `docs/README.md`
+   - `docs/api-overview.md`
+   - `docs/db-overview.md`
+   - `docs/project-status-review.md`
+   - `docs/deployment/launch-readiness-acquisition-guide.md`
+3. 当前公开入口用语：
+   - 校内兼职平台
+   - 校园代送试运营平台
+   - 基础复用能力
+   - 历史兼容能力
+   - 兼容接口
+4. 未修改：
+   - `AGENTS.md`
+   - 历史归档目录
+   - Flyway 文件名
+   - 业务代码
+5. 后续如果要改 GitHub About，需要单独处理。

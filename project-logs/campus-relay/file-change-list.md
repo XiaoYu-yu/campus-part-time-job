@@ -3074,3 +3074,32 @@
 - `project-logs/campus-relay/global-working-memory.md`
 
 本轮无业务代码变更，无服务器操作，无数据库操作。
+
+## Step 184 - 仓库介绍去旧项目化与 campus-first 口径整理
+
+- `README.md`
+  - 仓库介绍改为独立 campus-first 项目描述。
+  - 移除旧归档入口展示。
+  - 将 `bridge` 展示性描述改为兼容接口。
+- `docs/README.md`
+  - 文档索引移除旧阶段归档入口。
+  - 历史映射文档标题改为“历史兼容能力到校园代送模块映射”。
+- `docs/api-overview.md`
+  - “旧外卖后台”改为“基础管理能力”。
+  - “bridge 说明”改为“兼容接口说明”。
+- `docs/db-overview.md`
+  - “旧外卖基础表”改为“基础复用表”。
+  - V1 说明改为基础 schema 基线。
+- `docs/project-status-review.md`
+  - 当前结论改为 campus-first。
+  - 移除旧阶段归档入口展示。
+- `docs/deployment/launch-readiness-acquisition-guide.md`
+  - “旧模块清理”改为“历史兼容能力清理”。
+- `project-logs/campus-relay/step-184-repository-introduction-campus-first.md`（新增）
+- `project-logs/campus-relay/summary.md`
+- `project-logs/campus-relay/file-change-list.md`
+- `project-logs/campus-relay/pending-items.md`
+- `project-logs/campus-relay/agent-collaboration.md`
+- `project-logs/campus-relay/global-working-memory.md`
+
+本轮无业务代码变更，无服务器操作，无数据库操作。

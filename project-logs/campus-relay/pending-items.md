@@ -1198,3 +1198,10 @@
    - owner 先生成生产 release keystore。
    - 配 signed APK / AAB 构建。
    - 用 HTTPS API 地址做 MuMu / 真机验证。
+
+## Step 184 后的仓库介绍整理状态
+
+1. README 和主要 docs 入口已改为 campus-first。
+2. 公开入口不再展示“苍穹外卖 / 旧外卖”作为项目介绍。
+3. AGENTS 协作约束和历史归档未改；如果要彻底清理历史归档，需要单独评估。
+4. 如果需要同步 GitHub 仓库 About 描述，下一步手动在 GitHub 页面修改或授权使用 `gh repo edit`。

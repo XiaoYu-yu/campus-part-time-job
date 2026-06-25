@@ -2762,3 +2762,10 @@
   - `README.md` 和 `docs/README.md` 已增加新文档入口，并补充 138 standalone MySQL + Flyway 局域网内测状态。
   - 本轮仅文档和索引变更，未改服务器、数据库或业务代码。
   - [Step 183 日志](step-183-launch-material-guide-and-mainline-organization.md)
+
+- 当前已完成：`Step 184 - 仓库介绍去旧项目化与 campus-first 口径整理`
+  - `README.md` 删除“苍穹外卖”来源表述，改为面向校园场景的校内兼职与代送试运营平台。
+  - 根 README 和 `docs/README.md` 移除旧归档入口展示，公开入口改为 campus-first。
+  - `docs/api-overview.md`、`docs/db-overview.md`、`docs/project-status-review.md`、`docs/deployment/launch-readiness-acquisition-guide.md` 中的展示性“旧外卖”口径改为“基础复用能力 / 历史兼容能力 / 兼容接口”。
+  - 本轮未删除代码、未移动目录、未改 AGENTS 协作约束、未改数据库或服务器。
+  - [Step 184 日志](step-184-repository-introduction-campus-first.md)

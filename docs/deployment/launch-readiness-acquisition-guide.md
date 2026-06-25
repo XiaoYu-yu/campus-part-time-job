@@ -342,15 +342,15 @@ APP_CORS_ALLOWED_ORIGINS=https://你的正式域名
 - App 推送：厂商推送 / Firebase Cloud Messaging / 国内推送服务。
 - 短信：阿里云短信、腾讯云短信等，需要签名和模板审核。
 
-### 3. 旧模块清理
+### 3. 历史兼容能力清理
 
 当前 AGENTS 约束要求：
 
-- 不删除旧外卖模块。
+- 不删除历史兼容模块。
 - 普通用户复用 `user`。
 - 管理员复用 `employee`。
 
-因此短期不建议为“看起来干净”直接删旧后端模块。后续若要清理，必须按 controller -> service -> mapper -> table 逐项审计。
+因此短期不建议为“看起来干净”直接删后端兼容能力。后续若要清理，必须按 controller -> service -> mapper -> table 逐项审计。
 
 ## 项目文件整理口径
 
@@ -371,8 +371,8 @@ project-logs/campus-relay/        每轮工作日志与证据
 不建议现在做的整理：
 
 - 不移动 `backend/`、`frontend/`、`mobile/`。
-- 不删除 `legacy-takeaway/`。
-- 不删除旧后端外卖模块。
+- 不删除历史归档目录。
+- 不删除后端兼容模块。
 - 不把 `project-logs/` 改名或拆散。
 - 不把真实 `.env` 放进仓库。
 
